@@ -4,8 +4,8 @@
     <!-- Top Header Bar -->
     <header class="bg-white/95 dark:bg-[#111827]/95 backdrop-blur-md border-b border-gray-200/90 dark:border-gray-800/90 px-6 py-3.5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 shrink-0 z-20">
       <div class="flex items-center gap-3">
-        <!-- Brand Nav Switcher -->
-        <nav class="flex items-center p-1 bg-gray-100 dark:bg-gray-800/70 rounded-xl border border-gray-200/70 dark:border-gray-700/60" role="tablist">
+        <!-- Navigation Tab Switcher -->
+        <nav class="flex items-center p-1 bg-gray-100 dark:bg-gray-800/70 rounded-xl border border-gray-200/70 dark:border-gray-700/60" role="tablist" aria-label="Dashboard views">
           <button
             v-for="tab in tabs"
             :key="tab.id"
@@ -32,6 +32,7 @@
             class="inline-flex items-center gap-2 px-3.5 py-1.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 text-gray-700 dark:text-gray-300 rounded-lg text-xs font-medium shadow-xs transition-colors cursor-pointer"
             aria-haspopup="true"
             :aria-expanded="isDateOpen"
+            aria-label="Select date range period"
           >
             <Calendar class="w-3.5 h-3.5 text-gray-400" />
             <span class="tabular-nums font-semibold text-[11px]">{{ selectedDateRangeLabel }}</span>
@@ -41,7 +42,7 @@
           <!-- Date Range Dropdown Popover -->
           <div
             v-if="isDateOpen"
-            class="absolute right-0 mt-1.5 w-56 bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 rounded-xl shadow-lg p-1.5 z-50 text-xs space-y-1 animate-in fade-in zoom-in-95 duration-100"
+            class="absolute right-0 mt-1.5 w-60 bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 rounded-xl shadow-lg p-1.5 z-50 text-xs space-y-1 animate-in fade-in zoom-in-95 duration-100"
           >
             <button
               v-for="preset in datePresets"
@@ -63,12 +64,23 @@
         <button
           @click="triggerExport"
           class="inline-flex items-center gap-1.5 px-4 py-1.5 bg-[#23B750] hover:bg-[#1a943e] active:scale-[0.98] text-white rounded-lg text-xs font-bold shadow-md shadow-[#23B750]/20 transition-all cursor-pointer"
+          title="Download full analytics dataset as CSV"
         >
           <Download class="w-3.5 h-3.5" />
-          <span>Export report</span>
+          <span>Export CSV</span>
         </button>
       </div>
     </header>
+
+    <!-- Notification Toast Banner -->
+    <div
+      v-if="toastMessage"
+      class="fixed top-4 right-4 z-50 bg-gray-900 text-white px-4 py-2.5 rounded-xl shadow-xl flex items-center gap-2.5 text-xs border border-gray-700 animate-in fade-in slide-in-from-top-2 duration-200"
+    >
+      <span class="w-2 h-2 rounded-full bg-[#23B750]"></span>
+      <span>{{ toastMessage }}</span>
+      <button @click="toastMessage = ''" class="ml-2 text-gray-400 hover:text-white" aria-label="Dismiss message">✕</button>
+    </div>
 
     <!-- Scrollable Content Canvas -->
     <main class="flex-1 overflow-y-auto p-6 space-y-6 scroll-smooth">
@@ -88,22 +100,22 @@
             <div class="flex items-center gap-2">
               <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-50 text-[#1a943e] dark:bg-emerald-950/50 dark:text-[#62D816] border border-emerald-200/80 dark:border-emerald-800/60">
                 <span class="w-2 h-2 rounded-full bg-[#23B750] animate-pulse"></span>
-                RakanSales CRM Live Sync
+                Connected to WhatsApp &amp; Inbound Telemetry
               </span>
             </div>
           </div>
 
-          <!-- Top KPI Strip (4 High-Impact Visual Cards with Brand Tokens) -->
+          <!-- Top KPI Strip (4 Focused Executive Metrics) -->
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             
-            <!-- 1. Total Revenue Won Card -->
+            <!-- 1. Total Revenue Won -->
             <div class="bg-gradient-to-br from-[#23B750] via-[#1fa848] to-[#178537] text-white p-5 rounded-2xl shadow-md shadow-[#23B750]/15 relative overflow-hidden flex flex-col justify-between h-[154px]">
               <div class="flex items-center justify-between">
                 <div class="flex items-center gap-1.5 group relative">
                   <span class="text-[11px] font-bold tracking-wider uppercase opacity-95">Total Revenue Won</span>
                   <Info class="w-3 h-3 opacity-75 cursor-help" />
-                  <div class="absolute left-0 top-5 hidden group-hover:block bg-gray-900 text-white text-[10px] p-2 rounded-lg shadow-xl w-48 z-30 font-normal border border-gray-700">
-                    Gross closed-won deal value across all sales pipelines in the selected period.
+                  <div class="absolute left-0 top-5 hidden group-hover:block bg-gray-900 text-white text-[10px] p-2 rounded-lg shadow-xl w-52 z-30 font-normal border border-gray-700 leading-normal">
+                    <strong>Formula:</strong> Sum of deal values for all deals marked "Closed Won" in this date range.
                   </div>
                 </div>
                 <div class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center">
@@ -113,21 +125,21 @@
               <div>
                 <div class="text-3xl font-extrabold tracking-tight tabular-nums">RM {{ activeRevenueStats.wonAmount }}</div>
                 <div class="flex items-center justify-between text-[11px] font-semibold opacity-95 mt-2 pt-2 border-t border-white/20">
-                  <span class="tabular-nums">{{ activeRevenueStats.growth }} vs last period</span>
-                  <span class="tabular-nums">{{ activeRevenueStats.dealsCount }} deals closed</span>
+                  <span class="tabular-nums">{{ activeRevenueStats.growth }} vs prior period</span>
+                  <span class="tabular-nums">{{ activeRevenueStats.dealsCount }} closed deals</span>
                 </div>
               </div>
             </div>
 
-            <!-- 2. Active Pipeline Value Card -->
+            <!-- 2. Active Pipeline Value -->
             <div class="bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-xs flex flex-col justify-between h-[154px] hover:border-gray-300 dark:hover:border-gray-700 transition-colors">
               <div>
                 <div class="flex items-center justify-between">
                   <div class="flex items-center gap-1.5 group relative">
                     <span class="text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Active Pipeline</span>
                     <Info class="w-3 h-3 text-gray-400 cursor-help" />
-                    <div class="absolute left-0 top-5 hidden group-hover:block bg-gray-900 text-white text-[10px] p-2 rounded-lg shadow-xl w-48 z-30 font-normal border border-gray-700">
-                      Total value of all qualified opportunities in active pipeline stages.
+                    <div class="absolute left-0 top-5 hidden group-hover:block bg-gray-900 text-white text-[10px] p-2 rounded-lg shadow-xl w-52 z-30 font-normal border border-gray-700 leading-normal">
+                      <strong>Formula:</strong> Total value of all open deals across qualification, proposal, and negotiation.
                     </div>
                   </div>
                   <span class="text-[10px] font-bold text-[#23B750] bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-full border border-emerald-150 dark:border-emerald-900/50 tabular-nums">
@@ -141,15 +153,15 @@
               </div>
             </div>
 
-            <!-- 3. Lead Conversion to Won (Purple: #7C3AED) -->
+            <!-- 3. Lead Conversion to Won -->
             <div class="bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-xs flex flex-col justify-between h-[154px] hover:border-gray-300 dark:hover:border-gray-700 transition-colors">
               <div>
                 <div class="flex items-center justify-between">
                   <div class="flex items-center gap-1.5 group relative">
                     <span class="text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Conversion to Won</span>
                     <Info class="w-3 h-3 text-gray-400 cursor-help" />
-                    <div class="absolute left-0 top-5 hidden group-hover:block bg-gray-900 text-white text-[10px] p-2 rounded-lg shadow-xl w-48 z-30 font-normal border border-gray-700">
-                      Closed Won Deals divided by Total Inbound Leads in this timeframe.
+                    <div class="absolute left-0 top-5 hidden group-hover:block bg-gray-900 text-white text-[10px] p-2 rounded-lg shadow-xl w-52 z-30 font-normal border border-gray-700 leading-normal">
+                      <strong>Formula:</strong> (Closed Won Deals / Total Inbound Leads) × 100 in this period.
                     </div>
                   </div>
                   <span class="text-[10px] font-bold text-[#7C3AED] dark:text-[#A78BFA] bg-purple-50 dark:bg-purple-950/40 px-2 py-0.5 rounded-full border border-purple-150 dark:border-purple-900/50 tabular-nums">
@@ -163,15 +175,15 @@
               </div>
             </div>
 
-            <!-- 4. Avg First Response SLA (Orange: #F97316) -->
+            <!-- 4. Avg First Response SLA -->
             <div class="bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-xs flex flex-col justify-between h-[154px] hover:border-gray-300 dark:hover:border-gray-700 transition-colors">
               <div>
                 <div class="flex items-center justify-between">
                   <div class="flex items-center gap-1.5 group relative">
                     <span class="text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Avg First Response</span>
                     <Info class="w-3 h-3 text-gray-400 cursor-help" />
-                    <div class="absolute left-0 top-5 hidden group-hover:block bg-gray-900 text-white text-[10px] p-2 rounded-lg shadow-xl w-48 z-30 font-normal border border-gray-700">
-                      Mean duration from inbound lead creation to first outbound WhatsApp/Email response by an agent.
+                    <div class="absolute left-0 top-5 hidden group-hover:block bg-gray-900 text-white text-[10px] p-2 rounded-lg shadow-xl w-52 z-30 font-normal border border-gray-700 leading-normal">
+                      <strong>Formula:</strong> Average minutes from inbound lead generation to first outbound agent message.
                     </div>
                   </div>
                   <span class="text-[10px] font-bold text-[#F97316] bg-orange-50 dark:bg-orange-950/40 px-2 py-0.5 rounded-full border border-orange-150 dark:border-orange-900/50 tabular-nums">
@@ -187,7 +199,7 @@
 
           </div>
 
-          <!-- Sales Health Pulse Section (With ApexCharts Radial & Trend) -->
+          <!-- Sales Health Pulse Section -->
           <div class="bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 rounded-2xl p-5 shadow-xs space-y-4">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 pb-3 border-b border-gray-150 dark:border-gray-800/80">
               <div class="flex items-center gap-2.5">
@@ -195,80 +207,81 @@
                   <Activity class="w-4 h-4" />
                 </span>
                 <div>
-                  <h2 class="text-sm font-bold text-gray-900 dark:text-white">Sales Health Pulse</h2>
-                  <p class="text-xs text-gray-500 dark:text-gray-400">Pipeline diagnostic telemetry and risk alerts</p>
+                  <h2 class="text-sm font-bold text-gray-900 dark:text-white">Pipeline Health Diagnostic</h2>
+                  <p class="text-xs text-gray-500 dark:text-gray-400">Response speed compliance, pipeline staleness, and historical win rate trend</p>
                 </div>
               </div>
               <div class="flex items-center gap-2">
                 <button
                   @click="nudgeAllStaleDeals"
                   class="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-orange-50 hover:bg-orange-100 text-[#F97316] dark:bg-orange-950/40 dark:hover:bg-orange-900/60 border border-orange-200 dark:border-orange-800/60 rounded-lg text-xs font-bold transition-colors cursor-pointer"
+                  title="Send automated WhatsApp follow-ups to 27 deals inactive for >3 days"
                 >
                   <Zap class="w-3.5 h-3.5 text-[#F97316] fill-current" />
-                  <span>Nudge 27 Stale Deals</span>
+                  <span>Send WhatsApp follow-up to 27 stale deals</span>
                 </button>
               </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <!-- SLA Compliance Apex Radial Gauge -->
+              <!-- SLA Compliance Radial Gauge -->
               <div class="flex items-center gap-4 p-3.5 bg-gray-50/60 dark:bg-gray-800/40 rounded-xl border border-gray-150 dark:border-gray-800">
                 <div class="w-16 h-16 flex-shrink-0 flex items-center justify-center">
                   <apexchart type="radialBar" width="75" height="75" :options="slaRadialOptions" :series="[92]" />
                 </div>
                 <div>
-                  <div class="text-xs font-bold text-gray-900 dark:text-white">SLA Compliance</div>
-                  <p class="text-[11px] text-gray-500 dark:text-gray-400">Responded within 15 min</p>
+                  <div class="text-xs font-bold text-gray-900 dark:text-white">15-Minute SLA Compliance</div>
+                  <p class="text-[11px] text-gray-500 dark:text-gray-400">92% of new leads contacted &lt; 15 min</p>
                   <span class="text-[10px] font-semibold text-[#23B750]">Target: 80%+ • Status: On Track</span>
                 </div>
               </div>
 
-              <!-- Pipeline Freshness Split -->
+              <!-- Pipeline Freshness -->
               <div class="p-3.5 bg-gray-50/60 dark:bg-gray-800/40 rounded-xl border border-gray-150 dark:border-gray-800 flex flex-col justify-between">
                 <div class="flex justify-between items-center text-xs">
-                  <span class="font-bold text-gray-900 dark:text-white">Pipeline Freshness</span>
-                  <span class="text-[11px] font-semibold text-[#EF4444]">Action Required</span>
+                  <span class="font-bold text-gray-900 dark:text-white">Opportunity Activity Status</span>
+                  <span class="text-[11px] font-semibold text-[#EF4444]">Follow-up Needed</span>
                 </div>
                 <div class="w-full h-2.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden flex my-1.5">
                   <div class="bg-[#23B750] h-full" style="width: 10%;"></div>
                   <div class="bg-[#EF4444] h-full" style="width: 90%;"></div>
                 </div>
                 <div class="flex justify-between items-center text-[10px] font-semibold text-gray-500">
-                  <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-[#23B750]"></span> 3 active (10%)</span>
-                  <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-[#EF4444]"></span> 27 stale &gt;3d (90%)</span>
+                  <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-[#23B750]"></span> 3 active (&le;3d)</span>
+                  <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-[#EF4444]"></span> 27 stale (&gt;3d)</span>
                 </div>
               </div>
 
-              <!-- Win Rate Trend Apex Sparkline -->
+              <!-- Win Rate Trend -->
               <div class="p-3.5 bg-gray-50/60 dark:bg-gray-800/40 rounded-xl border border-gray-150 dark:border-gray-800 flex flex-col justify-between">
                 <div class="flex justify-between items-center text-xs">
-                  <span class="font-bold text-gray-900 dark:text-white">Win Rate Trend</span>
-                  <span class="text-[#23B750] font-bold tabular-nums">+12.2 pts</span>
+                  <span class="font-bold text-gray-900 dark:text-white">Win Rate Trend (6-Week)</span>
+                  <span class="text-[#23B750] font-bold tabular-nums">+12.2 pts gain</span>
                 </div>
                 <div class="h-8 w-full my-1">
                   <apexchart type="area" height="35" :options="winRateTrendOptions" :series="winRateTrendSeries" />
                 </div>
                 <div class="flex justify-between text-[10px] text-gray-400">
-                  <span>6 weeks ago</span>
+                  <span>6 weeks ago (6.3%)</span>
                   <span class="font-bold text-gray-700 dark:text-gray-300">Current: 18.5%</span>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Revenue vs Target & Funnel Charts (ApexCharts) -->
+          <!-- Revenue vs Target & Funnel Charts -->
           <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
             
-            <!-- Revenue vs Target Area Chart (ApexCharts) -->
+            <!-- Revenue vs Target -->
             <div class="xl:col-span-6 bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-6 rounded-2xl shadow-xs flex flex-col justify-between">
               <div>
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                   <div>
-                    <h3 class="text-sm font-bold text-gray-900 dark:text-white">Revenue vs Target</h3>
-                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Cumulative closed revenue against monthly quota</p>
+                    <h3 class="text-sm font-bold text-gray-900 dark:text-white">Revenue vs Target Quota</h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Cumulative closed revenue compared against team target</p>
                   </div>
                   <div class="flex items-center gap-2">
-                    <div class="flex p-0.5 bg-gray-100 dark:bg-gray-800 rounded-lg">
+                    <div class="flex p-0.5 bg-gray-100 dark:bg-gray-800 rounded-lg" role="group" aria-label="Revenue time frame">
                       <button
                         v-for="p in ['30D', '90D', 'YTD']"
                         :key="p"
@@ -291,7 +304,7 @@
                   <span class="text-xs font-semibold text-[#23B750]">of RM {{ activeRevenueStats.targetAmount }} target (119% attained)</span>
                 </div>
 
-                <!-- ApexCharts Interactive Spline Area Chart -->
+                <!-- ApexCharts Spline Area Chart -->
                 <div class="w-full mt-2 select-none">
                   <apexchart type="area" height="200" :options="revenueApexOptions" :series="revenueApexSeries" />
                 </div>
@@ -314,15 +327,15 @@
               </div>
             </div>
 
-            <!-- Pipeline Funnel (ApexCharts Horizontal Bar) -->
+            <!-- Pipeline Stage Funnel -->
             <div class="xl:col-span-6 bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-6 rounded-2xl shadow-xs flex flex-col justify-between">
               <div>
                 <div class="flex justify-between items-center pb-2">
                   <div>
-                    <h3 class="text-sm font-bold text-gray-900 dark:text-white">Pipeline Stage Funnel</h3>
-                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Stage volume with progression conversion rates</p>
+                    <h3 class="text-sm font-bold text-gray-900 dark:text-white">Pipeline Stage Progression</h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Opportunity volume &amp; step-by-step conversion rate</p>
                   </div>
-                  <div class="flex p-0.5 bg-gray-100 dark:bg-gray-800 rounded-lg">
+                  <div class="flex p-0.5 bg-gray-100 dark:bg-gray-800 rounded-lg" role="group" aria-label="Funnel metric unit">
                     <button
                       v-for="mode in ['Count', 'Value']"
                       :key="mode"
@@ -334,7 +347,7 @@
                           : 'text-gray-500 hover:text-gray-900 dark:hover:text-white'
                       ]"
                     >
-                      {{ mode }}
+                      {{ mode === 'Count' ? 'Deal Count' : 'Deal Value' }}
                     </button>
                   </div>
                 </div>
@@ -353,7 +366,7 @@
 
           </div>
 
-          <!-- Top Performing Agents & Channel Distribution (ApexCharts Donut) -->
+          <!-- Top Performing Agents & Channel Distribution -->
           <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
             
             <!-- Top Performing Agents Leaderboard -->
@@ -361,9 +374,9 @@
               <div class="flex justify-between items-center pb-3 border-b border-gray-150 dark:border-gray-800">
                 <div>
                   <h3 class="text-sm font-bold text-gray-900 dark:text-white">Top Performing Agents</h3>
-                  <p class="text-xs text-gray-500 dark:text-gray-400">Ranked by revenue contribution this period</p>
+                  <p class="text-xs text-gray-500 dark:text-gray-400">Ranked by closed-won revenue in {{ selectedDateRangeLabel }}</p>
                 </div>
-                <span class="text-xs font-semibold text-gray-400">Leaderboard</span>
+                <span class="text-xs font-semibold text-gray-400">Sales Leaderboard</span>
               </div>
 
               <div class="divide-y divide-gray-150 dark:divide-gray-800/60 mt-1">
@@ -386,13 +399,13 @@
               </div>
             </div>
 
-            <!-- Leads by Channel Apex Donut Chart -->
+            <!-- Leads by Channel Donut Chart -->
             <div class="xl:col-span-6 bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-6 rounded-2xl shadow-xs flex flex-col justify-between">
               <div>
                 <div class="flex justify-between items-center pb-3 border-b border-gray-150 dark:border-gray-800">
                   <div>
-                    <h3 class="text-sm font-bold text-gray-900 dark:text-white">Leads by Channel</h3>
-                    <p class="text-xs text-gray-500 dark:text-gray-400">Inbound volume across communications</p>
+                    <h3 class="text-sm font-bold text-gray-900 dark:text-white">Leads by Communication Channel</h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Origin of 389 inbound customer conversations</p>
                   </div>
                   <span class="text-xs font-bold text-gray-400 tabular-nums">389 Total Leads</span>
                 </div>
@@ -423,8 +436,8 @@
           <div class="bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-xs space-y-3">
             <div class="flex justify-between items-center">
               <div>
-                <h3 class="text-sm font-bold text-gray-900 dark:text-white">This Week's Scheduled Follow-ups</h3>
-                <p class="text-xs text-gray-500 dark:text-gray-400">Scheduled client touches across active pipelines</p>
+                <h3 class="text-sm font-bold text-gray-900 dark:text-white">Scheduled Follow-ups for This Week</h3>
+                <p class="text-xs text-gray-500 dark:text-gray-400">Scheduled client touches across all active pipelines</p>
               </div>
               <span class="text-xs font-semibold text-gray-400">Week 34 (August 2026)</span>
             </div>
@@ -442,7 +455,7 @@
               >
                 <div class="flex items-center justify-between">
                   <span class="text-[10px] font-bold uppercase tracking-wider">{{ day.label }}</span>
-                  <span v-if="day.badge" class="w-2 h-2 rounded-full bg-[#23B750]"></span>
+                  <span v-if="day.badge" class="w-2 h-2 rounded-full bg-[#23B750]" title="Active meetings scheduled today"></span>
                 </div>
                 <div class="text-2xl font-black tabular-nums">{{ day.date }}</div>
               </div>
@@ -467,7 +480,7 @@
               <span class="text-[11px] font-bold tracking-wider uppercase opacity-90">Conversion Rate</span>
               <div>
                 <div class="text-3xl font-extrabold tracking-tight tabular-nums">14.3%</div>
-                <div class="text-xs text-emerald-100 mt-1 tabular-nums">↑ 6.2 pts vs last period</div>
+                <div class="text-xs text-emerald-100 mt-1 tabular-nums">↑ 6.2 pts vs prior period</div>
               </div>
             </div>
 
@@ -483,20 +496,20 @@
               <span class="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Avg Deal Velocity</span>
               <div>
                 <div class="text-2xl font-bold text-gray-900 dark:text-white tabular-nums">14.2 days</div>
-                <div class="text-xs text-[#23B750] font-semibold mt-1 tabular-nums">↑ 3.4d faster closing</div>
+                <div class="text-xs text-[#23B750] font-semibold mt-1 tabular-nums">↑ 3.4 days faster cycle</div>
               </div>
             </div>
 
             <div class="bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-xs flex flex-col justify-between h-[142px]">
               <span class="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Win / Loss Ratio</span>
               <div>
-                <div class="text-2xl font-bold text-gray-900 dark:text-white tabular-nums">0.23:1</div>
+                <div class="text-2xl font-bold text-gray-900 dark:text-white tabular-nums">0.23 : 1</div>
                 <div class="text-xs text-gray-400 mt-1 tabular-nums">5 won · 22 lost</div>
               </div>
             </div>
 
             <div class="bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-xs flex flex-col justify-between h-[142px]">
-              <span class="text-[11px] font-bold text-gray-500 uppercase tracking-wider">SLA Response</span>
+              <span class="text-[11px] font-bold text-gray-500 uppercase tracking-wider">SLA Response Speed</span>
               <div>
                 <div class="text-2xl font-bold text-[#23B750] tabular-nums">92%</div>
                 <div class="text-xs text-gray-400 mt-1">&lt; 15 min response time</div>
@@ -507,13 +520,13 @@
           <!-- Velocity by Stage & Lost Deals Analysis -->
           <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
             
-            <!-- Velocity by Stage Apex Chart -->
+            <!-- Velocity by Stage -->
             <div class="xl:col-span-6 bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-6 rounded-2xl shadow-xs flex flex-col justify-between">
               <div>
                 <div class="flex justify-between items-center">
                   <div>
-                    <h3 class="text-sm font-bold text-gray-900 dark:text-white">Deal Velocity by Stage</h3>
-                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Average duration spent in each qualification milestone</p>
+                    <h3 class="text-sm font-bold text-gray-900 dark:text-white">Deal Velocity by Pipeline Stage</h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Average duration deals spend in each qualification milestone</p>
                   </div>
                 </div>
 
@@ -522,27 +535,28 @@
                 </div>
               </div>
 
-              <!-- Bottleneck Warning Card -->
+              <!-- Bottleneck Warning -->
               <div class="mt-2 p-3.5 bg-orange-50 dark:bg-orange-950/20 border border-orange-200 dark:border-orange-900/40 rounded-xl flex items-start gap-2.5 text-xs text-[#F97316]">
                 <AlertCircle class="w-4 h-4 text-[#F97316] shrink-0 mt-0.5" />
-                <span><strong>Bottleneck Detected:</strong> Proposal / Quotation stage takes 31% of total cycle time. Consider automated WhatsApp quote nudges.</span>
+                <span><strong>Bottleneck Identified:</strong> Deals spend an average of 8.9 days in Proposal/Quotation (31% of total cycle). Automate WhatsApp quote reminders to shorten conversion.</span>
               </div>
             </div>
 
-            <!-- Lost Deal Reasons (ApexCharts Donut + List) -->
+            <!-- Lost Deal Reasons -->
             <div class="xl:col-span-6 bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-6 rounded-2xl shadow-xs">
               <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-3 border-b border-gray-150 dark:border-gray-800">
                 <div>
                   <h3 class="text-sm font-bold text-gray-900 dark:text-white">Lost Deal Root Causes</h3>
-                  <p class="text-xs text-gray-500 dark:text-gray-400">22 lost opportunities analysis</p>
+                  <p class="text-xs text-gray-500 dark:text-gray-400">Analysis of 22 lost opportunities</p>
                 </div>
-                <div class="relative w-40">
+                <div class="relative w-44">
                   <Search class="w-3.5 h-3.5 text-gray-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
                   <input
                     v-model="lostReasonSearch"
                     type="text"
-                    placeholder="Search reasons..."
+                    placeholder="Search root causes..."
                     class="w-full pl-8 pr-2 py-1 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-[#23B750]"
+                    aria-label="Search lost deal reasons"
                   />
                 </div>
               </div>
@@ -570,7 +584,7 @@
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
               <div>
                 <h3 class="text-sm font-bold text-gray-900 dark:text-white">Active Opportunities</h3>
-                <p class="text-xs text-gray-500 dark:text-gray-400">Click any deal to view full conversation history and audit drawer</p>
+                <p class="text-xs text-gray-500 dark:text-gray-400">Select any opportunity to view deal details or send a WhatsApp follow-up</p>
               </div>
 
               <!-- Filter Toolbar -->
@@ -580,11 +594,16 @@
                   <input
                     v-model="activeDealSearch"
                     type="text"
-                    placeholder="Search deal or company..."
+                    placeholder="Search opportunity or company..."
                     class="w-full pl-9 pr-3 py-1.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-[#23B750]"
+                    aria-label="Search active opportunities by name or company"
                   />
                 </div>
-                <select v-model="activeDealStageFilter" class="px-3 py-1.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg text-xs font-semibold text-gray-700 dark:text-gray-300 focus:ring-1 focus:ring-[#23B750]">
+                <select
+                  v-model="activeDealStageFilter"
+                  class="px-3 py-1.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg text-xs font-semibold text-gray-700 dark:text-gray-300 focus:ring-1 focus:ring-[#23B750]"
+                  aria-label="Filter active opportunities by stage"
+                >
                   <option value="All">All Stages</option>
                   <option value="New Leads">New Leads</option>
                   <option value="Acknowledged">Acknowledged</option>
@@ -601,10 +620,10 @@
                 <thead>
                   <tr class="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider bg-gray-50/80 dark:bg-gray-800/50 border-b border-gray-200 dark:border-gray-800">
                     <th class="px-4 py-3">OPPORTUNITY</th>
-                    <th class="px-4 py-3 text-right">VALUE</th>
-                    <th class="px-4 py-3">STAGE</th>
-                    <th class="px-4 py-3">AGE / STALENESS</th>
-                    <th class="px-4 py-3">OWNER</th>
+                    <th class="px-4 py-3 text-right">EST. VALUE</th>
+                    <th class="px-4 py-3">PIPELINE STAGE</th>
+                    <th class="px-4 py-3">INACTIVITY AGE</th>
+                    <th class="px-4 py-3">ASSIGNED OWNER</th>
                     <th class="px-4 py-3">CHANNEL</th>
                     <th class="px-4 py-3 text-center">ACTION</th>
                   </tr>
@@ -646,19 +665,20 @@
                       <button
                         @click="triggerWhatsAppChat(deal)"
                         class="p-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-[#23B750] dark:bg-emerald-950/40 transition-colors cursor-pointer"
-                        title="Send WhatsApp Nudge"
+                        title="Send WhatsApp follow-up message"
                       >
                         <MessageSquare class="w-3.5 h-3.5" />
                       </button>
                     </td>
                   </tr>
 
-                  <!-- Empty State -->
+                  <!-- Clear Empty State with Specific Context -->
                   <tr v-if="filteredActiveDeals.length === 0">
                     <td colspan="7" class="py-12 text-center text-gray-400">
-                      <p class="font-medium text-sm">No active opportunities match your search.</p>
-                      <button @click="clearActiveDealFilters" class="mt-2 text-xs font-bold text-[#23B750] hover:underline cursor-pointer">
-                        Clear all filters
+                      <p class="font-medium text-sm text-gray-600 dark:text-gray-300">No active opportunities match "{{ activeDealSearch || activeDealStageFilter }}".</p>
+                      <p class="text-xs text-gray-400 mt-1">Try adjusting your search keywords or resetting stage filters.</p>
+                      <button @click="clearActiveDealFilters" class="mt-3 px-3 py-1.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg text-xs font-bold transition-colors cursor-pointer">
+                        Reset filters
                       </button>
                     </td>
                   </tr>
@@ -675,25 +695,25 @@
         <div v-if="activeTab === 'marketing'" class="space-y-6 animate-in fade-in duration-200">
           
           <div>
-            <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Marketing &amp; Attribution</h1>
+            <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Marketing &amp; Lead Attribution</h1>
             <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Multi-touch attribution models, campaign lead generation, and acquisition origins.</p>
           </div>
 
           <!-- Top Marketing KPIs -->
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
             <div class="bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-xs flex flex-col justify-between h-[135px]">
-              <span class="text-xs font-bold text-gray-500 uppercase">Sessions</span>
+              <span class="text-xs font-bold text-gray-500 uppercase">Total Sessions</span>
               <div>
                 <div class="text-2xl font-bold text-gray-900 dark:text-white tabular-nums">24,812</div>
-                <div class="text-[11px] font-bold text-[#23B750] mt-1 tabular-nums">↑ 9.4% vs last period</div>
+                <div class="text-[11px] font-bold text-[#23B750] mt-1 tabular-nums">↑ 9.4% vs prior period</div>
               </div>
             </div>
 
             <div class="bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-xs flex flex-col justify-between h-[135px]">
-              <span class="text-xs font-bold text-gray-500 uppercase">Unique Users</span>
+              <span class="text-xs font-bold text-gray-500 uppercase">Unique Visitors</span>
               <div>
                 <div class="text-2xl font-bold text-gray-900 dark:text-white tabular-nums">18,204</div>
-                <div class="text-[11px] font-bold text-[#23B750] mt-1 tabular-nums">↑ 7.1% vs last period</div>
+                <div class="text-[11px] font-bold text-[#23B750] mt-1 tabular-nums">↑ 7.1% vs prior period</div>
               </div>
             </div>
 
@@ -701,7 +721,7 @@
               <span class="text-xs font-bold text-gray-500 uppercase">Engagement Rate</span>
               <div>
                 <div class="text-2xl font-bold text-gray-900 dark:text-white tabular-nums">62.4%</div>
-                <div class="text-[11px] font-bold text-[#23B750] mt-1 tabular-nums">↑ 3.2 pts vs last period</div>
+                <div class="text-[11px] font-bold text-[#23B750] mt-1 tabular-nums">↑ 3.2 pts vs prior period</div>
               </div>
             </div>
 
@@ -709,7 +729,7 @@
               <span class="text-xs font-bold text-gray-500 uppercase">Leads Generated</span>
               <div>
                 <div class="text-2xl font-bold text-gray-900 dark:text-white tabular-nums">847</div>
-                <div class="text-[11px] font-bold text-[#23B750] mt-1 tabular-nums">↑ 8.2% vs last period</div>
+                <div class="text-[11px] font-bold text-[#23B750] mt-1 tabular-nums">↑ 8.2% vs prior period</div>
               </div>
             </div>
 
@@ -717,23 +737,23 @@
               <span class="text-xs font-bold text-gray-500 uppercase">Lead to Customer</span>
               <div>
                 <div class="text-2xl font-bold text-gray-900 dark:text-white tabular-nums">18.3%</div>
-                <div class="text-[11px] font-bold text-[#23B750] mt-1 tabular-nums">↑ 2.1 pts vs last period</div>
+                <div class="text-[11px] font-bold text-[#23B750] mt-1 tabular-nums">↑ 2.1 pts vs prior period</div>
               </div>
             </div>
           </div>
 
-          <!-- Attribution Donut & Channel Grouped Bar Chart (ApexCharts) -->
+          <!-- Attribution Donut & Channel Grouped Bar Chart -->
           <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
             
-            <!-- Attribution Model Selector & Apex Donut -->
+            <!-- Attribution Model Selector & Donut -->
             <div class="xl:col-span-6 bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-6 rounded-2xl shadow-xs flex flex-col justify-between">
               <div>
                 <div class="flex justify-between items-start">
                   <div>
                     <h3 class="text-sm font-bold text-gray-900 dark:text-white">Revenue Attribution by Channel</h3>
-                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{{ attributionModel }} model · RM 537.5K attributed</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{{ attributionModel }} model · RM 537.5K attributed revenue</p>
                   </div>
-                  <div class="flex p-0.5 bg-gray-100 dark:bg-gray-800 rounded-lg">
+                  <div class="flex p-0.5 bg-gray-100 dark:bg-gray-800 rounded-lg" role="group" aria-label="Attribution calculation model">
                     <button
                       v-for="model in ['First-touch', 'Last-touch', 'Linear']"
                       :key="model"
@@ -771,11 +791,11 @@
               </div>
             </div>
 
-            <!-- Grouped Bar Chart (ApexCharts) -->
+            <!-- Grouped Bar Chart -->
             <div class="xl:col-span-6 bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-6 rounded-2xl shadow-xs flex flex-col justify-between">
               <div>
-                <h3 class="text-sm font-bold text-gray-900 dark:text-white">Channel Performance</h3>
-                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Leads generated vs converted across acquisition origins</p>
+                <h3 class="text-sm font-bold text-gray-900 dark:text-white">Channel Lead Generation &amp; Conversion</h3>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Comparing total leads acquired vs closed deals per platform</p>
 
                 <div class="w-full mt-2 select-none">
                   <apexchart type="bar" height="220" :options="channelBarApexOptions" :series="channelBarApexSeries" />
@@ -785,17 +805,17 @@
 
           </div>
 
-          <!-- Sessions & Key Events (Dual-Axis Apex Line) & Quality Split (Stacked Apex Bar) -->
+          <!-- Sessions & Key Events & Lead Quality Stacked -->
           <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
             
             <div class="xl:col-span-6 bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-6 rounded-2xl shadow-xs flex flex-col justify-between">
               <div>
                 <div class="flex justify-between items-center pb-2">
                   <div>
-                    <h3 class="text-sm font-bold text-gray-900 dark:text-white">Sessions &amp; Key Events</h3>
-                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Form submits, WhatsApp links, and demo inquiries</p>
+                    <h3 class="text-sm font-bold text-gray-900 dark:text-white">Website Sessions &amp; Key Conversion Events</h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Form submissions, WhatsApp link clicks, and consultation inquiries</p>
                   </div>
-                  <div class="flex p-0.5 bg-gray-100 dark:bg-gray-800 rounded-lg">
+                  <div class="flex p-0.5 bg-gray-100 dark:bg-gray-800 rounded-lg" role="group" aria-label="Session interval view">
                     <button
                       v-for="v in ['Daily', 'Weekly']"
                       :key="v"
@@ -818,11 +838,11 @@
               </div>
             </div>
 
-            <!-- Lead Quality Stacked Horizontal Bars (ApexCharts) -->
+            <!-- Lead Quality Stacked -->
             <div class="xl:col-span-6 bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-6 rounded-2xl shadow-xs flex flex-col justify-between">
               <div>
-                <h3 class="text-sm font-bold text-gray-900 dark:text-white">Lead Quality by Source</h3>
-                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Commercial Qualification Ratio (100% Stacked)</p>
+                <h3 class="text-sm font-bold text-gray-900 dark:text-white">Commercial Lead Qualification Ratio</h3>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Percentage of leads meeting sales qualification criteria</p>
 
                 <div class="w-full mt-2">
                   <apexchart type="bar" height="220" :options="qualityStackedApexOptions" :series="qualityStackedApexSeries" />
@@ -834,7 +854,7 @@
 
           <!-- GA4 Traffic Sources Table -->
           <div class="bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 rounded-2xl shadow-xs overflow-hidden p-6 space-y-4">
-            <h3 class="text-sm font-bold text-gray-900 dark:text-white">Source / Medium (GA4 Inbound)</h3>
+            <h3 class="text-sm font-bold text-gray-900 dark:text-white">Inbound Traffic Sources &amp; Conversion Rates (GA4)</h3>
 
             <div class="overflow-x-auto border border-gray-200 dark:border-gray-800 rounded-xl">
               <table class="w-full text-xs text-left whitespace-nowrap">
@@ -842,7 +862,7 @@
                   <tr class="text-[10px] text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-800 bg-gray-50/80 dark:bg-gray-800/50 font-bold">
                     <th class="px-4 py-3">SOURCE / MEDIUM</th>
                     <th class="px-4 py-3 text-right">SESSIONS</th>
-                    <th class="px-4 py-3 text-right">USERS</th>
+                    <th class="px-4 py-3 text-right">VISITORS</th>
                     <th class="px-4 py-3 text-right">ENGAGEMENT</th>
                     <th class="px-4 py-3 text-right">KEY EVENTS</th>
                     <th class="px-4 py-3 text-right">LEADS</th>
@@ -867,14 +887,14 @@
           <!-- Top Landing Pages & UTM Campaigns -->
           <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
             <div class="xl:col-span-6 bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 rounded-2xl shadow-xs p-6 space-y-4">
-              <h3 class="text-sm font-bold text-gray-900 dark:text-white">Top Landing Pages</h3>
+              <h3 class="text-sm font-bold text-gray-900 dark:text-white">Top Converting Landing Pages</h3>
               <div class="overflow-x-auto border border-gray-200 dark:border-gray-800 rounded-xl">
                 <table class="w-full text-xs text-left whitespace-nowrap">
                   <thead>
                     <tr class="text-[10px] text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-800 bg-gray-50/80 dark:bg-gray-800/50 font-bold">
-                      <th class="px-4 py-3">PAGE</th>
+                      <th class="px-4 py-3">PAGE URL</th>
                       <th class="px-4 py-3 text-right">SESSIONS</th>
-                      <th class="px-4 py-3 text-right">BOUNCE</th>
+                      <th class="px-4 py-3 text-right">BOUNCE RATE</th>
                       <th class="px-4 py-3 text-right">LEADS</th>
                     </tr>
                   </thead>
@@ -891,13 +911,13 @@
             </div>
 
             <div class="xl:col-span-6 bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 rounded-2xl shadow-xs p-6 space-y-4">
-              <h3 class="text-sm font-bold text-gray-900 dark:text-white">Active UTM Campaigns</h3>
+              <h3 class="text-sm font-bold text-gray-900 dark:text-white">Active UTM Ad Campaigns</h3>
               <div class="overflow-x-auto border border-gray-200 dark:border-gray-800 rounded-xl">
                 <table class="w-full text-xs text-left whitespace-nowrap">
                   <thead>
                     <tr class="text-[10px] text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-800 bg-gray-50/80 dark:bg-gray-800/50 font-bold">
-                      <th class="px-4 py-3">CAMPAIGN</th>
-                      <th class="px-4 py-3">SOURCE</th>
+                      <th class="px-4 py-3">CAMPAIGN NAME</th>
+                      <th class="px-4 py-3">PLATFORM</th>
                       <th class="px-4 py-3 text-right">SESSIONS</th>
                       <th class="px-4 py-3 text-right">LEADS</th>
                     </tr>
@@ -920,8 +940,8 @@
       </div>
     </main>
 
-    <!-- Slide-Over Deal Drawer -->
-    <div v-if="selectedDeal" class="fixed inset-0 z-50 overflow-hidden" role="dialog" aria-modal="true">
+    <!-- Slide-Over Opportunity Details Drawer -->
+    <div v-if="selectedDeal" class="fixed inset-0 z-50 overflow-hidden" role="dialog" aria-modal="true" aria-labelledby="drawer-title">
       <div class="absolute inset-0 bg-gray-950/60 backdrop-blur-xs transition-opacity" @click="selectedDeal = null"></div>
       
       <div class="fixed inset-y-0 right-0 max-w-full flex pl-10">
@@ -932,10 +952,10 @@
                 <span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-50 text-[#1a943e] dark:bg-emerald-950/40 dark:text-[#62D816] border border-emerald-150">
                   {{ selectedDeal.stage }}
                 </span>
-                <h2 class="text-base font-bold text-gray-900 dark:text-white mt-2">{{ selectedDeal.title }}</h2>
+                <h2 id="drawer-title" class="text-base font-bold text-gray-900 dark:text-white mt-2">{{ selectedDeal.title }}</h2>
                 <p class="text-xs text-gray-400">{{ selectedDeal.company }}</p>
               </div>
-              <button @click="selectedDeal = null" class="p-1 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-white cursor-pointer">
+              <button @click="selectedDeal = null" class="p-1 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-white cursor-pointer" aria-label="Close opportunity drawer">
                 ✕
               </button>
             </div>
@@ -954,15 +974,16 @@
                 <span class="font-bold text-[#2E91E5]">{{ selectedDeal.source }}</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-gray-400">Status:</span>
+                <span class="text-gray-400">Inactivity Status:</span>
                 <span class="font-bold text-[#F97316]">{{ selectedDeal.age }}</span>
               </div>
             </div>
 
             <!-- Action Sequence -->
             <div class="space-y-2">
-              <label class="text-xs font-bold text-gray-700 dark:text-gray-300">Quick WhatsApp Response:</label>
+              <label for="drawer-msg-input" class="text-xs font-bold text-gray-700 dark:text-gray-300">Follow-up Message Template:</label>
               <textarea
+                id="drawer-msg-input"
                 v-model="quickMessageText"
                 rows="3"
                 class="w-full p-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl text-xs focus:ring-1 focus:ring-[#23B750] focus:outline-none"
@@ -975,13 +996,13 @@
               @click="sendQuickMessage"
               class="flex-1 py-2 bg-[#23B750] hover:bg-[#1a943e] text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-[#23B750]/20 cursor-pointer"
             >
-              Send WhatsApp Message
+              Send via WhatsApp
             </button>
             <button
               @click="selectedDeal = null"
               class="px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl text-xs font-bold transition-colors cursor-pointer"
             >
-              Close
+              Cancel
             </button>
           </div>
         </div>
@@ -1007,12 +1028,22 @@ import {
 } from 'lucide-vue-next'
 
 const tabs = [
-  { id: 'overview', label: 'Overview' },
-  { id: 'pipeline', label: 'Pipeline' },
-  { id: 'marketing', label: 'Marketing' }
+  { id: 'overview', label: 'Commercial Overview' },
+  { id: 'pipeline', label: 'Pipeline Velocity' },
+  { id: 'marketing', label: 'Marketing & Attribution' }
 ]
 
 const activeTab = ref<string>('overview')
+const toastMessage = ref('')
+
+function showToast(msg: string) {
+  toastMessage.value = msg
+  setTimeout(() => {
+    if (toastMessage.value === msg) {
+      toastMessage.value = ''
+    }
+  }, 4000)
+}
 
 // ═════════════════════════════════════════════════════════
 // GLOBAL CONTROLS & DATE PRESETS
@@ -1032,10 +1063,11 @@ function setDateRange(preset: { id: string; label: string }) {
   selectedPresetId.value = preset.id
   selectedDateRangeLabel.value = preset.label
   isDateOpen.value = false
+  showToast(`Filtered dashboard to ${preset.label}`)
 }
 
 function triggerExport() {
-  alert('Exporting verified analytics dataset for ' + selectedDateRangeLabel.value)
+  showToast(`Preparing CSV download for ${selectedDateRangeLabel.value}...`)
 }
 
 // ═════════════════════════════════════════════════════════
@@ -1254,7 +1286,7 @@ const calendarDays = [
 ]
 
 function nudgeAllStaleDeals() {
-  alert('Automated WhatsApp follow-up sequence triggered for 27 stale opportunities.')
+  showToast('Automated WhatsApp follow-up sequence queued for 27 stale opportunities.')
 }
 
 // ═════════════════════════════════════════════════════════
@@ -1346,13 +1378,13 @@ interface ActiveDeal {
 }
 
 const activeDealsList = ref<ActiveDeal[]>([
-  { id: 1, title: 'Whetstone Corporate Event Space booking [Jan-12] / 500 pax', company: 'Whetstone Corporate Events', value: '15.3K', stage: 'Follow up/Negotiation', age: '2 days', isStale: false, owner: 'Kausalya', source: 'WhatsApp' },
-  { id: 2, title: 'G2G B2B MATCH APP Enterprise Rollout', company: 'Touch Point Tech', value: '200.0K', stage: 'Follow up/Negotiation', age: '27d ago (Stale)', isStale: true, owner: 'Yee Ling', source: 'WhatsApp' },
-  { id: 3, title: 'ERP Crystal Tech Implementation', company: 'Nova Star Systems', value: '97.2K', stage: 'Proposal/Quotation', age: '5d ago', isStale: false, owner: 'Amirul Mokhtar', source: 'WhatsApp' },
-  { id: 4, title: 'HW02 Webinar Sponsorship Series', company: 'Whetstone Events', value: '32.7K', stage: 'Follow up/Negotiation', age: '5d ago', isStale: false, owner: 'Amirul Mokhtar', source: 'WhatsApp' },
-  { id: 5, title: 'AMS Victory Logistics Integration', company: 'Victory Log Sdn Bhd', value: '26.1K', stage: 'Follow up/Negotiation', age: '6d ago', isStale: false, owner: 'Amirul Mokhtar', source: 'WhatsApp' },
-  { id: 6, title: 'Realbox Pro E-Commerce Storefront', company: 'Real Box Co', value: '16.2K', stage: 'Follow up/Negotiation', age: '6d ago', isStale: false, owner: 'Amirul Mokhtar', source: 'WhatsApp' },
-  { id: 7, title: 'Lemmex Corporate Portal', company: 'Lemmex Corp', value: '38.0K', stage: 'Proposal/Quotation', age: '20d ago (Stale)', isStale: true, owner: 'Amirul Mokhtar', source: 'WhatsApp' }
+  { id: 1, title: 'Whetstone Corporate Event Space booking [Jan-12] / 500 pax', company: 'Whetstone Corporate Events', value: '15.3K', stage: 'Follow up/Negotiation', age: '2 days inactive', isStale: false, owner: 'Kausalya', source: 'WhatsApp' },
+  { id: 2, title: 'G2G B2B MATCH APP Enterprise Rollout', company: 'Touch Point Tech', value: '200.0K', stage: 'Follow up/Negotiation', age: '27 days (Stale >3d)', isStale: true, owner: 'Yee Ling', source: 'WhatsApp' },
+  { id: 3, title: 'ERP Crystal Tech Implementation', company: 'Nova Star Systems', value: '97.2K', stage: 'Proposal/Quotation', age: '5 days inactive', isStale: false, owner: 'Amirul Mokhtar', source: 'WhatsApp' },
+  { id: 4, title: 'HW02 Webinar Sponsorship Series', company: 'Whetstone Events', value: '32.7K', stage: 'Follow up/Negotiation', age: '5 days inactive', isStale: false, owner: 'Amirul Mokhtar', source: 'WhatsApp' },
+  { id: 5, title: 'AMS Victory Logistics Integration', company: 'Victory Log Sdn Bhd', value: '26.1K', stage: 'Follow up/Negotiation', age: '6 days inactive', isStale: false, owner: 'Amirul Mokhtar', source: 'WhatsApp' },
+  { id: 6, title: 'Realbox Pro E-Commerce Storefront', company: 'Real Box Co', value: '16.2K', stage: 'Follow up/Negotiation', age: '6 days inactive', isStale: false, owner: 'Amirul Mokhtar', source: 'WhatsApp' },
+  { id: 7, title: 'Lemmex Corporate Portal', company: 'Lemmex Corp', value: '38.0K', stage: 'Proposal/Quotation', age: '20 days (Stale >3d)', isStale: true, owner: 'Amirul Mokhtar', source: 'WhatsApp' }
 ])
 
 const filteredActiveDeals = computed(() => {
@@ -1382,7 +1414,7 @@ function triggerWhatsAppChat(deal: ActiveDeal) {
 }
 
 function sendQuickMessage() {
-  alert(`Message sent to ${selectedDeal.value?.company} via WhatsApp!`)
+  showToast(`WhatsApp message sent to ${selectedDeal.value?.company}!`)
   selectedDeal.value = null
 }
 
@@ -1519,7 +1551,7 @@ const qualityStackedApexSeries = [
 
 const marketingSources = [
   { source: 'Direct / (none)', sessions: 18420, users: 14200, engagement: '68.4%', events: 34200, leads: 520, convRate: 2.8 },
-  { source: 'google / organic', sessions: 6200, users: 4850, engagement: '61.2%', events: 12400, leads: 185, convRate: 3.0 },
+  { source: 'google / organic', sessions: 6200, users: 4850, mechanical: '61.2%', engagement: '61.2%', events: 12400, leads: 185, convRate: 3.0 },
   { source: 'facebook / cpc', sessions: 4150, users: 3200, engagement: '54.6%', events: 8900, leads: 94, convRate: 2.3 },
   { source: 'whatsapp / direct', sessions: 2900, users: 2450, engagement: '82.1%', events: 9800, leads: 238, convRate: 8.2 },
   { source: 'email / newsletter', sessions: 1850, users: 1520, engagement: '74.5%', events: 4500, leads: 151, convRate: 8.1 }
