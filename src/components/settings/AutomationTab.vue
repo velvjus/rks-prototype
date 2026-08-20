@@ -1,20 +1,19 @@
 <template>
-  <div class="space-y-5">
+  <div class="space-y-4">
     <!-- Page Header & Primary Action -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-1">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-1">
       <div>
-        <h1 class="text-xl font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
-          <Zap class="w-5 h-5 text-amber-500 fill-amber-500" />
-          Automation Setting
+        <h1 class="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
+          Automations
         </h1>
-        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
-          Automate routing, status transitions, tagging, and notifications based on CRM trigger events.
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+          Automate routing, assignments, tagging, and notifications based on CRM events.
         </p>
       </div>
-      <div class="flex items-center gap-2.5">
+      <div class="flex items-center gap-2">
         <button
           @click="openCreateModal"
-          class="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-xs rounded-lg cursor-pointer shadow-xs transition-colors"
+          class="inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-xs rounded-lg cursor-pointer shadow-2xs transition-colors"
         >
           <Plus class="w-3.5 h-3.5" />
           <span>New Automation</span>
@@ -22,287 +21,214 @@
       </div>
     </div>
 
-    <!-- Navigation Sub-tabs & Quick Metrics Summary -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-200 dark:border-slate-800 pb-px">
+    <!-- Navigation Sub-tabs & Clean Status Metrics -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-slate-200 dark:border-slate-800 pb-px">
       <div class="flex items-center gap-1">
         <button
           @click="activeSubTab = 'workflows'"
-          class="px-3.5 py-2 text-xs font-semibold border-b-2 cursor-pointer transition-colors flex items-center gap-1.5"
+          class="px-3 py-2 text-xs font-semibold border-b-2 cursor-pointer transition-colors"
           :class="activeSubTab === 'workflows'
             ? 'border-emerald-600 text-emerald-700 dark:text-emerald-400'
             : 'border-transparent text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200'"
         >
-          <SlidersHorizontal class="w-3.5 h-3.5" />
-          <span>Rules ({{ filteredAutomations.length }})</span>
+          Rules ({{ filteredAutomations.length }})
         </button>
         <button
           @click="activeSubTab = 'history'"
-          class="px-3.5 py-2 text-xs font-semibold border-b-2 cursor-pointer transition-colors flex items-center gap-1.5"
+          class="px-3 py-2 text-xs font-semibold border-b-2 cursor-pointer transition-colors"
           :class="activeSubTab === 'history'
             ? 'border-emerald-600 text-emerald-700 dark:text-emerald-400'
             : 'border-transparent text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200'"
         >
-          <History class="w-3.5 h-3.5" />
-          <span>Execution Logs ({{ executionLogs.length }})</span>
+          Execution Logs ({{ executionLogs.length }})
         </button>
       </div>
 
-      <!-- Compact Quick Status Summary -->
-      <div class="flex items-center gap-3 text-xs text-slate-500 dark:text-slate-400">
-        <span class="inline-flex items-center gap-1.5">
-          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-          <span><strong>{{ automations.filter(a => a.active).length }}</strong> Active</span>
-        </span>
-        <span class="text-slate-300 dark:text-slate-700">•</span>
-        <span><strong>{{ automations.filter(a => !a.active).length }}</strong> Paused</span>
-        <span class="text-slate-300 dark:text-slate-700">•</span>
-        <span><strong>142</strong> Executions Today</span>
+      <!-- Muted Summary Numbers -->
+      <div class="flex items-center gap-2.5 text-xs text-slate-400 pb-1">
+        <span><strong>{{ automations.filter(a => a.active).length }}</strong> active</span>
+        <span>•</span>
+        <span><strong>{{ automations.filter(a => !a.active).length }}</strong> paused</span>
+        <span>•</span>
+        <span><strong>142</strong> runs today</span>
       </div>
     </div>
 
     <!-- ══════════════ SUB-TAB 1: AUTOMATIONS LIST ══════════════ -->
     <div v-if="activeSubTab === 'workflows'" class="space-y-3">
       
-      <!-- Filter Bar: Search, Status, Sort & Tag Chips -->
-      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3.5 shadow-2xs space-y-3">
-        <div class="flex flex-col sm:flex-row items-center gap-2.5">
-          <!-- Search input -->
-          <div class="relative flex-1 w-full">
-            <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-            <input
-              ref="searchInputRef"
-              v-model="searchQuery"
-              type="text"
-              placeholder="Search automations by name, trigger, action, or tag (Press '/' to focus)..."
-              class="w-full pl-9 pr-14 py-2 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-slate-800 dark:text-white placeholder:text-slate-400 transition-all"
-            />
-            <div class="absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center gap-1">
-              <button
-                v-if="searchQuery"
-                @click="searchQuery = ''; searchInputRef?.focus()"
-                class="w-4 h-4 rounded-full bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-500 dark:text-slate-300 flex items-center justify-center text-[10px] cursor-pointer"
-                title="Clear search"
-              >
-                ✕
-              </button>
-              <kbd v-else class="hidden sm:inline-flex items-center px-1.5 py-0.5 text-[10px] font-mono text-slate-400 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded select-none">
-                /
-              </kbd>
-            </div>
-          </div>
-
-          <!-- Status & Sort Selectors -->
-          <div class="flex items-center gap-2 w-full sm:w-auto">
-            <select
-              v-model="selectedStatus"
-              class="text-xs bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 px-2.5 py-2 rounded-lg focus:outline-none text-slate-700 dark:text-slate-300 cursor-pointer"
+      <!-- Minimal Filter Bar: Search, Status, Sort & Tag Filter Pills -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <!-- Search input -->
+        <div class="relative flex-1 max-w-md">
+          <Search class="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
+          <input
+            ref="searchInputRef"
+            v-model="searchQuery"
+            type="text"
+            placeholder="Search automations by name, condition, or tag (Press '/' to focus)..."
+            class="w-full pl-8 pr-10 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-emerald-500 text-slate-800 dark:text-white placeholder:text-slate-400"
+          />
+          <div class="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
+            <button
+              v-if="searchQuery"
+              @click="searchQuery = ''; searchInputRef?.focus()"
+              class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xs cursor-pointer"
             >
-              <option value="all">All Status ({{ automations.length }})</option>
-              <option value="active">Active Only ({{ automations.filter(a => a.active).length }})</option>
-              <option value="paused">Paused Only ({{ automations.filter(a => !a.active).length }})</option>
-            </select>
-
-            <select
-              v-model="sortBy"
-              class="text-xs bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 px-2.5 py-2 rounded-lg focus:outline-none text-slate-700 dark:text-slate-300 cursor-pointer"
-            >
-              <option value="created_desc">Created: Newest</option>
-              <option value="created_asc">Created: Oldest</option>
-              <option value="name_asc">Name (A-Z)</option>
-              <option value="last_run">Recently Run</option>
-            </select>
+              ✕
+            </button>
+            <kbd v-else class="hidden sm:inline-flex items-center px-1 text-[10px] font-mono text-slate-400 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded select-none">
+              /
+            </kbd>
           </div>
         </div>
 
-        <!-- Tag Filter Chips -->
-        <div class="flex items-center gap-1.5 flex-wrap pt-2 border-t border-slate-100 dark:border-slate-800">
-          <span class="text-[11px] font-semibold text-slate-400 flex items-center gap-1 mr-1">
-            <Tag class="w-3 h-3 text-slate-400" />
-            Tags:
-          </span>
-          <button
-            @click="selectedTag = 'all'"
-            class="px-2 py-0.5 rounded-md text-[11px] font-medium transition-colors cursor-pointer"
-            :class="selectedTag === 'all'
-              ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900'
-              : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'"
+        <!-- Tag Filters & Status Dropdown -->
+        <div class="flex items-center gap-2 flex-wrap">
+          <!-- Tag Filter Pills (Muted Monochrome) -->
+          <div class="flex items-center gap-1">
+            <button
+              @click="selectedTag = 'all'"
+              class="px-2 py-1 rounded text-[11px] font-medium transition-colors cursor-pointer"
+              :class="selectedTag === 'all'
+                ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900'
+                : 'text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800'"
+            >
+              All
+            </button>
+            <button
+              v-for="tag in availableTags"
+              :key="tag.name"
+              @click="selectedTag = selectedTag === tag.name ? 'all' : tag.name"
+              class="px-2 py-1 rounded text-[11px] font-medium transition-colors cursor-pointer"
+              :class="selectedTag === tag.name
+                ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900'
+                : 'text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800'"
+            >
+              {{ tag.name }}
+            </button>
+          </div>
+
+          <div class="h-4 w-px bg-slate-200 dark:border-slate-800 hidden sm:block"></div>
+
+          <!-- Status & Mode Filter Dropdown -->
+          <select
+            v-model="selectedStatus"
+            class="text-xs bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-2 py-1 rounded-lg focus:outline-none text-slate-700 dark:text-slate-300 cursor-pointer"
           >
-            All ({{ automations.length }})
-          </button>
-          <button
-            v-for="tag in availableTags"
-            :key="tag.name"
-            @click="selectedTag = selectedTag === tag.name ? 'all' : tag.name"
-            class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-medium transition-colors cursor-pointer border"
-            :style="selectedTag === tag.name
-              ? { backgroundColor: tag.colorBg, color: tag.colorText, borderColor: tag.colorText }
-              : { backgroundColor: 'transparent', color: tag.colorText, borderColor: tag.colorText + '40' }"
-          >
-            <span class="w-1.5 h-1.5 rounded-full" :style="{ backgroundColor: tag.colorText }"></span>
-            {{ tag.name }}
-            <span class="opacity-75 text-[10px]">({{ getTagCount(tag.name) }})</span>
-          </button>
+            <option value="all">All Rules</option>
+            <option value="active">Active Only</option>
+            <option value="paused">Paused Only</option>
+            <option value="auto">Automations (Events)</option>
+            <option value="manual">Macros (Manual)</option>
+          </select>
         </div>
       </div>
 
-      <!-- Automations List -->
+      <!-- Automations List Container -->
       <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-2xs overflow-hidden">
         <div v-if="filteredAutomations.length > 0" class="divide-y divide-slate-100 dark:divide-slate-800">
           <div
             v-for="auto in filteredAutomations"
             :key="auto.id"
-            class="p-4 hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition-colors"
+            class="p-4 hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition-colors group relative"
           >
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3.5">
+            <div class="flex items-start justify-between gap-4">
               
-              <!-- Left Content Details -->
-              <div class="space-y-1.5 flex-1 min-w-0">
-                <!-- Title row + status badge + mode + tags + date -->
+              <!-- Left: Title, Clean Natural Logic String, Metadata -->
+              <div class="space-y-1 flex-1 min-w-0">
+                <!-- Title Row: Name, Macro badge (if manual), Neutral Tag Pills -->
                 <div class="flex items-center gap-2 flex-wrap">
-                  <h3 class="font-bold text-xs text-slate-900 dark:text-white truncate">
+                  <h3 class="font-semibold text-sm text-slate-900 dark:text-white truncate tracking-tight">
                     {{ auto.name }}
                   </h3>
 
-                  <!-- Active/Paused pill -->
+                  <!-- Manual Macro Badge (Only shown if manual mode) -->
                   <span
-                    class="text-[10px] font-semibold px-2 py-0.5 rounded-full inline-flex items-center gap-1"
-                    :class="auto.active
-                      ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-900/50'
-                      : 'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400 border border-slate-200 dark:border-slate-700'"
+                    v-if="auto.executionMode === 'manual'"
+                    class="text-[10px] font-medium px-1.5 py-0.5 rounded bg-purple-50 text-purple-700 dark:bg-purple-950/40 dark:text-purple-300 border border-purple-200/60 dark:border-purple-800/50"
                   >
-                    <span class="w-1.5 h-1.5 rounded-full" :class="auto.active ? 'bg-emerald-500' : 'bg-slate-400'"></span>
-                    {{ auto.active ? 'Active' : 'Paused' }}
+                    Macro
                   </span>
 
-                  <!-- Mode Badge -->
-                  <span
-                    class="text-[10px] font-medium px-1.5 py-0.5 rounded border"
-                    :class="auto.executionMode === 'manual'
-                      ? 'bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-950/40 dark:text-purple-300'
-                      : 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/40 dark:text-blue-300'"
-                  >
-                    {{ auto.executionMode === 'manual' ? 'Manual' : 'Automatic' }}
-                  </span>
-
-                  <!-- Tag Pills -->
+                  <!-- Neutral Monochrome Tag Pills -->
                   <span
                     v-for="tag in auto.tags"
                     :key="tag"
-                    class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium border"
-                    :style="getTagStyle(tag)"
+                    class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400"
                   >
+                    <span class="w-1.5 h-1.5 rounded-full" :style="{ backgroundColor: getTagDotColor(tag) }"></span>
                     {{ tag }}
                   </span>
-
-                  <!-- Date Created -->
-                  <span class="inline-flex items-center gap-1 text-[11px] text-slate-400">
-                    <Calendar class="w-3 h-3 text-slate-400" />
-                    <span>{{ auto.dateCreated }}</span>
-                  </span>
                 </div>
 
-                <!-- Optional Description -->
-                <p v-if="auto.description" class="text-xs text-slate-500 dark:text-slate-400 line-clamp-1">
-                  {{ auto.description }}
+                <!-- Clean Single-Line Natural Logic Summary -->
+                <p class="text-xs text-slate-600 dark:text-slate-300 line-clamp-1">
+                  {{ formatRuleSentence(auto) }}
                 </p>
 
-                <!-- Natural logic statement -->
-                <div class="flex items-center gap-1.5 flex-wrap text-xs pt-0.5">
-                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[11px] font-medium">
-                    <span class="text-slate-400 uppercase text-[10px]">When</span>
-                    <span>{{ auto.triggerEvent || 'Conversation Created' }}</span>
-                  </span>
-
-                  <template v-if="auto.conditions && auto.conditions.length > 0">
-                    <span
-                      v-for="(c, cIdx) in auto.conditions"
-                      :key="cIdx"
-                      class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-950/30 text-blue-700 dark:text-blue-300 text-[11px] font-medium border border-blue-100 dark:border-blue-900/30"
-                    >
-                      <span class="text-blue-400 uppercase text-[10px]">{{ cIdx === 0 ? 'If' : 'And' }}</span>
-                      <span>{{ c.field }} {{ c.operator }} {{ c.value }}</span>
-                    </span>
-                  </template>
-
-                  <span class="text-slate-300 dark:text-slate-600 font-bold">→</span>
-
-                  <template v-if="auto.actionSteps && auto.actionSteps.length > 0">
-                    <span
-                      v-for="(act, actIdx) in auto.actionSteps"
-                      :key="actIdx"
-                      class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-300 text-[11px] font-medium border border-emerald-100 dark:border-emerald-900/30"
-                    >
-                      <span class="opacity-70 text-[10px]">Step {{ actIdx + 1 }}:</span>
-                      <span>{{ act.type }}</span>
-                      <span v-if="act.waitDuration" class="text-[10px] text-emerald-800 dark:text-emerald-200">
-                        ({{ act.waitDuration }})
-                      </span>
-                    </span>
-                  </template>
-                  <template v-else>
-                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-300 text-[11px] font-medium">
-                      <span>{{ auto.action }}</span>
-                    </span>
-                  </template>
-                </div>
-
-                <!-- Last run info -->
-                <div class="flex items-center gap-2 text-[11px] text-slate-400 pt-0.5">
-                  <span v-if="auto.lastRun">Last run {{ auto.lastRun }}</span>
-                  <span v-else class="italic">Never triggered</span>
+                <!-- Clean Footer Metadata -->
+                <div class="text-[11px] text-slate-400 flex items-center gap-2 pt-0.5">
+                  <span>Created {{ auto.dateCreated }}</span>
                   <span>•</span>
                   <span>{{ auto.executionCount || 0 }} runs</span>
+                  <span v-if="auto.lastRun">• Last run {{ auto.lastRun }}</span>
                 </div>
               </div>
 
-              <!-- Right Actions: Run Test, Clone, Edit, Active Toggle, Delete -->
-              <div class="flex items-center gap-1.5 shrink-0">
-                <button
-                  @click="testAutomation(auto)"
-                  class="px-2.5 py-1.5 bg-slate-50 hover:bg-slate-100 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-medium text-xs rounded-lg cursor-pointer border border-slate-200 dark:border-slate-700 transition-colors flex items-center gap-1"
-                  title="Run Test"
-                >
-                  <Play class="w-3 h-3 fill-current text-slate-500" />
-                  <span class="hidden sm:inline">Test</span>
-                </button>
+              <!-- Right: Hover-Revealed Actions & Always-Visible Active Switch -->
+              <div class="flex items-center gap-1.5 shrink-0 self-center">
+                <!-- Secondary Actions (Revealed on Hover) -->
+                <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
+                  <button
+                    @click="testAutomation(auto)"
+                    class="p-1.5 text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-md transition-colors cursor-pointer"
+                    title="Test Run"
+                  >
+                    <Play class="w-3.5 h-3.5" />
+                  </button>
 
-                <button
-                  @click="cloneAutomation(auto)"
-                  class="p-1.5 sm:px-2.5 sm:py-1.5 text-slate-700 dark:text-slate-300 hover:text-emerald-600 bg-slate-50 hover:bg-emerald-50 dark:bg-slate-800 dark:hover:bg-emerald-950/30 rounded-lg transition-colors cursor-pointer flex items-center gap-1 border border-slate-200 dark:border-slate-700 font-medium text-xs"
-                  title="Clone Automation"
-                >
-                  <Copy class="w-3.5 h-3.5" />
-                  <span class="hidden sm:inline">Clone</span>
-                </button>
+                  <button
+                    @click="cloneAutomation(auto)"
+                    class="p-1.5 text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-md transition-colors cursor-pointer"
+                    title="Clone Rule"
+                  >
+                    <Copy class="w-3.5 h-3.5" />
+                  </button>
 
-                <button
-                  @click="openEditModal(auto)"
-                  class="p-1.5 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
-                  title="Edit Rule"
-                >
-                  <Pencil class="w-3.5 h-3.5" />
-                </button>
+                  <button
+                    @click="openEditModal(auto)"
+                    class="p-1.5 text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-md transition-colors cursor-pointer"
+                    title="Edit Rule"
+                  >
+                    <Pencil class="w-3.5 h-3.5" />
+                  </button>
 
-                <!-- Active Toggle Switch -->
-                <button
-                  @click="toggleActive(auto)"
-                  class="relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none"
-                  :class="auto.active ? 'bg-emerald-600' : 'bg-slate-200 dark:bg-slate-700'"
-                  :title="auto.active ? 'Click to Pause' : 'Click to Activate'"
-                >
-                  <span
-                    class="pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
-                    :class="auto.active ? 'translate-x-4' : 'translate-x-0'"
-                  ></span>
-                </button>
+                  <button
+                    @click="confirmDelete(auto)"
+                    class="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30 rounded-md transition-colors cursor-pointer"
+                    title="Delete Rule"
+                  >
+                    <Trash2 class="w-3.5 h-3.5" />
+                  </button>
+                </div>
 
-                <button
-                  @click="confirmDelete(auto)"
-                  class="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30 rounded-lg transition-colors cursor-pointer"
-                  title="Delete Automation"
-                >
-                  <Trash2 class="w-3.5 h-3.5" />
-                </button>
+                <div class="h-4 w-px bg-slate-200 dark:bg-slate-800 mx-0.5"></div>
+
+                <!-- Always-Visible Active Toggle Switch -->
+                <div class="flex items-center gap-1.5 pl-1">
+                  <button
+                    @click="toggleActive(auto)"
+                    class="relative inline-flex h-4 w-7 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none"
+                    :class="auto.active ? 'bg-emerald-600' : 'bg-slate-200 dark:bg-slate-700'"
+                    :title="auto.active ? 'Active (Click to Pause)' : 'Paused (Click to Activate)'"
+                  >
+                    <span
+                      class="pointer-events-none inline-block h-3 w-3 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                      :class="auto.active ? 'translate-x-3' : 'translate-x-0'"
+                    ></span>
+                  </button>
+                </div>
               </div>
 
             </div>
@@ -310,24 +236,14 @@
         </div>
 
         <!-- Empty State -->
-        <div v-else class="p-10 text-center space-y-2">
-          <div class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto text-slate-400">
-            <Zap class="w-5 h-5" />
-          </div>
-          <div class="text-xs font-bold text-slate-800 dark:text-white">No automation rules found</div>
-          <p class="text-xs text-slate-400 max-w-sm mx-auto">
+        <div v-else class="p-8 text-center space-y-2">
+          <div class="text-xs font-semibold text-slate-700 dark:text-slate-300">No matching automations</div>
+          <p class="text-xs text-slate-400">
             {{ searchQuery || selectedTag !== 'all' || selectedStatus !== 'all'
-              ? 'Try resetting your search filter.'
-              : 'Create your first automation workflow.'
+              ? 'Try adjusting your search filter.'
+              : 'Create your first automation rule.'
             }}
           </p>
-          <button
-            v-if="searchQuery || selectedTag !== 'all' || selectedStatus !== 'all'"
-            @click="resetFilters"
-            class="mt-2 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium text-xs rounded-lg cursor-pointer"
-          >
-            Reset Filters
-          </button>
         </div>
       </div>
 
@@ -335,25 +251,25 @@
 
     <!-- ══════════════ SUB-TAB 2: EXECUTION LOGS ══════════════ -->
     <div v-if="activeSubTab === 'history'" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-2xs overflow-hidden">
-      <div class="p-3.5 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50/50 dark:bg-slate-800/30">
+      <div class="p-3.5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between gap-3 bg-slate-50/50 dark:bg-slate-800/30">
         <div>
-          <h3 class="font-bold text-slate-900 dark:text-white text-xs uppercase tracking-wider">Execution Audit Logs</h3>
-          <p class="text-[11px] text-slate-400 mt-0.5">Real-time audit log of rule evaluations and triggered actions.</p>
+          <h3 class="font-semibold text-slate-900 dark:text-white text-xs">Execution Audit Trail</h3>
+          <p class="text-[11px] text-slate-400">Log of evaluated events and executed actions.</p>
         </div>
         <div class="flex items-center gap-2">
-          <div class="relative w-48 sm:w-56">
+          <div class="relative w-44">
             <Search class="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
             <input
               v-model="historySearchQuery"
               type="text"
-              placeholder="Filter logs..."
-              class="w-full pl-8 pr-6 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-emerald-500 text-slate-800 dark:text-white placeholder:text-slate-400"
+              placeholder="Filter..."
+              class="w-full pl-8 pr-3 py-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-md text-xs focus:outline-none focus:ring-1 focus:ring-emerald-500 text-slate-800 dark:text-white placeholder:text-slate-400"
             />
           </div>
           <button
             v-if="executionLogs.length > 0"
-            @click="executionLogs = []; $emit('toast', 'Logs Cleared', 'Execution history log wiped.', 'warning')"
-            class="text-[11px] text-slate-400 hover:text-rose-600 font-medium cursor-pointer px-2 py-1"
+            @click="executionLogs = []; $emit('toast', 'Logs Cleared', 'History wiped.', 'warning')"
+            class="text-[11px] text-slate-400 hover:text-rose-600 font-medium cursor-pointer"
           >
             Clear
           </button>
@@ -364,67 +280,64 @@
         <div
           v-for="log in filteredLogs"
           :key="log.id"
-          class="p-3.5 flex items-center justify-between hover:bg-slate-50/50 dark:hover:bg-slate-800/30 text-xs transition-colors"
+          class="p-3 flex items-center justify-between hover:bg-slate-50/50 dark:hover:bg-slate-800/30 text-xs transition-colors"
         >
-          <div class="flex items-center gap-3">
-            <div class="w-2 h-2 rounded-full" :class="log.status === 'success' ? 'bg-emerald-500' : 'bg-rose-400'"></div>
+          <div class="flex items-center gap-2.5">
+            <div class="w-1.5 h-1.5 rounded-full" :class="log.status === 'success' ? 'bg-emerald-500' : 'bg-rose-400'"></div>
             <div>
-              <div class="font-medium text-slate-800 dark:text-slate-200 flex items-center gap-2">
+              <div class="font-semibold text-sm text-slate-800 dark:text-slate-200">
                 {{ log.automationName }}
-                <span class="text-[11px] text-slate-400">on <strong class="text-slate-600 dark:text-slate-300 font-mono">{{ log.source }}</strong></span>
+                <span class="text-xs font-normal text-slate-400">on <span class="font-mono text-slate-600 dark:text-slate-300">{{ log.source }}</span></span>
               </div>
-              <div class="text-[11px] text-slate-400 mt-0.5 flex items-center gap-2">
+              <div class="text-xs text-slate-400 mt-0.5">
                 <span>Result: {{ log.actionResult }}</span>
-                <span>•</span>
-                <span>Duration: {{ log.duration || '12ms' }}</span>
+                <span class="mx-1">•</span>
+                <span>{{ log.duration || '12ms' }}</span>
               </div>
             </div>
           </div>
-          <div class="flex items-center gap-2.5">
-            <span class="text-[10px] bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 font-medium px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-900/40">
-              {{ log.status === 'success' ? 'Passed' : 'Failed' }}
-            </span>
-            <span class="text-[11px] font-mono text-slate-400">{{ log.time }}</span>
+          <div class="flex items-center gap-2">
+            <span class="text-[10px] text-slate-400 font-mono">{{ log.time }}</span>
           </div>
         </div>
       </div>
       <div v-else class="p-8 text-center text-slate-400 text-xs">
-        {{ historySearchQuery ? 'No execution logs match your filter.' : 'No execution logs recorded yet.' }}
+        {{ historySearchQuery ? 'No matching logs.' : 'No execution history recorded yet.' }}
       </div>
     </div>
 
     <!-- ══════════════ MODAL: NEW / EDIT AUTOMATION WORKFLOW BUILDER ══════════════ -->
     <div
       v-if="showModal"
-      class="fixed inset-0 bg-slate-950/70 backdrop-blur-xs flex items-center justify-center z-50 p-3 sm:p-6 overflow-y-auto animate-fade-in"
+      class="fixed inset-0 bg-slate-950/60 backdrop-blur-2xs flex items-center justify-center z-50 p-3 sm:p-6 overflow-y-auto animate-fade-in"
       @click.self="showModal = false"
     >
-      <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 max-w-2xl w-full mx-auto overflow-hidden animate-scale-up flex flex-col max-h-[90vh]">
+      <div class="bg-white dark:bg-slate-900 rounded-xl shadow-xl border border-slate-200 dark:border-slate-800 max-w-xl w-full mx-auto overflow-hidden animate-scale-up flex flex-col max-h-[88vh]">
         
         <!-- Modal Header -->
-        <header class="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-start justify-between bg-white dark:bg-slate-900 shrink-0">
+        <header class="px-5 py-3.5 border-b border-slate-100 dark:border-slate-800 flex items-start justify-between bg-white dark:bg-slate-900 shrink-0">
           <div>
             <h3 class="font-bold text-sm text-slate-900 dark:text-white">
               {{ isEditing ? 'Edit Automation' : isCloning ? 'Clone Automation' : 'New Automation' }}
             </h3>
             <p class="text-xs text-slate-400 mt-0.5">
-              Configure trigger conditions and multi-step action execution pipelines.
+              Merges what used to be separate Macros and Automations into one rule
             </p>
           </div>
           <button
             @click="showModal = false"
-            class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+            class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1 rounded-md transition-colors cursor-pointer"
           >
             <X class="w-4 h-4" />
           </button>
         </header>
 
-        <!-- Modal Scrollable Content Form -->
-        <form @submit.prevent="saveForm" class="flex-1 overflow-y-auto p-6 space-y-5 custom-scrollbar">
+        <!-- Modal Form -->
+        <form @submit.prevent="saveForm" class="flex-1 overflow-y-auto p-5 space-y-4 custom-scrollbar">
           
           <!-- 1. Rule Name -->
-          <div class="space-y-1.5">
-            <label class="block text-xs font-semibold text-slate-800 dark:text-slate-200">
+          <div class="space-y-1">
+            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">
               Rule Name
             </label>
             <input
@@ -432,81 +345,25 @@
               v-model="form.name"
               placeholder="Enter rule name"
               required
-              class="w-full text-xs bg-white dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-slate-800 dark:text-white placeholder:text-slate-400 transition-all"
+              class="w-full text-xs bg-white dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 px-3 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-emerald-500 text-slate-800 dark:text-white placeholder:text-slate-400"
             />
           </div>
 
           <!-- 2. Description (optional) -->
-          <div class="space-y-1.5">
-            <label class="block text-xs font-semibold text-slate-800 dark:text-slate-200">
+          <div class="space-y-1">
+            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">
               Description (optional)
             </label>
             <input
               type="text"
               v-model="form.description"
               placeholder="Enter rule description"
-              class="w-full text-xs bg-white dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-slate-800 dark:text-white placeholder:text-slate-400 transition-all"
+              class="w-full text-xs bg-white dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 px-3 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-emerald-500 text-slate-800 dark:text-white placeholder:text-slate-400"
             />
           </div>
 
-          <!-- 3. Category Tags Selection -->
-          <div class="space-y-2">
-            <label class="block text-xs font-semibold text-slate-800 dark:text-slate-200">
-              Organization Tags
-            </label>
-            <div class="flex items-center gap-1.5 flex-wrap">
-              <button
-                type="button"
-                v-for="tag in availableTags"
-                :key="tag.name"
-                @click="toggleTagSelection(tag.name)"
-                class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium cursor-pointer border transition-colors"
-                :style="form.tags.includes(tag.name)
-                  ? { backgroundColor: tag.colorBg, color: tag.colorText, borderColor: tag.colorText }
-                  : { backgroundColor: 'transparent', color: '#64748B', borderColor: '#CBD5E1' }"
-              >
-                <Check v-if="form.tags.includes(tag.name)" class="w-3 h-3" />
-                <span v-else class="w-1.5 h-1.5 rounded-full" :style="{ backgroundColor: tag.colorText }"></span>
-                {{ tag.name }}
-              </button>
-
-              <!-- Inline Add Custom Tag -->
-              <div v-if="isAddingCustomTag" class="inline-flex items-center gap-1">
-                <input
-                  v-model="customTagInput"
-                  type="text"
-                  placeholder="New tag..."
-                  @keydown.enter.prevent="addCustomTag"
-                  class="text-xs px-2.5 py-1 border border-emerald-500 rounded-md focus:outline-none w-24 bg-white dark:bg-slate-800 text-slate-800 dark:text-white"
-                />
-                <button
-                  type="button"
-                  @click="addCustomTag"
-                  class="text-xs text-emerald-600 font-semibold hover:underline cursor-pointer"
-                >
-                  Add
-                </button>
-                <button
-                  type="button"
-                  @click="isAddingCustomTag = false"
-                  class="text-xs text-slate-400 cursor-pointer"
-                >
-                  ✕
-                </button>
-              </div>
-              <button
-                v-else
-                type="button"
-                @click="isAddingCustomTag = true"
-                class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium border border-dashed border-slate-300 text-slate-500 hover:text-slate-700 dark:border-slate-700 dark:text-slate-400 cursor-pointer"
-              >
-                <Plus class="w-3 h-3" /> Custom Tag
-              </button>
-            </div>
-          </div>
-
           <!-- ══════ SECTION 1: WHEN SHOULD THIS RUN? ══════ -->
-          <div class="space-y-3.5 pt-3 border-t border-slate-100 dark:border-slate-800">
+          <div class="space-y-3 pt-3 border-t border-slate-100 dark:border-slate-800">
             
             <div class="flex items-start gap-2.5">
               <div class="w-5 h-5 rounded bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
@@ -514,7 +371,7 @@
               </div>
               <div>
                 <h4 class="font-bold text-xs text-slate-900 dark:text-white">When should this run?</h4>
-                <p class="text-[11px] text-slate-400">Choose whether it runs automatically by event, or manually when an agent triggers it.</p>
+                <p class="text-[11px] text-slate-400">Choose whether it runs by itself, or only when an agent clicks it</p>
               </div>
             </div>
 
@@ -526,7 +383,7 @@
                 class="flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-md text-xs font-semibold transition-colors cursor-pointer"
                 :class="form.executionMode === 'auto'
                   ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-2xs'
-                  : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200'"
+                  : 'text-slate-500 hover:text-slate-800 dark:text-slate-400'"
               >
                 <Zap class="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
                 Automatically
@@ -537,110 +394,131 @@
                 class="flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-md text-xs font-semibold transition-colors cursor-pointer"
                 :class="form.executionMode === 'manual'
                   ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-2xs'
-                  : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200'"
+                  : 'text-slate-500 hover:text-slate-800 dark:text-slate-400'"
               >
                 <Sparkles class="w-3.5 h-3.5 text-purple-500 fill-purple-500" />
                 Manually
               </button>
             </div>
 
-            <!-- Run when (Trigger Event Dropdown) -->
-            <div class="space-y-1">
-              <label class="block text-xs font-semibold text-slate-800 dark:text-slate-200">
-                Run when
-              </label>
-              <select
-                v-model="form.triggerEvent"
-                class="w-full text-xs bg-white dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-slate-800 dark:text-white cursor-pointer"
-              >
-                <option value="Conversation Created">Conversation Created</option>
-                <option value="Conversation Updated">Conversation Updated</option>
-                <option value="Message Created">Message Created</option>
-                <option value="Lead Score Changed">Lead Score Changed</option>
-                <option value="Deal Stage Changed">Deal Stage Changed</option>
-                <option value="Contact Created">Contact Created</option>
-                <option value="Ticket Status Changed">Ticket Status Changed</option>
-              </select>
+            <!-- When in Manually mode: Show Macro helper callout banner (Matching screenshot) -->
+            <div
+              v-if="form.executionMode === 'manual'"
+              class="p-3.5 bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 rounded-xl text-xs text-slate-600 dark:text-slate-300 animate-fade-in leading-relaxed"
+            >
+              This becomes a button agents can click from inside a conversation — the same as today's Macros. No event or conditions needed.
             </div>
 
-            <!-- Only if (Filter Conditions) -->
-            <div class="space-y-2.5">
-              <div>
-                <label class="block text-xs font-semibold text-slate-800 dark:text-slate-200">
-                  Only if
+            <!-- When in Automatically mode: Show Run when & Only if condition engine -->
+            <template v-else>
+              <!-- Run when (Trigger Event Dropdown) -->
+              <div class="space-y-1 animate-fade-in">
+                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                  Run when
                 </label>
-                <p class="text-[11px] text-slate-400">
-                  All conditions below must match (AND). Leave empty to execute on all matching events.
-                </p>
+                <select
+                  v-model="form.triggerEvent"
+                  class="w-full text-xs bg-white dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 px-3 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-emerald-500 text-slate-800 dark:text-white cursor-pointer"
+                >
+                  <option v-for="trig in triggerOptions" :key="trig" :value="trig">{{ trig }}</option>
+                </select>
               </div>
 
-              <!-- Conditions List -->
-              <div class="space-y-2">
-                <div
-                  v-for="(cond, index) in form.conditions"
-                  :key="index"
-                  class="flex items-center gap-2 flex-wrap sm:flex-nowrap"
-                >
-                  <span class="text-xs font-medium text-slate-400 w-10 shrink-0">
-                    {{ index === 0 ? 'Where' : 'And' }}
-                  </span>
+              <!-- Only if (Filter Conditions) -->
+              <div class="space-y-2.5">
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                    Only if
+                  </label>
+                  <p class="text-[11px] text-slate-400">
+                    All conditions below must be true (AND). Leave this empty to run for every conversation that matches the event above.
+                  </p>
+                </div>
 
-                  <!-- Condition Field -->
-                  <select
-                    v-model="cond.field"
-                    class="text-xs bg-white dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 px-2.5 py-1.5 rounded-lg focus:outline-none focus:ring-1 focus:ring-emerald-500 text-slate-800 dark:text-white flex-1 min-w-[110px]"
+                <!-- Conditions List -->
+                <div class="space-y-2">
+                  <div
+                    v-for="(cond, index) in form.conditions"
+                    :key="index"
+                    class="flex items-center gap-1.5 flex-wrap sm:flex-nowrap"
                   >
-                    <option value="Status">Status</option>
-                    <option value="Channel">Channel</option>
-                    <option value="Lead Score">Lead Score</option>
-                    <option value="Assigned Team">Assigned Team</option>
-                    <option value="Priority">Priority</option>
-                    <option value="Tag">Tag</option>
-                    <option value="Unread Time">Unread Time</option>
-                  </select>
+                    <span class="text-xs text-slate-400 w-10 shrink-0">
+                      {{ index === 0 ? 'Where' : 'And' }}
+                    </span>
 
-                  <!-- Condition Operator -->
-                  <select
-                    v-model="cond.operator"
-                    class="text-xs bg-white dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 px-2.5 py-1.5 rounded-lg focus:outline-none focus:ring-1 focus:ring-emerald-500 text-slate-800 dark:text-white flex-1 min-w-[100px]"
-                  >
-                    <option value="Equal to">Equal to</option>
+                    <!-- Condition Field -->
+                    <select
+                      v-model="cond.field"
+                      class="text-xs bg-white dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 px-2 py-1.5 rounded-lg focus:outline-none text-slate-800 dark:text-white flex-1 min-w-[120px]"
+                    >
+                      <option v-for="f in conditionFieldOptions" :key="f" :value="f">{{ f }}</option>
+                    </select>
+
+                    <!-- Condition Operator -->
+                    <select
+                      v-model="cond.operator"
+                      class="text-xs bg-white dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 px-2 py-1.5 rounded-lg focus:outline-none text-slate-800 dark:text-white flex-1 min-w-[100px]"
+                    >
+                      <option value="Equal to">Equal to</option>
                     <option value="Not equal to">Not equal to</option>
                     <option value="Contains">Contains</option>
                     <option value="Greater than">Greater than</option>
                     <option value="Less than">Less than</option>
                     <option value="Is present">Is present</option>
+                    <option value="Is not present">Is not present</option>
                   </select>
 
                   <!-- Condition Value Input / Select -->
                   <input
-                    v-if="cond.field === 'Lead Score' || cond.field === 'Unread Time'"
+                    v-if="['Email Subject', 'Country', 'Phone Number', 'Referrer Link', 'Email', 'Hp 2'].includes(cond.field)"
                     type="text"
                     v-model="cond.value"
-                    placeholder="e.g. 80"
-                    class="text-xs bg-white dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 px-2.5 py-1.5 rounded-lg focus:outline-none focus:ring-1 focus:ring-emerald-500 text-slate-800 dark:text-white flex-1 min-w-[100px]"
+                    placeholder="Enter value..."
+                    class="text-xs bg-white dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 px-2 py-1.5 rounded-lg focus:outline-none text-slate-800 dark:text-white flex-1 min-w-[110px]"
                   />
                   <select
-                    v-else
+                    v-else-if="cond.field === 'Status'"
                     v-model="cond.value"
-                    class="text-xs bg-white dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 px-2.5 py-1.5 rounded-lg focus:outline-none focus:ring-1 focus:ring-emerald-500 text-slate-800 dark:text-white flex-1 min-w-[100px]"
+                    class="text-xs bg-white dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 px-2 py-1.5 rounded-lg focus:outline-none text-slate-800 dark:text-white flex-1 min-w-[110px]"
                   >
                     <option value="Open">Open</option>
                     <option value="Pending">Pending</option>
                     <option value="Resolved">Resolved</option>
-                    <option value="WhatsApp">WhatsApp</option>
-                    <option value="Email">Email</option>
-                    <option value="Live Chat">Live Chat</option>
-                    <option value="VIP Client">VIP Client</option>
-                    <option value="Partner">Partner</option>
-                    <option value="High Priority">High Priority</option>
+                    <option value="Snoozed">Snoozed</option>
                   </select>
+                  <select
+                    v-else-if="cond.field === 'Priority'"
+                    v-model="cond.value"
+                    class="text-xs bg-white dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 px-2 py-1.5 rounded-lg focus:outline-none text-slate-800 dark:text-white flex-1 min-w-[110px]"
+                  >
+                    <option value="Low">Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High">High</option>
+                    <option value="Urgent">Urgent</option>
+                  </select>
+                  <select
+                    v-else-if="cond.field === 'Inbox'"
+                    v-model="cond.value"
+                    class="text-xs bg-white dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 px-2 py-1.5 rounded-lg focus:outline-none text-slate-800 dark:text-white flex-1 min-w-[110px]"
+                  >
+                    <option value="WhatsApp Support">WhatsApp Support</option>
+                    <option value="General Sales">General Sales</option>
+                    <option value="Live Chat">Live Chat</option>
+                    <option value="Email Helpdesk">Email Helpdesk</option>
+                  </select>
+                  <input
+                    v-else
+                    type="text"
+                    v-model="cond.value"
+                    placeholder="Select or enter value..."
+                    class="text-xs bg-white dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 px-2 py-1.5 rounded-lg focus:outline-none text-slate-800 dark:text-white flex-1 min-w-[110px]"
+                  />
 
                   <!-- Remove Condition Button -->
                   <button
                     type="button"
                     @click="removeCondition(index)"
-                    class="p-1.5 text-slate-400 hover:text-rose-600 rounded-lg transition-colors cursor-pointer shrink-0"
+                    class="p-1 text-slate-400 hover:text-rose-600 rounded cursor-pointer shrink-0"
                     title="Remove condition"
                   >
                     ✕
@@ -652,16 +530,17 @@
               <button
                 type="button"
                 @click="addCondition"
-                class="inline-flex items-center gap-1 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-medium text-xs rounded-lg transition-colors cursor-pointer"
+                class="inline-flex items-center gap-1 px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 font-medium text-xs rounded-lg transition-colors cursor-pointer"
               >
-                <Plus class="w-3.5 h-3.5" /> Add condition
+                <Plus class="w-3.5 h-3.5" /> Add a condition
               </button>
             </div>
+          </template>
 
-          </div>
+        </div>
 
           <!-- ══════ SECTION 2: THEN DO THIS ══════ -->
-          <div class="space-y-3.5 pt-3 border-t border-slate-100 dark:border-slate-800">
+          <div class="space-y-3 pt-3 border-t border-slate-100 dark:border-slate-800">
             
             <div class="flex items-start gap-2.5">
               <div class="w-5 h-5 rounded bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
@@ -669,51 +548,44 @@
               </div>
               <div>
                 <h4 class="font-bold text-xs text-slate-900 dark:text-white">Then do this</h4>
-                <p class="text-[11px] text-slate-400">Actions execute in sequence from top to bottom.</p>
+                <p class="text-[11px] text-slate-400">Steps run in order, top to bottom. Click the clock on any step to add a wait before it runs.</p>
               </div>
             </div>
 
             <!-- Steps List -->
-            <div class="space-y-2.5">
+            <div class="space-y-3">
               <div
                 v-for="(step, stepIndex) in form.actionSteps"
                 :key="stepIndex"
                 class="border border-slate-200 dark:border-slate-800 rounded-xl p-3 bg-slate-50/50 dark:bg-slate-800/20 space-y-2.5"
               >
-                <div class="flex items-center justify-between gap-2.5">
+                <div class="flex items-center justify-between gap-2">
                   <div class="flex items-center gap-2 flex-1">
                     <span class="w-5 h-5 rounded-full bg-slate-900 text-white font-bold text-[10px] flex items-center justify-center shrink-0">
                       {{ stepIndex + 1 }}
                     </span>
 
+                    <!-- Action Selector with all 17 actions -->
                     <select
                       v-model="step.type"
                       class="text-xs font-semibold bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 px-2.5 py-1.5 rounded-lg focus:outline-none text-slate-900 dark:text-white flex-1"
                     >
-                      <option value="Send a Message">Send a Message</option>
-                      <option value="Assign to Team">Assign to Team</option>
-                      <option value="Assign to User">Assign to User</option>
-                      <option value="Apply Tag">Apply Tag</option>
-                      <option value="Remove Tag">Remove Tag</option>
-                      <option value="Update Stage">Update Pipeline Stage</option>
-                      <option value="Send Email Template">Send Email Template</option>
-                      <option value="Send WhatsApp Template">Send WhatsApp Template</option>
-                      <option value="Set Urgency Level">Set Urgency Level</option>
+                      <option v-for="act in actionTypeOptions" :key="act" :value="act">{{ act }}</option>
                     </select>
                   </div>
 
-                  <div class="flex items-center gap-1 shrink-0">
+                  <!-- Step Actions: Wait Badge / Add Wait & Delete Step -->
+                  <div class="flex items-center gap-1.5 shrink-0">
                     <button
                       type="button"
-                      @click="toggleStepWait(step)"
-                      class="inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium transition-colors cursor-pointer border"
-                      :class="step.waitDuration
-                        ? 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300'
+                      @click="step.wait.isEditing = !step.wait.isEditing"
+                      class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer border"
+                      :class="step.wait.enabled
+                        ? 'bg-amber-50 text-amber-800 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300'
                         : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:bg-slate-100'"
-                      title="Set wait delay"
                     >
-                      <Clock class="w-3 h-3" />
-                      <span>{{ step.waitDuration ? `${step.waitDuration}` : 'Wait' }}</span>
+                      <Clock class="w-3.5 h-3.5" />
+                      <span>{{ step.wait.enabled ? `${step.wait.value} ${step.wait.unit}` : 'Add wait' }}</span>
                     </button>
 
                     <button
@@ -727,23 +599,25 @@
                   </div>
                 </div>
 
-                <!-- Payload Area -->
+                <!-- Step Dynamic Payload Details -->
                 <div>
-                  <div v-if="step.type === 'Send a Message'" class="space-y-1.5">
+                  <!-- 1. Send a Message / Send AI Message / Private Note -->
+                  <div v-if="['Send a Message', 'Send AI Personalized Message', 'Add a Private Note'].includes(step.type)" class="space-y-1.5">
                     <textarea
                       v-model="step.payload"
-                      rows="2"
-                      placeholder="Enter message template..."
+                      rows="3"
+                      :placeholder="step.type === 'Add a Private Note' ? 'Enter private internal note...' : 'Enter your message here'"
                       class="w-full text-xs bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 p-2.5 rounded-lg focus:outline-none focus:ring-1 focus:ring-emerald-500 text-slate-800 dark:text-white placeholder:text-slate-400 resize-y"
                     ></textarea>
-                    <div class="flex items-center gap-1 text-[10px] text-slate-400 flex-wrap">
+                    <div class="flex items-center gap-1 text-[10px] text-slate-400">
                       <span>Insert:</span>
-                      <button type="button" @click="step.payload += ' {{contact.name}}'" class="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded text-slate-600 dark:text-slate-300 hover:bg-slate-200 cursor-pointer">&#123;&#123;contact.name&#125;&#125;</button>
-                      <button type="button" @click="step.payload += ' {{company.name}}'" class="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded text-slate-600 dark:text-slate-300 hover:bg-slate-200 cursor-pointer">&#123;&#123;company.name&#125;&#125;</button>
+                      <button type="button" @click="step.payload += ' {{contact.name}}'" class="underline hover:text-slate-600 cursor-pointer">&#123;&#123;contact.name&#125;&#125;</button>
+                      <button type="button" @click="step.payload += ' {{company.name}}'" class="underline hover:text-slate-600 cursor-pointer">&#123;&#123;company.name&#125;&#125;</button>
                     </div>
                   </div>
 
-                  <div v-else-if="step.type === 'Assign to User'">
+                  <!-- 2. Assign to Agent -->
+                  <div v-else-if="step.type === 'Assign to Agent'">
                     <select
                       v-model="step.target"
                       class="w-full text-xs bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 px-2.5 py-1.5 rounded-lg focus:outline-none text-slate-800 dark:text-white"
@@ -752,10 +626,12 @@
                       <option value="Justin (Admin)">Justin (Admin)</option>
                       <option value="David (Sales Rep)">David (Sales Rep)</option>
                       <option value="Emma (Junior Rep)">Emma (Junior Rep)</option>
+                      <option value="Round Robin (All Reps)">Round Robin (All Reps)</option>
                     </select>
                   </div>
 
-                  <div v-else-if="step.type === 'Assign to Team'">
+                  <!-- 3. Assign a Team -->
+                  <div v-else-if="step.type === 'Assign a Team'">
                     <select
                       v-model="step.target"
                       class="w-full text-xs bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 px-2.5 py-1.5 rounded-lg focus:outline-none text-slate-800 dark:text-white"
@@ -763,42 +639,141 @@
                       <option value="Sales Team">Sales Team</option>
                       <option value="Support Team">Support Team</option>
                       <option value="Enterprise Team">Enterprise Team</option>
+                      <option value="VIP Triage">VIP Triage</option>
                     </select>
                   </div>
 
-                  <div v-else-if="step.type === 'Apply Tag' || step.type === 'Remove Tag'">
+                  <!-- 4. Add / Remove Label -->
+                  <div v-else-if="['Add a Label', 'Remove a Label'].includes(step.type)">
                     <select
                       v-model="step.target"
                       class="w-full text-xs bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 px-2.5 py-1.5 rounded-lg focus:outline-none text-slate-800 dark:text-white"
                     >
-                      <option value="Partner">Partner Tag</option>
-                      <option value="Hot Lead">Hot Lead Tag</option>
-                      <option value="VIP Client">VIP Client Tag</option>
-                      <option value="High Priority">High Priority Tag</option>
+                      <option value="VIP Client">VIP Client</option>
+                      <option value="Hot Lead">Hot Lead</option>
+                      <option value="Partner">Partner</option>
+                      <option value="High Priority">High Priority</option>
+                      <option value="Enterprise">Enterprise</option>
                     </select>
                   </div>
 
-                  <div v-else-if="step.type === 'Update Stage'">
+                  <!-- 5. Change Priority -->
+                  <div v-else-if="step.type === 'Change Priority'">
                     <select
                       v-model="step.target"
                       class="w-full text-xs bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 px-2.5 py-1.5 rounded-lg focus:outline-none text-slate-800 dark:text-white"
                     >
-                      <option value="Qualified">Qualified</option>
-                      <option value="Demo Scheduled">Demo Scheduled</option>
-                      <option value="Proposal Sent">Proposal Sent</option>
-                      <option value="Closed Won">Closed Won</option>
+                      <option value="Low">Low</option>
+                      <option value="Medium">Medium</option>
+                      <option value="High">High</option>
+                      <option value="Urgent">Urgent</option>
                     </select>
                   </div>
 
-                  <div v-else>
+                  <!-- 6. Add SLA -->
+                  <div v-else-if="step.type === 'Add SLA'">
+                    <select
+                      v-model="step.target"
+                      class="w-full text-xs bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 px-2.5 py-1.5 rounded-lg focus:outline-none text-slate-800 dark:text-white"
+                    >
+                      <option value="Standard Response (1 Hour)">Standard Response (1 Hour)</option>
+                      <option value="VIP Priority (15 Mins)">VIP Priority (15 Mins)</option>
+                      <option value="Critical Escalation (5 Mins)">Critical Escalation (5 Mins)</option>
+                    </select>
+                  </div>
+
+                  <!-- 7. Webhook or Custom Target -->
+                  <div v-else-if="step.type === 'Send Webhook Event'">
                     <input
-                      type="text"
+                      type="url"
                       v-model="step.target"
-                      placeholder="Target parameter..."
+                      placeholder="https://api.yourdomain.com/webhook"
                       class="w-full text-xs bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 px-2.5 py-1.5 rounded-lg focus:outline-none text-slate-800 dark:text-white"
                     />
                   </div>
+
+                  <div v-else class="text-[11px] text-slate-400 italic">
+                    Executes state transition: {{ step.type }}
+                  </div>
                 </div>
+
+                <!-- Step Wait Configuration Panel (Expandable - Matching Screenshot 4) -->
+                <div
+                  v-if="step.wait.isEditing"
+                  class="p-3.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl space-y-3 animate-fade-in"
+                >
+                  <div class="space-y-2">
+                    <label class="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="radio"
+                        value="duration"
+                        v-model="step.wait.type"
+                        class="text-emerald-600 focus:ring-emerald-500"
+                      />
+                      <span class="text-xs font-medium text-slate-700 dark:text-slate-300">
+                        Wait a set amount of time before this step
+                      </span>
+                    </label>
+
+                    <div v-if="step.wait.type === 'duration'" class="flex items-center gap-2 pl-5">
+                      <input
+                        type="number"
+                        min="1"
+                        v-model.number="step.wait.value"
+                        class="w-16 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-2.5 py-1.5 rounded-lg focus:outline-none text-slate-800 dark:text-white"
+                      />
+                      <select
+                        v-model="step.wait.unit"
+                        class="text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-2.5 py-1.5 rounded-lg focus:outline-none text-slate-800 dark:text-white cursor-pointer"
+                      >
+                        <option value="minutes">minutes</option>
+                        <option value="hours">hours</option>
+                        <option value="days">days</option>
+                        <option value="weeks">weeks</option>
+                      </select>
+                    </div>
+
+                    <label class="flex items-center gap-2 cursor-pointer pt-1">
+                      <input
+                        type="radio"
+                        value="specific_time"
+                        v-model="step.wait.type"
+                        class="text-emerald-600 focus:ring-emerald-500"
+                      />
+                      <span class="text-xs font-medium text-slate-700 dark:text-slate-300">
+                        Run at a specific date & time instead
+                      </span>
+                    </label>
+
+                    <div v-if="step.wait.type === 'specific_time'" class="pl-5 pt-1">
+                      <input
+                        type="datetime-local"
+                        v-model="step.wait.specificTime"
+                        class="text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-2.5 py-1.5 rounded-lg focus:outline-none text-slate-800 dark:text-white"
+                      />
+                    </div>
+                  </div>
+
+                  <!-- Done and Remove Actions -->
+                  <div class="flex items-center gap-2 pt-1 border-t border-slate-100 dark:border-slate-800">
+                    <button
+                      type="button"
+                      @click="step.wait.enabled = true; step.wait.isEditing = false"
+                      class="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-xs rounded-md cursor-pointer flex items-center gap-1"
+                    >
+                      <Check class="w-3.5 h-3.5" />
+                      <span>Done</span>
+                    </button>
+                    <button
+                      type="button"
+                      @click="step.wait.enabled = false; step.wait.isEditing = false"
+                      class="px-2.5 py-1 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 text-xs font-medium cursor-pointer"
+                    >
+                      ✕ Remove wait
+                    </button>
+                  </div>
+                </div>
+
               </div>
             </div>
 
@@ -806,19 +781,19 @@
             <button
               type="button"
               @click="addStep"
-              class="inline-flex items-center gap-1 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-medium text-xs rounded-lg transition-colors cursor-pointer"
+              class="inline-flex items-center gap-1 px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 font-medium text-xs rounded-lg transition-colors cursor-pointer"
             >
-              <Plus class="w-3.5 h-3.5" /> Add step
+              <Plus class="w-3.5 h-3.5" /> Add a step
             </button>
 
           </div>
 
-          <!-- ══════ SECTION 3: FALLBACK / ESCALATION ══════ -->
-          <div class="border border-slate-200 dark:border-slate-800 rounded-xl p-3.5 bg-slate-50/40 dark:bg-slate-800/20 space-y-2.5">
+          <!-- ══════ SECTION 3: IF IT DOESN'T WORK, DO SOMETHING ELSE ══════ -->
+          <div class="pt-3.5 border-t border-slate-100 dark:border-slate-800 space-y-3">
             <div class="flex items-center justify-between">
               <div>
                 <h4 class="font-bold text-xs text-slate-900 dark:text-white">If it doesn't work, do something else</h4>
-                <p class="text-[11px] text-slate-400">Optional fallback reminder or escalation branch</p>
+                <p class="text-[11px] text-slate-400">Optional — for reminders and follow-ups when there's no reply</p>
               </div>
 
               <!-- Fallback Toggle -->
@@ -835,38 +810,106 @@
               </button>
             </div>
 
-            <!-- Fallback Branch -->
-            <div v-if="form.hasFallback" class="pt-2.5 border-t border-slate-200 dark:border-slate-800 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs animate-fade-in">
-              <div>
-                <label class="block text-[10px] font-semibold text-slate-400 uppercase mb-1">If no response after</label>
+            <!-- Fallback Branch Pipeline (Apparent only when toggled ON) -->
+            <div
+              v-if="form.hasFallback"
+              class="p-4 rounded-xl border border-amber-300/70 bg-amber-50/20 dark:border-amber-900/40 dark:bg-amber-950/20 space-y-3 animate-fade-in shadow-2xs"
+            >
+              <!-- Wait line (Matching Screenshot 5: "Wait up to [ 2 ] [ days ] for a reply. If none comes, run:") -->
+              <div class="flex items-center gap-1.5 flex-wrap text-xs text-slate-700 dark:text-slate-300">
+                <span>Wait up to</span>
+                <input
+                  type="number"
+                  min="1"
+                  v-model.number="form.fallbackTimeout"
+                  class="w-14 text-xs bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-2 py-1 rounded-md focus:outline-none text-slate-800 dark:text-white font-medium"
+                />
                 <select
-                  v-model="form.fallbackWait"
-                  class="w-full text-xs bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 px-2.5 py-1.5 rounded-lg focus:outline-none text-slate-800 dark:text-white"
+                  v-model="form.fallbackTimeoutUnit"
+                  class="text-xs bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-2 py-1 rounded-md focus:outline-none text-slate-800 dark:text-white cursor-pointer"
                 >
-                  <option value="15 minutes">15 minutes</option>
-                  <option value="1 hour">1 hour</option>
-                  <option value="24 hours">24 hours</option>
-                  <option value="3 days">3 days</option>
+                  <option value="minutes">minutes</option>
+                  <option value="hours">hours</option>
+                  <option value="days">days</option>
+                  <option value="weeks">weeks</option>
                 </select>
+                <span>for a reply. If none comes, run:</span>
               </div>
-              <div>
-                <label class="block text-[10px] font-semibold text-slate-400 uppercase mb-1">Then execute</label>
-                <select
-                  v-model="form.fallbackAction"
-                  class="w-full text-xs bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 px-2.5 py-1.5 rounded-lg focus:outline-none text-slate-800 dark:text-white"
+
+              <!-- Fallback Action Steps List -->
+              <div class="space-y-2.5">
+                <div
+                  v-for="(fStep, fIdx) in form.fallbackSteps"
+                  :key="fIdx"
+                  class="border border-slate-200 dark:border-slate-700 rounded-lg p-2.5 bg-white dark:bg-slate-900 space-y-2 shadow-2xs"
                 >
-                  <option value="Escalate to Senior Rep">Escalate to Senior Rep</option>
-                  <option value="Send Notification to Admin">Send Notification to Admin</option>
-                  <option value="Apply Tag [Follow-up Required]">Apply Tag [Follow-up Required]</option>
-                </select>
+                  <div class="flex items-center justify-between gap-2">
+                    <div class="flex items-center gap-2 flex-1">
+                      <span class="w-5 h-5 rounded-full bg-slate-900 text-white font-bold text-[10px] flex items-center justify-center shrink-0">
+                        {{ fIdx + 1 }}
+                      </span>
+                      <select
+                        v-model="fStep.type"
+                        class="text-xs font-semibold bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-2 py-1 rounded-md focus:outline-none text-slate-900 dark:text-white flex-1"
+                      >
+                        <option v-for="act in actionTypeOptions" :key="act" :value="act">{{ act }}</option>
+                      </select>
+                    </div>
+
+                    <button
+                      type="button"
+                      @click="form.fallbackSteps.splice(fIdx, 1)"
+                      class="p-1 text-slate-400 hover:text-rose-600 rounded cursor-pointer"
+                    >
+                      <Trash2 class="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+
+                  <!-- Fallback Step Payload -->
+                  <div v-if="['Send a Message', 'Send AI Personalized Message', 'Add a Private Note'].includes(fStep.type)">
+                    <textarea
+                      v-model="fStep.payload"
+                      rows="2"
+                      placeholder="Enter your message here"
+                      class="w-full text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-2 rounded-md focus:outline-none text-slate-800 dark:text-white placeholder:text-slate-400 resize-y"
+                    ></textarea>
+                  </div>
+                  <div v-else-if="fStep.type === 'Assign to Agent'">
+                    <select
+                      v-model="fStep.target"
+                      class="w-full text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-2 py-1 rounded-md focus:outline-none text-slate-800 dark:text-white"
+                    >
+                      <option value="Sarah (Senior Sales Rep)">Sarah (Senior Sales Rep)</option>
+                      <option value="Justin (Admin)">Justin (Admin)</option>
+                    </select>
+                  </div>
+                  <div v-else-if="fStep.type === 'Assign a Team'">
+                    <select
+                      v-model="fStep.target"
+                      class="w-full text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-2 py-1 rounded-md focus:outline-none text-slate-800 dark:text-white"
+                    >
+                      <option value="Sales Team">Sales Team</option>
+                      <option value="Support Team">Support Team</option>
+                    </select>
+                  </div>
+                </div>
               </div>
+
+              <!-- + Add a fallback step button -->
+              <button
+                type="button"
+                @click="addFallbackStep"
+                class="inline-flex items-center gap-1 px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 font-medium text-xs rounded-lg transition-colors cursor-pointer border border-emerald-200/60 dark:border-emerald-800/60"
+              >
+                <Plus class="w-3.5 h-3.5" /> Add a fallback step
+              </button>
             </div>
           </div>
 
         </form>
 
-        <!-- Sticky Modal Footer -->
-        <footer class="px-6 py-3.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between bg-white dark:bg-slate-900 shrink-0">
+        <!-- Modal Footer -->
+        <footer class="px-5 py-3.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between bg-white dark:bg-slate-900 shrink-0">
           <div class="flex items-center gap-2">
             <button
               type="button"
@@ -879,7 +922,7 @@
                 :class="form.active ? 'translate-x-4' : 'translate-x-0'"
               ></span>
             </button>
-            <span class="text-xs font-semibold" :class="form.active ? 'text-slate-800 dark:text-white' : 'text-slate-400'">
+            <span class="text-xs font-semibold text-slate-700 dark:text-slate-300">
               {{ form.active ? 'Active' : 'Paused' }}
             </span>
           </div>
@@ -888,7 +931,7 @@
             <button
               type="button"
               @click="showModal = false"
-              class="px-3.5 py-1.5 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-medium text-xs rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer transition-colors"
+              class="px-3.5 py-1.5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white text-xs font-medium cursor-pointer"
             >
               Cancel
             </button>
@@ -898,7 +941,7 @@
               :disabled="!form.name.trim()"
               class="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-xs rounded-lg shadow-2xs cursor-pointer disabled:opacity-50 transition-colors"
             >
-              {{ isEditing ? 'Save Changes' : isCloning ? 'Clone Automation' : 'Save Automation' }}
+              {{ isEditing ? 'Save changes' : 'Save automation' }}
             </button>
           </div>
         </footer>
@@ -912,8 +955,8 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import {
-  Zap, Plus, Search, Tag, Calendar, Play, Copy, Pencil, Trash2,
-  Clock, Check, X, SlidersHorizontal, History, Sparkles
+  Zap, Plus, Search, Play, Copy, Pencil, Trash2,
+  Clock, Check, X, Sparkles
 } from 'lucide-vue-next';
 
 const emit = defineEmits<{
@@ -923,18 +966,73 @@ const emit = defineEmits<{
 // Available Category Tags
 export interface AutomationTag {
   name: string;
-  colorBg: string;
-  colorText: string;
+  dotColor: string;
 }
 
 const availableTags = ref<AutomationTag[]>([
-  { name: 'Lead Routing', colorBg: '#EFF6FF', colorText: '#1D4ED8' },
-  { name: 'Escalations', colorBg: '#FEF2F2', colorText: '#DC2626' },
-  { name: 'VIP Clients', colorBg: '#FAF5FF', colorText: '#7E22CE' },
-  { name: 'SLA Alert', colorBg: '#FFFBEB', colorText: '#D97706' },
-  { name: 'Deals', colorBg: '#ECFDF5', colorText: '#059669' },
-  { name: 'WhatsApp', colorBg: '#F0FDF4', colorText: '#15803D' },
+  { name: 'Lead Routing', dotColor: '#3B82F6' },
+  { name: 'Escalations', dotColor: '#EF4444' },
+  { name: 'VIP Clients', dotColor: '#A855F7' },
+  { name: 'SLA Alert', dotColor: '#F59E0B' },
+  { name: 'Deals', dotColor: '#10B981' },
+  { name: 'WhatsApp', dotColor: '#22C55E' },
 ]);
+
+// Trigger Events (Screenshot 1)
+const triggerOptions = [
+  'Conversation Created',
+  'Conversation Updated',
+  'Message Created',
+  'Conversation Resolved',
+  'Conversation Opened',
+  'Private Note Created',
+  'Deal Created',
+  'Ticket Created',
+  'Contact Owner Assigned',
+  'Conversation Owner Assigned',
+];
+
+// Filter Condition Fields (Screenshot 2)
+const conditionFieldOptions = [
+  'Status',
+  'Browser Language',
+  'Email Subject',
+  'Country',
+  'Phone Number',
+  'Referrer Link',
+  'Email',
+  'Inbox',
+  'Conversation Language',
+  'Priority',
+  'Labels',
+  'Contact Custom Attributes',
+  'Lead Temperature',
+  'Sales Motion',
+  'Hp 2',
+  'Lead Type',
+  'Lead Source',
+];
+
+// Step Action Types (Screenshot 3)
+const actionTypeOptions = [
+  'Assign to Agent',
+  'Assign a Team',
+  'Add a Label',
+  'Remove a Label',
+  'Send a Message',
+  'Add a Private Note',
+  'Send an Email to Team',
+  'Send Attachment',
+  'Send Webhook Event',
+  'Change Priority',
+  'Send AI Personalized Message',
+  'Send an Email Transcript',
+  'Mute Conversation',
+  'Snooze Conversation',
+  'Resolve Conversation',
+  'Open conversation',
+  'Add SLA',
+];
 
 export interface FilterCondition {
   field: string;
@@ -942,11 +1040,26 @@ export interface FilterCondition {
   value: string;
 }
 
+export interface WaitConfig {
+  enabled: boolean;
+  type: 'duration' | 'specific_time';
+  value: number;
+  unit: 'minutes' | 'hours' | 'days' | 'weeks';
+  specificTime?: string;
+  isEditing?: boolean;
+}
+
 export interface ActionStep {
   type: string;
   target?: string;
   payload?: string;
-  waitDuration?: string;
+  wait: WaitConfig;
+}
+
+export interface FallbackStep {
+  type: string;
+  target?: string;
+  payload?: string;
 }
 
 export interface AutomationRule {
@@ -960,8 +1073,9 @@ export interface AutomationRule {
   conditions?: FilterCondition[];
   actionSteps?: ActionStep[];
   hasFallback?: boolean;
-  fallbackWait?: string;
-  fallbackAction?: string;
+  fallbackTimeout?: number;
+  fallbackTimeoutUnit?: string;
+  fallbackSteps?: FallbackStep[];
   tags: string[];
   dateCreated: string;
   active: boolean;
@@ -987,19 +1101,21 @@ const automations = ref<AutomationRule[]>([
     description: 'Auto-routes enterprise leads with score > 80 directly to Senior Sales Director',
     executionMode: 'auto',
     triggerEvent: 'Conversation Created',
-    trigger: 'Lead Score > 80',
-    action: 'Assign to User [Sarah (Senior Sales Rep)]',
+    action: 'Assign to Agent [Sarah (Senior Sales Rep)]',
     conditions: [
-      { field: 'Lead Score', operator: 'Greater than', value: '80' },
+      { field: 'Lead Temperature', operator: 'Equal to', value: 'Hot' },
       { field: 'Status', operator: 'Equal to', value: 'Open' },
     ],
     actionSteps: [
-      { type: 'Assign to User', target: 'Sarah (Senior Sales Rep)' },
-      { type: 'Apply Tag', target: 'VIP Client' },
+      { type: 'Assign to Agent', target: 'Sarah (Senior Sales Rep)', wait: { enabled: false, type: 'duration', value: 2, unit: 'days' } },
+      { type: 'Add a Label', target: 'VIP Client', wait: { enabled: false, type: 'duration', value: 2, unit: 'days' } },
     ],
     hasFallback: true,
-    fallbackWait: '24 hours',
-    fallbackAction: 'Escalate to Senior Rep',
+    fallbackTimeout: 2,
+    fallbackTimeoutUnit: 'days',
+    fallbackSteps: [
+      { type: 'Send an Email to Team', payload: 'Follow-up needed for Hot Lead' }
+    ],
     tags: ['Lead Routing', 'Deals'],
     dateCreated: '12 Jan 2026',
     active: true,
@@ -1012,13 +1128,12 @@ const automations = ref<AutomationRule[]>([
     description: 'Auto-tags enterprise accounts based on recognized email domain',
     executionMode: 'auto',
     triggerEvent: 'Contact Created',
-    trigger: 'Email Domain = *.enterprise.com',
-    action: 'Apply Tag [Partner]',
+    action: 'Add a Label [Partner]',
     conditions: [
-      { field: 'Tag', operator: 'Equal to', value: 'VIP Client' },
+      { field: 'Email', operator: 'Contains', value: '@enterprise.com' },
     ],
     actionSteps: [
-      { type: 'Apply Tag', target: 'Partner' },
+      { type: 'Add a Label', target: 'Partner', wait: { enabled: false, type: 'duration', value: 2, unit: 'days' } },
     ],
     tags: ['VIP Clients', 'Deals'],
     dateCreated: '18 Jan 2026',
@@ -1032,15 +1147,13 @@ const automations = ref<AutomationRule[]>([
     description: 'Sends alert to Admin team if ticket remains unread past SLA threshold',
     executionMode: 'auto',
     triggerEvent: 'Conversation Updated',
-    trigger: 'Unread Duration > 24h',
-    action: 'Send Notification [Justin (Admin)]',
+    action: 'Send an Email to Team [Justin]',
     conditions: [
-      { field: 'Unread Time', operator: 'Greater than', value: '24' },
       { field: 'Status', operator: 'Equal to', value: 'Pending' },
     ],
     actionSteps: [
-      { type: 'Set Urgency Level', target: 'Urgent' },
-      { type: 'Assign to User', target: 'Justin (Admin)', waitDuration: '1 hour' },
+      { type: 'Change Priority', target: 'Urgent', wait: { enabled: true, type: 'duration', value: 1, unit: 'hours' } },
+      { type: 'Assign to Agent', target: 'Justin (Admin)', wait: { enabled: false, type: 'duration', value: 2, unit: 'days' } },
     ],
     tags: ['Escalations', 'SLA Alert'],
     dateCreated: '02 Feb 2026',
@@ -1054,14 +1167,13 @@ const automations = ref<AutomationRule[]>([
     description: 'Routes WhatsApp chat inquiries to the active sales team round-robin',
     executionMode: 'auto',
     triggerEvent: 'Message Created',
-    trigger: 'Channel Source = WhatsApp',
-    action: 'Assign to Team [Sales Team]',
+    action: 'Assign a Team [Sales Team]',
     conditions: [
-      { field: 'Channel', operator: 'Equal to', value: 'WhatsApp' },
+      { field: 'Inbox', operator: 'Equal to', value: 'WhatsApp Support' },
     ],
     actionSteps: [
-      { type: 'Assign to Team', target: 'Sales Team' },
-      { type: 'Send a Message', payload: 'Hello {{contact.name}}, thanks for reaching out!' },
+      { type: 'Assign a Team', target: 'Sales Team', wait: { enabled: false, type: 'duration', value: 2, unit: 'days' } },
+      { type: 'Send a Message', payload: 'Hello {{contact.name}}, thanks for reaching out!', wait: { enabled: false, type: 'duration', value: 2, unit: 'days' } },
     ],
     tags: ['WhatsApp', 'Lead Routing'],
     dateCreated: '14 Feb 2026',
@@ -1075,14 +1187,13 @@ const automations = ref<AutomationRule[]>([
     description: 'Manual macro button to trigger instant VIP ticket triage and escalation',
     executionMode: 'manual',
     triggerEvent: 'Conversation Updated',
-    trigger: 'Tag Applied = VIP Client',
-    action: 'Set Urgency Level [High Urgency (Urgent)]',
+    action: 'Change Priority [Urgent] & Assign a Team [Enterprise]',
     conditions: [
-      { field: 'Priority', operator: 'Equal to', value: 'High Priority' },
+      { field: 'Priority', operator: 'Equal to', value: 'High' },
     ],
     actionSteps: [
-      { type: 'Set Urgency Level', target: 'High Urgency (Urgent)' },
-      { type: 'Assign to Team', target: 'Enterprise Team' },
+      { type: 'Change Priority', target: 'Urgent', wait: { enabled: false, type: 'duration', value: 2, unit: 'days' } },
+      { type: 'Assign a Team', target: 'Enterprise Team', wait: { enabled: false, type: 'duration', value: 2, unit: 'days' } },
     ],
     tags: ['VIP Clients', 'Escalations'],
     dateCreated: '19 Feb 2026',
@@ -1096,8 +1207,8 @@ const automations = ref<AutomationRule[]>([
 const executionLogs = ref<ExecutionLog[]>([
   { id: 1, automationName: 'Route hot leads to Sarah', source: 'Deal #4821 (Acme Global)', actionResult: 'Assigned to Sarah', time: '2m ago', status: 'success', duration: '14ms' },
   { id: 2, automationName: 'Auto-assign inbound WhatsApp chats', source: 'WhatsApp +60 12-882 1993', actionResult: 'Routed to Sales Team', time: '12m ago', status: 'success', duration: '9ms' },
-  { id: 3, automationName: 'VIP High Urgency Ticket Triage', source: 'Lead: Global Horizon LLC', actionResult: 'Urgency set to High', time: '1h ago', status: 'success', duration: '18ms' },
-  { id: 4, automationName: 'Escalate unread conversation after 24h', source: 'Conversation #2201', actionResult: 'Notification delivered to Justin', time: '5h ago', status: 'success', duration: '22ms' },
+  { id: 3, automationName: 'VIP High Urgency Ticket Triage', source: 'Lead: Global Horizon LLC', actionResult: 'Priority set to Urgent', time: '1h ago', status: 'success', duration: '18ms' },
+  { id: 4, automationName: 'Escalate unread conversation after 24h', source: 'Conversation #2201', actionResult: 'Email delivered to Justin', time: '5h ago', status: 'success', duration: '22ms' },
   { id: 5, automationName: 'Route hot leads to Sarah', source: 'Deal #4799 (TechFlow Inc)', actionResult: 'Assigned to Sarah', time: 'Yesterday', status: 'success', duration: '11ms' },
 ]);
 
@@ -1131,6 +1242,38 @@ onUnmounted(() => {
   window.removeEventListener('keydown', handleKeydown);
 });
 
+// Format Rule Sentence cleanly
+function formatRuleSentence(auto: AutomationRule): string {
+  const parts: string[] = [];
+  const event = auto.triggerEvent || 'Conversation Created';
+  parts.push(`When ${event.toLowerCase()}`);
+
+  if (auto.conditions && auto.conditions.length > 0) {
+    const condStr = auto.conditions.map(c => `${c.field.toLowerCase()} ${c.operator.toLowerCase()} ${c.value}`).join(' and ');
+    parts.push(`if ${condStr}`);
+  } else if (auto.trigger) {
+    parts.push(`if ${auto.trigger.toLowerCase()}`);
+  }
+
+  let actionStr = '';
+  if (auto.actionSteps && auto.actionSteps.length > 0) {
+    actionStr = auto.actionSteps.map(s => {
+      const waitPart = s.wait && s.wait.enabled ? ` (wait ${s.wait.value} ${s.wait.unit})` : '';
+      return s.target ? `${s.type} [${s.target}]${waitPart}` : `${s.type}${waitPart}`;
+    }).join(' → ');
+  } else {
+    actionStr = auto.action || 'Execute action';
+  }
+
+  return `${parts.join(' ')} → ${actionStr}`;
+}
+
+// Tag dot color helper
+function getTagDotColor(tagName: string): string {
+  const tag = availableTags.value.find(t => t.name === tagName);
+  return tag ? tag.dotColor : '#94A3B8';
+}
+
 // Filtered Automations computed
 const filteredAutomations = computed(() => {
   let list = [...automations.value];
@@ -1155,11 +1298,15 @@ const filteredAutomations = computed(() => {
     list = list.filter(a => a.tags.includes(selectedTag.value));
   }
 
-  // Status filter
+  // Status & Mode filter
   if (selectedStatus.value === 'active') {
     list = list.filter(a => a.active);
   } else if (selectedStatus.value === 'paused') {
     list = list.filter(a => !a.active);
+  } else if (selectedStatus.value === 'auto') {
+    list = list.filter(a => a.executionMode !== 'manual');
+  } else if (selectedStatus.value === 'manual') {
+    list = list.filter(a => a.executionMode === 'manual');
   }
 
   // Sort
@@ -1187,33 +1334,6 @@ const filteredLogs = computed(() => {
   );
 });
 
-function getTagCount(tagName: string): number {
-  return automations.value.filter(a => a.tags.includes(tagName)).length;
-}
-
-function getTagStyle(tagName: string) {
-  const tag = availableTags.value.find(t => t.name === tagName);
-  if (tag) {
-    return {
-      backgroundColor: tag.colorBg,
-      color: tag.colorText,
-      borderColor: tag.colorText + '30',
-    };
-  }
-  return {
-    backgroundColor: '#F8FAFC',
-    color: '#475569',
-    borderColor: '#E2E8F0',
-  };
-}
-
-function resetFilters() {
-  searchQuery.value = '';
-  selectedTag.value = 'all';
-  selectedStatus.value = 'all';
-  sortBy.value = 'created_desc';
-}
-
 // ═══════════════════ MODAL & FORM STATE ═══════════════════
 const showModal = ref(false);
 const isEditing = ref(false);
@@ -1230,52 +1350,21 @@ const form = ref({
     { field: 'Status', operator: 'Equal to', value: 'Open' }
   ] as FilterCondition[],
   actionSteps: [
-    { type: 'Send a Message', payload: '', target: '', waitDuration: '' }
+    {
+      type: 'Send a Message',
+      payload: '',
+      target: '',
+      wait: { enabled: false, type: 'duration' as const, value: 2, unit: 'days' as const, isEditing: false }
+    }
   ] as ActionStep[],
   hasFallback: false,
-  fallbackWait: '24 hours',
-  fallbackAction: 'Escalate to Senior Rep',
+  fallbackTimeout: 2,
+  fallbackTimeoutUnit: 'days',
+  fallbackSteps: [
+    { type: 'Send a Message', payload: '', target: '' }
+  ] as FallbackStep[],
   active: true,
 });
-
-const isAddingCustomTag = ref(false);
-const customTagInput = ref('');
-
-function toggleTagSelection(tagName: string) {
-  const idx = form.value.tags.indexOf(tagName);
-  if (idx > -1) {
-    form.value.tags.splice(idx, 1);
-  } else {
-    form.value.tags.push(tagName);
-  }
-}
-
-function addCustomTag() {
-  const name = customTagInput.value.trim();
-  if (!name) {
-    isAddingCustomTag.value = false;
-    return;
-  }
-  if (!availableTags.value.some(t => t.name.toLowerCase() === name.toLowerCase())) {
-    const defaultColors = [
-      { bg: '#EFF6FF', text: '#1D4ED8' },
-      { bg: '#FDF2F8', text: '#BE185D' },
-      { bg: '#FAF5FF', text: '#7E22CE' },
-      { bg: '#FFFBEB', text: '#B45309' },
-    ];
-    const picked = defaultColors[availableTags.value.length % defaultColors.length];
-    availableTags.value.push({
-      name,
-      colorBg: picked.bg,
-      colorText: picked.text,
-    });
-  }
-  if (!form.value.tags.includes(name)) {
-    form.value.tags.push(name);
-  }
-  customTagInput.value = '';
-  isAddingCustomTag.value = false;
-}
 
 function addCondition() {
   form.value.conditions.push({
@@ -1291,10 +1380,10 @@ function removeCondition(index: number) {
 
 function addStep() {
   form.value.actionSteps.push({
-    type: 'Assign to User',
+    type: 'Assign to Agent',
     target: 'Sarah (Senior Sales Rep)',
     payload: '',
-    waitDuration: '',
+    wait: { enabled: false, type: 'duration', value: 2, unit: 'days', isEditing: false }
   });
 }
 
@@ -1302,12 +1391,12 @@ function removeStep(index: number) {
   form.value.actionSteps.splice(index, 1);
 }
 
-function toggleStepWait(step: ActionStep) {
-  if (step.waitDuration) {
-    step.waitDuration = '';
-  } else {
-    step.waitDuration = '15 mins';
-  }
+function addFallbackStep() {
+  form.value.fallbackSteps.push({
+    type: 'Send a Message',
+    payload: '',
+    target: ''
+  });
 }
 
 function openCreateModal() {
@@ -1324,11 +1413,19 @@ function openCreateModal() {
       { field: 'Status', operator: 'Equal to', value: 'Open' }
     ],
     actionSteps: [
-      { type: 'Send a Message', payload: 'Hello {{contact.name}}, thanks for reaching out to us!', target: '', waitDuration: '' }
+      {
+        type: 'Send a Message',
+        payload: 'Enter your message here',
+        target: '',
+        wait: { enabled: false, type: 'duration', value: 2, unit: 'days', isEditing: false }
+      }
     ],
     hasFallback: false,
-    fallbackWait: '24 hours',
-    fallbackAction: 'Escalate to Senior Rep',
+    fallbackTimeout: 2,
+    fallbackTimeoutUnit: 'days',
+    fallbackSteps: [
+      { type: 'Send a Message', payload: '', target: '' }
+    ],
     active: true,
   };
   showModal.value = true;
@@ -1350,10 +1447,18 @@ function openEditModal(auto: AutomationRule) {
       : [{ field: 'Status', operator: 'Equal to', value: 'Open' }],
     actionSteps: auto.actionSteps && auto.actionSteps.length > 0
       ? JSON.parse(JSON.stringify(auto.actionSteps))
-      : [{ type: 'Assign to User', target: 'Sarah (Senior Sales Rep)', payload: '', waitDuration: '' }],
+      : [{
+          type: 'Assign to Agent',
+          target: 'Sarah (Senior Sales Rep)',
+          payload: '',
+          wait: { enabled: false, type: 'duration', value: 2, unit: 'days', isEditing: false }
+        }],
     hasFallback: !!auto.hasFallback,
-    fallbackWait: auto.fallbackWait || '24 hours',
-    fallbackAction: auto.fallbackAction || 'Escalate to Senior Rep',
+    fallbackTimeout: auto.fallbackTimeout || 2,
+    fallbackTimeoutUnit: auto.fallbackTimeoutUnit || 'days',
+    fallbackSteps: auto.fallbackSteps && auto.fallbackSteps.length > 0
+      ? JSON.parse(JSON.stringify(auto.fallbackSteps))
+      : [{ type: 'Send a Message', payload: '', target: '' }],
     active: auto.active,
   };
   showModal.value = true;
@@ -1374,8 +1479,9 @@ function cloneAutomation(auto: AutomationRule) {
     conditions: auto.conditions ? JSON.parse(JSON.stringify(auto.conditions)) : undefined,
     actionSteps: auto.actionSteps ? JSON.parse(JSON.stringify(auto.actionSteps)) : undefined,
     hasFallback: auto.hasFallback,
-    fallbackWait: auto.fallbackWait,
-    fallbackAction: auto.fallbackAction,
+    fallbackTimeout: auto.fallbackTimeout,
+    fallbackTimeoutUnit: auto.fallbackTimeoutUnit,
+    fallbackSteps: auto.fallbackSteps ? JSON.parse(JSON.stringify(auto.fallbackSteps)) : undefined,
     tags: [...auto.tags],
     dateCreated: currentDate,
     active: false,
@@ -1392,7 +1498,7 @@ function saveForm() {
 
   const currentDate = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
   const primaryActionSummary = form.value.actionSteps.length > 0
-    ? `${form.value.actionSteps[0].type} [${form.value.actionSteps[0].target || 'Custom payload'}]`
+    ? `${form.value.actionSteps[0].type} [${form.value.actionSteps[0].target || 'Custom'}]`
     : 'Custom execution';
 
   if (isEditing.value && editingId.value) {
@@ -1406,11 +1512,12 @@ function saveForm() {
       item.actionSteps = JSON.parse(JSON.stringify(form.value.actionSteps));
       item.action = primaryActionSummary;
       item.hasFallback = form.value.hasFallback;
-      item.fallbackWait = form.value.fallbackWait;
-      item.fallbackAction = form.value.fallbackAction;
+      item.fallbackTimeout = form.value.fallbackTimeout;
+      item.fallbackTimeoutUnit = form.value.fallbackTimeoutUnit;
+      item.fallbackSteps = JSON.parse(JSON.stringify(form.value.fallbackSteps));
       item.tags = [...form.value.tags];
       item.active = form.value.active;
-      emit('toast', 'Automation Updated', `Saved changes to "${item.name}".`, 'success');
+      emit('toast', 'Automation Updated', `Saved "${item.name}".`, 'success');
     }
   } else {
     const newAuto: AutomationRule = {
@@ -1423,15 +1530,16 @@ function saveForm() {
       actionSteps: JSON.parse(JSON.stringify(form.value.actionSteps)),
       action: primaryActionSummary,
       hasFallback: form.value.hasFallback,
-      fallbackWait: form.value.fallbackWait,
-      fallbackAction: form.value.fallbackAction,
+      fallbackTimeout: form.value.fallbackTimeout,
+      fallbackTimeoutUnit: form.value.fallbackTimeoutUnit,
+      fallbackSteps: JSON.parse(JSON.stringify(form.value.fallbackSteps)),
       tags: form.value.tags.length > 0 ? [...form.value.tags] : ['Lead Routing'],
       dateCreated: currentDate,
       active: form.value.active,
       executionCount: 0,
     };
     automations.value.unshift(newAuto);
-    emit('toast', 'Automation Created', `"${newAuto.name}" is now configured.`, 'success');
+    emit('toast', 'Automation Created', `"${newAuto.name}" created.`, 'success');
   }
 
   showModal.value = false;
@@ -1442,7 +1550,7 @@ function toggleActive(auto: AutomationRule) {
   emit(
     'toast',
     auto.active ? 'Automation Activated' : 'Automation Paused',
-    `"${auto.name}" is now ${auto.active ? 'active and listening' : 'paused'}.`,
+    `"${auto.name}" is now ${auto.active ? 'active' : 'paused'}.`,
     'success'
   );
 }
@@ -1470,7 +1578,7 @@ function testAutomation(auto: AutomationRule) {
     duration: '8ms',
   });
 
-  emit('toast', 'Test Run Successful', `Executed "${auto.name}" with status OK.`, 'success');
+  emit('toast', 'Test Run Successful', `Executed "${auto.name}".`, 'success');
 }
 </script>
 
