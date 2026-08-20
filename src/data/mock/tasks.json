@@ -1,0 +1,5 @@
+[
+  { "id": 1, "text": "Review CRM company directory", "checked": true },
+  { "id": 2, "text": "Verify shadcn border radiuses", "checked": true },
+  { "id": 3, "text": "Configure local system notifications", "checked": false }
+]

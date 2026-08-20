@@ -1,0 +1,370 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/inter";
+
+@custom-variant dark (&:is(.dark *));
+@config "../../tailwind.config.js";
+
+@layer base {
+  :root {
+    --background: oklch(1 0 0);
+    --foreground: oklch(0.145 0 0);
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.145 0 0);
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.145 0 0);
+    --primary: oklch(0.527 0.154 150.069);
+    --primary-foreground: oklch(0.982 0.018 155.826);
+    --secondary: oklch(0.967 0.001 286.375);
+    --secondary-foreground: oklch(0.21 0.006 285.885);
+    --muted: oklch(0.97 0 0);
+    --muted-foreground: oklch(0.556 0 0);
+    --accent: oklch(0.97 0 0);
+    --accent-foreground: oklch(0.205 0 0);
+    --destructive: oklch(0.577 0.245 27.325);
+    --destructive-foreground: oklch(0.985 0 0);
+    --border: oklch(0.922 0 0);
+    --input: oklch(0.922 0 0);
+    --ring: oklch(0.708 0 0);
+    --chart-1: oklch(0.871 0.15 154.449);
+    --chart-2: oklch(0.723 0.219 149.579);
+    --chart-3: oklch(0.627 0.194 149.214);
+    --chart-4: oklch(0.527 0.154 150.069);
+    --chart-5: oklch(0.448 0.119 151.328);
+    --radius: 0.3rem;
+    --sidebar: oklch(0.985 0 0);
+    --sidebar-foreground: oklch(0.145 0 0);
+    --sidebar-primary: oklch(0.627 0.194 149.214);
+    --sidebar-primary-foreground: oklch(0.982 0.018 155.826);
+    --sidebar-accent: oklch(0.97 0 0);
+    --sidebar-accent-foreground: oklch(0.205 0 0);
+    --sidebar-border: oklch(0.922 0 0);
+    --sidebar-ring: oklch(0.708 0 0);
+
+    /* RKS Custom Brand Tokens */
+    --rks-green: #23B750;
+    --rks-green-dark: #1a943e;
+    --rks-shadow-green: 0 4px 12px rgba(35, 183, 80, 0.15);
+    --rks-gradient-primary: linear-gradient(135deg, #23B750 0%, #62D816 100%);
+    --rks-lime: #62D816;
+    --rks-danger: #EF4444;
+    --rks-danger-dark: #DC2626;
+    --rks-danger-bg: rgba(239, 68, 68, 0.1);
+    --rks-gray-900: #111827;
+    --rks-gray-800: #1F2937;
+    --rks-gray-100: #F3F4F6;
+
+    /* RKS Premium Aesthetic Shadows (Toggleable System) */
+    /* To turn shadows off: uncomment the disabler block at the bottom of this file or set variables to "none" */
+    --rks-shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.03);
+    --rks-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    --rks-shadow-md: 0 8px 30px rgba(0, 0, 0, 0.06);
+    --rks-shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.08);
+    --rks-shadow-xl: 0 24px 64px rgba(0, 0, 0, 0.1);
+    --rks-shadow-2xl: 0 32px 80px rgba(0, 0, 0, 0.12);
+    --rks-shadow-3xl: 0 40px 96px rgba(0, 0, 0, 0.14);
+    --rks-shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+
+    /* State-colored shadows for alerts/toasts */
+    --rks-shadow-success: 0 8px 32px rgba(35, 183, 80, 0.12);
+    --rks-shadow-danger: 0 8px 32px rgba(239, 68, 68, 0.12);
+    --rks-shadow-warning: 0 8px 32px rgba(245, 158, 11, 0.12);
+    --rks-shadow-info: 0 8px 32px rgba(46, 145, 229, 0.12);
+  }
+
+  .dark {
+    --background: oklch(0.145 0 0);
+    --foreground: oklch(0.985 0 0);
+    --card: oklch(0.205 0 0);
+    --card-foreground: oklch(0.985 0 0);
+    --popover: oklch(0.205 0 0);
+    --popover-foreground: oklch(0.985 0 0);
+    --primary: oklch(0.448 0.119 151.328);
+    --primary-foreground: oklch(0.982 0.018 155.826);
+    --secondary: oklch(0.274 0.006 286.033);
+    --secondary-foreground: oklch(0.985 0 0);
+    --muted: oklch(0.269 0 0);
+    --muted-foreground: oklch(0.708 0 0);
+    --accent: oklch(0.269 0 0);
+    --accent-foreground: oklch(0.985 0 0);
+    --destructive: oklch(0.704 0.191 22.216);
+    --destructive-foreground: oklch(0.985 0 0);
+    --border: oklch(1 0 0 / 10%);
+    --input: oklch(1 0 0 / 15%);
+    --ring: oklch(0.556 0 0);
+    --chart-1: oklch(0.871 0.15 154.449);
+    --chart-2: oklch(0.723 0.219 149.579);
+    --chart-3: oklch(0.627 0.194 149.214);
+    --chart-4: oklch(0.527 0.154 150.069);
+    --chart-5: oklch(0.448 0.119 151.328);
+    --sidebar: oklch(0.205 0 0);
+    --sidebar-foreground: oklch(0.985 0 0);
+    --sidebar-primary: oklch(0.723 0.219 149.579);
+    --sidebar-primary-foreground: oklch(0.982 0.018 155.826);
+    --sidebar-accent: oklch(0.269 0 0);
+    --sidebar-accent-foreground: oklch(0.985 0 0);
+    --sidebar-border: oklch(1 0 0 / 10%);
+    --sidebar-ring: oklch(0.556 0 0);
+
+    /* Toggleable Shadow System (Dark Mode) - diffused glow with lower opacity */
+    --rks-shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.2);
+    --rks-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    --rks-shadow-md: 0 8px 30px rgba(0, 0, 0, 0.3);
+    --rks-shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.35);
+    --rks-shadow-xl: 0 24px 64px rgba(0, 0, 0, 0.4);
+    --rks-shadow-2xl: 0 32px 80px rgba(0, 0, 0, 0.45);
+    --rks-shadow-3xl: 0 40px 96px rgba(0, 0, 0, 0.5);
+    --rks-shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.15);
+
+    /* Colored shadows for alerts/toasts in dark mode */
+    --rks-shadow-success: 0 8px 32px rgba(35, 183, 80, 0.18);
+    --rks-shadow-danger: 0 8px 32px rgba(239, 68, 68, 0.18);
+    --rks-shadow-warning: 0 8px 32px rgba(245, 158, 11, 0.18);
+    --rks-shadow-info: 0 8px 32px rgba(46, 145, 229, 0.18);
+  }
+
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}
+
+@theme inline {
+  --font-heading: var(--font-sans);
+  --font-sans: 'Inter Variable', sans-serif;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.527 0.154 150.069);
+  --primary-foreground: oklch(0.982 0.018 155.826);
+  --secondary: oklch(0.967 0.001 286.375);
+  --secondary-foreground: oklch(0.21 0.006 285.885);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.871 0.15 154.449);
+  --chart-2: oklch(0.723 0.219 149.579);
+  --chart-3: oklch(0.627 0.194 149.214);
+  --chart-4: oklch(0.527 0.154 150.069);
+  --chart-5: oklch(0.448 0.119 151.328);
+  --radius: 0.3rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.627 0.194 149.214);
+  --sidebar-primary-foreground: oklch(0.982 0.018 155.826);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.448 0.119 151.328);
+  --primary-foreground: oklch(0.982 0.018 155.826);
+  --secondary: oklch(0.274 0.006 286.033);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.871 0.15 154.449);
+  --chart-2: oklch(0.723 0.219 149.579);
+  --chart-3: oklch(0.627 0.194 149.214);
+  --chart-4: oklch(0.527 0.154 150.069);
+  --chart-5: oklch(0.448 0.119 151.328);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.723 0.219 149.579);
+  --sidebar-primary-foreground: oklch(0.982 0.018 155.826);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer utilities {
+  .shadow-soft {
+    box-shadow: var(--rks-shadow-sm);
+  }
+  .glow {
+    box-shadow: 0 0 15px var(--primary);
+  }
+  @keyframes pulse-glow {
+    0%   { box-shadow: 0 0 5px rgba(35, 183, 80, 0.15); }
+    50%  { box-shadow: 0 0 15px rgba(35, 183, 80, 0.35); }
+    100% { box-shadow: 0 0 5px rgba(35, 183, 80, 0.15); }
+  }
+  .animate-pulse-glow {
+    animation: pulse-glow 2.5s infinite ease-in-out;
+  }
+
+  /* State-specific aesthetic colored shadows for Toast Notifications */
+  .group .toast[data-type="success"] {
+    box-shadow: var(--rks-shadow-success) !important;
+    border-color: rgba(35, 183, 80, 0.25) !important;
+  }
+  .group .toast[data-type="error"] {
+    box-shadow: var(--rks-shadow-danger) !important;
+    border-color: rgba(239, 68, 68, 0.25) !important;
+  }
+  .group .toast[data-type="warning"] {
+    box-shadow: var(--rks-shadow-warning) !important;
+    border-color: rgba(245, 158, 11, 0.25) !important;
+  }
+  .group .toast[data-type="info"] {
+    box-shadow: var(--rks-shadow-info) !important;
+    border-color: rgba(46, 145, 229, 0.25) !important;
+  }
+
+  /* Helper status shadow classes */
+  .shadow-success-glow { box-shadow: var(--rks-shadow-success); }
+  .shadow-danger-glow { box-shadow: var(--rks-shadow-danger); }
+  .shadow-warning-glow { box-shadow: var(--rks-shadow-warning); }
+  .shadow-info-glow { box-shadow: var(--rks-shadow-info); }
+
+
+  @keyframes slide-bottom-up {
+    from {
+      transform: translate(-50%, 40%) scale(0.96);
+      opacity: 0;
+    }
+    to {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
+    }
+  }
+
+  @keyframes slide-bottom-down {
+    from {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
+    }
+    to {
+      transform: translate(-50%, 40%) scale(0.96);
+      opacity: 0;
+    }
+  }
+
+  .animate-slide-up {
+    animation: slide-bottom-up 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+  }
+
+  .animate-slide-down {
+    animation: slide-bottom-down 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+  }
+}
+
+/* 
+ * ==========================================================================
+ * GLOBAL SHADOWS DISABLER TOGGLE
+ * ==========================================================================
+ * RakanSales is designed to support both a flat border-only aesthetic and a 
+ * highly layered, diffused aesthetic.
+ * 
+ * To DISABLE all shadows globally and revert back to a clean flat aesthetic, 
+ * simply UNCOMMENT the block below. To ENABLE shadows, keep it commented out.
+ */
+/*
+:root, .dark {
+  --rks-shadow-green: none !important;
+  --rks-shadow-sm: none !important;
+  --rks-shadow: none !important;
+  --rks-shadow-md: none !important;
+  --rks-shadow-lg: none !important;
+  --rks-shadow-xl: none !important;
+  --rks-shadow-2xl: none !important;
+  --rks-shadow-3xl: none !important;
+  --rks-shadow-inner: none !important;
+  --rks-shadow-success: none !important;
+  --rks-shadow-danger: none !important;
+  --rks-shadow-warning: none !important;
+  --rks-shadow-info: none !important;
+}
+*/
+
+/* Light gray premium scrollbar styling */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #f1f5f9;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #e2e8f0;
+}
+
+/* Cross-browser standard scrollbar styling */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #f1f5f9 transparent;
+}

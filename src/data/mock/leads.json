@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "name": "VeecoTech Solutions",
+    "stage": "Enterprise",
+    "budget": "$24,500 USD",
+    "status": "active"
+  },
+  {
+    "id": 2,
+    "name": "RakanSales Dev Team",
+    "stage": "Developer",
+    "budget": "$12,000 USD",
+    "status": "active"
+  },
+  {
+    "id": 3,
+    "name": "Nova Enterprise Corp",
+    "stage": "Proposal",
+    "budget": "$48,000 USD",
+    "status": "pending"
+  }
+]
