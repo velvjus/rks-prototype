@@ -1,357 +1,337 @@
 <template>
-  <div class="h-full flex flex-col bg-gray-50 dark:bg-background overflow-hidden text-sm">
-    <!-- Main Content Canvas (Scrollable) -->
-    <main class="flex-1 overflow-y-auto bg-gray-50 dark:bg-background">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
-        
-        <!-- Tab Navigation Buttons & Controls -->
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-gray-200 dark:border-border pb-4">
-          <div class="flex items-center gap-2 p-1 bg-gray-200/50 dark:bg-muted rounded-full">
+  <div class="h-full flex flex-col bg-[#FAF5FF]/30 dark:bg-[#0B0F17] text-gray-900 dark:text-gray-100 font-sans antialiased overflow-hidden">
+    
+    <!-- Top Header Bar -->
+    <header class="bg-white/95 dark:bg-[#111827]/95 backdrop-blur-md border-b border-gray-200/90 dark:border-gray-800/90 px-6 py-3.5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 shrink-0 z-20">
+      <div class="flex items-center gap-3">
+        <!-- Brand Nav Switcher -->
+        <nav class="flex items-center p-1 bg-gray-100 dark:bg-gray-800/70 rounded-xl border border-gray-200/70 dark:border-gray-700/60" role="tablist">
+          <button
+            v-for="tab in tabs"
+            :key="tab.id"
+            @click="activeTab = tab.id"
+            role="tab"
+            :aria-selected="activeTab === tab.id"
+            :class="[
+              'px-4 py-1.5 rounded-lg text-xs font-semibold tracking-tight transition-all duration-150 cursor-pointer select-none',
+              activeTab === tab.id
+                ? 'bg-white dark:bg-gray-900 text-[#23B750] dark:text-[#23B750] shadow-xs font-bold'
+                : 'text-gray-600 dark:text-gray-400 hover:text-gray-950 dark:hover:text-white'
+            ]"
+          >
+            {{ tab.label }}
+          </button>
+        </nav>
+      </div>
+
+      <!-- Controls: Date Range Popover & Export CTA -->
+      <div class="flex items-center gap-2 relative">
+        <div class="relative">
+          <button
+            @click="isDateOpen = !isDateOpen"
+            class="inline-flex items-center gap-2 px-3.5 py-1.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 text-gray-700 dark:text-gray-300 rounded-lg text-xs font-medium shadow-xs transition-colors cursor-pointer"
+            aria-haspopup="true"
+            :aria-expanded="isDateOpen"
+          >
+            <Calendar class="w-3.5 h-3.5 text-gray-400" />
+            <span class="tabular-nums font-semibold text-[11px]">{{ selectedDateRangeLabel }}</span>
+            <ChevronDown class="w-3.5 h-3.5 text-gray-400 transition-transform duration-200" :class="{ 'rotate-180': isDateOpen }" />
+          </button>
+
+          <!-- Date Range Dropdown Popover -->
+          <div
+            v-if="isDateOpen"
+            class="absolute right-0 mt-1.5 w-56 bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 rounded-xl shadow-lg p-1.5 z-50 text-xs space-y-1 animate-in fade-in zoom-in-95 duration-100"
+          >
             <button
-              v-for="tab in ['overview', 'pipeline', 'marketing']"
-              :key="tab"
-              @click="activeTab = tab"
+              v-for="preset in datePresets"
+              :key="preset.id"
+              @click="setDateRange(preset)"
               :class="[
-                'px-5 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-200 cursor-pointer',
-                activeTab === tab
-                  ? 'bg-emerald-600 text-white shadow-sm'
-                  : 'text-gray-600 dark:text-muted-foreground hover:text-gray-900 dark:hover:text-foreground'
+                'w-full text-left px-3 py-2 rounded-lg font-medium transition-colors cursor-pointer flex items-center justify-between',
+                selectedPresetId === preset.id
+                  ? 'bg-emerald-50 dark:bg-emerald-950/40 text-[#23B750] font-bold'
+                  : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800/60'
               ]"
             >
-              {{ tab }}
-            </button>
-          </div>
-
-          <!-- Date Picker & Export Actions -->
-          <div class="flex items-center gap-2 self-stretch sm:self-auto">
-            <button class="inline-flex items-center gap-2 px-3.5 py-2 bg-white dark:bg-card border border-gray-200 dark:border-border hover:bg-gray-50 dark:hover:bg-muted text-gray-700 dark:text-foreground rounded-lg text-xs font-semibold shadow-sm transition-colors cursor-pointer">
-              <Calendar class="w-4 h-4 text-gray-400" />
-              <span>May 25, 2026 – Jun 23, 2026</span>
-            </button>
-            <button class="inline-flex items-center gap-2 px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] text-white rounded-lg text-xs font-bold shadow-sm transition-all cursor-pointer">
-              <Plus class="w-4 h-4" />
-              <span>Export Report</span>
+              <span>{{ preset.label }}</span>
+              <span v-if="selectedPresetId === preset.id" class="w-1.5 h-1.5 rounded-full bg-[#23B750]"></span>
             </button>
           </div>
         </div>
 
+        <button
+          @click="triggerExport"
+          class="inline-flex items-center gap-1.5 px-4 py-1.5 bg-[#23B750] hover:bg-[#1a943e] active:scale-[0.98] text-white rounded-lg text-xs font-bold shadow-md shadow-[#23B750]/20 transition-all cursor-pointer"
+        >
+          <Download class="w-3.5 h-3.5" />
+          <span>Export report</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Scrollable Content Canvas -->
+    <main class="flex-1 overflow-y-auto p-6 space-y-6 scroll-smooth">
+      <div class="max-w-7xl mx-auto space-y-6">
+
         <!-- ═════════════════════════════════════════════════════════
              TAB 1: OVERVIEW
              ═════════════════════════════════════════════════════════ -->
-        <div v-if="activeTab === 'overview'" class="space-y-6">
-          <!-- Page title -->
-          <div>
-            <h1 class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-foreground">Overview</h1>
-            <p class="text-sm text-gray-500 dark:text-muted-foreground mt-0.5">Performance for 25 May — 23 Jun 2026 compared with the previous period.</p>
+        <div v-if="activeTab === 'overview'" class="space-y-6 animate-in fade-in duration-200">
+          
+          <!-- Section Title & Context -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Commercial Overview</h1>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Real-time revenue, conversion velocity, and team pipeline health for {{ selectedDateRangeLabel }}.</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-50 text-[#1a943e] dark:bg-emerald-950/50 dark:text-[#62D816] border border-emerald-200/80 dark:border-emerald-800/60">
+                <span class="w-2 h-2 rounded-full bg-[#23B750] animate-pulse"></span>
+                RakanSales CRM Live Sync
+              </span>
+            </div>
           </div>
 
-          <!-- KPI Cards Grid -->
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-            <!-- Total Revenue Card (Green background) -->
-            <div class="bg-gradient-to-br from-emerald-600 to-emerald-500 dark:from-emerald-700 dark:to-emerald-600 text-white p-5 rounded-2xl shadow-sm relative overflow-hidden flex flex-col justify-between h-[150px]">
+          <!-- Top KPI Strip (4 High-Impact Visual Cards with Brand Tokens) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            
+            <!-- 1. Total Revenue Won Card -->
+            <div class="bg-gradient-to-br from-[#23B750] via-[#1fa848] to-[#178537] text-white p-5 rounded-2xl shadow-md shadow-[#23B750]/15 relative overflow-hidden flex flex-col justify-between h-[154px]">
               <div class="flex items-center justify-between">
-                <span class="text-xs font-bold opacity-90">Total revenue won</span>
-                <div class="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center">
-                  <Zap class="w-4 h-4 text-white fill-current" />
+                <div class="flex items-center gap-1.5 group relative">
+                  <span class="text-[11px] font-bold tracking-wider uppercase opacity-95">Total Revenue Won</span>
+                  <Info class="w-3 h-3 opacity-75 cursor-help" />
+                  <div class="absolute left-0 top-5 hidden group-hover:block bg-gray-900 text-white text-[10px] p-2 rounded-lg shadow-xl w-48 z-30 font-normal border border-gray-700">
+                    Gross closed-won deal value across all sales pipelines in the selected period.
+                  </div>
+                </div>
+                <div class="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center">
+                  <DollarSign class="w-3.5 h-3.5 text-white" />
                 </div>
               </div>
               <div>
-                <h3 class="text-3xl font-extrabold tracking-tight">RM 509.6K</h3>
-                <p class="text-xs opacity-90 mt-1">+105.1% vs last period</p>
+                <div class="text-3xl font-extrabold tracking-tight tabular-nums">RM {{ activeRevenueStats.wonAmount }}</div>
+                <div class="flex items-center justify-between text-[11px] font-semibold opacity-95 mt-2 pt-2 border-t border-white/20">
+                  <span class="tabular-nums">{{ activeRevenueStats.growth }} vs last period</span>
+                  <span class="tabular-nums">{{ activeRevenueStats.dealsCount }} deals closed</span>
+                </div>
               </div>
             </div>
 
-            <!-- Total Leads Card -->
-            <div class="bg-white dark:bg-card border border-gray-200 dark:border-border p-5 rounded-2xl shadow-sm relative overflow-hidden flex flex-col justify-between h-[150px] group hover:shadow-md transition-shadow">
-              <div class="flex items-start justify-between">
-                <div>
-                  <span class="text-xs text-gray-500 dark:text-muted-foreground font-semibold">Total Leads</span>
-                  <h3 class="text-2xl font-bold text-gray-900 dark:text-foreground mt-1">281</h3>
+            <!-- 2. Active Pipeline Value Card -->
+            <div class="bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-xs flex flex-col justify-between h-[154px] hover:border-gray-300 dark:hover:border-gray-700 transition-colors">
+              <div>
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-1.5 group relative">
+                    <span class="text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Active Pipeline</span>
+                    <Info class="w-3 h-3 text-gray-400 cursor-help" />
+                    <div class="absolute left-0 top-5 hidden group-hover:block bg-gray-900 text-white text-[10px] p-2 rounded-lg shadow-xl w-48 z-30 font-normal border border-gray-700">
+                      Total value of all qualified opportunities in active pipeline stages.
+                    </div>
+                  </div>
+                  <span class="text-[10px] font-bold text-[#23B750] bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-full border border-emerald-150 dark:border-emerald-900/50 tabular-nums">
+                    +7.1%
+                  </span>
                 </div>
-                <span class="bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-150 dark:border-emerald-900/50 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-0.5">
-                  <ArrowUpRight class="w-3 h-3" /> +5.4%
-                </span>
+                <div class="text-2xl font-bold text-gray-900 dark:text-white tabular-nums mt-1">RM 3.84M</div>
               </div>
-              <!-- Sparkline SVG -->
-              <div class="h-8 w-full mt-2">
-                <svg class="w-full h-full" viewBox="0 0 200 40" preserveAspectRatio="none">
-                  <path d="M 0 35 C 20 30, 40 38, 60 22 C 80 18, 100 28, 120 12 C 140 8, 160 32, 180 20 C 190 15, 195 28, 200 5" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round"/>
-                </svg>
+              <div class="h-9 w-full">
+                <apexchart type="area" height="36" :options="sparklineBlueOptions" :series="sparklinePipelineSeries" />
               </div>
             </div>
 
-            <!-- Conversion To Won Card -->
-            <div class="bg-white dark:bg-card border border-gray-200 dark:border-border p-5 rounded-2xl shadow-sm relative overflow-hidden flex flex-col justify-between h-[150px] group hover:shadow-md transition-shadow">
-              <div class="flex items-start justify-between">
-                <div>
-                  <span class="text-xs text-gray-500 dark:text-muted-foreground font-semibold">Conversion To Won</span>
-                  <h3 class="text-2xl font-bold text-gray-900 dark:text-foreground mt-1">2.0%</h3>
+            <!-- 3. Lead Conversion to Won (Purple: #7C3AED) -->
+            <div class="bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-xs flex flex-col justify-between h-[154px] hover:border-gray-300 dark:hover:border-gray-700 transition-colors">
+              <div>
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-1.5 group relative">
+                    <span class="text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Conversion to Won</span>
+                    <Info class="w-3 h-3 text-gray-400 cursor-help" />
+                    <div class="absolute left-0 top-5 hidden group-hover:block bg-gray-900 text-white text-[10px] p-2 rounded-lg shadow-xl w-48 z-30 font-normal border border-gray-700">
+                      Closed Won Deals divided by Total Inbound Leads in this timeframe.
+                    </div>
+                  </div>
+                  <span class="text-[10px] font-bold text-[#7C3AED] dark:text-[#A78BFA] bg-purple-50 dark:bg-purple-950/40 px-2 py-0.5 rounded-full border border-purple-150 dark:border-purple-900/50 tabular-nums">
+                    +6.2 pts
+                  </span>
                 </div>
-                <span class="bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-150 dark:border-emerald-900/50 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-0.5">
-                  <ArrowUpRight class="w-3 h-3" /> +2.3pts
-                </span>
+                <div class="text-2xl font-bold text-gray-900 dark:text-white tabular-nums mt-1">14.3%</div>
               </div>
-              <!-- Sparkline SVG (Purple) -->
-              <div class="h-8 w-full mt-2">
-                <svg class="w-full h-full" viewBox="0 0 200 40" preserveAspectRatio="none">
-                  <path d="M 0 32 C 20 38, 40 20, 60 30 C 80 35, 100 15, 120 25 C 140 32, 160 12, 180 18 C 190 20, 195 10, 200 8" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-linecap="round"/>
-                </svg>
+              <div class="h-9 w-full">
+                <apexchart type="area" height="36" :options="sparklinePurpleOptions" :series="sparklineConvSeries" />
               </div>
             </div>
 
-            <!-- AVG First Response Card -->
-            <div class="bg-white dark:bg-card border border-gray-200 dark:border-border p-5 rounded-2xl shadow-sm relative overflow-hidden flex flex-col justify-between h-[150px] group hover:shadow-md transition-shadow">
-              <div class="flex items-start justify-between">
-                <div>
-                  <span class="text-xs text-gray-500 dark:text-muted-foreground font-semibold">AVG First Response</span>
-                  <h3 class="text-2xl font-bold text-gray-900 dark:text-foreground mt-1">8420.5</h3>
+            <!-- 4. Avg First Response SLA (Orange: #F97316) -->
+            <div class="bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-xs flex flex-col justify-between h-[154px] hover:border-gray-300 dark:hover:border-gray-700 transition-colors">
+              <div>
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-1.5 group relative">
+                    <span class="text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Avg First Response</span>
+                    <Info class="w-3 h-3 text-gray-400 cursor-help" />
+                    <div class="absolute left-0 top-5 hidden group-hover:block bg-gray-900 text-white text-[10px] p-2 rounded-lg shadow-xl w-48 z-30 font-normal border border-gray-700">
+                      Mean duration from inbound lead creation to first outbound WhatsApp/Email response by an agent.
+                    </div>
+                  </div>
+                  <span class="text-[10px] font-bold text-[#F97316] bg-orange-50 dark:bg-orange-950/40 px-2 py-0.5 rounded-full border border-orange-150 dark:border-orange-900/50 tabular-nums">
+                    -18% faster
+                  </span>
                 </div>
-                <span class="bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-150 dark:border-emerald-900/50 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-0.5">
-                  <ArrowUpRight class="w-3 h-3" /> +101.2% faster
-                </span>
+                <div class="text-2xl font-bold text-gray-900 dark:text-white tabular-nums mt-1">12m 45s</div>
               </div>
-              <!-- Sparkline SVG (Orange) -->
-              <div class="h-8 w-full mt-2">
-                <svg class="w-full h-full" viewBox="0 0 200 40" preserveAspectRatio="none">
-                  <path d="M 0 15 C 30 20, 60 15, 90 28 C 120 38, 150 25, 180 32 C 190 35, 195 28, 200 30" fill="none" stroke="#f97316" stroke-width="2" stroke-linecap="round"/>
-                </svg>
+              <div class="h-9 w-full">
+                <apexchart type="area" height="36" :options="sparklineOrangeOptions" :series="sparklineRespSeries" />
               </div>
             </div>
 
-            <!-- AVG Deal Value Card -->
-            <div class="bg-white dark:bg-card border border-gray-200 dark:border-border p-5 rounded-2xl shadow-sm relative overflow-hidden flex flex-col justify-between h-[150px] group hover:shadow-md transition-shadow">
-              <div class="flex items-start justify-between">
-                <div>
-                  <span class="text-xs text-gray-500 dark:text-muted-foreground font-semibold">AVG Deal Value</span>
-                  <h3 class="text-2xl font-bold text-gray-900 dark:text-foreground mt-1">RM 756</h3>
-                </div>
-                <span class="bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-150 dark:border-emerald-900/50 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-0.5">
-                  <ArrowUpRight class="w-3 h-3" /> +99.4%
+          </div>
+
+          <!-- Sales Health Pulse Section (With ApexCharts Radial & Trend) -->
+          <div class="bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 rounded-2xl p-5 shadow-xs space-y-4">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 pb-3 border-b border-gray-150 dark:border-gray-800/80">
+              <div class="flex items-center gap-2.5">
+                <span class="p-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/50 text-[#23B750]">
+                  <Activity class="w-4 h-4" />
                 </span>
+                <div>
+                  <h2 class="text-sm font-bold text-gray-900 dark:text-white">Sales Health Pulse</h2>
+                  <p class="text-xs text-gray-500 dark:text-gray-400">Pipeline diagnostic telemetry and risk alerts</p>
+                </div>
               </div>
-              <!-- Sparkline SVG (Blue) -->
-              <div class="h-8 w-full mt-2">
-                <svg class="w-full h-full" viewBox="0 0 200 40" preserveAspectRatio="none">
-                  <path d="M 0 38 C 30 35, 60 25, 90 28 C 120 18, 150 22, 180 8 C 190 5, 195 10, 200 6" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round"/>
-                </svg>
+              <div class="flex items-center gap-2">
+                <button
+                  @click="nudgeAllStaleDeals"
+                  class="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-orange-50 hover:bg-orange-100 text-[#F97316] dark:bg-orange-950/40 dark:hover:bg-orange-900/60 border border-orange-200 dark:border-orange-800/60 rounded-lg text-xs font-bold transition-colors cursor-pointer"
+                >
+                  <Zap class="w-3.5 h-3.5 text-[#F97316] fill-current" />
+                  <span>Nudge 27 Stale Deals</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <!-- SLA Compliance Apex Radial Gauge -->
+              <div class="flex items-center gap-4 p-3.5 bg-gray-50/60 dark:bg-gray-800/40 rounded-xl border border-gray-150 dark:border-gray-800">
+                <div class="w-16 h-16 flex-shrink-0 flex items-center justify-center">
+                  <apexchart type="radialBar" width="75" height="75" :options="slaRadialOptions" :series="[92]" />
+                </div>
+                <div>
+                  <div class="text-xs font-bold text-gray-900 dark:text-white">SLA Compliance</div>
+                  <p class="text-[11px] text-gray-500 dark:text-gray-400">Responded within 15 min</p>
+                  <span class="text-[10px] font-semibold text-[#23B750]">Target: 80%+ • Status: On Track</span>
+                </div>
+              </div>
+
+              <!-- Pipeline Freshness Split -->
+              <div class="p-3.5 bg-gray-50/60 dark:bg-gray-800/40 rounded-xl border border-gray-150 dark:border-gray-800 flex flex-col justify-between">
+                <div class="flex justify-between items-center text-xs">
+                  <span class="font-bold text-gray-900 dark:text-white">Pipeline Freshness</span>
+                  <span class="text-[11px] font-semibold text-[#EF4444]">Action Required</span>
+                </div>
+                <div class="w-full h-2.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden flex my-1.5">
+                  <div class="bg-[#23B750] h-full" style="width: 10%;"></div>
+                  <div class="bg-[#EF4444] h-full" style="width: 90%;"></div>
+                </div>
+                <div class="flex justify-between items-center text-[10px] font-semibold text-gray-500">
+                  <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-[#23B750]"></span> 3 active (10%)</span>
+                  <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-[#EF4444]"></span> 27 stale &gt;3d (90%)</span>
+                </div>
+              </div>
+
+              <!-- Win Rate Trend Apex Sparkline -->
+              <div class="p-3.5 bg-gray-50/60 dark:bg-gray-800/40 rounded-xl border border-gray-150 dark:border-gray-800 flex flex-col justify-between">
+                <div class="flex justify-between items-center text-xs">
+                  <span class="font-bold text-gray-900 dark:text-white">Win Rate Trend</span>
+                  <span class="text-[#23B750] font-bold tabular-nums">+12.2 pts</span>
+                </div>
+                <div class="h-8 w-full my-1">
+                  <apexchart type="area" height="35" :options="winRateTrendOptions" :series="winRateTrendSeries" />
+                </div>
+                <div class="flex justify-between text-[10px] text-gray-400">
+                  <span>6 weeks ago</span>
+                  <span class="font-bold text-gray-700 dark:text-gray-300">Current: 18.5%</span>
+                </div>
               </div>
             </div>
           </div>
 
-          <!-- Revenue vs Target & AI Assistant -->
+          <!-- Revenue vs Target & Funnel Charts (ApexCharts) -->
           <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
             
-            <!-- Revenue vs Target Card -->
-            <div class="xl:col-span-8 bg-white dark:bg-card border border-gray-200 dark:border-border p-6 rounded-2xl shadow-sm flex flex-col justify-between">
+            <!-- Revenue vs Target Area Chart (ApexCharts) -->
+            <div class="xl:col-span-6 bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-6 rounded-2xl shadow-xs flex flex-col justify-between">
               <div>
-                <!-- Header -->
-                <div class="flex justify-between items-start">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                   <div>
-                    <h3 class="text-base font-bold text-gray-900 dark:text-foreground flex items-center gap-1">
-                      Revenue vs target
-                      <Info class="w-3.5 h-3.5 text-gray-400 cursor-help" />
-                    </h3>
-                    <p class="text-xs text-gray-500 dark:text-muted-foreground mt-0.5">Cumulative revenue vs target for 23 Jun 2026</p>
+                    <h3 class="text-sm font-bold text-gray-900 dark:text-white">Revenue vs Target</h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Cumulative closed revenue against monthly quota</p>
                   </div>
                   <div class="flex items-center gap-2">
-                    <div class="flex p-0.5 bg-gray-100 dark:bg-muted rounded-lg">
+                    <div class="flex p-0.5 bg-gray-100 dark:bg-gray-800 rounded-lg">
                       <button
                         v-for="p in ['30D', '90D', 'YTD']"
                         :key="p"
                         @click="revenuePeriod = p"
                         :class="[
-                          'px-2.5 py-1 text-[10px] font-bold rounded-md transition-colors cursor-pointer',
+                          'px-2.5 py-1 text-[11px] font-bold rounded-md transition-colors cursor-pointer',
                           revenuePeriod === p
-                            ? 'bg-white dark:bg-card text-gray-950 dark:text-foreground shadow-sm'
-                            : 'text-gray-500 hover:text-gray-900 dark:hover:text-foreground'
+                            ? 'bg-white dark:bg-gray-900 text-[#23B750] shadow-xs'
+                            : 'text-gray-500 hover:text-gray-900 dark:hover:text-white'
                         ]"
                       >
                         {{ p }}
                       </button>
                     </div>
-                    <div class="relative">
-                      <button class="inline-flex items-center gap-1 px-2.5 py-1 bg-white dark:bg-muted border border-gray-200 dark:border-border text-[10px] font-bold rounded-lg text-gray-700 dark:text-foreground hover:bg-gray-50 dark:hover:bg-muted/80 cursor-pointer">
-                        <span>All Teams</span>
-                        <ChevronDown class="w-3 h-3" />
-                      </button>
-                    </div>
                   </div>
                 </div>
 
-                <!-- Main metrics -->
                 <div class="flex items-baseline gap-2 mt-4">
-                  <span class="text-3xl font-extrabold text-gray-900 dark:text-foreground">RM 509,612</span>
-                  <span class="text-xs text-gray-500 dark:text-muted-foreground">of RM 372,685.14 target</span>
-                  <span class="bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-900 text-[10px] font-bold px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
-                    <ArrowUpRight class="w-3 h-3" /> 105.1%
-                  </span>
+                  <span class="text-3xl font-extrabold text-gray-900 dark:text-white tabular-nums">RM {{ activeRevenueStats.wonAmount }}</span>
+                  <span class="text-xs font-semibold text-[#23B750]">of RM {{ activeRevenueStats.targetAmount }} target (119% attained)</span>
                 </div>
 
-                <!-- Achievement progress bar -->
-                <div class="mt-4">
-                  <div class="w-full h-2 bg-gray-100 dark:bg-muted rounded-full overflow-hidden">
-                    <div class="h-full bg-emerald-500 rounded-full" style="width: 100%;"></div>
-                  </div>
-                  <div class="flex justify-between items-center text-[10px] text-gray-500 dark:text-muted-foreground font-semibold mt-1.5">
-                    <span>136.74% achieved · 136.74% projected</span>
-                    <span>100% of target</span>
-                  </div>
-                </div>
-
-                <!-- Spline Interactive SVG Chart -->
-                <div class="relative w-full aspect-[5/2] mt-6 select-none bg-gray-50/50 dark:bg-muted/10 rounded-xl p-3 border border-gray-100 dark:border-border/50" @mousemove="handleChartHover" @mouseleave="hoveredPoint = null">
-                  <svg class="w-full h-full overflow-visible" viewBox="0 0 1000 220" preserveAspectRatio="none">
-                    <!-- Grid Lines -->
-                    <line x1="0" y1="36" x2="1000" y2="36" stroke="rgba(0,0,0,0.05)" dark:stroke="rgba(255,255,255,0.03)" stroke-dasharray="3" />
-                    <line x1="0" y1="72" x2="1000" y2="72" stroke="rgba(0,0,0,0.05)" dark:stroke="rgba(255,255,255,0.03)" stroke-dasharray="3" />
-                    <line x1="0" y1="108" x2="1000" y2="108" stroke="rgba(0,0,0,0.05)" dark:stroke="rgba(255,255,255,0.03)" stroke-dasharray="3" />
-                    <line x1="0" y1="144" x2="1000" y2="144" stroke="rgba(0,0,0,0.05)" dark:stroke="rgba(255,255,255,0.03)" stroke-dasharray="3" />
-                    <line x1="0" y1="180" x2="1000" y2="180" stroke="rgba(0,0,0,0.05)" dark:stroke="rgba(255,255,255,0.03)" stroke-dasharray="3" />
-
-                    <!-- Target Dashed Line -->
-                    <line x1="50" y1="150" x2="950" y2="90" stroke="rgba(100, 116, 139, 0.4)" stroke-width="1.5" stroke-dasharray="5 5" />
-                    
-                    <!-- Glow Shading Gradient -->
-                    <defs>
-                      <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="rgba(16, 185, 129, 0.25)" />
-                        <stop offset="100%" stop-color="rgba(16, 185, 129, 0)" />
-                      </linearGradient>
-                    </defs>
-                    <path d="M 50 150 Q 150 150, 250 135 T 450 120 T 650 130 T 800 80 T 950 60 L 950 220 L 50 220 Z" fill="url(#chartGradient)" />
-
-                    <!-- Core Bezier Spline -->
-                    <path d="M 50 150 Q 150 150, 250 135 T 450 120 T 650 130 T 800 80 T 950 60" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" />
-
-                    <!-- Vertical tracking line when hovered -->
-                    <line v-if="hoveredPoint" :x1="hoveredPoint.x" y1="0" :x2="hoveredPoint.x" y2="220" stroke="rgba(16, 185, 129, 0.4)" stroke-width="1.5" stroke-dasharray="3 3" />
-                    
-                    <!-- Labeled Points -->
-                    <circle v-for="(p, index) in chartPoints" :key="index" :cx="p.x" :cy="p.y" :r="hoveredPoint && hoveredPoint.idx === index ? 6 : 4" :fill="hoveredPoint && hoveredPoint.idx === index ? '#62D816' : '#10b981'" stroke="white" dark:stroke="#1f2937" stroke-width="1.5" />
-                  </svg>
-
-                  <!-- Tooltip -->
-                  <div v-if="hoveredPoint" class="absolute bg-gray-900/95 dark:bg-card/95 border border-gray-800 dark:border-border text-white p-3 rounded-lg shadow-xl pointer-events-none text-xs space-y-1 z-30" :style="{ left: hoveredPoint.x - 60 + 'px', top: hoveredPoint.y - 85 + 'px' }">
-                    <p class="font-bold text-[10px] text-gray-400 font-mono">{{ hoveredPoint.date }}</p>
-                    <p class="font-semibold text-emerald-400">Revenue: RM {{ hoveredPoint.val.toLocaleString() }}</p>
-                    <p class="text-gray-300">Target: RM {{ hoveredPoint.target.toLocaleString() }}</p>
-                  </div>
-
-                  <!-- X-Axis Labels -->
-                  <div class="flex justify-between items-center text-[10px] font-bold text-gray-400 dark:text-muted-foreground px-8 mt-2">
-                    <span>May</span>
-                    <span>Jun</span>
-                  </div>
+                <!-- ApexCharts Interactive Spline Area Chart -->
+                <div class="w-full mt-2 select-none">
+                  <apexchart type="area" height="200" :options="revenueApexOptions" :series="revenueApexSeries" />
                 </div>
               </div>
 
               <!-- Footer Statistics -->
-              <div class="grid grid-cols-3 border-t border-gray-150 dark:border-border pt-4 mt-6 text-center">
+              <div class="grid grid-cols-3 border-t border-gray-150 dark:border-gray-800 pt-4 mt-2 text-center">
                 <div>
-                  <p class="text-[10px] text-gray-500 dark:text-muted-foreground uppercase font-semibold tracking-wider">Overall conversion</p>
-                  <p class="text-base font-bold text-gray-900 dark:text-foreground mt-0.5">2.0%</p>
+                  <p class="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-bold tracking-wider">Overall Conversion</p>
+                  <p class="text-sm font-bold text-gray-900 dark:text-white mt-0.5 tabular-nums">14.3%</p>
                 </div>
-                <div class="border-x border-gray-150 dark:border-border">
-                  <p class="text-[10px] text-gray-500 dark:text-muted-foreground uppercase font-semibold tracking-wider">Avg deal velocity</p>
-                  <p class="text-base font-bold text-gray-900 dark:text-foreground mt-0.5">-0.1 days</p>
+                <div class="border-x border-gray-150 dark:border-gray-800">
+                  <p class="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-bold tracking-wider">Avg Deal Velocity</p>
+                  <p class="text-sm font-bold text-gray-900 dark:text-white mt-0.5 tabular-nums">14.2 days</p>
                 </div>
                 <div>
-                  <p class="text-[10px] text-gray-500 dark:text-muted-foreground uppercase font-semibold tracking-wider">Pipeline value</p>
-                  <p class="text-base font-bold text-gray-900 dark:text-foreground mt-0.5">RM 999.3K</p>
+                  <p class="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-bold tracking-wider">Pipeline Value</p>
+                  <p class="text-sm font-bold text-gray-900 dark:text-white mt-0.5 tabular-nums">RM 3.84M</p>
                 </div>
               </div>
             </div>
 
-            <!-- AI Assistant Card -->
-            <div class="xl:col-span-4 bg-white dark:bg-card border border-gray-200 dark:border-border p-6 rounded-2xl shadow-sm flex flex-col justify-between">
+            <!-- Pipeline Funnel (ApexCharts Horizontal Bar) -->
+            <div class="xl:col-span-6 bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-6 rounded-2xl shadow-xs flex flex-col justify-between">
               <div>
-                <!-- Header -->
-                <div class="flex justify-between items-center pb-4 border-b border-gray-100 dark:border-border">
+                <div class="flex justify-between items-center pb-2">
                   <div>
-                    <h3 class="text-base font-bold text-gray-900 dark:text-foreground flex items-center gap-1.5">
-                      <Sparkles class="w-4 h-4 text-yellow-500 fill-current" />
-                      AI Assistant
-                    </h3>
+                    <h3 class="text-sm font-bold text-gray-900 dark:text-white">Pipeline Stage Funnel</h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Stage volume with progression conversion rates</p>
                   </div>
-                  <span class="text-[10px] bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-purple-400 border border-purple-100 dark:border-purple-900 font-bold px-2 py-0.5 rounded-full">
-                    3 new insights
-                  </span>
-                </div>
-
-                <!-- Insights Stack -->
-                <div class="space-y-4 py-4 max-h-[300px] overflow-y-auto pr-1">
-                  <div
-                    v-for="(insight, idx) in insights"
-                    :key="idx"
-                    class="p-4 rounded-xl border transition-all duration-200"
-                    :class="[
-                      insight.type === 'alert' ? 'bg-red-50/50 dark:bg-red-950/10 border-red-100 dark:border-red-900/50' :
-                      insight.type === 'success' ? 'bg-emerald-50/50 dark:bg-emerald-950/10 border-emerald-100 dark:border-emerald-900/50' :
-                      'bg-gray-55 dark:bg-muted/40 border-gray-150 dark:border-border/50'
-                    ]"
-                  >
-                    <div class="flex items-start gap-3">
-                      <div :class="[
-                        'w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 border',
-                        insight.type === 'alert' ? 'bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 border-red-200 dark:border-red-900' :
-                        insight.type === 'success' ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-900' :
-                        'bg-gray-100 dark:bg-muted text-gray-500 dark:text-muted-foreground border-gray-200 dark:border-border'
-                      ]">
-                        <AlertCircle v-if="insight.type === 'alert'" class="w-4 h-4" />
-                        <CheckCircle v-else-if="insight.type === 'success'" class="w-4 h-4" />
-                        <MessageSquare v-else class="w-4 h-4" />
-                      </div>
-                      <div class="flex-1 min-w-0">
-                        <h4 class="text-xs font-bold text-gray-800 dark:text-foreground" v-html="insight.title"></h4>
-                        <p class="text-[11px] text-gray-500 dark:text-muted-foreground mt-1" v-html="insight.text"></p>
-                        <button class="mt-2 text-[10px] font-bold text-emerald-600 dark:text-emerald-450 hover:underline inline-flex items-center gap-0.5 cursor-pointer">
-                          {{ insight.actionText }} <ArrowRight class="w-3 h-3" />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Question Box Console -->
-              <form @submit.prevent="submitAIQuestion" class="relative group mt-4">
-                <input
-                  v-model="aiQuery"
-                  type="text"
-                  placeholder="Ask anything about your sales..."
-                  class="w-full pl-4 pr-12 py-2.5 bg-gray-50 dark:bg-muted border border-gray-200 dark:border-border rounded-xl text-xs text-gray-900 dark:text-foreground focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:bg-white dark:focus:bg-card focus:border-emerald-500 transition-all shadow-inner"
-                />
-                <button
-                  type="submit"
-                  class="absolute right-1.5 top-1/2 -translate-y-1/2 p-2 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white rounded-lg transition-all cursor-pointer shadow-sm"
-                >
-                  <Send class="w-3 h-3" />
-                </button>
-              </form>
-            </div>
-          </div>
-
-          <!-- Pipeline Funnel & Leads by Channel -->
-          <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
-            
-            <!-- Pipeline Funnel Card -->
-            <div class="xl:col-span-6 bg-white dark:bg-card border border-gray-200 dark:border-border p-6 rounded-2xl shadow-sm flex flex-col justify-between">
-              <div>
-                <div class="flex justify-between items-center pb-4">
-                  <div>
-                    <h3 class="text-base font-bold text-gray-900 dark:text-foreground">Pipeline funnel</h3>
-                    <p class="text-xs text-gray-500 dark:text-muted-foreground mt-0.5">Stage progression with conversion rates</p>
-                  </div>
-                  <div class="flex p-0.5 bg-gray-100 dark:bg-muted rounded-lg border border-gray-200 dark:border-border">
+                  <div class="flex p-0.5 bg-gray-100 dark:bg-gray-800 rounded-lg">
                     <button
                       v-for="mode in ['Count', 'Value']"
                       :key="mode"
                       @click="funnelMode = mode"
                       :class="[
-                        'px-3 py-1 text-[10px] font-bold rounded-md transition-colors cursor-pointer',
+                        'px-3 py-1 text-[11px] font-bold rounded-md transition-colors cursor-pointer',
                         funnelMode === mode
-                          ? 'bg-white dark:bg-card text-gray-950 dark:text-foreground shadow-sm'
-                          : 'text-gray-500 hover:text-gray-900 dark:hover:text-foreground'
+                          ? 'bg-white dark:bg-gray-900 text-[#23B750] shadow-xs'
+                          : 'text-gray-500 hover:text-gray-900 dark:hover:text-white'
                       ]"
                     >
                       {{ mode }}
@@ -359,427 +339,401 @@
                   </div>
                 </div>
 
-                <!-- Funnel Progression Bars -->
-                <div class="space-y-3 mt-4">
-                  <div v-for="(stage, idx) in funnelStages" :key="idx" class="space-y-1">
-                    <div class="flex justify-between items-center text-xs font-semibold">
-                      <span class="text-gray-700 dark:text-gray-300 font-bold">{{ stage.name }}</span>
-                      <span class="text-gray-900 dark:text-foreground font-mono">{{ funnelMode === 'Count' ? stage.count : 'RM ' + stage.val.toLocaleString() }}</span>
-                    </div>
-                    <div class="flex items-center gap-3">
-                      <div class="flex-1 h-7 bg-gray-100 dark:bg-muted rounded-lg overflow-hidden relative border border-gray-150 dark:border-border/30">
-                        <div
-                          class="h-full rounded-lg transition-all duration-500 flex items-center px-3"
-                          :class="stage.name === 'Won' ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white' : 'bg-gradient-to-r from-emerald-600 to-emerald-500 text-white'"
-                          :style="{ width: stage.pct + '%' }"
-                        >
-                          <span class="text-[10px] font-bold drop-shadow-sm select-none">{{ funnelMode === 'Count' ? stage.count : stage.count }}</span>
-                        </div>
-                      </div>
-                      <span class="w-12 text-right text-[11px] font-bold text-gray-500 dark:text-muted-foreground font-mono" :class="{ 'text-emerald-600 dark:text-emerald-400': idx > 0 && stage.name !== 'Won' && stage.name !== 'New Leads' }">
-                        {{ stage.conversion }}
-                      </span>
-                    </div>
-                  </div>
+                <div class="w-full mt-2">
+                  <apexchart type="bar" height="230" :options="funnelApexOptions" :series="funnelApexSeries" />
                 </div>
               </div>
 
-              <!-- Footer Statistics Summary -->
-              <div class="border-t border-gray-150 dark:border-border pt-4 mt-6 text-xs text-gray-500 dark:text-muted-foreground font-semibold flex justify-between items-center">
-                <span>Overall conversion <strong>2.0%</strong></span>
-                <span>Avg deal velocity <strong>-0.1 days</strong></span>
-                <span>Pipeline value <strong>RM 999.3K</strong></span>
+              <!-- Funnel Summary -->
+              <div class="border-t border-gray-150 dark:border-gray-800 pt-3 mt-2 flex justify-between text-xs text-gray-500">
+                <span>Top of Funnel: <strong class="text-gray-900 dark:text-white tabular-nums">349 Inbound Leads</strong></span>
+                <span>Final Win Rate: <strong class="text-[#23B750] tabular-nums">14.3% Closed Won</strong></span>
               </div>
             </div>
 
-            <!-- Leads by Channel Card -->
-            <div class="xl:col-span-6 bg-white dark:bg-card border border-gray-200 dark:border-border p-6 rounded-2xl shadow-sm">
-              <h3 class="text-base font-bold text-gray-900 dark:text-foreground">Leads by channel</h3>
-              <p class="text-xs text-gray-500 dark:text-muted-foreground mt-0.5">Volume & conversion rate</p>
+          </div>
 
-              <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center mt-6">
-                <!-- Donut Chart -->
-                <div class="md:col-span-5 flex justify-center relative select-none">
-                  <svg width="180" height="180" viewBox="0 0 200 200" class="transform -rotate-90">
-                    <circle cx="100" cy="100" r="70" fill="none" stroke="rgba(100,116,139,0.06)" stroke-width="26" />
-                    <!-- WhatsApp 55% = stroke-dasharray="241.9 197.9", offset=0 -->
-                    <!-- Email 45% = stroke-dasharray="197.9 241.9", offset="-241.9" -->
-                    <circle cx="100" cy="100" r="70" fill="none" stroke="#f97316" stroke-width="26" stroke-dasharray="241.9 197.9" stroke-dashoffset="0" class="transition-all duration-500" />
-                    <circle cx="100" cy="100" r="70" fill="none" stroke="#3b82f6" stroke-width="26" stroke-dasharray="197.9 241.9" stroke-dashoffset="-241.9" class="transition-all duration-500" />
-                  </svg>
-                  <!-- Absolute center text -->
-                  <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
-                    <span class="text-3xl font-extrabold text-gray-900 dark:text-foreground font-sans">368</span>
-                    <span class="text-[10px] text-gray-400 dark:text-muted-foreground uppercase font-bold tracking-wider">Total Leads</span>
+          <!-- Top Performing Agents & Channel Distribution (ApexCharts Donut) -->
+          <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+            
+            <!-- Top Performing Agents Leaderboard -->
+            <div class="xl:col-span-6 bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-6 rounded-2xl shadow-xs">
+              <div class="flex justify-between items-center pb-3 border-b border-gray-150 dark:border-gray-800">
+                <div>
+                  <h3 class="text-sm font-bold text-gray-900 dark:text-white">Top Performing Agents</h3>
+                  <p class="text-xs text-gray-500 dark:text-gray-400">Ranked by revenue contribution this period</p>
+                </div>
+                <span class="text-xs font-semibold text-gray-400">Leaderboard</span>
+              </div>
+
+              <div class="divide-y divide-gray-150 dark:divide-gray-800/60 mt-1">
+                <div v-for="(agent, idx) in topAgents" :key="idx" class="py-3 flex items-center justify-between hover:bg-gray-50/60 dark:hover:bg-gray-800/40 rounded-xl px-2 transition-colors">
+                  <div class="flex items-center gap-3">
+                    <span class="text-xs font-bold text-gray-400 tabular-nums w-4">0{{ idx + 1 }}</span>
+                    <div :class="['w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white', agent.avatarBg]">
+                      {{ agent.initials }}
+                    </div>
+                    <div>
+                      <div class="text-xs font-bold text-gray-900 dark:text-white">{{ agent.name }}</div>
+                      <div class="text-[11px] text-gray-400 tabular-nums">{{ agent.won }} won · {{ agent.open }} active deals</div>
+                    </div>
+                  </div>
+                  <div class="text-right tabular-nums">
+                    <div class="text-xs font-bold text-gray-900 dark:text-white">RM {{ agent.revenue }}</div>
+                    <div class="text-[11px] font-semibold text-[#23B750]">{{ agent.winRate }}% win rate</div>
                   </div>
                 </div>
+              </div>
+            </div>
 
-                <!-- Legend & conversion volume table -->
-                <div class="md:col-span-7 space-y-2">
-                  <div v-for="(ch, idx) in leadsByChannel" :key="idx" class="flex justify-between items-center text-xs pb-1.5 border-b border-gray-100 dark:border-border/50">
-                    <div class="flex items-center gap-2">
-                      <span class="w-2.5 h-2.5 rounded-full flex-shrink-0" :style="{ backgroundColor: ch.color }"></span>
-                      <span class="font-bold text-gray-700 dark:text-gray-300">{{ ch.channel }}</span>
-                    </div>
-                    <div class="flex items-center gap-4 text-gray-900 dark:text-foreground font-mono">
-                      <span>{{ ch.count }}</span>
-                      <span class="text-gray-450 dark:text-muted-foreground font-bold w-10 text-right">{{ ch.pct }}%</span>
+            <!-- Leads by Channel Apex Donut Chart -->
+            <div class="xl:col-span-6 bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-6 rounded-2xl shadow-xs flex flex-col justify-between">
+              <div>
+                <div class="flex justify-between items-center pb-3 border-b border-gray-150 dark:border-gray-800">
+                  <div>
+                    <h3 class="text-sm font-bold text-gray-900 dark:text-white">Leads by Channel</h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Inbound volume across communications</p>
+                  </div>
+                  <span class="text-xs font-bold text-gray-400 tabular-nums">389 Total Leads</span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center mt-3">
+                  <div class="md:col-span-6 flex justify-center">
+                    <apexchart type="donut" width="200" height="200" :options="channelDonutOptions" :series="channelDonutSeries" />
+                  </div>
+
+                  <div class="md:col-span-6 space-y-2">
+                    <div v-for="(ch, idx) in overviewChannels" :key="idx" class="flex justify-between items-center text-xs pb-1 border-b border-gray-100 dark:border-gray-800/50">
+                      <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full flex-shrink-0" :style="{ backgroundColor: ch.color }"></span>
+                        <span class="font-medium text-gray-700 dark:text-gray-300">{{ ch.channel }}</span>
+                      </div>
+                      <div class="flex items-center gap-3 text-gray-900 dark:text-white tabular-nums">
+                        <span class="font-bold">{{ ch.count }}</span>
+                        <span class="text-gray-400 w-10 text-right font-medium">{{ ch.pct }}%</span>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+
+          <!-- Follow-up Week Strip -->
+          <div class="bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-xs space-y-3">
+            <div class="flex justify-between items-center">
+              <div>
+                <h3 class="text-sm font-bold text-gray-900 dark:text-white">This Week's Scheduled Follow-ups</h3>
+                <p class="text-xs text-gray-500 dark:text-gray-400">Scheduled client touches across active pipelines</p>
+              </div>
+              <span class="text-xs font-semibold text-gray-400">Week 34 (August 2026)</span>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
+              <div
+                v-for="day in calendarDays"
+                :key="day.date"
+                :class="[
+                  'p-3.5 rounded-xl border transition-all duration-150 flex flex-col justify-between h-24',
+                  day.isToday
+                    ? 'bg-emerald-50/80 border-[#23B750] dark:bg-emerald-950/30 dark:border-emerald-800 text-[#1a943e] dark:text-[#62D816] shadow-sm shadow-[#23B750]/10'
+                    : 'bg-gray-50/50 border-gray-200/80 dark:bg-gray-800/40 dark:border-gray-800 text-gray-600 dark:text-gray-400'
+                ]"
+              >
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] font-bold uppercase tracking-wider">{{ day.label }}</span>
+                  <span v-if="day.badge" class="w-2 h-2 rounded-full bg-[#23B750]"></span>
+                </div>
+                <div class="text-2xl font-black tabular-nums">{{ day.date }}</div>
+              </div>
+            </div>
+          </div>
+
         </div>
 
         <!-- ═════════════════════════════════════════════════════════
-             TAB 2: PIPELINE
+             TAB 2: PIPELINE & SALES
              ═════════════════════════════════════════════════════════ -->
-        <div v-if="activeTab === 'pipeline'" class="space-y-6">
-          <!-- Page title -->
+        <div v-if="activeTab === 'pipeline'" class="space-y-6 animate-in fade-in duration-200">
+          
           <div>
-            <h1 class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-foreground">Pipeline & Sales</h1>
-            <p class="text-sm text-gray-500 dark:text-muted-foreground mt-0.5">Pipeline activity for 25 May — 23 Jun 2026.</p>
+            <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Pipeline Velocity &amp; Active Deals</h1>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Stage durations, bottleneck discovery, and real-time opportunity triage.</p>
           </div>
 
-          <!-- KPI Cards Grid -->
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-            <!-- Conversion Rate (Green) -->
-            <div class="bg-gradient-to-br from-emerald-600 to-emerald-500 dark:from-emerald-700 dark:to-emerald-600 text-white p-5 rounded-2xl shadow-sm relative overflow-hidden flex flex-col justify-between h-[150px]">
-              <div class="flex items-center justify-between">
-                <span class="text-xs font-bold opacity-90">Conversion Rate</span>
-              </div>
+          <!-- Pipeline Top Cards -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+            <div class="bg-gradient-to-br from-[#23B750] to-[#178537] text-white p-5 rounded-2xl shadow-xs flex flex-col justify-between h-[142px]">
+              <span class="text-[11px] font-bold tracking-wider uppercase opacity-90">Conversion Rate</span>
               <div>
-                <h3 class="text-3xl font-extrabold tracking-tight">2%</h3>
-                <p class="text-xs opacity-90 mt-1">↘ 2.3 pts vs last period</p>
-              </div>
-              <div class="h-6 w-full opacity-60">
-                <svg class="w-full h-full" viewBox="0 0 200 30" preserveAspectRatio="none">
-                  <path d="M 0 20 C 30 15, 60 25, 90 10 C 120 18, 150 5, 180 15 C 190 10, 195 25, 200 12" fill="none" stroke="white" stroke-width="1.5"/>
-                </svg>
+                <div class="text-3xl font-extrabold tracking-tight tabular-nums">14.3%</div>
+                <div class="text-xs text-emerald-100 mt-1 tabular-nums">↑ 6.2 pts vs last period</div>
               </div>
             </div>
 
-            <!-- Pipeline Value -->
-            <div class="bg-white dark:bg-card border border-gray-200 dark:border-border p-5 rounded-2xl shadow-sm relative overflow-hidden flex flex-col justify-between h-[150px] group hover:shadow-md transition-shadow">
-              <div class="flex items-start justify-between">
-                <div>
-                  <span class="text-xs text-gray-500 dark:text-muted-foreground font-semibold">Pipeline Value</span>
-                  <h3 class="text-2xl font-bold text-gray-900 dark:text-foreground mt-1">RM200.3K</h3>
-                </div>
-              </div>
-              <p class="text-xs text-gray-400 dark:text-muted-foreground font-bold mt-1">45 open deals</p>
-              <div class="h-6 w-full mt-2">
-                <svg class="w-full h-full" viewBox="0 0 200 30" preserveAspectRatio="none">
-                  <path d="M 0 28 C 30 25, 60 12, 90 22 C 120 10, 150 18, 180 8 C 190 5, 195 22, 200 15" fill="none" stroke="#10b981" stroke-width="2"/>
-                </svg>
+            <div class="bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-xs flex flex-col justify-between h-[142px]">
+              <span class="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Pipeline Value</span>
+              <div>
+                <div class="text-2xl font-bold text-gray-900 dark:text-white tabular-nums">RM 3.84M</div>
+                <div class="text-xs text-gray-400 mt-1 tabular-nums">30 open opportunities</div>
               </div>
             </div>
 
-            <!-- Deal Velocity -->
-            <div class="bg-white dark:bg-card border border-gray-200 dark:border-border p-5 rounded-2xl shadow-sm relative overflow-hidden flex flex-col justify-between h-[150px] group hover:shadow-md transition-shadow">
-              <div class="flex items-start justify-between">
-                <div>
-                  <span class="text-xs text-gray-500 dark:text-muted-foreground font-semibold">Deal Velocity</span>
-                  <h3 class="text-2xl font-bold text-gray-900 dark:text-foreground mt-1">-0.1 days</h3>
-                </div>
-                <span class="bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-150 dark:border-emerald-900/50 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-0.5">
-                  ↗ 24.7d faster
-                </span>
-              </div>
-              <!-- Red Sparkline SVG -->
-              <div class="h-6 w-full mt-2">
-                <svg class="w-full h-full" viewBox="0 0 200 30" preserveAspectRatio="none">
-                  <path d="M 0 5 C 30 10, 60 28, 90 20 C 120 32, 150 15, 180 25 C 190 28, 195 20, 200 24" fill="none" stroke="#ef4444" stroke-width="2"/>
-                </svg>
+            <div class="bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-xs flex flex-col justify-between h-[142px]">
+              <span class="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Avg Deal Velocity</span>
+              <div>
+                <div class="text-2xl font-bold text-gray-900 dark:text-white tabular-nums">14.2 days</div>
+                <div class="text-xs text-[#23B750] font-semibold mt-1 tabular-nums">↑ 3.4d faster closing</div>
               </div>
             </div>
 
-            <!-- Win / loss -->
-            <div class="bg-white dark:bg-card border border-gray-200 dark:border-border p-5 rounded-2xl shadow-sm relative overflow-hidden flex flex-col justify-between h-[150px] group hover:shadow-md transition-shadow">
-              <div class="flex items-start justify-between">
-                <div>
-                  <span class="text-xs text-gray-500 dark:text-muted-foreground font-semibold">Win / loss</span>
-                  <h3 class="text-2xl font-bold text-gray-900 dark:text-foreground mt-1">1 / 2</h3>
-                </div>
-                <span class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">0.50:1 ratio</span>
-              </div>
-              <div class="h-6 w-full mt-2">
-                <svg class="w-full h-full" viewBox="0 0 200 30" preserveAspectRatio="none">
-                  <path d="M 0 28 C 30 25, 60 28, 90 12 C 120 18, 150 8, 180 12 C 190 10, 195 22, 200 15" fill="none" stroke="#10b981" stroke-width="2"/>
-                </svg>
+            <div class="bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-xs flex flex-col justify-between h-[142px]">
+              <span class="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Win / Loss Ratio</span>
+              <div>
+                <div class="text-2xl font-bold text-gray-900 dark:text-white tabular-nums">0.23:1</div>
+                <div class="text-xs text-gray-400 mt-1 tabular-nums">5 won · 22 lost</div>
               </div>
             </div>
 
-            <!-- SLA Compliance -->
-            <div class="bg-white dark:bg-card border border-gray-200 dark:border-border p-5 rounded-2xl shadow-sm relative overflow-hidden flex flex-col justify-between h-[150px] group hover:shadow-md transition-shadow">
-              <div class="flex items-start justify-between">
-                <div>
-                  <span class="text-xs text-gray-500 dark:text-muted-foreground font-semibold">SLA Compliance</span>
-                  <h3 class="text-2xl font-bold text-gray-900 dark:text-foreground mt-1">0%</h3>
-                </div>
-              </div>
-              <p class="text-xs text-gray-400 dark:text-muted-foreground font-bold mt-1">Response &lt; 15 min</p>
-              <div class="h-6 w-full mt-2">
-                <div class="w-full h-1 bg-gray-150 dark:bg-muted rounded-full overflow-hidden">
-                  <div class="h-full bg-red-500" style="width: 0%;"></div>
-                </div>
+            <div class="bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-xs flex flex-col justify-between h-[142px]">
+              <span class="text-[11px] font-bold text-gray-500 uppercase tracking-wider">SLA Response</span>
+              <div>
+                <div class="text-2xl font-bold text-[#23B750] tabular-nums">92%</div>
+                <div class="text-xs text-gray-400 mt-1">&lt; 15 min response time</div>
               </div>
             </div>
           </div>
 
-          <!-- Deal Velocity by Stage & Lost Deal Reasons -->
+          <!-- Velocity by Stage & Lost Deals Analysis -->
           <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
             
-            <!-- Deal Velocity by Stage Card -->
-            <div class="xl:col-span-6 bg-white dark:bg-card border border-gray-200 dark:border-border p-6 rounded-2xl shadow-sm flex flex-col justify-between">
+            <!-- Velocity by Stage Apex Chart -->
+            <div class="xl:col-span-6 bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-6 rounded-2xl shadow-xs flex flex-col justify-between">
               <div>
-                <h3 class="text-base font-bold text-gray-900 dark:text-foreground flex items-center gap-1.5">
-                  Deal velocity by stage
-                  <Info class="w-3.5 h-3.5 text-gray-400 cursor-help" />
-                </h3>
-                <p class="text-xs text-gray-500 dark:text-muted-foreground mt-0.5">Average time spent in each stage for the selected range</p>
-
-                <div class="space-y-4 mt-6">
-                  <div v-for="(st, idx) in dealVelocityStages" :key="idx" class="space-y-1">
-                    <div class="flex justify-between items-center text-xs font-semibold">
-                      <span class="text-gray-700 dark:text-gray-300 font-bold">{{ st.name }}</span>
-                      <span class="text-gray-900 dark:text-foreground font-mono">{{ st.days }}d</span>
-                    </div>
-                    <div class="h-5 bg-gray-150 dark:bg-muted rounded-lg overflow-hidden relative border border-gray-200 dark:border-border/30">
-                      <div
-                        class="h-full rounded-lg transition-all duration-500"
-                        :class="st.name === 'Proposal/ Quotation' ? 'bg-gradient-to-r from-blue-600 to-blue-500' : 'bg-gradient-to-r from-emerald-600 to-emerald-500'"
-                        :style="{ width: (st.days / 10) * 100 + '%' }"
-                      ></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Warning container -->
-              <div class="mt-6 p-3 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/50 rounded-xl flex items-start gap-2.5">
-                <AlertCircle class="w-4 h-4 text-amber-600 dark:text-amber-500 flex-shrink-0 mt-0.5" />
-                <div class="text-[11px] leading-relaxed text-amber-800 dark:text-amber-400">
-                  <strong>Bottleneck detected</strong> - Proposal / Quotation stage takes 23% of total cycle time. Consider automated follow-up sequences.
-                </div>
-              </div>
-            </div>
-
-            <!-- Lost Deal Reasons Card -->
-            <div class="xl:col-span-6 bg-white dark:bg-card border border-gray-200 dark:border-border p-6 rounded-2xl shadow-sm flex flex-col justify-between">
-              <div>
-                <!-- Header -->
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 border-b border-gray-100 dark:border-border/60">
+                <div class="flex justify-between items-center">
                   <div>
-                    <h3 class="text-base font-bold text-gray-900 dark:text-foreground flex items-center gap-1.5">
-                      Lost deal reasons
-                      <Info class="w-3.5 h-3.5 text-gray-400 cursor-help" />
-                    </h3>
-                    <p class="text-xs text-gray-500 dark:text-muted-foreground mt-0.5">13 lost deals this period - root-cause breakdown</p>
-                  </div>
-                  <div class="relative w-full sm:w-44">
-                    <Search class="w-3.5 h-3.5 text-gray-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
-                    <input
-                      type="text"
-                      placeholder="Search..."
-                      class="w-full pl-8 pr-3 py-1 bg-gray-50 dark:bg-muted border border-gray-250 dark:border-border rounded-lg text-[10px] focus:outline-none focus:ring-1 focus:ring-emerald-500 transition-all"
-                    />
+                    <h3 class="text-sm font-bold text-gray-900 dark:text-white">Deal Velocity by Stage</h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Average duration spent in each qualification milestone</p>
                   </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center mt-6">
-                  <!-- Donut Chart -->
-                  <div class="md:col-span-5 flex justify-center relative select-none">
-                    <svg width="150" height="150" viewBox="0 0 200 200" class="transform -rotate-90">
-                      <circle cx="100" cy="100" r="70" fill="none" stroke="rgba(100,116,139,0.06)" stroke-width="24" />
-                      <!-- Segment 1: Competitor 30.8% = 135.5, offset=0 (Blue) -->
-                      <circle cx="100" cy="100" r="70" fill="none" stroke="#3b82f6" stroke-width="24" stroke-dasharray="135.5 304.3" stroke-dashoffset="0" />
-                      <!-- Segment 2: Other 23.1% = 101.6, offset=-135.5 (Orange) -->
-                      <circle cx="100" cy="100" r="70" fill="none" stroke="#f97316" stroke-width="24" stroke-dasharray="101.6 338.2" stroke-dashoffset="-135.5" />
-                      <!-- Segment 3: Unreachable 23.1% = 101.6, offset=-237.1 (Red) -->
-                      <circle cx="100" cy="100" r="70" fill="none" stroke="#ef4444" stroke-width="24" stroke-dasharray="101.6 338.2" stroke-dashoffset="-237.1" />
-                      <!-- Segment 4: No Need 15.4% = 67.7, offset=-338.7 (Green) -->
-                      <circle cx="100" cy="100" r="70" fill="none" stroke="#10b981" stroke-width="24" stroke-dasharray="67.7 372.1" stroke-dashoffset="-338.7" />
-                    </svg>
-                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
-                      <span class="text-2xl font-extrabold text-gray-900 dark:text-foreground">13</span>
-                      <span class="text-[9px] text-gray-400 dark:text-muted-foreground uppercase font-bold tracking-wider">Lost Deals</span>
-                    </div>
-                  </div>
+                <div class="w-full mt-2">
+                  <apexchart type="bar" height="200" :options="velocityApexOptions" :series="velocityApexSeries" />
+                </div>
+              </div>
 
-                  <!-- Table breakdown -->
-                  <div class="md:col-span-7">
-                    <table class="w-full text-xs">
-                      <thead>
-                        <tr class="text-[10px] text-gray-400 uppercase tracking-wider text-left border-b border-gray-150 dark:border-border pb-1">
-                          <th class="font-bold pb-2">#</th>
-                          <th class="font-bold pb-2">Reason</th>
-                          <th class="font-bold pb-2 text-right">Count</th>
-                          <th class="font-bold pb-2 text-right">Value</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr v-for="(reason, idx) in lostReasons" :key="idx" class="border-b border-gray-100 dark:border-border/50 hover:bg-gray-50 dark:hover:bg-muted/30 transition-colors">
-                          <td class="py-2.5 font-bold text-gray-450">{{ idx + 1 }}</td>
-                          <td class="py-2.5 font-bold text-gray-800 dark:text-gray-300">{{ reason.title }}</td>
-                          <td class="py-2.5 font-bold text-right font-mono text-gray-750 dark:text-foreground">{{ reason.count }}</td>
-                          <td class="py-2.5 font-bold text-right font-mono text-gray-900 dark:text-foreground">RM {{ reason.val.toLocaleString() }}</td>
-                        </tr>
-                      </tbody>
-                    </table>
+              <!-- Bottleneck Warning Card -->
+              <div class="mt-2 p-3.5 bg-orange-50 dark:bg-orange-950/20 border border-orange-200 dark:border-orange-900/40 rounded-xl flex items-start gap-2.5 text-xs text-[#F97316]">
+                <AlertCircle class="w-4 h-4 text-[#F97316] shrink-0 mt-0.5" />
+                <span><strong>Bottleneck Detected:</strong> Proposal / Quotation stage takes 31% of total cycle time. Consider automated WhatsApp quote nudges.</span>
+              </div>
+            </div>
+
+            <!-- Lost Deal Reasons (ApexCharts Donut + List) -->
+            <div class="xl:col-span-6 bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-6 rounded-2xl shadow-xs">
+              <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-3 border-b border-gray-150 dark:border-gray-800">
+                <div>
+                  <h3 class="text-sm font-bold text-gray-900 dark:text-white">Lost Deal Root Causes</h3>
+                  <p class="text-xs text-gray-500 dark:text-gray-400">22 lost opportunities analysis</p>
+                </div>
+                <div class="relative w-40">
+                  <Search class="w-3.5 h-3.5 text-gray-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
+                  <input
+                    v-model="lostReasonSearch"
+                    type="text"
+                    placeholder="Search reasons..."
+                    class="w-full pl-8 pr-2 py-1 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-[#23B750]"
+                  />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center mt-3">
+                <div class="md:col-span-5 flex justify-center">
+                  <apexchart type="donut" width="170" height="170" :options="lostReasonDonutOptions" :series="lostReasonDonutSeries" />
+                </div>
+                <div class="md:col-span-7 divide-y divide-gray-150 dark:divide-gray-800/60">
+                  <div v-for="(r, idx) in filteredLostReasons" :key="idx" class="py-2.5 flex items-center justify-between text-xs hover:bg-gray-50/50 dark:hover:bg-gray-800/30 px-2 rounded-xl transition-colors">
+                    <span class="font-bold text-gray-800 dark:text-gray-200">{{ r.title }}</span>
+                    <div class="flex items-center gap-4 tabular-nums">
+                      <span class="text-gray-500">{{ r.count }} deals</span>
+                      <span class="font-bold text-gray-900 dark:text-white">RM {{ r.val.toLocaleString() }}</span>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
+
           </div>
 
-          <!-- Agent Performance Leaderboard -->
-          <div class="bg-white dark:bg-card border border-gray-200 dark:border-border rounded-2xl shadow-sm overflow-hidden">
-            <div class="px-6 py-4 border-b border-gray-255 dark:border-border bg-gray-55 dark:bg-muted/40">
-              <h3 class="text-base font-bold text-gray-900 dark:text-foreground">Agent Performance</h3>
-              <p class="text-xs text-gray-500 dark:text-muted-foreground mt-0.5">Leaderboard for selected range - ranked by revenue won</p>
+          <!-- Active Opportunities Data Grid with Slide-Over Drawer Trigger -->
+          <div class="bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 rounded-2xl shadow-xs p-6 space-y-4">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+              <div>
+                <h3 class="text-sm font-bold text-gray-900 dark:text-white">Active Opportunities</h3>
+                <p class="text-xs text-gray-500 dark:text-gray-400">Click any deal to view full conversation history and audit drawer</p>
+              </div>
+
+              <!-- Filter Toolbar -->
+              <div class="flex items-center gap-2 w-full sm:w-auto">
+                <div class="relative flex-1 sm:w-64">
+                  <Search class="w-3.5 h-3.5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                  <input
+                    v-model="activeDealSearch"
+                    type="text"
+                    placeholder="Search deal or company..."
+                    class="w-full pl-9 pr-3 py-1.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-[#23B750]"
+                  />
+                </div>
+                <select v-model="activeDealStageFilter" class="px-3 py-1.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg text-xs font-semibold text-gray-700 dark:text-gray-300 focus:ring-1 focus:ring-[#23B750]">
+                  <option value="All">All Stages</option>
+                  <option value="New Leads">New Leads</option>
+                  <option value="Acknowledged">Acknowledged</option>
+                  <option value="Qualifying">Qualifying</option>
+                  <option value="Proposal/Quotation">Proposal/Quotation</option>
+                  <option value="Follow up/Negotiation">Follow up/Negotiation</option>
+                </select>
+              </div>
             </div>
-            
-            <div class="overflow-x-auto">
+
+            <!-- Table -->
+            <div class="overflow-x-auto border border-gray-200 dark:border-gray-800 rounded-xl">
               <table class="w-full text-xs text-left whitespace-nowrap">
                 <thead>
-                  <tr class="text-[10px] text-gray-400 uppercase tracking-wider border-b border-gray-255 dark:border-border bg-gray-50/50 dark:bg-muted/20">
-                    <th class="px-6 py-3 font-bold">#</th>
-                    <th class="px-6 py-3 font-bold">Agent</th>
-                    <th class="px-6 py-3 font-bold text-right">Revenue Won</th>
-                    <th class="px-6 py-3 font-bold text-right">Deal Closed</th>
-                    <th class="px-6 py-3 font-bold text-center">Win Rate</th>
-                    <th class="px-6 py-3 font-bold text-right">AVG Response</th>
-                    <th class="px-6 py-3 font-bold text-right">AVG Deal Value</th>
+                  <tr class="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider bg-gray-50/80 dark:bg-gray-800/50 border-b border-gray-200 dark:border-gray-800">
+                    <th class="px-4 py-3">OPPORTUNITY</th>
+                    <th class="px-4 py-3 text-right">VALUE</th>
+                    <th class="px-4 py-3">STAGE</th>
+                    <th class="px-4 py-3">AGE / STALENESS</th>
+                    <th class="px-4 py-3">OWNER</th>
+                    <th class="px-4 py-3">CHANNEL</th>
+                    <th class="px-4 py-3 text-center">ACTION</th>
                   </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-150 dark:divide-border/60">
-                  <tr v-for="(agent, idx) in agents" :key="idx" class="hover:bg-gray-50 dark:hover:bg-muted/30 transition-colors">
-                    <td class="px-6 py-4 font-bold text-gray-450 font-sans" :class="{ 'text-emerald-600 dark:text-emerald-500 font-extrabold': idx === 0 }">{{ idx + 1 }}</td>
-                    <td class="px-6 py-4">
-                      <div class="flex items-center gap-3">
-                        <img :src="agent.avatar" class="w-8 h-8 rounded-full border border-gray-200 dark:border-border/60 object-cover" :alt="agent.name" />
-                        <div>
-                          <p class="font-bold text-gray-900 dark:text-foreground">{{ agent.name }}</p>
-                          <p class="text-[10px] text-gray-400 dark:text-muted-foreground mt-0.5">{{ agent.won }} won · {{ agent.open }} open</p>
-                        </div>
-                      </div>
+                <tbody class="divide-y divide-gray-100 dark:divide-gray-800/60">
+                  <tr
+                    v-for="deal in filteredActiveDeals"
+                    :key="deal.id"
+                    @click="openDealDrawer(deal)"
+                    class="hover:bg-emerald-50/30 dark:hover:bg-emerald-950/20 transition-colors cursor-pointer"
+                  >
+                    <td class="px-4 py-3.5">
+                      <div class="font-bold text-gray-900 dark:text-white hover:text-[#23B750] transition-colors">{{ deal.title }}</div>
+                      <div class="text-[11px] text-gray-400">{{ deal.company }}</div>
                     </td>
-                    <td class="px-6 py-4 font-bold text-right font-mono text-gray-800 dark:text-foreground">RM {{ agent.revenueWon.toLocaleString() }}</td>
-                    <td class="px-6 py-4 font-bold text-right font-mono text-gray-800 dark:text-foreground">{{ agent.dealsClosed }}</td>
-                    <td class="px-6 py-4 text-center">
-                      <span :class="[
-                        'px-2 py-0.5 rounded-full text-[10px] font-bold border',
-                        agent.winRate === 100 
-                          ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border-emerald-100 dark:border-emerald-900'
-                          : 'bg-red-50 dark:bg-red-950/40 text-red-700 dark:text-red-400 border-red-100 dark:border-red-900'
-                      ]">
-                        {{ agent.winRate }}%
+                    <td class="px-4 py-3.5 font-bold text-right text-gray-900 dark:text-white tabular-nums">RM {{ deal.value }}</td>
+                    <td class="px-4 py-3.5">
+                      <span class="px-2.5 py-1 rounded-md text-[10px] font-semibold bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
+                        {{ deal.stage }}
                       </span>
                     </td>
-                    <td class="px-6 py-4 font-bold text-right font-mono text-gray-800 dark:text-foreground">{{ agent.avgResponse }} min</td>
-                    <td class="px-6 py-4 font-bold text-right font-mono text-gray-800 dark:text-foreground">RM {{ agent.avgDealValue.toLocaleString() }}</td>
+                    <td class="px-4 py-3.5">
+                      <span :class="[
+                        'text-[10px] font-bold px-2 py-0.5 rounded-full tabular-nums',
+                        deal.isStale 
+                          ? 'bg-red-50 text-[#EF4444] dark:bg-red-950/40 dark:text-red-400' 
+                          : 'text-gray-500'
+                      ]">
+                        {{ deal.age }}
+                      </span>
+                    </td>
+                    <td class="px-4 py-3.5 font-medium text-gray-800 dark:text-gray-200">{{ deal.owner }}</td>
+                    <td class="px-4 py-3.5">
+                      <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400">
+                        {{ deal.source }}
+                      </span>
+                    </td>
+                    <td class="px-4 py-3.5 text-center" @click.stop>
+                      <button
+                        @click="triggerWhatsAppChat(deal)"
+                        class="p-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-[#23B750] dark:bg-emerald-950/40 transition-colors cursor-pointer"
+                        title="Send WhatsApp Nudge"
+                      >
+                        <MessageSquare class="w-3.5 h-3.5" />
+                      </button>
+                    </td>
+                  </tr>
+
+                  <!-- Empty State -->
+                  <tr v-if="filteredActiveDeals.length === 0">
+                    <td colspan="7" class="py-12 text-center text-gray-400">
+                      <p class="font-medium text-sm">No active opportunities match your search.</p>
+                      <button @click="clearActiveDealFilters" class="mt-2 text-xs font-bold text-[#23B750] hover:underline cursor-pointer">
+                        Clear all filters
+                      </button>
+                    </td>
                   </tr>
                 </tbody>
               </table>
             </div>
           </div>
+
         </div>
 
         <!-- ═════════════════════════════════════════════════════════
-             TAB 3: MARKETING
+             TAB 3: MARKETING & ATTRIBUTION
              ═════════════════════════════════════════════════════════ -->
-        <div v-if="activeTab === 'marketing'" class="space-y-6">
-          <!-- Page title -->
+        <div v-if="activeTab === 'marketing'" class="space-y-6 animate-in fade-in duration-200">
+          
           <div>
-            <h1 class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-foreground">Marketing & Attribution</h1>
-            <p class="text-sm text-gray-500 dark:text-muted-foreground mt-0.5">Lead and attribution performance for 25 May — 23 Jun 2026.</p>
+            <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Marketing &amp; Attribution</h1>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Multi-touch attribution models, campaign lead generation, and acquisition origins.</p>
           </div>
 
-          <!-- KPI Cards Grid -->
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-            <!-- Sessions -->
-            <div class="bg-white dark:bg-card border border-gray-200 dark:border-border p-5 rounded-2xl shadow-sm relative overflow-hidden flex flex-col justify-between h-[130px] group hover:shadow-md transition-shadow">
-              <div class="flex items-start justify-between">
-                <div>
-                  <span class="text-xs text-gray-500 dark:text-muted-foreground font-semibold">Sessions</span>
-                  <h3 class="text-2xl font-bold text-gray-900 dark:text-foreground mt-1">24,812</h3>
-                </div>
-                <span class="bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-150 dark:border-emerald-900/50 text-[10px] font-bold px-2 py-0.5 rounded-full">
-                  ↗ 9.4%
-                </span>
+          <!-- Top Marketing KPIs -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+            <div class="bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-xs flex flex-col justify-between h-[135px]">
+              <span class="text-xs font-bold text-gray-500 uppercase">Sessions</span>
+              <div>
+                <div class="text-2xl font-bold text-gray-900 dark:text-white tabular-nums">24,812</div>
+                <div class="text-[11px] font-bold text-[#23B750] mt-1 tabular-nums">↑ 9.4% vs last period</div>
               </div>
             </div>
 
-            <!-- Users -->
-            <div class="bg-white dark:bg-card border border-gray-200 dark:border-border p-5 rounded-2xl shadow-sm relative overflow-hidden flex flex-col justify-between h-[130px] group hover:shadow-md transition-shadow">
-              <div class="flex items-start justify-between">
-                <div>
-                  <span class="text-xs text-gray-500 dark:text-muted-foreground font-semibold">Users</span>
-                  <h3 class="text-2xl font-bold text-gray-900 dark:text-foreground mt-1">18,204</h3>
-                </div>
-                <span class="bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-150 dark:border-emerald-900/50 text-[10px] font-bold px-2 py-0.5 rounded-full">
-                  ↗ 7.1%
-                </span>
+            <div class="bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-xs flex flex-col justify-between h-[135px]">
+              <span class="text-xs font-bold text-gray-500 uppercase">Unique Users</span>
+              <div>
+                <div class="text-2xl font-bold text-gray-900 dark:text-white tabular-nums">18,204</div>
+                <div class="text-[11px] font-bold text-[#23B750] mt-1 tabular-nums">↑ 7.1% vs last period</div>
               </div>
             </div>
 
-            <!-- Engagement Rate -->
-            <div class="bg-white dark:bg-card border border-gray-200 dark:border-border p-5 rounded-2xl shadow-sm relative overflow-hidden flex flex-col justify-between h-[130px] group hover:shadow-md transition-shadow">
-              <div class="flex items-start justify-between">
-                <div>
-                  <span class="text-xs text-gray-500 dark:text-muted-foreground font-semibold">Engagement rate</span>
-                  <h3 class="text-2xl font-bold text-gray-900 dark:text-foreground mt-1">62.4</h3>
-                </div>
-                <span class="bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-150 dark:border-emerald-900/50 text-[10px] font-bold px-2 py-0.5 rounded-full">
-                  ↗ 3.2 pts
-                </span>
+            <div class="bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-xs flex flex-col justify-between h-[135px]">
+              <span class="text-xs font-bold text-gray-500 uppercase">Engagement Rate</span>
+              <div>
+                <div class="text-2xl font-bold text-gray-900 dark:text-white tabular-nums">62.4%</div>
+                <div class="text-[11px] font-bold text-[#23B750] mt-1 tabular-nums">↑ 3.2 pts vs last period</div>
               </div>
             </div>
 
-            <!-- Leads Generated -->
-            <div class="bg-white dark:bg-card border border-gray-200 dark:border-border p-5 rounded-2xl shadow-sm relative overflow-hidden flex flex-col justify-between h-[130px] group hover:shadow-md transition-shadow">
-              <div class="flex items-start justify-between">
-                <div>
-                  <span class="text-xs text-gray-500 dark:text-muted-foreground font-semibold">Leads generated</span>
-                  <h3 class="text-2xl font-bold text-gray-900 dark:text-foreground mt-1">847</h3>
-                </div>
-                <span class="bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-150 dark:border-emerald-900/50 text-[10px] font-bold px-2 py-0.5 rounded-full">
-                  ↗ 8.2%
-                </span>
+            <div class="bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-xs flex flex-col justify-between h-[135px]">
+              <span class="text-xs font-bold text-gray-500 uppercase">Leads Generated</span>
+              <div>
+                <div class="text-2xl font-bold text-gray-900 dark:text-white tabular-nums">847</div>
+                <div class="text-[11px] font-bold text-[#23B750] mt-1 tabular-nums">↑ 8.2% vs last period</div>
               </div>
             </div>
 
-            <!-- Lead-to-customer -->
-            <div class="bg-white dark:bg-card border border-gray-200 dark:border-border p-5 rounded-2xl shadow-sm relative overflow-hidden flex flex-col justify-between h-[130px] group hover:shadow-md transition-shadow">
-              <div class="flex items-start justify-between">
-                <div>
-                  <span class="text-xs text-gray-500 dark:text-muted-foreground font-semibold">Lead-to-customer</span>
-                  <h3 class="text-2xl font-bold text-gray-900 dark:text-foreground mt-1">18.3</h3>
-                </div>
-                <span class="bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-150 dark:border-emerald-900/50 text-[10px] font-bold px-2 py-0.5 rounded-full">
-                  ↗ 2.1 pts
-                </span>
+            <div class="bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-xs flex flex-col justify-between h-[135px]">
+              <span class="text-xs font-bold text-gray-500 uppercase">Lead to Customer</span>
+              <div>
+                <div class="text-2xl font-bold text-gray-900 dark:text-white tabular-nums">18.3%</div>
+                <div class="text-[11px] font-bold text-[#23B750] mt-1 tabular-nums">↑ 2.1 pts vs last period</div>
               </div>
             </div>
           </div>
 
-          <!-- Revenue Attribution & Channel Performance -->
+          <!-- Attribution Donut & Channel Grouped Bar Chart (ApexCharts) -->
           <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
             
-            <!-- Revenue Attribution by Channel -->
-            <div class="xl:col-span-6 bg-white dark:bg-card border border-gray-200 dark:border-border p-6 rounded-2xl shadow-sm flex flex-col justify-between">
+            <!-- Attribution Model Selector & Apex Donut -->
+            <div class="xl:col-span-6 bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-6 rounded-2xl shadow-xs flex flex-col justify-between">
               <div>
                 <div class="flex justify-between items-start">
                   <div>
-                    <h3 class="text-base font-bold text-gray-900 dark:text-foreground flex items-center gap-1.5">
-                      Revenue attribution by channel
-                      <Info class="w-3.5 h-3.5 text-gray-400 cursor-help" />
-                    </h3>
-                    <p class="text-xs text-gray-500 dark:text-muted-foreground mt-0.5">Last-touch model · RM 284,500 attributed</p>
+                    <h3 class="text-sm font-bold text-gray-900 dark:text-white">Revenue Attribution by Channel</h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{{ attributionModel }} model · RM 537.5K attributed</p>
                   </div>
-                  <div class="flex p-0.5 bg-gray-100 dark:bg-muted rounded-lg border border-gray-250 dark:border-border">
+                  <div class="flex p-0.5 bg-gray-100 dark:bg-gray-800 rounded-lg">
                     <button
                       v-for="model in ['First-touch', 'Last-touch', 'Linear']"
                       :key="model"
@@ -787,8 +741,8 @@
                       :class="[
                         'px-2.5 py-1 text-[10px] font-bold rounded-md transition-colors cursor-pointer',
                         attributionModel === model
-                          ? 'bg-white dark:bg-card text-gray-950 dark:text-foreground shadow-sm'
-                          : 'text-gray-500 hover:text-gray-900 dark:hover:text-foreground'
+                          ? 'bg-white dark:bg-gray-900 text-[#23B750] shadow-xs'
+                          : 'text-gray-500 hover:text-gray-900'
                       ]"
                     >
                       {{ model }}
@@ -796,39 +750,20 @@
                   </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center mt-6">
-                  <!-- Donut SVG -->
-                  <div class="md:col-span-5 flex justify-center relative select-none">
-                    <svg width="170" height="170" viewBox="0 0 200 200" class="transform -rotate-90">
-                      <circle cx="100" cy="100" r="70" fill="none" stroke="rgba(100,116,139,0.06)" stroke-width="26" />
-                      <!-- Circumference = 439.8 -->
-                      <!-- WhatsApp: 50% = 219.9, offset=0 (Orange) -->
-                      <circle cx="100" cy="100" r="70" fill="none" stroke="#f97316" stroke-width="26" stroke-dasharray="219.9 219.9" stroke-dashoffset="0" />
-                      <!-- Organic Search: 20% = 88.0, offset=-219.9 (Blue) -->
-                      <circle cx="100" cy="100" r="70" fill="none" stroke="#3b82f6" stroke-width="26" stroke-dasharray="88.0 351.8" stroke-dashoffset="-219.9" />
-                      <!-- Facebook: 15% = 66.0, offset=-307.9 (Green) -->
-                      <circle cx="100" cy="100" r="70" fill="none" stroke="#10b981" stroke-width="26" stroke-dasharray="66.0 373.8" stroke-dashoffset="-307.9" />
-                      <!-- Instagram: 6% = 26.4, offset=-373.9 (Red) -->
-                      <circle cx="100" cy="100" r="70" fill="none" stroke="#ef4444" stroke-width="26" stroke-dasharray="26.4 413.4" stroke-dashoffset="-373.9" />
-                      <!-- Email: 9% = 39.6, offset=-400.3 (Purple) -->
-                      <circle cx="100" cy="100" r="70" fill="none" stroke="#8b5cf6" stroke-width="26" stroke-dasharray="39.6 400.2" stroke-dashoffset="-400.3" />
-                    </svg>
-                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
-                      <span class="text-xl font-extrabold text-gray-900 dark:text-foreground">RM 284k</span>
-                      <span class="text-[9px] text-gray-400 dark:text-muted-foreground uppercase font-bold tracking-wider">Attributed</span>
-                    </div>
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center mt-3">
+                  <div class="md:col-span-6 flex justify-center">
+                    <apexchart type="donut" width="200" height="200" :options="attributionApexOptions" :series="attributionApexSeries" />
                   </div>
 
-                  <!-- Legend -->
-                  <div class="md:col-span-7 space-y-2">
-                    <div v-for="(item, idx) in attributionChannels" :key="idx" class="flex justify-between items-center text-xs pb-1.5 border-b border-gray-100 dark:border-border/50">
+                  <div class="md:col-span-6 space-y-2">
+                    <div v-for="(item, idx) in activeAttributionChannels" :key="idx" class="flex justify-between items-center text-xs pb-1.5 border-b border-gray-100 dark:border-gray-800/50">
                       <div class="flex items-center gap-2">
                         <span class="w-2.5 h-2.5 rounded-full flex-shrink-0" :style="{ backgroundColor: item.color }"></span>
-                        <span class="font-bold text-gray-700 dark:text-gray-300">{{ item.name }}</span>
+                        <span class="font-medium text-gray-700 dark:text-gray-300">{{ item.name }}</span>
                       </div>
-                      <div class="flex items-center gap-4 text-gray-900 dark:text-foreground font-mono">
+                      <div class="flex items-center gap-4 text-gray-900 dark:text-white font-bold tabular-nums">
                         <span>RM {{ item.val }}</span>
-                        <span class="text-gray-450 dark:text-muted-foreground font-bold w-10 text-right">{{ item.pct }}%</span>
+                        <span class="text-gray-400 w-10 text-right">{{ item.pct }}%</span>
                       </div>
                     </div>
                   </div>
@@ -836,100 +771,31 @@
               </div>
             </div>
 
-            <!-- Channel Performance Card (Bar Chart) -->
-            <div class="xl:col-span-6 bg-white dark:bg-card border border-gray-200 dark:border-border p-6 rounded-2xl shadow-sm flex flex-col justify-between">
+            <!-- Grouped Bar Chart (ApexCharts) -->
+            <div class="xl:col-span-6 bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-6 rounded-2xl shadow-xs flex flex-col justify-between">
               <div>
-                <h3 class="text-base font-bold text-gray-900 dark:text-foreground flex items-center gap-1.5">
-                  Channel performance
-                  <Info class="w-3.5 h-3.5 text-gray-400 cursor-help" />
-                </h3>
-                <p class="text-xs text-gray-500 dark:text-muted-foreground mt-0.5">Leads generated vs converted</p>
+                <h3 class="text-sm font-bold text-gray-900 dark:text-white">Channel Performance</h3>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Leads generated vs converted across acquisition origins</p>
 
-                <!-- Grouped Bar Chart SVG -->
-                <div class="relative w-full aspect-[5/3] mt-6 select-none bg-gray-50/50 dark:bg-muted/10 rounded-xl p-3 border border-gray-100 dark:border-border/50">
-                  <svg class="w-full h-full overflow-visible" viewBox="0 0 500 240" preserveAspectRatio="none">
-                    <!-- Grid Lines -->
-                    <line x1="40" y1="40" x2="500" y2="40" stroke="rgba(0,0,0,0.05)" dark:stroke="rgba(255,255,255,0.03)" stroke-dasharray="3" />
-                    <line x1="40" y1="90" x2="500" y2="90" stroke="rgba(0,0,0,0.05)" dark:stroke="rgba(255,255,255,0.03)" stroke-dasharray="3" />
-                    <line x1="40" y1="140" x2="500" y2="140" stroke="rgba(0,0,0,0.05)" dark:stroke="rgba(255,255,255,0.03)" stroke-dasharray="3" />
-                    <line x1="40" y1="190" x2="500" y2="190" stroke="rgba(0,0,0,0.05)" dark:stroke="rgba(255,255,255,0.03)" stroke-dasharray="3" />
-
-                    <!-- Y-Axis Labels -->
-                    <text x="30" y="44" text-anchor="end" class="text-[9px] fill-gray-400 font-mono font-bold">300</text>
-                    <text x="30" y="94" text-anchor="end" class="text-[9px] fill-gray-400 font-mono font-bold">200</text>
-                    <text x="30" y="144" text-anchor="end" class="text-[9px] fill-gray-400 font-mono font-bold">100</text>
-                    <text x="30" y="194" text-anchor="end" class="text-[9px] fill-gray-400 font-mono font-bold">0</text>
-
-                    <!-- Grouped columns (WhatsApp, Facebook, Google, Instagram, Email, Direct) -->
-                    <!-- Center locations: 75, 150, 225, 300, 375, 450 -->
-                    <!-- Green Bar (generated), Blue Bar (converted) -->
-                    <!-- WhatsApp (generated: 380 -> h=190, converted: 70 -> h=35) -->
-                    <rect x="65" y="50" width="10" height="140" fill="#10b981" rx="2" />
-                    <rect x="77" y="155" width="10" height="35" fill="#3b82f6" rx="2" />
-
-                    <!-- Facebook (generated: 180 -> h=90, converted: 30 -> h=15) -->
-                    <rect x="140" y="100" width="10" height="90" fill="#10b981" rx="2" />
-                    <rect x="152" y="175" width="10" height="15" fill="#3b82f6" rx="2" />
-
-                    <!-- Google (generated: 160 -> h=80, converted: 35 -> h=17.5) -->
-                    <rect x="215" y="110" width="10" height="80" fill="#10b981" rx="2" />
-                    <rect x="227" y="172.5" width="10" height="17.5" fill="#3b82f6" rx="2" />
-
-                    <!-- Instagram (generated: 70 -> h=35, converted: 15 -> h=7.5) -->
-                    <rect x="290" y="155" width="10" height="35" fill="#10b981" rx="2" />
-                    <rect x="302" y="182.5" width="10" height="7.5" fill="#3b82f6" rx="2" />
-
-                    <!-- Email (generated: 60 -> h=30, converted: 12 -> h=6) -->
-                    <rect x="365" y="160" width="10" height="30" fill="#10b981" rx="2" />
-                    <rect x="377" y="184" width="10" height="6" fill="#3b82f6" rx="2" />
-
-                    <!-- Direct (generated: 75 -> h=37.5, converted: 10 -> h=5) -->
-                    <rect x="440" y="152.5" width="10" height="37.5" fill="#10b981" rx="2" />
-                    <rect x="452" y="185" width="10" height="5" fill="#3b82f6" rx="2" />
-
-                    <!-- X-Axis line -->
-                    <line x1="40" y1="190" x2="500" y2="190" stroke="rgba(100,116,139,0.2)" stroke-width="1.5" />
-
-                    <!-- X-Axis Labels -->
-                    <text x="76" y="210" text-anchor="middle" class="text-[9px] fill-gray-400 font-bold">WhatsApp</text>
-                    <text x="151" y="210" text-anchor="middle" class="text-[9px] fill-gray-400 font-bold">Facebook</text>
-                    <text x="226" y="210" text-anchor="middle" class="text-[9px] fill-gray-400 font-bold">Google</text>
-                    <text x="301" y="210" text-anchor="middle" class="text-[9px] fill-gray-400 font-bold">Instagram</text>
-                    <text x="376" y="210" text-anchor="middle" class="text-[9px] fill-gray-400 font-bold">Email</text>
-                    <text x="451" y="210" text-anchor="middle" class="text-[9px] fill-gray-400 font-bold">Direct</text>
-                  </svg>
-                </div>
-                
-                <!-- Chart Legend indicators -->
-                <div class="flex items-center justify-center gap-4 text-[10px] font-bold text-gray-500 mt-2">
-                  <div class="flex items-center gap-1.5">
-                    <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full"></span>
-                    <span>Leads Generated</span>
-                  </div>
-                  <div class="flex items-center gap-1.5">
-                    <span class="w-2.5 h-2.5 bg-blue-500 rounded-full"></span>
-                    <span>Leads Converted</span>
-                  </div>
+                <div class="w-full mt-2 select-none">
+                  <apexchart type="bar" height="220" :options="channelBarApexOptions" :series="channelBarApexSeries" />
                 </div>
               </div>
             </div>
+
           </div>
 
-          <!-- Sessions & Key Events & Lead Quality -->
+          <!-- Sessions & Key Events (Dual-Axis Apex Line) & Quality Split (Stacked Apex Bar) -->
           <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
             
-            <!-- Sessions & Key Events Card -->
-            <div class="xl:col-span-6 bg-white dark:bg-card border border-gray-200 dark:border-border p-6 rounded-2xl shadow-sm flex flex-col justify-between">
+            <div class="xl:col-span-6 bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-6 rounded-2xl shadow-xs flex flex-col justify-between">
               <div>
-                <div class="flex justify-between items-center pb-4">
+                <div class="flex justify-between items-center pb-2">
                   <div>
-                    <h3 class="text-base font-bold text-gray-900 dark:text-foreground flex items-center gap-1.5">
-                      "Sessions & key events"
-                      <Info class="w-3.5 h-3.5 text-gray-400 cursor-help" />
-                    </h3>
-                    <p class="text-xs text-gray-500 dark:text-muted-foreground mt-0.5">GA4 events — form submits, WhatsApp clicks, demo requests</p>
+                    <h3 class="text-sm font-bold text-gray-900 dark:text-white">Sessions &amp; Key Events</h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Form submits, WhatsApp links, and demo inquiries</p>
                   </div>
-                  <div class="flex p-0.5 bg-gray-100 dark:bg-muted rounded-lg border border-gray-250 dark:border-border">
+                  <div class="flex p-0.5 bg-gray-100 dark:bg-gray-800 rounded-lg">
                     <button
                       v-for="v in ['Daily', 'Weekly']"
                       :key="v"
@@ -937,8 +803,8 @@
                       :class="[
                         'px-3 py-1 text-[10px] font-bold rounded-md transition-colors cursor-pointer',
                         sessionsView === v
-                          ? 'bg-white dark:bg-card text-gray-950 dark:text-foreground shadow-sm'
-                          : 'text-gray-500 hover:text-gray-900 dark:hover:text-foreground'
+                          ? 'bg-white dark:bg-gray-900 text-[#23B750] shadow-xs'
+                          : 'text-gray-500 hover:text-gray-900 dark:hover:text-white'
                       ]"
                     >
                       {{ v }}
@@ -946,383 +812,733 @@
                   </div>
                 </div>
 
-                <!-- Sessions Line Chart SVG -->
-                <div class="relative w-full aspect-[5/3] mt-4 select-none bg-gray-50/50 dark:bg-muted/10 rounded-xl p-3 border border-gray-100 dark:border-border/50">
-                  <svg class="w-full h-full overflow-visible" viewBox="0 0 500 200" preserveAspectRatio="none">
-                    <!-- Y grid lines -->
-                    <line x1="40" y1="30" x2="480" y2="30" stroke="rgba(0,0,0,0.05)" dark:stroke="rgba(255,255,255,0.03)" stroke-dasharray="3" />
-                    <line x1="40" y1="70" x2="480" y2="70" stroke="rgba(0,0,0,0.05)" dark:stroke="rgba(255,255,255,0.03)" stroke-dasharray="3" />
-                    <line x1="40" y1="110" x2="480" y2="110" stroke="rgba(0,0,0,0.05)" dark:stroke="rgba(255,255,255,0.03)" stroke-dasharray="3" />
-                    <line x1="40" y1="150" x2="480" y2="150" stroke="rgba(0,0,0,0.05)" dark:stroke="rgba(255,255,255,0.03)" stroke-dasharray="3" />
-
-                    <!-- Y-Axis labels (Left: Sessions 2.8k to 4k) -->
-                    <text x="30" y="34" text-anchor="end" class="text-[8px] fill-gray-400 font-mono font-bold">4,000</text>
-                    <text x="30" y="74" text-anchor="end" class="text-[8px] fill-gray-400 font-mono font-bold">3,600</text>
-                    <text x="30" y="114" text-anchor="end" class="text-[8px] fill-gray-400 font-mono font-bold">3,200</text>
-                    <text x="30" y="154" text-anchor="end" class="text-[8px] fill-gray-400 font-mono font-bold">2,800</text>
-
-                    <!-- Right Axis labels (Events 140 to 240) -->
-                    <text x="490" y="34" text-anchor="start" class="text-[8px] fill-emerald-500 font-mono font-bold">240</text>
-                    <text x="490" y="74" text-anchor="start" class="text-[8px] fill-emerald-500 font-mono font-bold">210</text>
-                    <text x="490" y="114" text-anchor="start" class="text-[8px] fill-emerald-500 font-mono font-bold">180</text>
-                    <text x="490" y="154" text-anchor="start" class="text-[8px] fill-emerald-500 font-mono font-bold">140</text>
-
-                    <!-- Green Trend line (Events) -->
-                    <path d="M 40 130 C 80 135, 120 100, 160 110 C 200 95, 240 105, 280 85 C 320 90, 360 70, 400 80 C 440 60, 460 65, 480 40" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round"/>
-
-                    <!-- Blue Trend line (Sessions) -->
-                    <path d="M 40 150 C 80 148, 120 155, 160 140 C 200 142, 240 145, 280 132 C 320 135, 360 128, 400 130 C 440 122, 460 124, 480 115" fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round"/>
-
-                    <!-- X axis -->
-                    <line x1="40" y1="170" x2="480" y2="170" stroke="rgba(100,116,139,0.2)" stroke-width="1.5" />
-
-                    <!-- X-Axis Labels -->
-                    <text x="40" y="185" text-anchor="middle" class="text-[8px] fill-gray-400 font-bold">Jul 1</text>
-                    <text x="113" y="185" text-anchor="middle" class="text-[8px] fill-gray-400 font-bold">Jul 7</text>
-                    <text x="186" y="185" text-anchor="middle" class="text-[8px] fill-gray-400 font-bold">Jul 13</text>
-                    <text x="259" y="185" text-anchor="middle" class="text-[8px] fill-gray-400 font-bold">Jul 19</text>
-                    <text x="332" y="185" text-anchor="middle" class="text-[8px] fill-gray-400 font-bold">Jul 25</text>
-                    <text x="480" y="185" text-anchor="middle" class="text-[8px] fill-gray-400 font-bold">Jul 29</text>
-                  </svg>
+                <div class="w-full mt-2 select-none">
+                  <apexchart type="line" height="220" :options="sessionsDualApexOptions" :series="sessionsDualApexSeries" />
                 </div>
               </div>
             </div>
 
-            <!-- Lead Quality by Source Card -->
-            <div class="xl:col-span-6 bg-white dark:bg-card border border-gray-200 dark:border-border p-6 rounded-2xl shadow-sm flex flex-col justify-between">
+            <!-- Lead Quality Stacked Horizontal Bars (ApexCharts) -->
+            <div class="xl:col-span-6 bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-6 rounded-2xl shadow-xs flex flex-col justify-between">
               <div>
-                <h3 class="text-base font-bold text-gray-900 dark:text-foreground flex items-center gap-1.5">
-                  Lead quality by source
-                  <Info class="w-3.5 h-3.5 text-gray-400 cursor-help" />
-                </h3>
-                <p class="text-xs text-gray-500 dark:text-muted-foreground mt-0.5">Qualified vs unqualified split</p>
+                <h3 class="text-sm font-bold text-gray-900 dark:text-white">Lead Quality by Source</h3>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Commercial Qualification Ratio (100% Stacked)</p>
 
-                <!-- Stacked Horizontal Bars -->
-                <div class="space-y-4 mt-6">
-                  <div v-for="(src, idx) in leadQualitySources" :key="idx" class="space-y-1">
-                    <div class="flex justify-between items-center text-xs font-semibold">
-                      <span class="text-gray-700 dark:text-gray-300 font-bold">{{ src.name }}</span>
-                      <span class="text-gray-450 text-[10px] font-mono">Max 400</span>
-                    </div>
-                    <div class="h-6 w-full bg-gray-155 dark:bg-muted rounded-lg overflow-hidden flex border border-gray-200 dark:border-border/30">
-                      <!-- Qualified (Green) -->
-                      <div class="h-full bg-emerald-500 transition-all duration-500" :style="{ width: src.qualPct + '%' }"></div>
-                      <!-- Unqualified (Blue or Gray) -->
-                      <div class="h-full transition-all duration-500" :class="src.name === 'Instagram' ? 'bg-blue-500' : 'bg-gray-300 dark:bg-gray-700'" :style="{ width: src.unqualPct + '%' }"></div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Legend indicators -->
-                <div class="flex items-center justify-center gap-4 text-[10px] font-bold text-gray-500 mt-4">
-                  <div class="flex items-center gap-1.5">
-                    <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full"></span>
-                    <span>Qualified</span>
-                  </div>
-                  <div class="flex items-center gap-1.5">
-                    <span class="w-2.5 h-2.5 bg-gray-300 dark:bg-gray-700 rounded-full"></span>
-                    <span>Unqualified</span>
-                  </div>
+                <div class="w-full mt-2">
+                  <apexchart type="bar" height="220" :options="qualityStackedApexOptions" :series="qualityStackedApexSeries" />
                 </div>
               </div>
             </div>
+
           </div>
 
-          <!-- Top Acquisition Traffic Origins Table -->
-          <div class="bg-white dark:bg-card border border-gray-200 dark:border-border rounded-2xl shadow-sm overflow-hidden">
-            <div class="px-6 py-4 border-b border-gray-255 dark:border-border bg-gray-55 dark:bg-muted/40">
-              <h3 class="text-base font-bold text-gray-900 dark:text-foreground">Source / medium</h3>
-              <p class="text-xs text-gray-500 dark:text-muted-foreground mt-0.5">GA4 acquisition — top traffic origins</p>
-            </div>
-            
-            <div class="overflow-x-auto">
+          <!-- GA4 Traffic Sources Table -->
+          <div class="bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 rounded-2xl shadow-xs overflow-hidden p-6 space-y-4">
+            <h3 class="text-sm font-bold text-gray-900 dark:text-white">Source / Medium (GA4 Inbound)</h3>
+
+            <div class="overflow-x-auto border border-gray-200 dark:border-gray-800 rounded-xl">
               <table class="w-full text-xs text-left whitespace-nowrap">
                 <thead>
-                  <tr class="text-[10px] text-gray-400 uppercase tracking-wider border-b border-gray-255 dark:border-border bg-gray-50/50 dark:bg-muted/20">
-                    <th class="px-6 py-3 font-bold">#</th>
-                    <th class="px-6 py-3 font-bold">Source / Medium</th>
-                    <th class="px-6 py-3 font-bold text-right">Users</th>
-                    <th class="px-6 py-3 font-bold text-right">Sessions</th>
-                    <th class="px-6 py-3 font-bold text-right">Engaged Sessions</th>
-                    <th class="px-6 py-3 font-bold text-right">Avg Engagement Time</th>
-                    <th class="px-6 py-3 font-bold text-right">GA4 Events</th>
-                    <th class="px-6 py-3 font-bold text-right">Conversions</th>
+                  <tr class="text-[10px] text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-800 bg-gray-50/80 dark:bg-gray-800/50 font-bold">
+                    <th class="px-4 py-3">SOURCE / MEDIUM</th>
+                    <th class="px-4 py-3 text-right">SESSIONS</th>
+                    <th class="px-4 py-3 text-right">USERS</th>
+                    <th class="px-4 py-3 text-right">ENGAGEMENT</th>
+                    <th class="px-4 py-3 text-right">KEY EVENTS</th>
+                    <th class="px-4 py-3 text-right">LEADS</th>
+                    <th class="px-4 py-3 text-right">CONV RATE</th>
                   </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-150 dark:divide-border/60 font-sans">
-                  <tr v-for="(tr, idx) in trafficOrigins" :key="idx" class="hover:bg-gray-50 dark:hover:bg-muted/30 transition-colors">
-                    <td class="px-6 py-4 font-bold text-gray-450 font-sans">{{ idx + 1 }}</td>
-                    <td class="px-6 py-4 font-bold text-gray-800 dark:text-gray-300 font-sans">{{ tr.source }}</td>
-                    <td class="px-6 py-4 font-bold text-right font-mono text-gray-800 dark:text-foreground">{{ tr.users.toLocaleString() }}</td>
-                    <td class="px-6 py-4 font-bold text-right font-mono text-gray-800 dark:text-foreground">{{ tr.sessions.toLocaleString() }}</td>
-                    <td class="px-6 py-4 font-bold text-right font-mono text-gray-800 dark:text-foreground">{{ tr.engaged.toLocaleString() }}</td>
-                    <td class="px-6 py-4 font-bold text-right font-mono text-gray-800 dark:text-foreground">{{ tr.avgTime }}</td>
-                    <td class="px-6 py-4 font-bold text-right font-mono text-gray-800 dark:text-foreground">{{ tr.events.toLocaleString() }}</td>
-                    <td class="px-6 py-4 font-bold text-right font-mono text-emerald-600 dark:text-emerald-450">{{ tr.conversions.toLocaleString() }}</td>
+                <tbody class="divide-y divide-gray-150 dark:divide-gray-800/60">
+                  <tr v-for="(tr, idx) in marketingSources" :key="idx" class="hover:bg-gray-50/70 dark:hover:bg-gray-800/30 transition-colors">
+                    <td class="px-4 py-3.5 font-bold text-gray-800 dark:text-gray-200">{{ tr.source }}</td>
+                    <td class="px-4 py-3.5 font-bold text-right text-gray-800 dark:text-white tabular-nums">{{ tr.sessions.toLocaleString() }}</td>
+                    <td class="px-4 py-3.5 font-bold text-right text-gray-800 dark:text-white tabular-nums">{{ tr.users.toLocaleString() }}</td>
+                    <td class="px-4 py-3.5 font-bold text-right text-gray-800 dark:text-white tabular-nums">{{ tr.engagement }}</td>
+                    <td class="px-4 py-3.5 font-bold text-right text-gray-800 dark:text-white tabular-nums">{{ tr.events.toLocaleString() }}</td>
+                    <td class="px-4 py-3.5 font-bold text-right text-gray-800 dark:text-white tabular-nums">{{ tr.leads.toLocaleString() }}</td>
+                    <td class="px-4 py-3.5 font-bold text-right text-[#23B750] tabular-nums">{{ tr.convRate }}%</td>
                   </tr>
                 </tbody>
               </table>
             </div>
           </div>
+
+          <!-- Top Landing Pages & UTM Campaigns -->
+          <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+            <div class="xl:col-span-6 bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 rounded-2xl shadow-xs p-6 space-y-4">
+              <h3 class="text-sm font-bold text-gray-900 dark:text-white">Top Landing Pages</h3>
+              <div class="overflow-x-auto border border-gray-200 dark:border-gray-800 rounded-xl">
+                <table class="w-full text-xs text-left whitespace-nowrap">
+                  <thead>
+                    <tr class="text-[10px] text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-800 bg-gray-50/80 dark:bg-gray-800/50 font-bold">
+                      <th class="px-4 py-3">PAGE</th>
+                      <th class="px-4 py-3 text-right">SESSIONS</th>
+                      <th class="px-4 py-3 text-right">BOUNCE</th>
+                      <th class="px-4 py-3 text-right">LEADS</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-gray-150 dark:divide-gray-800/60">
+                    <tr v-for="(lp, idx) in topLandingPages" :key="idx" class="hover:bg-gray-50/70 dark:hover:bg-gray-800/30 transition-colors">
+                      <td class="px-4 py-3 font-semibold text-[#23B750] hover:underline cursor-pointer">{{ lp.page }}</td>
+                      <td class="px-4 py-3 font-bold text-right text-gray-800 dark:text-white tabular-nums">{{ lp.sessions.toLocaleString() }}</td>
+                      <td class="px-4 py-3 font-bold text-right text-gray-600 dark:text-gray-400 tabular-nums">{{ lp.bounce }}%</td>
+                      <td class="px-4 py-3 font-bold text-right text-[#23B750] tabular-nums">{{ lp.leads }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="xl:col-span-6 bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 rounded-2xl shadow-xs p-6 space-y-4">
+              <h3 class="text-sm font-bold text-gray-900 dark:text-white">Active UTM Campaigns</h3>
+              <div class="overflow-x-auto border border-gray-200 dark:border-gray-800 rounded-xl">
+                <table class="w-full text-xs text-left whitespace-nowrap">
+                  <thead>
+                    <tr class="text-[10px] text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-800 bg-gray-50/80 dark:bg-gray-800/50 font-bold">
+                      <th class="px-4 py-3">CAMPAIGN</th>
+                      <th class="px-4 py-3">SOURCE</th>
+                      <th class="px-4 py-3 text-right">SESSIONS</th>
+                      <th class="px-4 py-3 text-right">LEADS</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-gray-150 dark:divide-gray-800/60">
+                    <tr v-for="(camp, idx) in topUtmCampaigns" :key="idx" class="hover:bg-gray-50/70 dark:hover:bg-gray-800/30 transition-colors">
+                      <td class="px-4 py-3 font-bold text-gray-900 dark:text-white">{{ camp.campaign }}</td>
+                      <td class="px-4 py-3 text-gray-600 dark:text-gray-400 font-medium">{{ camp.source }}</td>
+                      <td class="px-4 py-3 font-bold text-right text-gray-800 dark:text-white tabular-nums">{{ camp.sessions.toLocaleString() }}</td>
+                      <td class="px-4 py-3 font-bold text-right text-[#23B750] tabular-nums">{{ camp.leads }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
         </div>
 
       </div>
     </main>
+
+    <!-- Slide-Over Deal Drawer -->
+    <div v-if="selectedDeal" class="fixed inset-0 z-50 overflow-hidden" role="dialog" aria-modal="true">
+      <div class="absolute inset-0 bg-gray-950/60 backdrop-blur-xs transition-opacity" @click="selectedDeal = null"></div>
+      
+      <div class="fixed inset-y-0 right-0 max-w-full flex pl-10">
+        <div class="w-screen max-w-md bg-white dark:bg-[#111827] border-l border-gray-200 dark:border-gray-800 p-6 shadow-2xl flex flex-col justify-between">
+          <div class="space-y-5">
+            <div class="flex justify-between items-start">
+              <div>
+                <span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-50 text-[#1a943e] dark:bg-emerald-950/40 dark:text-[#62D816] border border-emerald-150">
+                  {{ selectedDeal.stage }}
+                </span>
+                <h2 class="text-base font-bold text-gray-900 dark:text-white mt-2">{{ selectedDeal.title }}</h2>
+                <p class="text-xs text-gray-400">{{ selectedDeal.company }}</p>
+              </div>
+              <button @click="selectedDeal = null" class="p-1 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-white cursor-pointer">
+                ✕
+              </button>
+            </div>
+
+            <div class="p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-800 space-y-2 text-xs">
+              <div class="flex justify-between">
+                <span class="text-gray-400">Opportunity Value:</span>
+                <span class="font-bold text-gray-900 dark:text-white tabular-nums">RM {{ selectedDeal.value }}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-400">Assigned Owner:</span>
+                <span class="font-bold text-gray-900 dark:text-white">{{ selectedDeal.owner }}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-400">Primary Channel:</span>
+                <span class="font-bold text-[#2E91E5]">{{ selectedDeal.source }}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-400">Status:</span>
+                <span class="font-bold text-[#F97316]">{{ selectedDeal.age }}</span>
+              </div>
+            </div>
+
+            <!-- Action Sequence -->
+            <div class="space-y-2">
+              <label class="text-xs font-bold text-gray-700 dark:text-gray-300">Quick WhatsApp Response:</label>
+              <textarea
+                v-model="quickMessageText"
+                rows="3"
+                class="w-full p-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl text-xs focus:ring-1 focus:ring-[#23B750] focus:outline-none"
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="flex gap-2 pt-4 border-t border-gray-150 dark:border-gray-800">
+            <button
+              @click="sendQuickMessage"
+              class="flex-1 py-2 bg-[#23B750] hover:bg-[#1a943e] text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-[#23B750]/20 cursor-pointer"
+            >
+              Send WhatsApp Message
+            </button>
+            <button
+              @click="selectedDeal = null"
+              class="px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl text-xs font-bold transition-colors cursor-pointer"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import {
   Calendar,
-  Plus,
-  Info,
   ChevronDown,
-  Sparkles,
+  Download,
+  Info,
+  Zap,
+  Activity,
   AlertCircle,
-  CheckCircle,
+  Search,
   MessageSquare,
-  Send,
-  ArrowUpRight,
-  ArrowRight,
-  Zap
+  DollarSign
 } from 'lucide-vue-next'
 
-// --- View State ---
+const tabs = [
+  { id: 'overview', label: 'Overview' },
+  { id: 'pipeline', label: 'Pipeline' },
+  { id: 'marketing', label: 'Marketing' }
+]
+
 const activeTab = ref<string>('overview')
 
 // ═════════════════════════════════════════════════════════
-// OVERVIEW VIEW STATE & MOCK DATA
+// GLOBAL CONTROLS & DATE PRESETS
+// ═════════════════════════════════════════════════════════
+const isDateOpen = ref(false)
+const selectedPresetId = ref('last30')
+const selectedDateRangeLabel = ref('22 Jul 2026 — 20 Aug 2026')
+
+const datePresets = [
+  { id: 'last7', label: 'Last 7 Days (14 Aug — 20 Aug)' },
+  { id: 'last30', label: 'Last 30 Days (22 Jul — 20 Aug)' },
+  { id: 'thisMonth', label: 'This Month (1 Aug — 20 Aug)' },
+  { id: 'ytd', label: 'Year to Date (1 Jan — 20 Aug)' }
+]
+
+function setDateRange(preset: { id: string; label: string }) {
+  selectedPresetId.value = preset.id
+  selectedDateRangeLabel.value = preset.label
+  isDateOpen.value = false
+}
+
+function triggerExport() {
+  alert('Exporting verified analytics dataset for ' + selectedDateRangeLabel.value)
+}
+
+// ═════════════════════════════════════════════════════════
+// TAB 1: OVERVIEW STATE & APEXCHARTS
 // ═════════════════════════════════════════════════════════
 const revenuePeriod = ref('30D')
 const funnelMode = ref('Count')
 
-// Interactive Revenue Spline Points
-const chartPoints = [
-  { x: 50, y: 150, date: 'May 25', val: 300000, target: 280000 },
-  { x: 150, y: 150, date: 'Jun 1', val: 320000, target: 295000 },
-  { x: 250, y: 135, date: 'Jun 4', val: 345000, target: 310000 },
-  { x: 350, y: 140, date: 'Jun 7', val: 350000, target: 325000 },
-  { x: 450, y: 120, date: 'Jun 10', val: 385000, target: 340000 },
-  { x: 550, y: 110, date: 'Jun 13', val: 405000, target: 355000 },
-  { x: 650, y: 130, date: 'Jun 16', val: 395000, target: 370000 },
-  { x: 750, y: 100, date: 'Jun 19', val: 435000, target: 385000 },
-  { x: 850, y: 80, date: 'Jun 21', val: 468500, target: 400000 },
-  { x: 950, y: 60, date: 'Jun 23', val: 509612, target: 372685 }
-]
+const activeRevenueStats = computed(() => {
+  if (revenuePeriod.value === '30D') {
+    return { wonAmount: '537.5K', targetAmount: '450.0K', growth: '+27.4%', dealsCount: 5 }
+  } else if (revenuePeriod.value === '90D') {
+    return { wonAmount: '1.42M', targetAmount: '1.20M', growth: '+34.2%', dealsCount: 18 }
+  } else {
+    return { wonAmount: '4.85M', targetAmount: '4.00M', growth: '+42.1%', dealsCount: 62 }
+  }
+})
 
-const hoveredPoint = ref<{ x: number; y: number; idx: number; date: string; val: number; target: number } | null>(null)
+// Sparklines
+const sparklineBlueOptions = {
+  chart: { type: 'area', sparkline: { enabled: true } },
+  stroke: { curve: 'smooth', width: 2 },
+  fill: { type: 'gradient', gradient: { opacityFrom: 0.35, opacityTo: 0 } },
+  colors: ['#2E91E5'],
+  tooltip: { fixed: { enabled: false }, x: { show: false }, y: { title: { formatter: () => '' } } }
+}
+const sparklinePipelineSeries = [{ name: 'Pipeline', data: [2.8, 3.1, 3.0, 3.4, 3.2, 3.6, 3.84] }]
 
-function handleChartHover(event: MouseEvent) {
-  const rect = (event.currentTarget as HTMLElement).getBoundingClientRect()
-  const mouseX = ((event.clientX - rect.left) / rect.width) * 1000 // scale to SVG viewBox width 1000
-  
-  // Find closest point by x coordinate
-  let closestIdx = 0
-  let minDist = Math.abs(chartPoints[0].x - mouseX)
-  
-  for (let i = 1; i < chartPoints.length; i++) {
-    const dist = Math.abs(chartPoints[i].x - mouseX)
-    if (dist < minDist) {
-      minDist = dist
-      closestIdx = i
+const sparklinePurpleOptions = {
+  chart: { type: 'area', sparkline: { enabled: true } },
+  stroke: { curve: 'smooth', width: 2 },
+  fill: { type: 'gradient', gradient: { opacityFrom: 0.35, opacityTo: 0 } },
+  colors: ['#7C3AED'],
+  tooltip: { fixed: { enabled: false }, x: { show: false } }
+}
+const sparklineConvSeries = [{ name: 'Conv Rate', data: [11.2, 12.0, 11.8, 13.2, 13.8, 14.1, 14.3] }]
+
+const sparklineOrangeOptions = {
+  chart: { type: 'area', sparkline: { enabled: true } },
+  stroke: { curve: 'smooth', width: 2 },
+  fill: { type: 'gradient', gradient: { opacityFrom: 0.35, opacityTo: 0 } },
+  colors: ['#F97316'],
+  tooltip: { fixed: { enabled: false }, x: { show: false } }
+}
+const sparklineRespSeries = [{ name: 'Response (min)', data: [18.2, 16.5, 15.0, 14.2, 13.5, 13.0, 12.75] }]
+
+// Sales Health SLA Radial
+const slaRadialOptions = {
+  chart: { type: 'radialBar', sparkline: { enabled: true } },
+  plotOptions: {
+    radialBar: {
+      hollow: { size: '60%' },
+      track: { background: '#e5e7eb' },
+      dataLabels: {
+        name: { show: false },
+        value: {
+          fontSize: '12px',
+          fontWeight: 700,
+          offsetY: 4,
+          formatter: (val: number) => val + '%'
+        }
+      }
     }
-  }
-  
-  const pt = chartPoints[closestIdx]
-  // Map back to relative DOM position for tooltip placement
-  const tooltipX = (pt.x / 1000) * rect.width
-  const tooltipY = (pt.y / 220) * rect.height
-  
-  hoveredPoint.value = {
-    x: tooltipX,
-    y: tooltipY,
-    idx: closestIdx,
-    date: pt.date,
-    val: pt.val,
-    target: pt.target
-  }
+  },
+  colors: ['#23B750']
 }
 
-// AI Assistant Insights Stack
-const insights = ref([
-  {
-    type: 'alert',
-    title: '13 deals were lost in this range',
-    text: 'Use the lost-deals breakdown to identify the main reason and recover <strong>at-risk pipeline</strong> earlier.',
-    actionText: 'Review losses'
+const winRateTrendOptions = {
+  chart: { type: 'area', sparkline: { enabled: true } },
+  stroke: { curve: 'smooth', width: 2 },
+  fill: { type: 'gradient', gradient: { opacityFrom: 0.4, opacityTo: 0 } },
+  colors: ['#23B750']
+}
+const winRateTrendSeries = [{ name: 'Win Rate', data: [12.0, 14.5, 13.8, 16.2, 17.5, 18.5] }]
+
+// Revenue vs Target Apex Chart
+const revenueApexOptions = computed(() => ({
+  chart: {
+    type: 'area',
+    toolbar: { show: false },
+    fontFamily: 'Inter, sans-serif'
   },
-  {
-    type: 'success',
-    title: 'Yee Ling leads revenue won',
-    text: '<strong>Yee Ling</strong> contributed <strong>RM 500K</strong> in won revenue during this range.',
-    actionText: 'View leaderboard'
+  stroke: { curve: 'smooth', width: 2.5 },
+  colors: ['#23B750'],
+  fill: {
+    type: 'gradient',
+    gradient: {
+      shadeIntensity: 1,
+      opacityFrom: 0.35,
+      opacityTo: 0.05,
+      stops: [0, 90, 100],
+      colorStops: [
+        { offset: 0, color: '#23B750', opacity: 0.35 },
+        { offset: 100, color: '#62D816', opacity: 0.0 }
+      ]
+    }
   },
-  {
-    type: 'default',
-    title: 'Website is the largest lead source',
-    text: '<strong>0</strong> leads came from <strong>Website</strong> in this range.',
-    actionText: 'View channels'
+  dataLabels: { enabled: false },
+  xaxis: {
+    categories: revenuePeriod.value === '30D' 
+      ? ['Week 1', 'Week 2', 'Week 3', 'Week 4']
+      : revenuePeriod.value === '90D'
+        ? ['Month 1', 'Month 2', 'Month 3']
+        : ['Q1', 'Q2', 'Q3', 'Q4'],
+    labels: { style: { colors: '#94a3b8', fontSize: '11px' } },
+    axisBorder: { show: false },
+    axisTicks: { show: false }
+  },
+  yaxis: {
+    labels: {
+      style: { colors: '#94a3b8', fontSize: '11px' },
+      formatter: (val: number) => `RM ${val}k`
+    }
+  },
+  grid: { borderColor: '#e2e8f0', strokeDashArray: 3 },
+  tooltip: {
+    theme: 'dark',
+    y: { formatter: (val: number) => `RM ${val.toLocaleString()}K` }
   }
+}))
+
+const revenueApexSeries = computed(() => {
+  if (revenuePeriod.value === '30D') {
+    return [{ name: 'Revenue Won', data: [120, 245, 390, 537.5] }]
+  } else if (revenuePeriod.value === '90D') {
+    return [{ name: 'Revenue Won', data: [450, 920, 1420] }]
+  } else {
+    return [{ name: 'Revenue Won', data: [1100, 2300, 3600, 4850] }]
+  }
+})
+
+// Pipeline Funnel Bar
+const funnelApexOptions = computed(() => ({
+  chart: { type: 'bar', toolbar: { show: false }, fontFamily: 'Inter, sans-serif' },
+  plotOptions: {
+    bar: {
+      horizontal: true,
+      borderRadius: 4,
+      barHeight: '55%',
+      distributed: false
+    }
+  },
+  colors: ['#23B750'],
+  dataLabels: {
+    enabled: true,
+    formatter: (val: number) => funnelMode.value === 'Count' ? `${val} deals` : `RM ${val}k`,
+    style: { fontSize: '10px', fontWeight: 700 }
+  },
+  xaxis: {
+    labels: { show: false },
+    axisBorder: { show: false },
+    axisTicks: { show: false }
+  },
+  yaxis: {
+    categories: ['Won Deals', 'Proposal / Neg', 'Technical Qual', 'Contacted', 'Inbound Leads'],
+    labels: { style: { colors: '#64748b', fontSize: '11px', fontWeight: 600 } }
+  },
+  grid: { show: false },
+  tooltip: { theme: 'dark' }
+}))
+
+const funnelApexSeries = computed(() => {
+  if (funnelMode.value === 'Count') {
+    return [{ name: 'Deals', data: [10, 48, 125, 210, 349] }]
+  } else {
+    return [{ name: 'Pipeline Value', data: [537.5, 410, 620, 890, 1200] }]
+  }
+})
+
+const topAgents = [
+  { rank: '01', name: 'Yee Ling', initials: 'YL', avatarBg: 'bg-[#23B750]', won: 2, open: 4, revenue: '522K', winRate: 68 },
+  { rank: '02', name: 'Amirul Mokhtar', initials: 'AM', avatarBg: 'bg-[#7C3AED]', won: 2, open: 17, revenue: '15.3K', winRate: 100 },
+  { rank: '03', name: 'Kausalya Saundarajan', initials: 'KS', avatarBg: 'bg-[#2E91E5]', won: 1, open: 1, revenue: '216', winRate: 100 }
+]
+
+const overviewChannels = [
+  { channel: 'WhatsApp Direct', count: 238, pct: 61, color: '#2E91E5' },
+  { channel: 'Email Inbound', count: 151, pct: 39, color: '#7C3AED' },
+  { channel: 'Website LiveChat', count: 0, pct: 0, color: '#23B750' },
+  { channel: 'Facebook Messenger', count: 0, pct: 0, color: '#3b82f6' }
+]
+
+const channelDonutOptions = {
+  chart: { type: 'donut', fontFamily: 'Inter, sans-serif' },
+  labels: ['WhatsApp Direct', 'Email Inbound'],
+  colors: ['#2E91E5', '#7C3AED'],
+  legend: { show: false },
+  dataLabels: { enabled: false },
+  plotOptions: {
+    pie: {
+      donut: {
+        size: '72%',
+        labels: {
+          show: true,
+          total: {
+            show: true,
+            label: 'Total Leads',
+            fontSize: '10px',
+            fontWeight: 600,
+            formatter: () => '389'
+          }
+        }
+      }
+    }
+  },
+  tooltip: { theme: 'dark' }
+}
+const channelDonutSeries = [238, 151]
+
+const calendarDays = [
+  { label: 'MON 17', date: '17', isToday: false, badge: false },
+  { label: 'TUE 18', date: '18', isToday: false, badge: false },
+  { label: 'WED 19', date: '19', isToday: false, badge: false },
+  { label: 'THU · TODAY', date: '20', isToday: true, badge: true },
+  { label: 'FRI 21', date: '21', isToday: false, badge: false }
+]
+
+function nudgeAllStaleDeals() {
+  alert('Automated WhatsApp follow-up sequence triggered for 27 stale opportunities.')
+}
+
+// ═════════════════════════════════════════════════════════
+// TAB 2: PIPELINE STATE & APEXCHARTS
+// ═════════════════════════════════════════════════════════
+const velocityApexOptions = {
+  chart: { type: 'bar', toolbar: { show: false }, fontFamily: 'Inter, sans-serif' },
+  plotOptions: {
+    bar: {
+      horizontal: true,
+      borderRadius: 4,
+      barHeight: '50%',
+      colors: {
+        ranges: [
+          { from: 8, to: 15, color: '#F97316' },
+          { from: 0, to: 7.9, color: '#23B750' }
+        ]
+      }
+    }
+  },
+  dataLabels: {
+    enabled: true,
+    formatter: (val: number) => `${val} days`,
+    style: { fontSize: '10px', fontWeight: 700 }
+  },
+  xaxis: { labels: { show: false }, axisBorder: { show: false }, axisTicks: { show: false } },
+  yaxis: {
+    categories: ['Negotiation', 'Proposal/Quote', 'Tech Discovery', 'Contact SLA', 'Lead Intake'],
+    labels: { style: { colors: '#64748b', fontSize: '11px', fontWeight: 600 } }
+  },
+  grid: { show: false },
+  tooltip: { theme: 'dark' }
+}
+const velocityApexSeries = [{ name: 'Avg Duration', data: [3.2, 8.9, 4.1, 1.8, 2.1] }]
+
+const lostReasonSearch = ref('')
+const lostReasonsList = [
+  { title: 'Chose Competitor Solution', count: 8, val: 775550 },
+  { title: 'Budget Constraints / Deferred', count: 6, val: 4207592 },
+  { title: 'Unreachable / Lead Ghosted', count: 5, val: 580000 },
+  { title: 'No Immediate Need / Timing', count: 3, val: 310000 }
+]
+
+const filteredLostReasons = computed(() => {
+  if (!lostReasonSearch.value) return lostReasonsList
+  const q = lostReasonSearch.value.toLowerCase()
+  return lostReasonsList.filter(r => r.title.toLowerCase().includes(q))
+})
+
+const lostReasonDonutOptions = {
+  chart: { type: 'donut', fontFamily: 'Inter, sans-serif' },
+  labels: ['Competitor', 'Budget', 'Unreachable', 'Timing'],
+  colors: ['#2E91E5', '#F97316', '#EF4444', '#23B750'],
+  legend: { show: false },
+  dataLabels: { enabled: false },
+  plotOptions: {
+    pie: {
+      donut: {
+        size: '70%',
+        labels: {
+          show: true,
+          total: {
+            show: true,
+            label: 'Lost Deals',
+            fontSize: '10px',
+            formatter: () => '22'
+          }
+        }
+      }
+    }
+  },
+  tooltip: { theme: 'dark' }
+}
+const lostReasonDonutSeries = [8, 6, 5, 3]
+
+const activeDealSearch = ref('')
+const activeDealStageFilter = ref('All')
+
+interface ActiveDeal {
+  id: number
+  title: string
+  company: string
+  value: string
+  stage: string
+  age: string
+  isStale: boolean
+  owner: string
+  source: string
+}
+
+const activeDealsList = ref<ActiveDeal[]>([
+  { id: 1, title: 'Whetstone Corporate Event Space booking [Jan-12] / 500 pax', company: 'Whetstone Corporate Events', value: '15.3K', stage: 'Follow up/Negotiation', age: '2 days', isStale: false, owner: 'Kausalya', source: 'WhatsApp' },
+  { id: 2, title: 'G2G B2B MATCH APP Enterprise Rollout', company: 'Touch Point Tech', value: '200.0K', stage: 'Follow up/Negotiation', age: '27d ago (Stale)', isStale: true, owner: 'Yee Ling', source: 'WhatsApp' },
+  { id: 3, title: 'ERP Crystal Tech Implementation', company: 'Nova Star Systems', value: '97.2K', stage: 'Proposal/Quotation', age: '5d ago', isStale: false, owner: 'Amirul Mokhtar', source: 'WhatsApp' },
+  { id: 4, title: 'HW02 Webinar Sponsorship Series', company: 'Whetstone Events', value: '32.7K', stage: 'Follow up/Negotiation', age: '5d ago', isStale: false, owner: 'Amirul Mokhtar', source: 'WhatsApp' },
+  { id: 5, title: 'AMS Victory Logistics Integration', company: 'Victory Log Sdn Bhd', value: '26.1K', stage: 'Follow up/Negotiation', age: '6d ago', isStale: false, owner: 'Amirul Mokhtar', source: 'WhatsApp' },
+  { id: 6, title: 'Realbox Pro E-Commerce Storefront', company: 'Real Box Co', value: '16.2K', stage: 'Follow up/Negotiation', age: '6d ago', isStale: false, owner: 'Amirul Mokhtar', source: 'WhatsApp' },
+  { id: 7, title: 'Lemmex Corporate Portal', company: 'Lemmex Corp', value: '38.0K', stage: 'Proposal/Quotation', age: '20d ago (Stale)', isStale: true, owner: 'Amirul Mokhtar', source: 'WhatsApp' }
 ])
 
-const aiQuery = ref('')
-
-function submitAIQuestion() {
-  if (!aiQuery.value.trim()) return
-  
-  const query = aiQuery.value.toLowerCase()
-  let replyTitle = 'AI Response Insight'
-  let replyText = "I couldn't find specific stats on that query. Try asking about 'revenue', 'top agent', or 'channels'."
-  
-  if (query.includes('revenue') || query.includes('target') || query.includes('won')) {
-    replyTitle = 'Revenue vs Target Summary'
-    replyText = 'Total revenue won is <strong>RM 509.6K</strong>, exceeding target by <strong>136.74%</strong>. Main contributor is WhatsApp channel.'
-  } else if (query.includes('agent') || query.includes('leaderboard') || query.includes('top')) {
-    replyTitle = 'Top Performing Agent'
-    replyText = '<strong>Amirul Mokhtar</strong> is the top agent with <strong>RM 756</strong> revenue won and <strong>100%</strong> win rate across 19 active deals.'
-  } else if (query.includes('channel') || query.includes('platform') || query.includes('whatsapp')) {
-    replyTitle = 'Channel Volume Breakdown'
-    replyText = '<strong>WhatsApp</strong> is the active driver making up <strong>55%</strong> of leads (202 total), followed by <strong>Email</strong> with <strong>45%</strong> (166 total).'
-  }
-  
-  insights.value.unshift({
-    type: 'default',
-    title: replyTitle,
-    text: replyText,
-    actionText: 'Analyze query details'
+const filteredActiveDeals = computed(() => {
+  return activeDealsList.value.filter(d => {
+    const matchesSearch = !activeDealSearch.value || d.title.toLowerCase().includes(activeDealSearch.value.toLowerCase()) || d.company.toLowerCase().includes(activeDealSearch.value.toLowerCase())
+    const matchesStage = activeDealStageFilter.value === 'All' || d.stage === activeDealStageFilter.value
+    return matchesSearch && matchesStage
   })
-  
-  aiQuery.value = ''
+})
+
+function clearActiveDealFilters() {
+  activeDealSearch.value = ''
+  activeDealStageFilter.value = 'All'
 }
 
-// Pipeline Funnel data
-const funnelStages = [
-  { name: 'New Leads', count: 978, val: 978000, pct: 100, conversion: '—' },
-  { name: 'Acknowledged', count: 31, val: 31000, pct: 15, conversion: '3%' },
-  { name: 'Qualifying', count: 39, val: 39000, pct: 20, conversion: '126%' },
-  { name: 'Proposal/Quotation', count: 21, val: 21000, pct: 12, conversion: '54%' },
-  { name: 'Follow Up/Negotiation', count: 20, val: 20000, pct: 11, conversion: '95%' },
-  { name: 'Won', count: 0, val: 0, pct: 1, conversion: '0%' }
-]
+// Drawer State
+const selectedDeal = ref<ActiveDeal | null>(null)
+const quickMessageText = ref('Hi, checking in on the proposal we sent over. Let us know if you need any adjustments!')
 
-// Leads by Channel legend list
-const leadsByChannel = [
-  { channel: 'WebWidget', count: 0, pct: 0, color: '#10b981' },
-  { channel: 'Facebook', count: 0, pct: 0, color: '#3b82f6' },
-  { channel: 'WhatsApp', count: 202, pct: 55, color: '#f97316' },
-  { channel: 'SMS', count: 0, pct: 0, color: '#ef4444' },
-  { channel: 'Email', count: 166, pct: 45, color: '#3b82f6' },
-  { channel: 'API', count: 0, pct: 0, color: '#10b981' },
-  { channel: 'Telegram', count: 0, pct: 0, color: '#a7f3d0' },
-  { channel: 'Line', count: 0, pct: 0, color: '#34d399' },
-  { channel: 'Instagram', count: 0, pct: 0, color: '#059669' }
-]
+function openDealDrawer(deal: ActiveDeal) {
+  selectedDeal.value = deal
+  quickMessageText.value = `Hi ${deal.owner}, checking in on the ${deal.title} with ${deal.company}. Let us know if you need any adjustments!`
+}
+
+function triggerWhatsAppChat(deal: ActiveDeal) {
+  openDealDrawer(deal)
+}
+
+function sendQuickMessage() {
+  alert(`Message sent to ${selectedDeal.value?.company} via WhatsApp!`)
+  selectedDeal.value = null
+}
 
 // ═════════════════════════════════════════════════════════
-// PIPELINE VIEW STATE & MOCK DATA
-// ═════════════════════════════════════════════════════════
-const dealVelocityStages = [
-  { name: 'New Leads', days: 6.4 },
-  { name: 'Acknowledged', days: 7.6 },
-  { name: 'Qualifying', days: 6.4 },
-  { name: 'Proposal/ Quotation', days: 8.4 },
-  { name: 'Follow Up/ Negotiation', days: 7.2 }
-]
-
-const lostReasons = [
-  { title: 'Chose Competitor', count: 4, val: 35770 },
-  { title: 'Other', count: 3, val: 1620 },
-  { title: 'Unreachable', count: 3, val: 413000 },
-  { title: 'No Need', count: 2, val: 270000 }
-]
-
-const agents = [
-  {
-    name: 'Amirul Mokhtar',
-    avatar: '/avatars/agent_10_malay_male_coral.png',
-    won: 1,
-    open: 19,
-    revenueWon: 756,
-    dealsClosed: 1,
-    winRate: 100,
-    avgResponse: 0,
-    avgDealValue: 756
-  },
-  {
-    name: 'Poorneka',
-    avatar: '/avatars/agent_11_chinese_female_mint.png',
-    won: 0,
-    open: 2,
-    revenueWon: 0,
-    dealsClosed: 0,
-    winRate: 0,
-    avgResponse: 0,
-    avgDealValue: 0
-  },
-  {
-    name: 'Dheeba',
-    avatar: '/avatars/agent_12_indian_male_lavender.png',
-    won: 0,
-    open: 2,
-    revenueWon: 0,
-    dealsClosed: 0,
-    winRate: 0,
-    avgResponse: 0,
-    avgDealValue: 0
-  },
-  {
-    name: 'Kavitha Krishnan',
-    avatar: '/avatars/agent_06_indian_female_young.png',
-    won: 0,
-    open: 1,
-    revenueWon: 0,
-    dealsClosed: 0,
-    winRate: 0,
-    avgResponse: 0,
-    avgDealValue: 0
-  },
-  {
-    name: 'Chong Wei Jian',
-    avatar: '/avatars/chong-wei-jian.png',
-    won: 0,
-    open: 1,
-    revenueWon: 0,
-    dealsClosed: 0,
-    winRate: 0,
-    avgResponse: 0,
-    avgDealValue: 0
-  }
-]
-
-// ═════════════════════════════════════════════════════════
-// MARKETING VIEW STATE & MOCK DATA
+// TAB 3: MARKETING STATE & APEXCHARTS
 // ═════════════════════════════════════════════════════════
 const attributionModel = ref('Last-touch')
 const sessionsView = ref('Weekly')
 
-const attributionChannels = [
-  { name: 'WhatsApp', val: '142k', pct: 50, color: '#f97316' },
-  { name: 'Organic Search', val: '58k', pct: 20, color: '#3b82f6' },
-  { name: 'Facebook', val: '42k', pct: 15, color: '#10b981' },
-  { name: 'Instagram', val: '18k', pct: 6, color: '#ef4444' },
-  { name: 'Email', val: '25k', pct: 9, color: '#8b5cf6' }
+const activeAttributionChannels = computed(() => {
+  if (attributionModel.value === 'Last-touch') {
+    return [
+      { name: 'WhatsApp Direct (Last Touch)', val: '378K', pct: 70, color: '#23B750' },
+      { name: 'Direct Website Search', val: '159K', pct: 30, color: '#62D816' },
+      { name: 'Google Organic', val: '45K', pct: 8, color: '#7C3AED' },
+      { name: 'Meta Ads', val: '28K', pct: 5, color: '#F97316' }
+    ]
+  } else if (attributionModel.value === 'First-touch') {
+    return [
+      { name: 'Google Organic (First Touch)', val: '268K', pct: 50, color: '#7C3AED' },
+      { name: 'Meta Ads Campaign', val: '161K', pct: 30, color: '#F97316' },
+      { name: 'WhatsApp Inbound', val: '108K', pct: 20, color: '#23B750' }
+    ]
+  } else {
+    return [
+      { name: 'WhatsApp Direct (Linear)', val: '215K', pct: 40, color: '#23B750' },
+      { name: 'Google Organic (Linear)', val: '188K', pct: 35, color: '#7C3AED' },
+      { name: 'Meta Ads (Linear)', val: '134K', pct: 25, color: '#F97316' }
+    ]
+  }
+})
+
+const attributionApexOptions = computed(() => ({
+  chart: { type: 'donut', fontFamily: 'Inter, sans-serif' },
+  labels: activeAttributionChannels.value.map(c => c.name),
+  colors: activeAttributionChannels.value.map(c => c.color),
+  legend: { show: false },
+  dataLabels: { enabled: false },
+  plotOptions: {
+    pie: {
+      donut: {
+        size: '72%',
+        labels: {
+          show: true,
+          total: {
+            show: true,
+            label: 'Attributed',
+            fontSize: '10px',
+            formatter: () => 'RM 537.5K'
+          }
+        }
+      }
+    }
+  },
+  tooltip: { theme: 'dark' }
+}))
+
+const attributionApexSeries = computed(() => activeAttributionChannels.value.map(c => c.pct))
+
+// Channel Grouped Bar Chart
+const channelBarApexOptions = {
+  chart: { type: 'bar', toolbar: { show: false }, fontFamily: 'Inter, sans-serif' },
+  plotOptions: { bar: { horizontal: false, columnWidth: '50%', borderRadius: 3 } },
+  colors: ['#23B750', '#2E91E5'],
+  dataLabels: { enabled: false },
+  stroke: { show: true, width: 2, colors: ['transparent'] },
+  xaxis: {
+    categories: ['WhatsApp', 'Facebook', 'Google', 'Instagram', 'Email', 'Direct'],
+    labels: { style: { colors: '#64748b', fontSize: '11px' } }
+  },
+  yaxis: {
+    labels: { style: { colors: '#94a3b8', fontSize: '11px' } }
+  },
+  legend: {
+    position: 'top',
+    horizontalAlign: 'center',
+    labels: { colors: '#64748b' }
+  },
+  grid: { borderColor: '#e2e8f0', strokeDashArray: 3 },
+  tooltip: { theme: 'dark' }
+}
+const channelBarApexSeries = [
+  { name: 'Leads Generated', data: [380, 190, 170, 70, 60, 75] },
+  { name: 'Leads Converted', data: [80, 35, 40, 15, 18, 12] }
 ]
 
-const leadQualitySources = [
-  { name: 'WhatsApp', qualPct: 70, unqualPct: 30 },
-  { name: 'Facebook', qualPct: 83, unqualPct: 17 },
-  { name: 'Google', qualPct: 67, unqualPct: 33 },
-  { name: 'Instagram', qualPct: 0, unqualPct: 100 },
-  { name: 'Email', qualPct: 75, unqualPct: 25 }
+// Sessions Dual-Axis Line Chart
+const sessionsDualApexOptions = {
+  chart: { type: 'line', toolbar: { show: false }, fontFamily: 'Inter, sans-serif' },
+  stroke: { curve: 'smooth', width: 2.5 },
+  colors: ['#2E91E5', '#23B750'],
+  xaxis: {
+    categories: ['Jul 1', 'Jul 7', 'Jul 13', 'Jul 19', 'Jul 25', 'Jul 29'],
+    labels: { style: { colors: '#94a3b8', fontSize: '10px' } }
+  },
+  yaxis: [
+    {
+      title: { text: 'Sessions', style: { color: '#2E91E5', fontSize: '10px' } },
+      labels: { style: { colors: '#2E91E5', fontSize: '10px' } }
+    },
+    {
+      opposite: true,
+      title: { text: 'Key Events', style: { color: '#23B750', fontSize: '10px' } },
+      labels: { style: { colors: '#23B750', fontSize: '10px' } }
+    }
+  ],
+  legend: { position: 'top', labels: { colors: '#64748b' } },
+  grid: { borderColor: '#e2e8f0', strokeDashArray: 3 },
+  tooltip: { theme: 'dark' }
+}
+const sessionsDualApexSeries = [
+  { name: 'Sessions', type: 'line', data: [2900, 3200, 3450, 3600, 3850, 4100] },
+  { name: 'Key Events', type: 'line', data: [145, 170, 185, 205, 220, 240] }
 ]
 
-const trafficOrigins = [
-  { source: 'WhatsApp / cpc', users: 10402, sessions: 14810, engaged: 8950, avgTime: '1m 12s', events: 12400, conversions: 202 },
-  { source: 'google / organic', users: 4120, sessions: 5600, engaged: 3800, avgTime: '2m 04s', events: 6100, conversions: 88 },
-  { source: 'facebook / referral', users: 2800, sessions: 3450, engaged: 2100, avgTime: '0m 58s', events: 4500, conversions: 42 },
-  { source: 'email / newsletter', users: 1150, sessions: 1400, engaged: 950, avgTime: '1m 45s', events: 2100, conversions: 166 },
-  { source: 'direct / none', users: 850, sessions: 910, engaged: 520, avgTime: '0m 35s', events: 1100, conversions: 12 }
+// Lead Quality Stacked Horizontal
+const qualityStackedApexOptions = {
+  chart: { type: 'bar', stacked: true, stackType: '100%', toolbar: { show: false }, fontFamily: 'Inter, sans-serif' },
+  plotOptions: { bar: { horizontal: true, barHeight: '50%', borderRadius: 2 } },
+  colors: ['#23B750', '#cbd5e1'],
+  xaxis: { labels: { style: { colors: '#94a3b8', fontSize: '10px' } } },
+  yaxis: {
+    categories: ['Email', 'Instagram', 'Google', 'Facebook', 'WhatsApp'],
+    labels: { style: { colors: '#64748b', fontSize: '11px', fontWeight: 600 } }
+  },
+  legend: { position: 'top', labels: { colors: '#64748b' } },
+  grid: { show: false },
+  tooltip: { theme: 'dark' }
+}
+const qualityStackedApexSeries = [
+  { name: 'Qualified (%)', data: [75, 0, 67, 83, 70] },
+  { name: 'Unqualified (%)', data: [25, 100, 33, 17, 30] }
+]
+
+const marketingSources = [
+  { source: 'Direct / (none)', sessions: 18420, users: 14200, engagement: '68.4%', events: 34200, leads: 520, convRate: 2.8 },
+  { source: 'google / organic', sessions: 6200, users: 4850, engagement: '61.2%', events: 12400, leads: 185, convRate: 3.0 },
+  { source: 'facebook / cpc', sessions: 4150, users: 3200, engagement: '54.6%', events: 8900, leads: 94, convRate: 2.3 },
+  { source: 'whatsapp / direct', sessions: 2900, users: 2450, engagement: '82.1%', events: 9800, leads: 238, convRate: 8.2 },
+  { source: 'email / newsletter', sessions: 1850, users: 1520, engagement: '74.5%', events: 4500, leads: 151, convRate: 8.1 }
+]
+
+const topLandingPages = [
+  { page: '/pricing', sessions: 8420, bounce: 32.4, leads: 240 },
+  { page: '/home', sessions: 7650, bounce: 41.2, leads: 180 },
+  { page: '/features/omnichannel', sessions: 4210, bounce: 28.5, leads: 165 },
+  { page: '/contact', sessions: 2150, bounce: 19.8, leads: 142 },
+  { page: '/solutions/whatsapp-crm', sessions: 1980, bounce: 24.1, leads: 120 }
+]
+
+const topUtmCampaigns = [
+  { campaign: 'c4_launch_google', source: 'Google Ads', sessions: 4200, leads: 145, convRate: 3.4 },
+  { campaign: 'summer_promo_2026', source: 'Facebook', sessions: 3100, leads: 88, convRate: 2.8 },
+  { campaign: 'whatsapp_direct_q3', source: 'WhatsApp', sessions: 2400, leads: 210, convRate: 8.7 },
+  { campaign: 'newsletter_august', source: 'Email', sessions: 1850, leads: 151, convRate: 8.1 },
+  { campaign: 'linkedin_b2b_enterprise', source: 'LinkedIn', sessions: 1200, leads: 62, convRate: 5.1 }
 ]
 </script>
 
