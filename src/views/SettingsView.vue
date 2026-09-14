@@ -2,27 +2,168 @@
   <div class="h-full flex flex-col bg-gray-50 overflow-hidden text-sm">
     <div class="flex-1 flex overflow-hidden">
 
+      <!-- ═══════════════════ FIXED LIGHT SETTINGS SIDEBAR ═══════════════════ -->
+      <aside class="w-64 bg-white border-r border-gray-200 flex flex-col shrink-0 h-full select-none z-10 shadow-xs">
+        <!-- Sidebar Header -->
+        <div class="px-5 py-4 border-b border-gray-200 flex items-center">
+          <h2 class="text-sm font-semibold text-gray-900 tracking-tight">Settings</h2>
+        </div>
+
+        <!-- Sidebar Navigation List -->
+        <div class="flex-1 overflow-y-auto p-3 space-y-4 custom-settings-scrollbar">
+          <!-- Overview & Search Item -->
+          <div>
+            <button
+              @click="switchTab('search')"
+              class="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer text-left"
+              :class="activeTab === 'search' ? 'bg-primary/10 text-primary font-bold shadow-xs' : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900'"
+            >
+              <Search class="w-4 h-4 text-gray-400" :class="{ 'text-primary': activeTab === 'search' }" />
+              <span class="flex-1">Search Settings</span>
+              <span class="text-[9px] bg-gray-100 text-gray-400 px-1.5 py-0.5 rounded font-mono">⌘K</span>
+            </button>
+          </div>
+
+          <!-- Groups 1 to 4 -->
+          <div v-for="group in settingsGroups" :key="group.id" class="space-y-1">
+            <h3 class="px-3 py-1 text-[10px] font-bold text-gray-400 uppercase tracking-wider">
+              {{ group.title }}
+            </h3>
+            <button
+              v-for="item in group.items"
+              :key="item.id"
+              @click="switchTab(item.id)"
+              class="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer text-left"
+              :class="activeTab === item.id ? 'bg-primary/10 text-primary font-bold shadow-xs' : 'text-gray-600 hover:bg-gray-100/70 hover:text-gray-900 font-medium'"
+            >
+              <component
+                :is="item.icon"
+                class="w-4 h-4 text-gray-400 shrink-0 transition-colors"
+                :class="{ 'text-primary': activeTab === item.id }"
+              />
+              <span class="flex-1 truncate">{{ item.name }}</span>
+              <span v-if="item.badge" class="text-[9px] bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded font-bold">
+                {{ item.badge }}
+              </span>
+            </button>
+          </div>
+        </div>
+      </aside>
+
       <!-- ═══════════════════ MAIN CONTENT CANVAS ═══════════════════ -->
-      <main class="flex-1 overflow-y-auto bg-gray-50">
-        <div class="max-w-5xl mx-auto px-6 py-8 space-y-8">
+      <main class="flex-1 overflow-y-auto bg-gray-50/70">
+        <div class="max-w-5xl mx-auto px-8 py-8 space-y-6">
+
+          <!-- ══════════════ TAB: SETTINGS SEARCH & DIRECTORY (DEFAULT LANDING) ══════════════ -->
+          <div v-if="activeTab === 'search'" class="py-12 max-w-2xl mx-auto space-y-6 animate-fade-in">
+            <!-- Center Header -->
+            <div class="text-center space-y-1.5 pb-2">
+              <h1 class="text-2xl font-semibold text-gray-900 tracking-tight">Settings Directory</h1>
+              <p class="text-xs text-gray-500">Quickly find and jump to any workspace configuration or tool.</p>
+            </div>
+
+            <!-- Centered Search Bar in Middle -->
+            <div class="relative w-full">
+              <Search class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <input
+                v-model="settingsSearchQuery"
+                type="text"
+                placeholder="Search settings (e.g. WhatsApp, Quotas, SLAs, Webhooks, Billing)..."
+                class="w-full pl-11 pr-10 py-3.5 bg-white border border-gray-200 rounded-2xl text-xs font-medium text-gray-800 placeholder-gray-400 shadow-xs focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                v-focus
+              />
+              <button
+                v-if="settingsSearchQuery"
+                @click="settingsSearchQuery = ''"
+                class="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600 rounded-full cursor-pointer"
+              >
+                <X class="w-4 h-4" />
+              </button>
+            </div>
+
+            <!-- Live Search Results (When query is present) -->
+            <div v-if="settingsSearchQuery.trim()" class="space-y-3 pt-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  Matching Results ({{ filteredSettingsItems.length }})
+                </span>
+                <button @click="settingsSearchQuery = ''" class="text-xs font-semibold text-primary hover:underline cursor-pointer">
+                  Clear search
+                </button>
+              </div>
+
+              <div v-if="filteredSettingsItems.length > 0" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div
+                  v-for="res in filteredSettingsItems"
+                  :key="res.id"
+                  @click="switchTab(res.id)"
+                  class="p-4 bg-white border border-gray-200 hover:border-primary/50 hover:shadow-sm rounded-2xl transition-all cursor-pointer group flex items-start gap-3.5"
+                >
+                  <div class="w-9 h-9 rounded-xl bg-gray-50 border border-gray-150 flex items-center justify-center text-gray-700 group-hover:bg-primary/10 group-hover:text-primary transition-colors shrink-0">
+                    <component :is="res.icon" class="w-4 h-4" />
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between gap-2">
+                      <h3 class="text-xs font-semibold text-gray-900 group-hover:text-primary transition-colors truncate">
+                        {{ res.name }}
+                      </h3>
+                      <span class="text-[9px] font-semibold text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full shrink-0">
+                        {{ res.categoryName }}
+                      </span>
+                    </div>
+                    <p class="text-[11px] text-gray-500 mt-1 line-clamp-2 leading-relaxed">
+                      {{ res.description }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div v-else class="p-10 text-center bg-white border border-gray-200 rounded-2xl shadow-xs">
+                <Search class="w-8 h-8 text-gray-300 mx-auto mb-2" />
+                <h4 class="text-xs font-semibold text-gray-700">No settings found matching "{{ settingsSearchQuery }}"</h4>
+                <p class="text-[11px] text-gray-400 mt-1">Try keywords like 'agents', 'whatsapp', 'rules', 'sla', or 'billing'.</p>
+              </div>
+            </div>
+
+            <!-- Recently Visited Below Search Bar (When query is empty) -->
+            <div v-else class="space-y-3 pt-4">
+              <h3 class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider text-center">Recently Visited</h3>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <button
+                  v-for="item in [
+                    { id: 'inboxes', name: 'Inboxes', icon: Inbox, desc: 'Channels & WhatsApp' },
+                    { id: 'agents', name: 'Agents', icon: User, desc: 'Team & seat roles' },
+                    { id: 'ai-behaviour', name: 'AI Behaviour', icon: Bot, desc: 'Guardrails & prompts' },
+                    { id: 'account-settings', name: 'Account Settings', icon: Building, desc: 'General info' }
+                  ]"
+                  :key="item.id"
+                  @click="switchTab(item.id)"
+                  class="p-4 bg-white border border-gray-200 hover:border-primary/50 hover:shadow-xs rounded-2xl text-left cursor-pointer transition-all group"
+                >
+                  <component :is="item.icon" class="w-4 h-4 text-primary mb-2.5" />
+                  <div class="text-xs font-semibold text-gray-900 group-hover:text-primary transition-colors">{{ item.name }}</div>
+                  <div class="text-[10px] text-gray-400 mt-0.5 truncate">{{ item.desc }}</div>
+                </button>
+              </div>
+            </div>
+          </div>
 
           <!-- ══════════════ TAB: AI TRAINING HUB ══════════════ -->
-          <div v-if="activeTab === 'ai-training'" class="space-y-6">
-            <div class="flex justify-between items-start">
-              <div>
-                <h1 class="text-2xl font-extrabold tracking-tight text-gray-900 flex items-center gap-2">
-                  <Sparkles class="w-6 h-6 text-yellow-500 fill-yellow-500" />
-                  AI Training Hub
-                </h1>
-                <p class="text-sm text-gray-400 mt-0.5">Train your AI on product guides, pricing sheets, and internal SOPs.</p>
+          <div v-if="activeTab === 'ai-training'" class="space-y-6 animate-fade-in">
+            <div class="border-b border-gray-200 pb-5">
+              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                  <h1 class="text-xl font-semibold text-gray-900 tracking-tight">AI Training Hub</h1>
+                  <p class="text-xs text-gray-500 mt-1">Train your AI on product guides, pricing sheets, and internal SOPs.</p>
+                </div>
+                <button
+                  @click="loadDemoFiles"
+                  class="inline-flex items-center gap-2 px-3 py-1.5 bg-yellow-500 text-white font-medium text-xs rounded-lg opacity-0 pointer-events-none"
+                >
+                  <Play class="w-3.5 h-3.5 fill-current" />
+                  Simulate Demo Upload
+                </button>
               </div>
-              <button
-                @click="loadDemoFiles"
-                class="inline-flex items-center gap-2 px-3 py-1.5 bg-yellow-500 hover:bg-yellow-600 active:scale-95 text-white font-bold text-xs rounded-lg shadow transition-all cursor-pointer opacity-0 pointer-events-none"
-              >
-                <Play class="w-3.5 h-3.5 fill-current" />
-                Simulate Demo Upload
-              </button>
             </div>
 
             <!-- Knowledge Base Table -->
@@ -112,13 +253,10 @@
           </div>
 
           <!-- ══════════════ TAB: AI TRAINING HISTORY ══════════════ -->
-          <div v-if="activeTab === 'training-history'" class="space-y-6">
-            <div>
-              <h1 class="text-2xl font-extrabold tracking-tight text-gray-900 flex items-center gap-2">
-                <History class="w-6 h-6 text-yellow-500 animate-pulse" />
-                AI Model Training History
-              </h1>
-              <p class="text-sm text-gray-400 mt-0.5">Audit log of all LLM training runs, document indexings, and deployment states.</p>
+          <div v-if="activeTab === 'training-history'" class="space-y-6 animate-fade-in">
+            <div class="border-b border-gray-200 pb-5">
+              <h1 class="text-xl font-semibold text-gray-900 tracking-tight">AI Model Training History</h1>
+              <p class="text-xs text-gray-500 mt-1">Audit log of all LLM training runs, document indexings, and deployment states.</p>
             </div>
 
             <!-- Training History Log -->
@@ -147,15 +285,21 @@
           </div>
 
           <!-- ══════════════ TAB: INBOXES ══════════════ -->
-          <div v-if="activeTab === 'inboxes'" class="space-y-6">
-            <div class="flex items-start justify-between">
-              <div>
-                <h1 class="text-2xl font-extrabold tracking-tight text-gray-900">Inbox Integrations</h1>
-                <p class="text-sm text-gray-400 mt-0.5">Connect business channels to your unified inbox for AI-powered routing.</p>
+          <div v-if="activeTab === 'inboxes'" class="space-y-6 animate-fade-in">
+            <div class="border-b border-gray-200 pb-5">
+              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                  <h1 class="text-xl font-semibold text-gray-900 tracking-tight">Inbox Integrations</h1>
+                  <p class="text-xs text-gray-500 mt-1">Connect business channels to your unified inbox for AI-powered routing.</p>
+                </div>
+                <button
+                  v-if="activeInboxSubTab === 'channels'"
+                  @click="openAddChannelWizard"
+                  class="flex items-center gap-1.5 px-4 py-2 bg-primary hover:bg-primary/90 text-white font-medium text-xs rounded-xl cursor-pointer shadow-xs transition-colors"
+                >
+                  <Plus class="w-3.5 h-3.5" /> Add Channel
+                </button>
               </div>
-              <button v-if="activeInboxSubTab === 'channels'" @click="openAddChannelWizard" class="flex items-center gap-1.5 px-3 py-1.5 bg-primary hover:bg-primary/90 text-white font-bold text-xs rounded-lg cursor-pointer shadow">
-                <Plus class="w-3.5 h-3.5" /> Add Channel
-              </button>
             </div>
 
             <!-- Sub Tabs Navigation -->
@@ -240,17 +384,19 @@
           </div>
 
           <!-- ══════════════ TAB: CUSTOM TAGS & LABELS ══════════════ -->
-          <div v-if="activeTab === 'labels'" class="space-y-6">
-            <div class="flex items-start justify-between">
-              <div>
-                <h1 class="text-2xl font-extrabold tracking-tight text-gray-900">Custom Tags & Labels</h1>
-                <p class="text-sm text-gray-400 mt-0.5">Color-coded tags for deal profiling, lead sorting, and macro triggers.</p>
-              </div>
-              <div class="flex items-center gap-2">
-                <button @click="addToast('Tags Exported', 'Label library exported as tags.json.', 'success')" class="px-3 py-1.5 border border-gray-200 text-gray-600 font-bold text-xs rounded-lg cursor-pointer hover:bg-gray-50">Export</button>
-                <button @click="showCreateTagModal = true" class="flex items-center gap-1.5 px-3 py-1.5 bg-primary text-white font-bold text-xs rounded-lg cursor-pointer">
-                  <Plus class="w-3.5 h-3.5" /> New Tag
-                </button>
+          <div v-if="activeTab === 'labels'" class="space-y-6 animate-fade-in">
+            <div class="border-b border-gray-200 pb-5">
+              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                  <h1 class="text-xl font-semibold text-gray-900 tracking-tight">Custom Tags & Labels</h1>
+                  <p class="text-xs text-gray-500 mt-1">Color-coded tags for deal profiling, lead sorting, and macro triggers.</p>
+                </div>
+                <div class="flex items-center gap-2">
+                  <button @click="addToast('Tags Exported', 'Label library exported as tags.json.', 'success')" class="px-3.5 py-2 border border-gray-200 hover:bg-gray-50 text-gray-700 font-medium text-xs rounded-xl cursor-pointer transition-colors">Export</button>
+                  <button @click="showCreateTagModal = true" class="flex items-center gap-1.5 px-4 py-2 bg-primary hover:bg-primary/90 text-white font-medium text-xs rounded-xl cursor-pointer shadow-xs transition-colors">
+                    <Plus class="w-3.5 h-3.5" /> New Tag
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -352,15 +498,20 @@
           </div>
 
           <!-- ══════════════ TAB: WEB FORMS ══════════════ -->
-          <div v-if="activeTab === 'web-forms'" class="space-y-6">
-            <div class="flex items-start justify-between">
-              <div>
-                <h1 class="text-2xl font-extrabold tracking-tight text-gray-900">Web Forms</h1>
-                <p class="text-sm text-gray-400 mt-0.5">Manage lead capture forms with AI-powered field generation and easy embedding.</p>
+          <div v-if="activeTab === 'web-forms'" class="space-y-6 animate-fade-in">
+            <div class="border-b border-gray-200 pb-5">
+              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                  <h1 class="text-xl font-semibold text-gray-900 tracking-tight">Web Forms</h1>
+                  <p class="text-xs text-gray-500 mt-1">Manage lead capture forms with AI-powered field generation and easy embedding.</p>
+                </div>
+                <button
+                  @click="showCreateFormModal = true"
+                  class="flex items-center gap-1.5 px-4 py-2 bg-primary hover:bg-primary/90 text-white font-medium text-xs rounded-xl cursor-pointer shadow-xs transition-colors"
+                >
+                  <Plus class="w-3.5 h-3.5" /> Create Form
+                </button>
               </div>
-              <button @click="showCreateFormModal = true" class="flex items-center gap-1.5 px-3 py-1.5 bg-primary text-white font-bold text-xs rounded-lg cursor-pointer shadow">
-                <Plus class="w-3.5 h-3.5" /> Create Form
-              </button>
             </div>
 
             <!-- Forms Stats KPI Row -->
@@ -428,7 +579,7 @@
                           </button>
                           <button
                             @click="removeWebform(form.id)"
-                            class="p-1 text-gray-400 hover:text-red-500 hover:bg-red-55 rounded cursor-pointer transition-colors"
+                            class="p-1 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded cursor-pointer transition-colors"
                             title="Delete"
                           >
                             <Trash2 class="w-3.5 h-3.5" />
@@ -439,6 +590,938 @@
                   </tbody>
                 </table>
               </div>
+            </div>
+          </div>
+
+          <!-- ══════════════ TAB: ACCOUNT SETTINGS ══════════════ -->
+          <div v-if="activeTab === 'account-settings'" class="space-y-6 animate-fade-in">
+            <!-- Header matching screenshot: General info -->
+            <div class="border-b border-gray-200 pb-5">
+              <h1 class="text-xl font-semibold text-gray-900 tracking-tight">General info</h1>
+              <p class="text-xs text-gray-500 mt-1">Change general Workspace-level settings.</p>
+            </div>
+
+            <!-- Form Card -->
+            <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-xs space-y-6 w-full">
+              <!-- Workspace Name -->
+              <div class="space-y-1.5">
+                <label class="block text-xs font-semibold text-gray-700">Workspace Name</label>
+                <input
+                  v-model="workspaceName"
+                  type="text"
+                  class="w-full px-3.5 py-2.5 bg-white border border-gray-300 rounded-lg text-xs font-medium text-gray-800 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all"
+                />
+              </div>
+
+              <!-- User Inactivity Timeout -->
+              <div class="space-y-1.5">
+                <div class="flex items-center gap-1.5">
+                  <label class="block text-xs font-semibold text-gray-700">User Inactivity Timeout</label>
+                  <Info class="w-3.5 h-3.5 text-gray-400" title="Minutes of inactivity before logging out an idle session" />
+                </div>
+                <input
+                  v-model.number="inactivityTimeout"
+                  type="number"
+                  class="w-full px-3.5 py-2.5 bg-white border border-gray-300 rounded-lg text-xs font-medium text-gray-800 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all"
+                />
+              </div>
+
+              <!-- Time Zone -->
+              <div class="space-y-1.5">
+                <div class="flex items-center gap-1.5">
+                  <label class="block text-xs font-semibold text-gray-700">Time Zone</label>
+                  <Info class="w-3.5 h-3.5 text-gray-400" title="Primary operating timezone for SLAs and business hours" />
+                </div>
+                <div class="relative">
+                  <select
+                    v-model="timeZone"
+                    class="w-full px-3.5 py-2.5 bg-white border border-gray-300 rounded-lg text-xs font-medium text-gray-800 appearance-none focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all cursor-pointer"
+                  >
+                    <option value="(GMT+08:00) Asia/Kuala_Lumpur">(GMT+08:00) Asia/Kuala_Lumpur</option>
+                    <option value="(GMT+08:00) Asia/Singapore">(GMT+08:00) Asia/Singapore</option>
+                    <option value="(GMT+07:00) Asia/Jakarta">(GMT+07:00) Asia/Jakarta</option>
+                    <option value="(GMT+00:00) UTC">(GMT+00:00) UTC</option>
+                    <option value="(GMT-05:00) America/New_York">(GMT-05:00) America/New_York</option>
+                  </select>
+                  <ChevronRight class="w-4 h-4 text-gray-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none rotate-90" />
+                </div>
+              </div>
+
+              <!-- Weekly Recap Email Box -->
+              <div class="border border-gray-250 rounded-xl p-5 space-y-4 bg-gray-50/40">
+                <div class="flex items-start justify-between gap-4">
+                  <div>
+                    <h3 class="text-xs font-bold text-gray-900">Weekly Recap Email</h3>
+                    <p class="text-[11px] text-gray-500 mt-0.5 max-w-lg leading-relaxed">
+                      Choose whether you'd like to receive a weekly email summary of your Conversations and Lifecycle performance every Monday.
+                    </p>
+                  </div>
+                  <!-- Switch Toggle -->
+                  <button
+                    type="button"
+                    @click="weeklyRecapEnabled = !weeklyRecapEnabled"
+                    class="w-11 h-6 rounded-full p-1 transition-colors duration-200 ease-in-out cursor-pointer focus:outline-none shrink-0"
+                    :class="weeklyRecapEnabled ? 'bg-primary' : 'bg-gray-300'"
+                  >
+                    <div
+                      class="w-4 h-4 rounded-full bg-white transition-transform duration-200 ease-in-out shadow-xs"
+                      :class="weeklyRecapEnabled ? 'translate-x-5' : 'translate-x-0'"
+                    ></div>
+                  </button>
+                </div>
+
+                <!-- Recipient(s) -->
+                <div v-if="weeklyRecapEnabled" class="space-y-2 pt-2 border-t border-gray-200">
+                  <label class="block text-[11px] font-semibold text-gray-700">Recipient(s)</label>
+                  <div class="flex flex-wrap items-center gap-2">
+                    <span
+                      v-for="rec in recapRecipients"
+                      :key="rec"
+                      class="inline-flex items-center gap-1.5 px-3 py-1 bg-white border border-gray-300 rounded-lg text-xs text-gray-800 shadow-2xs font-medium"
+                    >
+                      <span>{{ rec }}</span>
+                      <button
+                        type="button"
+                        @click="removeRecipient(rec)"
+                        class="text-gray-400 hover:text-gray-700 cursor-pointer"
+                      >
+                        <X class="w-3 h-3" />
+                      </button>
+                    </span>
+
+                    <!-- Add chip -->
+                    <div v-if="showAddRecipientInput" class="inline-flex items-center gap-1">
+                      <input
+                        v-model="newRecipientName"
+                        @keydown.enter.prevent="addRecipient"
+                        type="text"
+                        placeholder="Name or Email"
+                        class="px-2 py-1 text-xs border border-primary rounded-lg focus:outline-none w-32"
+                        v-focus
+                      />
+                      <button @click="addRecipient" class="p-1 bg-primary text-white rounded hover:bg-primary/90 text-[10px] font-bold">Add</button>
+                      <button @click="showAddRecipientInput = false" class="p-1 text-gray-400 hover:text-gray-600"><X class="w-3.5 h-3.5" /></button>
+                    </div>
+                    <button
+                      v-else
+                      type="button"
+                      @click="showAddRecipientInput = true"
+                      class="w-7 h-7 rounded-lg border border-dashed border-gray-300 hover:border-gray-400 flex items-center justify-center text-gray-500 hover:text-gray-800 text-sm font-bold transition-colors cursor-pointer"
+                    >
+                      <Plus class="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Save Changes Button -->
+              <div class="pt-2 flex justify-end">
+                <button
+                  type="button"
+                  @click="addToast('Settings Saved', 'General workspace configuration updated.', 'success')"
+                  class="px-5 py-2.5 bg-primary hover:bg-primary/90 text-white rounded-xl text-xs font-bold shadow-sm transition-all cursor-pointer"
+                >
+                  Save Changes
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ══════════════ TAB: CANNED RESPONSES (MACROS) ══════════════ -->
+          <div v-if="activeTab === 'canned-responses'" class="space-y-6 animate-fade-in">
+            <div class="border-b border-gray-200 pb-5">
+              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                  <h1 class="text-xl font-semibold text-gray-900 tracking-tight">Canned Responses & Macros</h1>
+                  <p class="text-xs text-gray-500 mt-1">Pre-saved message templates with dynamic shortcut triggers (e.g. /pricing, /welcome).</p>
+                </div>
+                <button
+                  @click="showAddCannedModal = true"
+                  class="flex items-center gap-1.5 px-4 py-2 bg-primary hover:bg-primary/90 text-white font-medium text-xs rounded-xl shadow-xs cursor-pointer transition-colors"
+                >
+                  <Plus class="w-3.5 h-3.5" /> New Canned Response
+                </button>
+              </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="flex items-center justify-between gap-4 bg-white p-3 border border-gray-200 rounded-xl shadow-xs">
+              <div class="flex items-center gap-1 bg-gray-100 p-1 rounded-lg">
+                <button
+                  v-for="cat in ['All', 'Sales', 'General', 'Finance']"
+                  :key="cat"
+                  @click="cannedCategory = cat"
+                  class="px-3 py-1 text-xs font-semibold rounded-md transition-colors cursor-pointer"
+                  :class="cannedCategory === cat ? 'bg-white text-gray-900 shadow-xs' : 'text-gray-500 hover:text-gray-900'"
+                >
+                  {{ cat }}
+                </button>
+              </div>
+              <div class="relative w-64">
+                <Search class="w-3.5 h-3.5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                <input
+                  v-model="cannedSearch"
+                  type="text"
+                  placeholder="Filter snippets or shortcuts..."
+                  class="w-full pl-8 pr-3 py-1.5 text-xs bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary"
+                />
+              </div>
+            </div>
+
+            <!-- Cards List -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div
+                v-for="snippet in filteredCannedResponses"
+                :key="snippet.id"
+                class="bg-white border border-gray-200 rounded-2xl p-5 shadow-xs flex flex-col justify-between hover:border-gray-300 transition-colors"
+              >
+                <div class="space-y-2">
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                      <span class="font-mono text-xs font-bold text-primary bg-primary/10 px-2 py-0.5 rounded">
+                        {{ snippet.shortcut }}
+                      </span>
+                      <span class="text-[10px] text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full font-medium">
+                        {{ snippet.category }}
+                      </span>
+                    </div>
+                    <span class="text-[10px] text-gray-400 font-medium">{{ snippet.uses }} times used</span>
+                  </div>
+                  <h3 class="text-xs font-bold text-gray-900">{{ snippet.title }}</h3>
+                  <p class="text-xs text-gray-600 leading-relaxed font-sans bg-gray-50/70 p-3 rounded-xl border border-gray-150">
+                    {{ snippet.content }}
+                  </p>
+                </div>
+
+                <div class="flex items-center justify-end gap-2 pt-3 border-t border-gray-100 mt-4">
+                  <button
+                    @click="addToast('Snippet Copied', `Shortcut ${snippet.shortcut} ready to paste.`, 'success')"
+                    class="p-1 text-gray-400 hover:text-primary rounded cursor-pointer"
+                    title="Copy Content"
+                  >
+                    <Copy class="w-3.5 h-3.5" />
+                  </button>
+                  <button
+                    @click="cannedResponses = cannedResponses.filter(c => c.id !== snippet.id); addToast('Snippet Deleted', 'Macro removed.', 'warning')"
+                    class="p-1 text-gray-400 hover:text-red-500 rounded cursor-pointer"
+                    title="Delete"
+                  >
+                    <Trash2 class="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ══════════════ TAB: CUSTOM ATTRIBUTES ══════════════ -->
+          <div v-if="activeTab === 'custom-attributes'" class="space-y-6 animate-fade-in">
+            <div class="border-b border-gray-200 pb-5">
+              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                  <h1 class="text-xl font-semibold text-gray-900 tracking-tight">Custom Attributes</h1>
+                  <p class="text-xs text-gray-500 mt-1">Extend standard CRM records with custom data fields for Contacts, Companies, and Deals.</p>
+                </div>
+                <button
+                  @click="addToast('Attribute Builder', 'Custom field definition ready.', 'success')"
+                  class="flex items-center gap-1.5 px-4 py-2 bg-primary hover:bg-primary/90 text-white font-medium text-xs rounded-xl shadow-xs cursor-pointer transition-colors"
+                >
+                  <Plus class="w-3.5 h-3.5" /> Add Attribute
+                </button>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-1 bg-white p-2 border border-gray-200 rounded-xl shadow-xs w-fit">
+              <button
+                v-for="ent in ['All', 'Contact', 'Company', 'Deal']"
+                :key="ent"
+                @click="attributeEntityFilter = ent"
+                class="px-3 py-1 text-xs font-semibold rounded-lg transition-colors cursor-pointer"
+                :class="attributeEntityFilter === ent ? 'bg-primary text-white' : 'text-gray-500 hover:text-gray-900'"
+              >
+                {{ ent }}s
+              </button>
+            </div>
+
+            <!-- Table -->
+            <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
+              <table class="w-full text-left border-collapse text-xs">
+                <thead>
+                  <tr class="border-b border-gray-150 bg-gray-50 text-[10px] font-bold text-gray-500 uppercase tracking-wider">
+                    <th class="p-4">Attribute Name</th>
+                    <th class="p-4">Field Key</th>
+                    <th class="p-4">Target Entity</th>
+                    <th class="p-4">Data Type</th>
+                    <th class="p-4 text-center">Required</th>
+                    <th class="p-4 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100 font-medium">
+                  <tr v-for="attr in filteredCustomAttributes" :key="attr.id" class="hover:bg-gray-50/50">
+                    <td class="p-4 font-bold text-gray-900">{{ attr.name }}</td>
+                    <td class="p-4 font-mono text-[11px] text-gray-500">{{ attr.key }}</td>
+                    <td class="p-4">
+                      <span class="text-[10px] px-2 py-0.5 rounded-full font-bold bg-slate-100 text-slate-700">
+                        {{ attr.entity }}
+                      </span>
+                    </td>
+                    <td class="p-4">
+                      <span class="text-[10px] px-2 py-0.5 rounded-full font-semibold border border-gray-200 text-gray-600">
+                        {{ attr.type }}
+                      </span>
+                    </td>
+                    <td class="p-4 text-center">
+                      <span v-if="attr.required" class="text-[10px] text-red-600 bg-red-50 px-2 py-0.5 rounded font-bold">Yes</span>
+                      <span v-else class="text-[10px] text-gray-400">Optional</span>
+                    </td>
+                    <td class="p-4 text-right">
+                      <button class="p-1 text-gray-400 hover:text-primary rounded cursor-pointer mr-1"><Pencil class="w-3.5 h-3.5" /></button>
+                      <button @click="customAttributesList = customAttributesList.filter(a => a.id !== attr.id); addToast('Attribute Removed', `${attr.name} deleted.`, 'warning')" class="p-1 text-gray-400 hover:text-red-500 rounded cursor-pointer"><Trash2 class="w-3.5 h-3.5" /></button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- ══════════════ TAB: SLA POLICIES ══════════════ -->
+          <div v-if="activeTab === 'sla'" class="space-y-6 animate-fade-in">
+            <div class="border-b border-gray-200 pb-5">
+              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                  <h1 class="text-xl font-semibold text-gray-900 tracking-tight">Service Level Agreements (SLA)</h1>
+                  <p class="text-xs text-gray-500 mt-1">Define response benchmarks, resolution targets, and automatic escalation pathways.</p>
+                </div>
+                <button
+                  @click="addToast('SLA Saved', 'Service Level Agreement targets updated.', 'success')"
+                  class="px-4 py-2 bg-primary hover:bg-primary/90 text-white font-medium text-xs rounded-xl shadow-xs cursor-pointer transition-colors"
+                >
+                  Save SLA Settings
+                </button>
+              </div>
+            </div>
+
+            <!-- Priority Tiers -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div
+                v-for="policy in slaPolicies"
+                :key="policy.id"
+                class="bg-white border border-gray-200 rounded-2xl p-5 shadow-xs space-y-4"
+              >
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-black uppercase px-2.5 py-0.5 rounded border" :class="policy.badgeColor">
+                    {{ policy.priority }} Priority
+                  </span>
+                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                </div>
+
+                <div class="space-y-3 pt-2">
+                  <div>
+                    <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">First Response Target</label>
+                    <input v-model="policy.firstResponse" type="text" class="w-full text-xs font-bold text-gray-900 border border-gray-250 bg-gray-50/50 px-3 py-1.5 rounded-lg" />
+                  </div>
+                  <div>
+                    <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Resolution Target</label>
+                    <input v-model="policy.resolveTime" type="text" class="w-full text-xs font-bold text-gray-900 border border-gray-250 bg-gray-50/50 px-3 py-1.5 rounded-lg" />
+                  </div>
+                  <div>
+                    <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Breach Escalation</label>
+                    <input v-model="policy.escalation" type="text" class="w-full text-xs text-gray-700 border border-gray-250 bg-gray-50/50 px-3 py-1.5 rounded-lg" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Business Hours Schedule -->
+            <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-xs space-y-4">
+              <h3 class="text-xs font-bold text-gray-900 uppercase tracking-wider flex items-center gap-2">
+                <Clock class="w-4 h-4 text-primary" />
+                Operational Business Hours
+              </h3>
+              <p class="text-xs text-gray-500">SLA timers pause automatically outside of defined operational business hours.</p>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                <div>
+                  <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1.5">Operating Days</label>
+                  <div class="flex flex-wrap gap-2">
+                    <span v-for="d in ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']" :key="d" class="px-2.5 py-1 text-xs rounded-lg font-bold cursor-pointer transition-colors" :class="d !== 'Sat' && d !== 'Sun' ? 'bg-primary text-white' : 'bg-gray-100 text-gray-400'">
+                      {{ d }}
+                    </span>
+                  </div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="flex-1">
+                    <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1.5">Start Time</label>
+                    <input v-model="businessHoursStart" type="time" class="w-full text-xs border border-gray-300 rounded-lg p-2 font-sans font-medium" />
+                  </div>
+                  <div class="flex-1">
+                    <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1.5">End Time</label>
+                    <input v-model="businessHoursEnd" type="time" class="w-full text-xs border border-gray-300 rounded-lg p-2 font-sans font-medium" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ══════════════ TAB: REVENUE TARGETS ══════════════ -->
+          <div v-if="activeTab === 'revenue-targets'" class="space-y-6 animate-fade-in">
+            <div class="border-b border-gray-200 pb-5">
+              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                  <h1 class="text-xl font-semibold text-gray-900 tracking-tight">Revenue Targets & Pipeline Quotas</h1>
+                  <p class="text-xs text-gray-500 mt-1">Assign sales quotas, track closed-won attainment percentages, and monitor team benchmarks.</p>
+                </div>
+                <button
+                  @click="addToast('Quotas Updated', 'Monthly targets saved across all agents.', 'success')"
+                  class="px-4 py-2 bg-primary hover:bg-primary/90 text-white font-medium text-xs rounded-xl shadow-xs cursor-pointer transition-colors"
+                >
+                  Save Quotas
+                </button>
+              </div>
+            </div>
+
+            <!-- KPI Row -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-xs">
+                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Monthly Team Goal</span>
+                <div class="text-2xl font-bold text-gray-900 mt-1 font-sans tabular-nums">RM {{ monthlyRevenueTarget.toLocaleString() }}</div>
+                <div class="text-[10px] text-gray-400 mt-1">Target for September 2026</div>
+              </div>
+              <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-xs">
+                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Closed Revenue So Far</span>
+                <div class="text-2xl font-bold text-emerald-600 mt-1 font-sans tabular-nums">RM {{ currentAchievedRevenue.toLocaleString() }}</div>
+                <div class="text-[10px] text-emerald-600 font-bold mt-1">✔ 26 deals closed this month</div>
+              </div>
+              <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-xs">
+                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Overall Attainment</span>
+                <div class="text-2xl font-bold text-primary mt-1 font-sans tabular-nums">73.8%</div>
+                <div class="w-full bg-gray-100 h-2 rounded-full mt-2 overflow-hidden">
+                  <div class="bg-primary h-full rounded-full" style="width: 73.8%"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Agent Quota Breakdown Table -->
+            <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
+              <div class="p-4 border-b border-gray-200 bg-gray-50/50">
+                <h3 class="text-xs font-bold text-gray-900 uppercase tracking-wider">Agent Quota Breakdown</h3>
+              </div>
+              <table class="w-full text-left border-collapse text-xs">
+                <thead>
+                  <tr class="border-b border-gray-150 bg-gray-50 text-[10px] font-bold text-gray-500 uppercase tracking-wider">
+                    <th class="p-4">Sales Agent</th>
+                    <th class="p-4">Monthly Quota</th>
+                    <th class="p-4">Closed Revenue</th>
+                    <th class="p-4 text-center">Deals Won</th>
+                    <th class="p-4">Quota Attainment</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100 font-medium">
+                  <tr v-for="agent in agentQuotas" :key="agent.id" class="hover:bg-gray-50/50">
+                    <td class="p-4">
+                      <div class="flex items-center gap-2.5">
+                        <img :src="agent.avatar" class="w-7 h-7 rounded-full object-cover border border-gray-200 shadow-2xs" />
+                        <span class="font-bold text-gray-900">{{ agent.agent }}</span>
+                      </div>
+                    </td>
+                    <td class="p-4 font-sans font-semibold text-gray-700 tabular-nums">RM {{ agent.quota.toLocaleString() }}</td>
+                    <td class="p-4 font-sans font-bold text-emerald-600 tabular-nums">RM {{ agent.closed.toLocaleString() }}</td>
+                    <td class="p-4 text-center font-semibold text-gray-900 tabular-nums">{{ agent.deals }}</td>
+                    <td class="p-4">
+                      <div class="flex items-center gap-3">
+                        <div class="w-28 bg-gray-100 h-2 rounded-full overflow-hidden">
+                          <div class="bg-primary h-full rounded-full" :style="{ width: `${Math.min(100, Math.round((agent.closed / agent.quota) * 100))}%` }"></div>
+                        </div>
+                        <span class="font-sans text-xs font-semibold text-gray-800 tabular-nums">
+                          {{ Math.round((agent.closed / agent.quota) * 100) }}%
+                        </span>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- ══════════════ TAB: AI BEHAVIOUR ══════════════ -->
+          <div v-if="activeTab === 'ai-behaviour'" class="space-y-6 animate-fade-in">
+            <div class="border-b border-gray-200 pb-5">
+              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                  <h1 class="text-xl font-semibold text-gray-900 tracking-tight">AI Behaviour & Guardrails</h1>
+                  <p class="text-xs text-gray-500 mt-1">Control how your AI copilot persona responds, qualifies leads, and complies with safety policies.</p>
+                </div>
+                <button
+                  @click="addToast('AI Guardrails Updated', 'System prompt and policies saved.', 'success')"
+                  class="px-4 py-2 bg-primary hover:bg-primary/90 text-white font-medium text-xs rounded-xl shadow-xs cursor-pointer transition-colors"
+                >
+                  Save Behaviour
+                </button>
+              </div>
+            </div>
+
+            <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-xs space-y-6 w-full">
+              <!-- Persona Name -->
+              <div class="space-y-1.5">
+                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider">AI Persona Name</label>
+                <input v-model="aiPersonaName" type="text" class="w-full text-xs font-bold px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary" />
+              </div>
+
+              <!-- System Instructions -->
+              <div class="space-y-1.5">
+                <div class="flex items-center justify-between">
+                  <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider">System Instructions & Prompt</label>
+                  <span class="text-[10px] text-gray-400 font-mono">{{ aiSystemInstructions.length }} characters</span>
+                </div>
+                <textarea
+                  v-model="aiSystemInstructions"
+                  rows="4"
+                  class="w-full p-3 text-xs text-gray-800 border border-gray-300 rounded-xl leading-relaxed focus:outline-none focus:ring-1 focus:ring-primary font-sans"
+                ></textarea>
+              </div>
+
+              <!-- Tone of Voice -->
+              <div class="space-y-1.5">
+                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider">Tone of Voice</label>
+                <div class="grid grid-cols-3 gap-3">
+                  <button
+                    v-for="t in ['Professional & Consultative', 'Friendly & Warm', 'Direct & Concise']"
+                    :key="t"
+                    @click="aiTone = t"
+                    class="p-3 rounded-xl border text-xs font-bold text-center cursor-pointer transition-all"
+                    :class="aiTone === t ? 'border-primary bg-primary/10 text-primary shadow-xs' : 'border-gray-200 text-gray-600 hover:bg-gray-50'"
+                  >
+                    {{ t }}
+                  </button>
+                </div>
+              </div>
+
+              <!-- Guardrails -->
+              <div class="space-y-4 pt-4 border-t border-gray-200">
+                <h3 class="text-xs font-bold text-gray-900 uppercase tracking-wider">Operational Guardrails</h3>
+                
+                <div class="flex items-center justify-between p-3.5 bg-gray-50 rounded-xl border border-gray-200">
+                  <div>
+                    <div class="text-xs font-bold text-gray-900">Maximum Allowed Discount Limit</div>
+                    <div class="text-[10px] text-gray-500">AI will refuse to offer concessions beyond this percentage threshold.</div>
+                  </div>
+                  <div class="flex items-center gap-1">
+                    <input v-model.number="maxDiscountAllowed" type="number" class="w-16 text-xs text-right font-bold border border-gray-300 rounded-lg p-1.5 bg-white" />
+                    <span class="text-xs font-bold text-gray-500">%</span>
+                  </div>
+                </div>
+
+                <div class="flex items-center justify-between p-3.5 bg-gray-50 rounded-xl border border-gray-200">
+                  <div>
+                    <div class="text-xs font-bold text-gray-900">Escalate Angry or Hostile Sentiment</div>
+                    <div class="text-[10px] text-gray-500">Instantly release conversation from AI bot to on-duty human supervisor.</div>
+                  </div>
+                  <button
+                    type="button"
+                    @click="escalateAngrySentiment = !escalateAngrySentiment"
+                    class="w-10 h-6 rounded-full p-1 transition-colors cursor-pointer"
+                    :class="escalateAngrySentiment ? 'bg-primary' : 'bg-gray-300'"
+                  >
+                    <div class="w-4 h-4 rounded-full bg-white transition-transform" :class="escalateAngrySentiment ? 'translate-x-4' : 'translate-x-0'"></div>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ══════════════ TAB: AI INBOXES ══════════════ -->
+          <div v-if="activeTab === 'ai-inboxes'" class="space-y-6 animate-fade-in">
+            <div class="border-b border-gray-200 pb-5">
+              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                  <h1 class="text-xl font-semibold text-gray-900 tracking-tight">AI Inboxes Enablement</h1>
+                  <p class="text-xs text-gray-500 mt-1">Toggle automated AI responses or suggestion draft modes per connected channel.</p>
+                </div>
+                <button
+                  @click="addToast('Inboxes Updated', 'Channel AI copilot settings saved.', 'success')"
+                  class="px-4 py-2 bg-primary hover:bg-primary/90 text-white font-medium text-xs rounded-xl shadow-xs cursor-pointer transition-colors"
+                >
+                  Save Settings
+                </button>
+              </div>
+            </div>
+
+            <div class="space-y-4 w-full">
+              <div
+                v-for="inb in aiInboxConfigs"
+                :key="inb.id"
+                class="bg-white border border-gray-200 rounded-2xl p-5 shadow-xs flex items-center justify-between gap-4"
+              >
+                <div class="flex items-center gap-3.5">
+                  <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" :class="inb.color">
+                    <component :is="inb.icon" class="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 class="text-xs font-bold text-gray-900">{{ inb.name }}</h3>
+                    <div class="text-[11px] text-gray-400 mt-0.5">Mode: <span class="font-semibold text-gray-700">{{ inb.mode }}</span> • Min confidence: {{ inb.threshold }}%</div>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-4">
+                  <select v-model="inb.mode" class="text-xs border border-gray-200 rounded-lg px-2.5 py-1.5 bg-gray-50 font-medium">
+                    <option value="Auto-Pilot (Direct Replies)">Auto-Pilot (Direct)</option>
+                    <option value="Copilot (Draft Suggestions Only)">Copilot (Drafts)</option>
+                    <option value="Disabled">Disabled</option>
+                  </select>
+                  <button
+                    type="button"
+                    @click="inb.enabled = !inb.enabled"
+                    class="w-10 h-6 rounded-full p-1 transition-colors cursor-pointer"
+                    :class="inb.enabled ? 'bg-primary' : 'bg-gray-300'"
+                  >
+                    <div class="w-4 h-4 rounded-full bg-white transition-transform" :class="inb.enabled ? 'translate-x-4' : 'translate-x-0'"></div>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ══════════════ TAB: AI PLAYGROUND ══════════════ -->
+          <div v-if="activeTab === 'ai-playground'" class="space-y-6 animate-fade-in">
+            <div class="border-b border-gray-200 pb-5">
+              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                  <h1 class="text-xl font-semibold text-gray-900 tracking-tight">AI Testing Playground</h1>
+                  <p class="text-xs text-gray-500 mt-1">Test knowledge retrieval, inspect citations, and verify model answers in a sandbox.</p>
+                </div>
+                <button
+                  @click="playgroundMessages = []"
+                  class="px-3.5 py-2 border border-gray-200 hover:bg-gray-50 text-gray-700 font-medium text-xs rounded-xl cursor-pointer transition-colors"
+                >
+                  Clear Chat
+                </button>
+              </div>
+            </div>
+
+            <!-- Chat Preview Canvas -->
+            <div class="bg-white border border-gray-200 rounded-2xl shadow-xs overflow-hidden flex flex-col h-[520px] w-full">
+              <!-- Messages -->
+              <div class="flex-1 p-5 overflow-y-auto space-y-4 bg-gray-50/40">
+                <div v-if="playgroundMessages.length === 0" class="text-center text-gray-400 text-xs py-20">
+                  Send a test query below to simulate knowledgebase answer generation.
+                </div>
+                <div
+                  v-for="msg in playgroundMessages"
+                  :key="msg.id"
+                  class="flex flex-col"
+                  :class="msg.role === 'user' ? 'items-end' : 'items-start'"
+                >
+                  <div
+                    class="max-w-md p-3.5 rounded-2xl text-xs leading-relaxed"
+                    :class="msg.role === 'user' ? 'bg-primary text-white rounded-br-xs' : 'bg-white border border-gray-200 text-gray-900 shadow-2xs rounded-bl-xs'"
+                  >
+                    <p>{{ msg.text }}</p>
+                    <div v-if="msg.citations" class="mt-2.5 pt-2 border-t border-gray-100 flex flex-wrap gap-1">
+                      <span class="text-[9px] text-gray-400 font-bold uppercase block w-full">Citations:</span>
+                      <span v-for="c in msg.citations" :key="c" class="text-[9px] bg-emerald-50 text-emerald-700 px-1.5 py-0.5 rounded font-mono font-medium">
+                        {{ c }}
+                      </span>
+                    </div>
+                  </div>
+                  <span v-if="msg.latency" class="text-[9px] text-gray-400 font-mono mt-1">Latency: {{ msg.latency }} • Confidence: {{ msg.confidence }}%</span>
+                </div>
+
+                <div v-if="isPlaygroundThinking" class="flex items-center gap-2 text-xs text-gray-400 p-2">
+                  <Loader2 class="w-4 h-4 animate-spin text-primary" /> Generating consultative reply...
+                </div>
+              </div>
+
+              <!-- Input bar -->
+              <div class="p-3 border-t border-gray-200 bg-white flex items-center gap-2">
+                <input
+                  v-model="playgroundQuery"
+                  @keydown.enter="sendPlaygroundMessage"
+                  type="text"
+                  placeholder="Ask anything (e.g. 'What is our refund window for enterprise clients?')..."
+                  class="flex-1 px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-primary"
+                />
+                <button
+                  @click="sendPlaygroundMessage"
+                  :disabled="!playgroundQuery.trim() || isPlaygroundThinking"
+                  class="p-2.5 bg-primary hover:bg-primary/90 disabled:opacity-50 text-white rounded-xl cursor-pointer"
+                >
+                  <Send class="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ══════════════ TAB: INTEGRATIONS ══════════════ -->
+          <div v-if="activeTab === 'integrations'" class="space-y-6 animate-fade-in">
+            <div class="border-b border-gray-200 pb-5">
+              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                  <h1 class="text-xl font-semibold text-gray-900 tracking-tight">Integrations & Connected Apps</h1>
+                  <p class="text-xs text-gray-500 mt-1">Connect external platforms to synchronize contacts, orders, payments, and calendar bookings.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div
+                v-for="app in integrationsCatalog"
+                :key="app.id"
+                class="bg-white border border-gray-200 rounded-2xl p-5 shadow-xs flex flex-col justify-between hover:shadow-sm transition-shadow"
+              >
+                <div class="space-y-3">
+                  <div class="flex items-center justify-between">
+                    <div class="w-10 h-10 rounded-xl flex items-center justify-center font-black text-xs" :class="app.iconBg">
+                      {{ app.name.slice(0, 2).toUpperCase() }}
+                    </div>
+                    <span
+                      class="text-[10px] font-bold px-2 py-0.5 rounded-full"
+                      :class="app.connected ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-gray-100 text-gray-500'"
+                    >
+                      {{ app.connected ? 'Connected' : 'Available' }}
+                    </span>
+                  </div>
+                  <div>
+                    <h3 class="text-xs font-bold text-gray-900">{{ app.name }}</h3>
+                    <p class="text-[11px] text-gray-500 mt-1 leading-relaxed">{{ app.desc }}</p>
+                  </div>
+                </div>
+
+                <div class="pt-4 border-t border-gray-100 mt-4 flex items-center justify-between">
+                  <span class="text-[9px] font-semibold text-gray-400 uppercase">{{ app.category }}</span>
+                  <button
+                    @click="app.connected = !app.connected; addToast(app.connected ? 'App Connected' : 'App Disconnected', `${app.name} integration updated.`, 'success')"
+                    class="text-xs font-bold px-3 py-1 rounded-lg border transition-colors cursor-pointer"
+                    :class="app.connected ? 'border-gray-200 text-gray-600 hover:bg-gray-50' : 'bg-primary text-white border-primary'"
+                  >
+                    {{ app.connected ? 'Configure' : 'Connect' }}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ══════════════ TAB: WEBHOOKS ══════════════ -->
+          <div v-if="activeTab === 'webhooks'" class="space-y-6 animate-fade-in">
+            <div class="border-b border-gray-200 pb-5">
+              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                  <h1 class="text-xl font-semibold text-gray-900 tracking-tight">Webhooks</h1>
+                  <p class="text-xs text-gray-500 mt-1">Send real-time HTTP event payloads to external servers when conversations or deals change.</p>
+                </div>
+                <button
+                  @click="addToast('Webhook Endpoint', 'New webhook endpoint registered.', 'success')"
+                  class="flex items-center gap-1.5 px-4 py-2 bg-primary hover:bg-primary/90 text-white font-medium text-xs rounded-xl shadow-xs cursor-pointer transition-colors"
+                >
+                  <Plus class="w-3.5 h-3.5" /> Add Webhook
+                </button>
+              </div>
+            </div>
+
+            <div class="space-y-4 w-full">
+              <div
+                v-for="wh in webhooksList"
+                :key="wh.id"
+                class="bg-white border border-gray-200 rounded-2xl p-5 shadow-xs space-y-3"
+              >
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <h3 class="text-xs font-bold text-gray-900">{{ wh.name }}</h3>
+                    <span class="text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded font-bold">{{ wh.successRate }} Delivery</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <button
+                      @click="addToast('Test Ping Dispatched', `Payload sent to ${wh.name}. 200 OK received.`, 'success')"
+                      class="px-2.5 py-1 text-xs border border-gray-200 hover:bg-gray-50 rounded-lg text-gray-600 font-bold cursor-pointer"
+                    >
+                      Test Ping
+                    </button>
+                    <button
+                      @click="webhooksList = webhooksList.filter(w => w.id !== wh.id); addToast('Webhook Deleted', 'Endpoint removed.', 'warning')"
+                      class="p-1 text-gray-400 hover:text-red-500 cursor-pointer"
+                    >
+                      <Trash2 class="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+
+                <div class="font-mono text-xs text-gray-700 bg-gray-50 p-2.5 rounded-xl border border-gray-150 truncate">
+                  {{ wh.url }}
+                </div>
+
+                <div class="flex items-center gap-2 pt-1">
+                  <span class="text-[10px] font-bold text-gray-400 uppercase">Subscribed Events:</span>
+                  <span v-for="ev in wh.events" :key="ev" class="text-[10px] bg-slate-100 text-slate-700 px-2 py-0.5 rounded-md font-mono">
+                    {{ ev }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ══════════════ TAB: MARKETPLACE ══════════════ -->
+          <div v-if="activeTab === 'marketplace'" class="space-y-6 animate-fade-in">
+            <div class="border-b border-gray-200 pb-5">
+              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                  <h1 class="text-xl font-semibold text-gray-900 tracking-tight">Marketplace</h1>
+                  <p class="text-xs text-gray-500 mt-1">Discover vetted add-on apps, power tools, and community plugins.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div
+                v-for="mp in marketplaceApps"
+                :key="mp.id"
+                class="bg-white border border-gray-200 rounded-2xl p-5 shadow-xs flex items-start justify-between gap-4"
+              >
+                <div class="space-y-2 flex-1">
+                  <div class="flex items-center gap-2">
+                    <h3 class="text-xs font-bold text-gray-900">{{ mp.name }}</h3>
+                    <span class="text-[10px] text-amber-600 bg-amber-50 px-1.5 py-0.2 rounded font-bold">★ {{ mp.rating }}</span>
+                  </div>
+                  <p class="text-[11px] text-gray-500 leading-relaxed">{{ mp.desc }}</p>
+                  <div class="text-[10px] text-gray-400">By {{ mp.author }}</div>
+                </div>
+                <button
+                  @click="mp.installed = !mp.installed; addToast(mp.installed ? 'App Installed' : 'App Removed', `${mp.name} updated.`, 'success')"
+                  class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer shrink-0"
+                  :class="mp.installed ? 'border border-gray-200 text-gray-600 bg-gray-50' : 'bg-primary text-white shadow-xs'"
+                >
+                  {{ mp.installed ? 'Installed' : 'Install' }}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ══════════════ TAB: AUDIT LOGS ══════════════ -->
+          <div v-if="activeTab === 'audit-logs'" class="space-y-6 animate-fade-in">
+            <div class="border-b border-gray-200 pb-5">
+              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                  <h1 class="text-xl font-semibold text-gray-900 tracking-tight">Security & Audit Logs</h1>
+                  <p class="text-xs text-gray-500 mt-1">Immutable record of administrative actions, data exports, permissions, and security logins.</p>
+                </div>
+                <button
+                  @click="addToast('Audit Export', 'CSV security log generated.', 'success')"
+                  class="px-3.5 py-2 border border-gray-200 hover:bg-gray-50 text-gray-700 font-medium text-xs rounded-xl cursor-pointer transition-colors"
+                >
+                  Export CSV
+                </button>
+              </div>
+            </div>
+
+            <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
+              <table class="w-full text-left border-collapse text-xs">
+                <thead>
+                  <tr class="border-b border-gray-150 bg-gray-50 text-[10px] font-bold text-gray-500 uppercase tracking-wider">
+                    <th class="p-4">User</th>
+                    <th class="p-4">Action</th>
+                    <th class="p-4">Details</th>
+                    <th class="p-4">Timestamp</th>
+                    <th class="p-4">IP Address</th>
+                    <th class="p-4 text-center">Status</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100 font-medium">
+                  <tr v-for="log in auditLogs" :key="log.id" class="hover:bg-gray-50/50">
+                    <td class="p-4 font-bold text-gray-900">{{ log.user }}</td>
+                    <td class="p-4 font-semibold text-gray-700">{{ log.action }}</td>
+                    <td class="p-4 text-gray-500">{{ log.details }}</td>
+                    <td class="p-4 font-sans tabular-nums text-[11px] text-gray-400">{{ log.time }}</td>
+                    <td class="p-4 font-sans tabular-nums text-[11px] text-gray-400">{{ log.ip }}</td>
+                    <td class="p-4 text-center">
+                      <span class="text-[10px] bg-emerald-50 text-emerald-700 font-bold px-2 py-0.5 rounded-full">
+                        {{ log.status }}
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- ══════════════ TAB: BILLING ══════════════ -->
+          <div v-if="activeTab === 'billing'" class="space-y-6 animate-fade-in">
+            <div class="border-b border-gray-200 pb-5">
+              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                  <h1 class="text-xl font-semibold text-gray-900 tracking-tight">Billing & Subscriptions</h1>
+                  <p class="text-xs text-gray-500 mt-1">Manage your active subscription plan, seats count, payment cards, and download invoices.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+              <!-- Plan Card -->
+              <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-2xl p-6 shadow-md md:col-span-2 space-y-4">
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] font-bold uppercase tracking-widest text-emerald-400 bg-emerald-950/60 border border-emerald-800/60 px-2.5 py-0.5 rounded-full">Active Plan</span>
+                  <span class="text-xs text-slate-300">Renews {{ billingPlan.renewalDate }}</span>
+                </div>
+                <div>
+                  <h3 class="text-xl font-bold">{{ billingPlan.name }}</h3>
+                  <div class="text-2xl font-bold mt-1 text-white font-sans tabular-nums">{{ billingPlan.price }} <span class="text-xs text-slate-400 font-sans font-normal">/ month</span></div>
+                </div>
+                <div class="pt-2 border-t border-slate-700/60 flex items-center justify-between">
+                  <div class="text-xs text-slate-300">
+                    <span class="font-bold text-white">{{ billingPlan.activeSeats }}</span> of {{ billingPlan.totalSeats }} seats in use
+                  </div>
+                  <button @click="addToast('Seat Upgrade', 'Additional agent seats unlocked.', 'success')" class="px-3.5 py-1.5 bg-primary hover:bg-primary/90 text-white font-medium text-xs rounded-xl cursor-pointer">
+                    Upgrade Seats
+                  </button>
+                </div>
+              </div>
+
+              <!-- Payment Method -->
+              <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-xs space-y-3 flex flex-col justify-between">
+                <div class="space-y-2">
+                  <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Payment Method</span>
+                  <div class="flex items-center gap-2.5 pt-1">
+                    <CreditCard class="w-5 h-5 text-primary" />
+                    <span class="text-xs font-bold text-gray-900">{{ billingPlan.card }}</span>
+                  </div>
+                  <div class="text-[10px] text-gray-400">Expires {{ billingPlan.cardExp }}</div>
+                </div>
+                <button class="w-full py-2 border border-gray-200 hover:bg-gray-50 text-xs font-medium text-gray-700 rounded-xl cursor-pointer">
+                  Update Card
+                </button>
+              </div>
+            </div>
+
+            <!-- Invoices Table -->
+            <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
+              <div class="p-4 border-b border-gray-200 bg-gray-50/50">
+                <h3 class="text-xs font-bold text-gray-900 uppercase tracking-wider">Invoice History</h3>
+              </div>
+              <table class="w-full text-left border-collapse text-xs">
+                <thead>
+                  <tr class="border-b border-gray-150 bg-gray-50 text-[10px] font-bold text-gray-500 uppercase tracking-wider">
+                    <th class="p-4">Invoice ID</th>
+                    <th class="p-4">Billing Date</th>
+                    <th class="p-4">Amount</th>
+                    <th class="p-4 text-center">Status</th>
+                    <th class="p-4 text-right">Receipt</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100 font-medium">
+                  <tr v-for="inv in billingInvoices" :key="inv.id" class="hover:bg-gray-50/50">
+                    <td class="p-4 font-sans font-semibold text-gray-900 tabular-nums">{{ inv.id }}</td>
+                    <td class="p-4 text-gray-600">{{ inv.date }}</td>
+                    <td class="p-4 font-sans font-semibold text-gray-900 tabular-nums">{{ inv.amount }}</td>
+                    <td class="p-4 text-center">
+                      <span class="text-[10px] bg-emerald-50 text-emerald-700 font-bold px-2 py-0.5 rounded-full">
+                        {{ inv.status }}
+                      </span>
+                    </td>
+                    <td class="p-4 text-right">
+                      <button @click="addToast('Downloading Invoice', `${inv.id} PDF saved.`, 'success')" class="text-xs font-bold text-primary hover:underline cursor-pointer">
+                        Download PDF
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
 
@@ -644,7 +1727,7 @@
                   </div>
 
                   <div v-if="whatsappStep !== 4" class="text-xs text-gray-405 mt-3 font-semibold">
-                    <span class="font-mono text-gray-700">{{ qrTimerFormatted }}</span> remaining
+                    <span class="font-sans font-semibold text-gray-700 tabular-nums">{{ qrTimerFormatted }}</span> remaining
                   </div>
 
                   <!-- Status Dot Indicator -->
@@ -732,7 +1815,7 @@
           <!-- STEP 4: VOILÀ! SUCCESS -->
           <div v-if="addChannelStep === 4" class="flex flex-col items-center justify-center text-center py-6 space-y-4">
             <div class="w-14 h-14 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 shadow-lg shadow-emerald-100/30">
-              <CheckCircle2 class="w-8 h-8 animate-bounce" />
+              <CheckCircle2 class="w-8 h-8 animate-pulse" />
             </div>
             <div class="space-y-1 max-w-sm">
               <h3 class="font-bold text-lg text-gray-900">Voilà! You are all set!</h3>
@@ -1020,8 +2103,8 @@
         <div
           v-for="toast in toasts"
           :key="toast.id"
-          class="pointer-events-auto w-full border border-gray-100 rounded-xl p-4 bg-white shadow-2xl flex items-start gap-3"
-          :class="toast.type === 'success' ? 'border-l-4 border-l-primary' : 'border-l-4 border-l-yellow-500'"
+          class="pointer-events-auto w-full border rounded-xl p-4 bg-white shadow-2xl flex items-start gap-3"
+          :class="toast.type === 'success' ? 'border-primary/25 shadow-primary/5' : 'border-amber-300 shadow-amber-500/5'"
         >
           <div class="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5" :class="toast.type === 'success' ? 'bg-primary/20 text-primary' : 'bg-yellow-100 text-yellow-600'">
             <CheckCircle2 class="w-3.5 h-3.5" />
@@ -1039,7 +2122,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, type Component } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import AgentsTab from '../components/settings/AgentsTab.vue';
 import TeamsTab from '../components/settings/TeamsTab.vue';
 import RolesTab from '../components/settings/RolesTab.vue';
@@ -1048,10 +2131,15 @@ import {
   Settings, Sparkles, FileText, Upload, CheckCircle2, Play, Pause,
   Mail, MessageSquare, Tag, Zap, Shield, Users, Smartphone,
   Loader2, Plus, Pencil, Trash2, X, Search, GripVertical, Copy,
-  Globe, Terminal, Check, ArrowLeft, Send, Instagram
+  Globe, Terminal, Check, ArrowLeft, Send, Instagram,
+  Bot, Clock, Target, MessageSquareQuote, Sliders, Webhook,
+  ShoppingBag, Building, CreditCard, History, BookOpen, Layers,
+  ExternalLink, Inbox, User, HelpCircle, ArrowUpRight, ChevronRight,
+  AlertCircle, Info, RefreshCw, Cpu
 } from 'lucide-vue-next';
 
 const route = useRoute();
+const router = useRouter();
 const fileInput = ref<HTMLInputElement | null>(null);
 function triggerFileInput() { loadDemoFiles(); }
 
@@ -1212,15 +2300,301 @@ function simulateAIReply() {
 }
 function applyAIReply() { addToast('Reply Applied', 'AI draft applied to composer.', 'success'); }
 
-// ═══════════════════ TAB 2: INBOXES & GUIDED WIZARD ═══════════════════
-const activeTab = ref('inboxes');
+// ═══════════════════ SETTINGS ARCHITECTURE & ROUTING ═══════════════════
+const activeTab = ref('search');
+const settingsSearchQuery = ref('');
+
+function switchTab(tabId: string) {
+  activeTab.value = tabId;
+  router.push({ path: '/settings', query: tabId === 'search' ? {} : { tab: tabId } });
+}
+
 watch(() => route.query.tab, (newTab) => {
   if (newTab && typeof newTab === 'string') {
     if (newTab === 'permissions') activeTab.value = 'agents';
-    else if (newTab === 'macros' || newTab === 'automation') activeTab.value = 'automation';
+    else if (newTab === 'macros') activeTab.value = 'canned-responses';
     else activeTab.value = newTab;
+  } else {
+    activeTab.value = 'search';
   }
 }, { immediate: true });
+
+interface SettingsItemDef {
+  id: string;
+  name: string;
+  category: string;
+  categoryName: string;
+  description: string;
+  icon: Component;
+  keywords: string[];
+  badge?: string;
+}
+
+interface SettingsGroupDef {
+  id: string;
+  title: string;
+  items: SettingsItemDef[];
+}
+
+const settingsGroups: SettingsGroupDef[] = [
+  {
+    id: 'team-workspace',
+    title: 'Team & Workspace',
+    items: [
+      { id: 'inboxes', name: 'Inboxes', category: 'team-workspace', categoryName: 'Team & Workspace', description: 'Omnichannel communication inboxes (WhatsApp QR, Web Chat, Email, SMS, API).', icon: Inbox, keywords: ['whatsapp', 'qr', 'chat', 'email', 'sms', 'meta', 'channels'] },
+      { id: 'teams', name: 'Teams', category: 'team-workspace', categoryName: 'Team & Workspace', description: 'Department and squad groupings with dedicated routing and assignment rules.', icon: Users, keywords: ['groups', 'departments', 'squads', 'routing', 'sales team'] },
+      { id: 'agents', name: 'Agents', category: 'team-workspace', categoryName: 'Team & Workspace', description: 'User accounts, permissions, colorful profile avatars, seat status, and invites.', icon: User, keywords: ['reps', 'users', 'members', 'staff', 'seats', 'avatars'] },
+      { id: 'roles', name: 'Roles', category: 'team-workspace', categoryName: 'Team & Workspace', description: 'Role-based access control matrix with fine-grained granular permissions.', icon: Shield, keywords: ['permissions', 'access control', 'admin', 'manager', 'policies'] },
+      { id: 'custom-attributes', name: 'Custom Attributes', category: 'team-workspace', categoryName: 'Team & Workspace', description: 'Custom data fields and properties for Contacts, Companies, and Deals.', icon: Sliders, keywords: ['fields', 'custom fields', 'properties', 'data model', 'attributes'] },
+      { id: 'labels', name: 'Labels', category: 'team-workspace', categoryName: 'Team & Workspace', description: 'Color-coded tags and classification markers for conversations and leads.', icon: Tag, keywords: ['tags', 'categories', 'markers', 'badges', 'classification'] },
+    ]
+  },
+  {
+    id: 'workflows-productivity',
+    title: 'Workflows & Productivity',
+    items: [
+      { id: 'automation', name: 'Automation', category: 'workflows-productivity', categoryName: 'Workflows & Productivity', description: 'Event triggers, smart conditions, and automated conversation routing actions.', icon: Zap, keywords: ['rules', 'triggers', 'workflow', 'auto assignment', 'bots'] },
+      { id: 'canned-responses', name: 'Canned Responses', category: 'workflows-productivity', categoryName: 'Workflows & Productivity', description: 'Reusable message templates and keyboard macro shortcuts (e.g. /pricing, /welcome).', icon: MessageSquareQuote, keywords: ['macros', 'templates', 'snippets', 'quick replies', 'shortcuts'] },
+      { id: 'sla', name: 'SLA', category: 'workflows-productivity', categoryName: 'Workflows & Productivity', description: 'Service level agreement policies, first-response targets, and breach escalations.', icon: Clock, keywords: ['service level', 'response time', 'resolution', 'breach', 'escalation'] },
+      { id: 'revenue-targets', name: 'Revenue Targets', category: 'workflows-productivity', categoryName: 'Workflows & Productivity', description: 'Pipeline quotas, quarterly targets, and closed-won commission goals per agent.', icon: Target, keywords: ['quotas', 'pipeline goals', 'sales targets', 'commissions', 'attainment'] },
+      { id: 'web-forms', name: 'Web Forms', category: 'workflows-productivity', categoryName: 'Workflows & Productivity', description: 'Lead generation forms with embed codes, field builders, and conversion tracking.', icon: FileText, keywords: ['forms', 'lead capture', 'embed', 'landing page', 'inquiry'] },
+    ]
+  },
+  {
+    id: 'ai-assistant',
+    title: 'AI Assistant',
+    items: [
+      { id: 'ai-behaviour', name: 'AI Behaviour', category: 'ai-assistant', categoryName: 'AI Assistant', description: 'System prompts, tone of voice, guardrails, compliance rules, and topic filters.', icon: Bot, keywords: ['persona', 'prompt', 'guardrails', 'rules', 'instructions', 'tone'] },
+      { id: 'ai-inboxes', name: 'AI Inboxes', category: 'ai-assistant', categoryName: 'AI Assistant', description: 'Enable or disable AI copilot draft suggestions and autonomous auto-pilot by channel.', icon: Cpu, keywords: ['autopilot', 'copilot', 'channel enable', 'threshold', 'handover'] },
+      { id: 'ai-playground', name: 'Playground', category: 'ai-assistant', categoryName: 'AI Assistant', description: 'Interactive testing sandbox to simulate conversations and verify response quality.', icon: Terminal, keywords: ['sandbox', 'test', 'simulation', 'chat test', 'prompt debug'] },
+      { id: 'ai-training', name: 'Knowledgebase', category: 'ai-assistant', categoryName: 'AI Assistant', description: 'Document indexing, PDF upload training, vector embeddings, and training logs.', icon: BookOpen, keywords: ['knowledge base', 'sops', 'pdf', 'documents', 'training', 'embeddings'] },
+    ]
+  },
+  {
+    id: 'ecosystem-system',
+    title: 'Ecosystem & System',
+    items: [
+      { id: 'integrations', name: 'Integrations', category: 'ecosystem-system', categoryName: 'Ecosystem & System', description: 'Pre-built connectors for Shopify, HubSpot, Stripe, Google Calendar, and Zapier.', icon: Layers, keywords: ['shopify', 'hubspot', 'stripe', 'zapier', 'apps', 'connect'] },
+      { id: 'webhooks', name: 'Webhooks', category: 'ecosystem-system', categoryName: 'Ecosystem & System', description: 'Outbound HTTP webhooks subscribed to message, lead, and pipeline events.', icon: Webhook, keywords: ['api', 'rest', 'events', 'payloads', 'endpoints', 'post'] },
+      { id: 'marketplace', name: 'Marketplace', category: 'ecosystem-system', categoryName: 'Ecosystem & System', description: 'Browse and install vetted community add-on apps, themes, and extensions.', icon: ShoppingBag, keywords: ['store', 'plugins', 'addons', 'apps', 'extensions'] },
+      { id: 'account-settings', name: 'Account Settings', category: 'ecosystem-system', categoryName: 'Ecosystem & System', description: 'General workspace info, inactivity timeouts, timezone, and weekly recap digests.', icon: Building, keywords: ['workspace', 'general', 'timezone', 'email recap', 'timeout', 'company'] },
+      { id: 'audit-logs', name: 'Audit Logs', category: 'ecosystem-system', categoryName: 'Ecosystem & System', description: 'Immutable activity log recording user logins, role changes, exports, and edits.', icon: History, keywords: ['security', 'audit trail', 'compliance', 'activity', 'logs'] },
+      { id: 'billing', name: 'Billing', category: 'ecosystem-system', categoryName: 'Ecosystem & System', description: 'Subscription tier, seat management, credit card on file, and invoice download history.', icon: CreditCard, keywords: ['subscription', 'plan', 'invoices', 'payment', 'receipts', 'seats'] },
+    ]
+  }
+];
+
+const allSettingsItems = computed(() => {
+  return settingsGroups.flatMap(g => g.items);
+});
+
+const filteredSettingsItems = computed(() => {
+  const q = settingsSearchQuery.value.trim().toLowerCase();
+  if (!q) return allSettingsItems.value;
+  return allSettingsItems.value.filter(item => {
+    return item.name.toLowerCase().includes(q) ||
+      item.description.toLowerCase().includes(q) ||
+      item.categoryName.toLowerCase().includes(q) ||
+      item.keywords.some(k => k.toLowerCase().includes(q));
+  });
+});
+
+// ═══════════════════ NEW TAB MOCK STATES ═══════════════════
+// Account Settings
+const workspaceName = ref('Content Team (Live-respond.io test)');
+const inactivityTimeout = ref(10);
+const timeZone = ref('(GMT+08:00) Asia/Kuala_Lumpur');
+const weeklyRecapEnabled = ref(true);
+const recapRecipients = ref(['Naima', 'Joshua Lim', 'Leon Lam', 'Content Team', 'Petrina Jo', 'Ryan Tan', 'Nabilah Salleh']);
+const showAddRecipientInput = ref(false);
+const newRecipientName = ref('');
+
+function addRecipient() {
+  if (newRecipientName.value.trim()) {
+    recapRecipients.value.push(newRecipientName.value.trim());
+    newRecipientName.value = '';
+    showAddRecipientInput.value = false;
+    addToast('Recipient Added', 'Weekly recap recipients updated.', 'success');
+  }
+}
+
+function removeRecipient(name: string) {
+  recapRecipients.value = recapRecipients.value.filter(r => r !== name);
+  addToast('Recipient Removed', `${name} removed from recap list.`, 'warning');
+}
+
+// Canned Responses
+interface CannedResponse { id: number; shortcut: string; title: string; content: string; category: string; uses: number; }
+const cannedResponses = ref<CannedResponse[]>([
+  { id: 1, shortcut: '/pricing', title: 'Standard Pricing Tiers', content: 'Hi {{contact.name}}, here is our 2026 pricing schedule: Starter at RM199/mo, Pro at RM499/mo, Enterprise custom.', category: 'Sales', uses: 342 },
+  { id: 2, shortcut: '/welcome', title: 'New Customer Welcome', content: 'Welcome to RakanSales, {{contact.name}}! Our customer success team is here to assist you 24/7.', category: 'General', uses: 890 },
+  { id: 3, shortcut: '/bank-details', title: 'Bank Wire Details', content: 'Please remit payment to: Maybank Account 5140-1234-5678 (VeecoTech RakanSales Sdn Bhd).', category: 'Finance', uses: 175 },
+  { id: 4, shortcut: '/meeting', title: 'Schedule Product Demo', content: 'Would you be open for a 15-minute product walk-through this week? You can book directly: rakansales.com/demo/{{agent.name}}', category: 'Sales', uses: 512 },
+  { id: 5, shortcut: '/followup', title: 'Post-Demo Followup', content: 'Thanks for attending our demo session earlier, {{contact.name}}! Attached is the summary deck and next steps.', category: 'Sales', uses: 220 },
+]);
+const cannedSearch = ref('');
+const cannedCategory = ref('All');
+const showAddCannedModal = ref(false);
+const newCannedShortcut = ref('');
+const newCannedTitle = ref('');
+const newCannedContent = ref('');
+const newCannedCat = ref('Sales');
+
+const filteredCannedResponses = computed(() => {
+  return cannedResponses.value.filter(c => {
+    const matchCat = cannedCategory.value === 'All' || c.category === cannedCategory.value;
+    const matchSearch = !cannedSearch.value || c.shortcut.toLowerCase().includes(cannedSearch.value.toLowerCase()) || c.title.toLowerCase().includes(cannedSearch.value.toLowerCase()) || c.content.toLowerCase().includes(cannedSearch.value.toLowerCase());
+    return matchCat && matchSearch;
+  });
+});
+
+function saveCannedResponse() {
+  if (!newCannedShortcut.value || !newCannedTitle.value || !newCannedContent.value) return;
+  cannedResponses.value.unshift({
+    id: Date.now(),
+    shortcut: newCannedShortcut.value.startsWith('/') ? newCannedShortcut.value : `/${newCannedShortcut.value}`,
+    title: newCannedTitle.value,
+    content: newCannedContent.value,
+    category: newCannedCat.value,
+    uses: 0
+  });
+  showAddCannedModal.value = false;
+  newCannedShortcut.value = '';
+  newCannedTitle.value = '';
+  newCannedContent.value = '';
+  addToast('Canned Response Created', 'New macro template is ready for use.', 'success');
+}
+
+// Custom Attributes
+interface CustomAttribute { id: number; name: string; key: string; entity: 'Contact' | 'Company' | 'Deal'; type: string; required: boolean; }
+const customAttributesList = ref<CustomAttribute[]>([
+  { id: 1, name: 'Industry Sector', key: 'contact.industry', entity: 'Contact', type: 'Dropdown', required: true },
+  { id: 2, name: 'Annual Revenue (MYR)', key: 'company.annual_revenue', entity: 'Company', type: 'Number', required: false },
+  { id: 3, name: 'Contract Renewal Date', key: 'deal.renewal_date', entity: 'Deal', type: 'Date', required: true },
+  { id: 4, name: 'Decision Maker Confirmed', key: 'contact.is_decision_maker', entity: 'Contact', type: 'Boolean', required: false },
+  { id: 5, name: 'Lead Source Detail', key: 'contact.source_detail', entity: 'Contact', type: 'Text', required: false },
+  { id: 6, name: 'Tax ID / SST Reg', key: 'company.tax_id', entity: 'Company', type: 'Text', required: false },
+]);
+const attributeEntityFilter = ref('All');
+const filteredCustomAttributes = computed(() => {
+  if (attributeEntityFilter.value === 'All') return customAttributesList.value;
+  return customAttributesList.value.filter(a => a.entity === attributeEntityFilter.value);
+});
+
+// SLA Policies
+const slaPolicies = ref([
+  { id: 1, priority: 'Urgent', firstResponse: '15 mins', resolveTime: '2 hours', escalation: 'Notify Squad Lead via WhatsApp & Slack', badgeColor: 'bg-red-50 text-red-700 border-red-200' },
+  { id: 2, priority: 'High', firstResponse: '1 hour', resolveTime: '8 hours', escalation: 'Auto-reassign to next available Senior Rep', badgeColor: 'bg-amber-50 text-amber-700 border-amber-200' },
+  { id: 3, priority: 'Normal', firstResponse: '4 hours', resolveTime: '24 hours', escalation: 'Flag in manager morning daily review', badgeColor: 'bg-blue-50 text-blue-700 border-blue-200' },
+]);
+const businessHoursDays = ref(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']);
+const businessHoursStart = ref('09:00');
+const businessHoursEnd = ref('18:00');
+
+// Revenue Targets
+const monthlyRevenueTarget = ref(250000);
+const currentAchievedRevenue = ref(184500);
+const agentQuotas = ref([
+  { id: 1, agent: 'Sarah Tan', quota: 60000, closed: 52000, deals: 8, avatar: '/avatars/agent_1_female_hijab_teal.png' },
+  { id: 2, agent: 'Alex Wong', quota: 50000, closed: 43500, deals: 6, avatar: '/avatars/agent_3_chinese_male_navy.png' },
+  { id: 3, agent: 'Farah Azman', quota: 50000, closed: 38000, deals: 5, avatar: '/avatars/agent_2_malay_female_rose.png' },
+  { id: 4, agent: 'Marcus Lee', quota: 45000, closed: 31000, deals: 4, avatar: '/avatars/agent_4_chinese_male_emerald.png' },
+  { id: 5, agent: 'Priya Nair', quota: 45000, closed: 20000, deals: 3, avatar: '/avatars/agent_5_indian_female_purple.png' },
+]);
+
+// AI Behaviour
+const aiPersonaName = ref('RakanSales Commercial Copilot');
+const aiSystemInstructions = ref(`You are an expert consultative sales and support AI assistant for RakanSales. Always be helpful, concise, and professional. Proactively qualify inbound customer needs before proposing pricing.`);
+const aiTone = ref('Professional & Consultative');
+const maxDiscountAllowed = ref(15);
+const escalateAngrySentiment = ref(true);
+const bannedTopics = ref(['Internal server architecture', 'Unreleased roadmap dates', 'Competitor defamatory remarks']);
+
+// AI Inboxes
+const aiInboxConfigs = ref([
+  { id: 1, name: 'Sales WhatsApp (+60 12-555 0001)', enabled: true, mode: 'Auto-Pilot (Direct Replies)', threshold: 85, icon: Smartphone, color: 'text-emerald-600 bg-emerald-50' },
+  { id: 2, name: 'Website Live Chat (rakansales.com)', enabled: true, mode: 'Copilot (Draft Suggestions Only)', threshold: 75, icon: MessageSquare, color: 'text-violet-600 bg-violet-50' },
+  { id: 3, name: 'Support Email (support@rakansales.com)', enabled: false, mode: 'Disabled', threshold: 90, icon: Mail, color: 'text-blue-600 bg-blue-50' },
+]);
+
+// AI Playground
+const playgroundQuery = ref('');
+const isPlaygroundThinking = ref(false);
+const playgroundMessages = ref([
+  { id: 1, role: 'user', text: 'What is your enterprise package pricing and SLA commitment?' },
+  { id: 2, role: 'assistant', text: 'Our Enterprise package starts at RM 2,499/month for up to 50 seats. It includes a 15-minute guaranteed first-response SLA, dedicated senior account manager, and custom webhook integrations.', citations: ['2026_Pricing_Guide.pdf (Page 3)', 'Company_SOPs.docx (Section 4.2)'], latency: '420ms', confidence: 98 }
+]);
+
+function sendPlaygroundMessage() {
+  if (!playgroundQuery.value.trim() || isPlaygroundThinking.value) return;
+  const q = playgroundQuery.value.trim();
+  playgroundMessages.value.push({ id: Date.now(), role: 'user', text: q });
+  playgroundQuery.value = '';
+  isPlaygroundThinking.value = true;
+  setTimeout(() => {
+    isPlaygroundThinking.value = false;
+    playgroundMessages.value.push({
+      id: Date.now() + 1,
+      role: 'assistant',
+      text: `Based on your Knowledgebase documents, RakanSales supports multi-channel assignment with round-robin priority and real-time webhook sync for "${q.slice(0, 30)}...".`,
+      citations: ['2026_Pricing_Guide.pdf', 'Employee_Handbook.docx'],
+      latency: '380ms',
+      confidence: 96
+    });
+  }, 900);
+}
+
+// Integrations
+const integrationsCatalog = ref([
+  { id: 1, name: 'Shopify', desc: 'Sync customer orders, abandoned carts, and live product catalog.', connected: true, category: 'E-Commerce', iconBg: 'bg-emerald-100 text-emerald-700' },
+  { id: 2, name: 'HubSpot CRM', desc: 'Two-way sync for deal pipelines, stages, and customer contacts.', connected: true, category: 'CRM', iconBg: 'bg-orange-100 text-orange-700' },
+  { id: 3, name: 'Stripe Payments', desc: 'Generate secure payment links in chat and track invoice payments.', connected: true, category: 'Payments', iconBg: 'bg-indigo-100 text-indigo-700' },
+  { id: 4, name: 'Google Calendar', desc: 'Auto-schedule product demos and booking meeting slots.', connected: false, category: 'Productivity', iconBg: 'bg-blue-100 text-blue-700' },
+  { id: 5, name: 'WooCommerce', desc: 'Real-time order notifications and customer inquiry lookup.', connected: false, category: 'E-Commerce', iconBg: 'bg-purple-100 text-purple-700' },
+  { id: 6, name: 'Zapier', desc: 'Connect RakanSales to over 5,000+ third-party business apps.', connected: false, category: 'Automation', iconBg: 'bg-amber-100 text-amber-700' },
+]);
+
+// Webhooks
+const webhooksList = ref([
+  { id: 1, name: 'ERP Inbound Sync', url: 'https://api.internal-erp.com/v1/rakansales-events', secret: 'whsec_89df2...a19', events: ['conversation.created', 'deal.won'], active: true, successRate: '99.8%' },
+  { id: 2, name: 'Slack Alerts Bot', url: 'https://hooks.slack.com/services/T00/B00/XXXX', secret: 'whsec_410bb...e32', events: ['lead.vip_created', 'sla.breached'], active: true, successRate: '100%' }
+]);
+
+// Marketplace
+const marketplaceApps = ref([
+  { id: 1, name: 'WhatsApp Broadcast Pro', desc: 'High-volume segmented campaign sender with opt-out handling.', installed: true, rating: '4.9', author: 'VeecoTech Official' },
+  { id: 2, name: 'AI Sentiment Classifier', desc: 'Real-time tone & urgency detector with automatic supervisor alerts.', installed: false, rating: '4.8', author: 'RakanLabs' },
+  { id: 3, name: 'Commission Calculator', desc: 'Auto-calculate monthly agent commissions based on closed deals.', installed: false, rating: '4.7', author: 'SalesMetrics' },
+  { id: 4, name: 'Multi-Currency Live Rate', desc: 'Automatic quotation conversions in USD, SGD, and MYR.', installed: false, rating: '4.9', author: 'FinSync' },
+]);
+
+// Audit Logs
+const auditLogs = ref([
+  { id: 1, user: 'Sarah Tan', action: 'Exported customer data', details: 'Exported 420 contact records to CSV', time: '12 mins ago', ip: '175.143.12.88', status: 'Success' },
+  { id: 2, user: 'Alex Wong', action: 'Modified SLA Policy', details: 'Updated Urgent first-response target from 30m to 15m', time: '1 hour ago', ip: '115.164.55.21', status: 'Success' },
+  { id: 3, user: 'System Bot', action: 'Refreshed WhatsApp Session', details: 'Multi-device QR session handshake verified', time: '3 hours ago', ip: '10.0.4.12', status: 'Success' },
+  { id: 4, user: 'Sarah Tan', action: 'Promoted Agent Role', details: 'Promoted Marcus Lee to Senior Sales Rep', time: 'Yesterday', ip: '175.143.12.88', status: 'Success' },
+  { id: 5, user: 'Farah Azman', action: 'Created Canned Response', details: 'Added new macro shortcut "/meeting"', time: '2 days ago', ip: '60.50.12.99', status: 'Success' },
+]);
+
+// Billing
+const billingPlan = ref({
+  name: 'RakanSales Growth Suite',
+  price: 'RM 499',
+  billingCycle: 'monthly',
+  activeSeats: 12,
+  totalSeats: 20,
+  renewalDate: 'Oct 01, 2026',
+  card: 'Visa ending in 4242',
+  cardExp: '12/28'
+});
+const billingInvoices = ref([
+  { id: 'INV-2026-009', date: 'Sep 01, 2026', amount: 'RM 499.00', status: 'Paid' },
+  { id: 'INV-2026-008', date: 'Aug 01, 2026', amount: 'RM 499.00', status: 'Paid' },
+  { id: 'INV-2026-007', date: 'Jul 01, 2026', amount: 'RM 499.00', status: 'Paid' },
+]);
+
+// ═══════════════════ EXISTING INBOXES & GUIDED WIZARD ═══════════════════
 
 interface Inbox { id: number; name: string; type: string; icon: Component; colorBg: string; colorText: string; details: string; assignedTeam: string; active: boolean; isDefault?: boolean; }
 const connectedInboxes = ref<Inbox[]>([
@@ -1699,4 +3073,18 @@ function removeWebform(id: number) {
 <style scoped>
 .scrollbar-none::-webkit-scrollbar { display: none; }
 .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
+
+.custom-settings-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.custom-settings-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-settings-scrollbar::-webkit-scrollbar-thumb {
+  background: #e2e8f0;
+  border-radius: 4px;
+}
+.custom-settings-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #cbd5e1;
+}
 </style>

@@ -23,7 +23,8 @@ import {
   FileText,
   Layers,
   Inbox,
-  Briefcase
+  Briefcase,
+  Sparkles,
 } from 'lucide-vue-next'
 
 const route = useRoute()
@@ -70,6 +71,8 @@ const routeLabels: Record<string, string> = {
   '/design-system':          'Design System',
   '/addons':                 'Add-ons',
   '/guidelines':             'Guidelines',
+  '/onboarding':             'Onboarding Wizard',
+  '/partner/register':       'Partner Registration',
 }
 const pageTitle = computed(() => {
   if (route.path.startsWith('/web-forms/builder')) return 'Form Builder'
@@ -102,6 +105,7 @@ const navItems = [
   },
   { to: '/deals',         icon: Briefcase,        label: 'Deals' },
   { to: '/addons',        icon: Puzzle,           label: 'Add-ons' },
+  { to: '/onboarding',    icon: Sparkles,         label: 'Onboarding Wizard' },
 ]
 </script>
 

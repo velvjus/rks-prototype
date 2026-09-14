@@ -1,20 +1,19 @@
 <template>
   <div class="space-y-6">
     <!-- Header -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-      <div>
-        <h1 class="text-2xl font-extrabold tracking-tight text-gray-900 dark:text-white flex items-center gap-2">
-          <Users class="w-6 h-6 text-primary" />
-          Agents
-        </h1>
-        <p class="text-sm text-gray-400 mt-0.5">Manage team members, roles, and granular workspace access controls.</p>
+    <div class="border-b border-gray-200 dark:border-border pb-5">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 class="text-xl font-semibold text-gray-900 dark:text-white tracking-tight">Agents</h1>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Manage team members, roles, and granular workspace access controls.</p>
+        </div>
+        <button
+          @click="showInviteModal = true"
+          class="inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-primary hover:bg-primary/95 text-white font-medium text-xs rounded-xl cursor-pointer shadow-xs transition-colors"
+        >
+          <Plus class="w-3.5 h-3.5" /> Invite User
+        </button>
       </div>
-      <button
-        @click="showInviteModal = true"
-        class="inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-primary hover:bg-primary/95 text-white font-bold text-xs rounded-xl cursor-pointer shadow-lg shadow-primary/20 hover:scale-[1.02] transition-all duration-200"
-      >
-        <Plus class="w-4 h-4" /> Invite User
-      </button>
     </div>
 
     <!-- Stats & Filters row -->
@@ -78,7 +77,7 @@
             :key="user.id"
             @click="activeUser = user"
             class="w-full text-left p-4 flex items-start gap-3 transition-all hover:bg-gray-50 dark:hover:bg-muted/40 cursor-pointer group relative"
-            :class="activeUser?.id === user.id ? 'bg-primary/5 dark:bg-primary/10 border-l-4 border-primary pl-3' : ''"
+            :class="activeUser?.id === user.id ? 'bg-primary/5 dark:bg-primary/10 ring-1 ring-inset ring-primary/20' : ''"
           >
             <!-- Avatar -->
             <div class="w-9 h-9 rounded-full overflow-hidden shrink-0 border border-gray-255 dark:border-border bg-gray-100 flex items-center justify-center relative">

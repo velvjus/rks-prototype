@@ -201,50 +201,82 @@ const getSnoozeCountdown = (item: Conversation): string => {
         <!-- Left border selected indicator (Image 2 style: straight 3px green bar) -->
         <div v-if="selected" class="absolute left-0 top-0 bottom-0 w-[3px] bg-[#23B750]"></div>
         
-        <!-- Premium Enhanced Hover Shortcuts Overlay (Hidden to allow hovering SLA Late Reply badges and tooltips) -->
-        <div class="hidden absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-1.5 bg-white/95 backdrop-blur-md border border-gray-250/80 px-2 py-1 rounded-full z-20 transition-all duration-300 opacity-0 translate-x-2 pointer-events-none h-9">
-          <!-- Waiting/Clock-sync icon for Reply Required, Checkmark-speech bubble for Waiting -->
-          <button 
-            type="button"
-            @click.stop="emit('toggleSnooze', item)" 
-            :title="item.section === 'Reply Required' ? 'Move to Waiting' : 'Move to Reply Now'"
-            class="p-1.5 text-[#475569] hover:bg-emerald-50 hover:text-emerald-700 rounded-full transition-all flex items-center justify-center cursor-pointer hover:scale-110 active:scale-95 outline-none"
-          >
-            <!-- Circular Sync Clock Icon for Move to Waiting -->
-            <svg v-if="item.section === 'Reply Required'" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21.5 2v6h-6" />
-              <path d="M21.34 15.57a10 10 0 1 1-.57-8.38l.73-.73" />
-              <path d="M12 7v5l3 2" />
-            </svg>
-            <!-- Checkmark-infused speech bubble SVG for Reactivate to Reply Now -->
-            <svg v-else class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5" />
-              <polyline points="16 5 19 8 23 4" />
-            </svg>
-          </button>
-
-          <!-- Toggle Read/Unread Status Button (Speech bubble with absolute overlaid red dot) -->
+        <!-- Gmail-Style Row Hover Quick Actions Bar -->
+        <div 
+          class="absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center gap-0.5 bg-white/95 backdrop-blur-md border border-gray-200/90 px-1 py-1 rounded-lg shadow-sm z-20 transition-all duration-150 opacity-0 translate-x-1 pointer-events-none group-hover:opacity-100 group-hover:translate-x-0 group-hover:pointer-events-auto"
+          @click.stop
+        >
+          <!-- 1. Mark Read/Unread Action -->
           <button 
             type="button"
             @click.stop="emit('toggleUnread', item)" 
             :title="item.unreadCount > 0 ? 'Mark as Read' : 'Mark as Unread'"
-            class="p-1.5 rounded-full transition-all flex items-center justify-center cursor-pointer hover:scale-110 active:scale-95 outline-none relative group/unreadhover"
+            class="w-7 h-7 rounded-md transition-all flex items-center justify-center cursor-pointer outline-none relative hover:scale-105 active:scale-95 group/unreadbtn"
             :class="[item.unreadCount > 0 ? 'text-red-700 bg-red-50 hover:bg-red-100 hover:text-red-800' : 'text-[#475569] hover:bg-red-50 hover:text-red-700']"
           >
-            <!-- Message bubble icon integrated with red dot -->
-            <svg class="w-4 h-4" :class="[item.unreadCount > 0 ? 'fill-red-600/10' : 'group-hover/unreadhover:fill-red-600/10']" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            <!-- Open envelope if unread, closed envelope if read -->
+            <svg v-if="item.unreadCount > 0" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21.2 8.4c.5.38.8.97.8 1.6v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V10a2 2 0 0 1 .8-1.6l8-6a2 2 0 0 1 2.4 0l8 6Z"/>
+              <path d="m22 10-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 10"/>
             </svg>
-            <!-- Dynamic Red Dot overlays message bubble -->
-            <span v-if="item.unreadCount > 0" class="absolute top-1 right-1 w-2 h-2 rounded-full border border-white bg-red-500 block transition-transform"></span>
+            <svg v-else class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="20" height="16" x="2" y="4" rx="2"/>
+              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+            </svg>
+            <span v-if="item.unreadCount > 0" class="absolute top-1 right-1 w-1.5 h-1.5 rounded-full border border-white bg-red-500 block"></span>
           </button>
 
-          <!-- Context Menu Trigger Button ("...") -->
+          <!-- 2. Snooze / Wait Action -->
+          <button 
+            type="button"
+            @click.stop="emit('toggleSnooze', item)" 
+            :title="item.isSnoozed ? 'Unsnooze Thread' : 'Snooze Thread (12h)'"
+            class="w-7 h-7 rounded-md transition-all flex items-center justify-center cursor-pointer outline-none hover:scale-105 active:scale-95"
+            :class="[item.isSnoozed ? 'text-blue-700 bg-blue-50 hover:bg-blue-100 hover:text-blue-800' : 'text-[#475569] hover:bg-blue-50 hover:text-blue-700']"
+          >
+            <svg class="w-3.5 h-3.5" :class="[item.isSnoozed ? 'fill-blue-500/10' : '']" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+              <path d="M18.63 13A17.89 17.89 0 0 1 18 8"/>
+              <path d="M6.26 6.26A5.86 5.86 0 0 0 6 8v7a3 3 0 0 1-3 3h15"/>
+              <path d="m2 2 20 20"/>
+              <path d="M10 4a2 2 0 0 1 4 0v.18"/>
+            </svg>
+          </button>
+
+          <!-- 3. Focus Action -->
+          <button 
+            type="button"
+            @click.stop="emit('contextMenuAction', 'toggle-focus', item)" 
+            :title="item.isFocus ? 'Remove from Focus' : 'Add to Focus'"
+            class="w-7 h-7 rounded-md transition-all flex items-center justify-center cursor-pointer outline-none hover:scale-105 active:scale-95 group/focusbtn"
+            :class="[item.isFocus ? 'text-violet-700 bg-violet-50 hover:bg-violet-100 hover:text-violet-800' : 'text-[#475569] hover:bg-violet-50 hover:text-violet-700']"
+          >
+            <svg class="w-3.5 h-3.5" :class="[item.isFocus ? 'fill-violet-600/10' : 'group-hover/focusbtn:fill-violet-600/10']" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <circle cx="12" cy="12" r="3" :class="[item.isFocus ? 'fill-violet-600' : 'group-hover/focusbtn:fill-violet-600']"/>
+            </svg>
+          </button>
+
+          <!-- 4. Archive Action -->
+          <button 
+            type="button"
+            @click.stop="emit('contextMenuAction', 'archive', item)" 
+            title="Archive Conversation"
+            class="w-7 h-7 rounded-md text-[#475569] hover:bg-orange-50 hover:text-orange-700 transition-all flex items-center justify-center cursor-pointer outline-none hover:scale-105 active:scale-95"
+          >
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="21 8 21 21 3 21 3 8"/>
+              <rect x="1" y="3" width="22" height="5" rx="1"/>
+              <line x1="10" y1="12" x2="14" y2="12"/>
+            </svg>
+          </button>
+
+          <!-- 5. More Options ("...") Trigger Context Menu Button -->
           <button 
             type="button"
             @click.stop="openContextMenu($event)" 
-            title="More Actions..."
-            class="p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600 rounded-full transition-all flex items-center justify-center cursor-pointer hover:scale-110 active:scale-95 outline-none"
+            title="More Options..."
+            class="w-7 h-7 rounded-md text-[#475569] hover:bg-gray-100 hover:text-gray-900 transition-all flex items-center justify-center cursor-pointer outline-none hover:scale-105 active:scale-95"
           >
             <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="12" cy="12" r="1.5"/>
@@ -324,8 +356,8 @@ const getSnoozeCountdown = (item: Conversation): string => {
               </div>
             </div>
 
-            <!-- Right Side: Workcycle State Badge and Time -->
-            <div class="flex items-center gap-1.5 flex-shrink-0 ml-2">
+            <!-- Right Side: Workcycle State Badge and Time (Fades out on hover to reveal Gmail-style quick action bar) -->
+            <div class="flex items-center gap-1.5 flex-shrink-0 ml-2 group-hover:opacity-0 transition-opacity duration-150">
               <!-- Gray Pinned Icon -->
               <svg v-if="item.isPinned" class="w-3.5 h-3.5 text-gray-400 select-none shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" title="Pinned">
                 <line x1="12" y1="17" x2="12" y2="22"/>
@@ -436,8 +468,14 @@ const getSnoozeCountdown = (item: Conversation): string => {
             :class="[item.unreadCount > 0 ? 'text-red-700 bg-red-50 hover:bg-red-100 hover:text-red-800' : 'text-[#475569] hover:text-red-700 hover:bg-red-50']"
             :title="item.unreadCount > 0 ? 'Mark as Read' : 'Mark as Unread'"
           >
-            <svg class="w-4 h-4" :class="[item.unreadCount > 0 ? 'fill-red-600/10' : 'group-hover/unreadbtn:fill-red-600/10']" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            <!-- Open envelope if unread, closed envelope if read -->
+            <svg v-if="item.unreadCount > 0" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21.2 8.4c.5.38.8.97.8 1.6v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V10a2 2 0 0 1 .8-1.6l8-6a2 2 0 0 1 2.4 0l8 6Z"/>
+              <path d="m22 10-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 10"/>
+            </svg>
+            <svg v-else class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="20" height="16" x="2" y="4" rx="2"/>
+              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
             </svg>
             <span v-if="item.unreadCount > 0" class="absolute top-1 right-1 w-2 h-2 rounded-full border border-white bg-red-500 block transition-transform"></span>
           </button>

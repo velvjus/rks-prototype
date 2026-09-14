@@ -108,6 +108,24 @@ const router = createRouter({
       component: () => import('../views/webforms/FormDetailView.vue')
     },
     {
+      path: '/onboarding',
+      name: 'onboarding',
+      component: () => import('../views/OnboardingView.vue'),
+      meta: { fullWidth: true }
+    },
+    {
+      path: '/auth',
+      name: 'auth',
+      component: () => import('../views/AuthView.vue'),
+      meta: { fullWidth: true }
+    },
+    {
+      path: '/partner/register',
+      name: 'partner-register',
+      component: () => import('../views/PartnerRegisterView.vue'),
+      meta: { standalone: true }
+    },
+    {
       path: '/',
       redirect: '/dashboard'
     }

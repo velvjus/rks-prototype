@@ -75,9 +75,9 @@ import {
   Calendar, Layout, Clock, Settings as SettingsIcon,
   BarChart2, PieChart, User, Users, Inbox, Tag, Bot,
   Megaphone, Plus, Cpu,
-  Book, Grid,
+  Book, Grid, LayoutGrid,
   Briefcase, CreditCard, Contact, Shield, MessageSquareQuote, FileText, Terminal, Zap, Clipboard, History,
-  Scan, UserCheck,
+  Scan, UserCheck, Sparkles, Award,
 } from 'lucide-vue-next';
 
 const ui = useUIStore();
@@ -226,47 +226,28 @@ const menuConfigs: Record<string, MenuConfig> = {
       },
     },
   },
-  'Settings': {
+  'Hidden': {
     groups: {
-      'WORKSPACE SETUP': {
+      'Default': {
         items: [
-          { label: 'Inboxes', route: '/settings?tab=inboxes' },
-          { label: 'Teams', route: '/settings?tab=teams' },
-          { label: 'Agents', route: '/settings?tab=agents' },
-          { label: 'Roles', route: '/settings?tab=roles' },
+          { label: 'Partner Registration', icon: Award, route: '/partner/register', badge: 'New' },
+          { label: 'Onboarding Wizard', icon: Sparkles, route: '/onboarding', badge: 'New' },
+          { label: 'Auth & Signup Flow', icon: UserCheck, route: '/auth', badge: 'New' },
+          { label: 'Design System', icon: LayoutGrid, route: '/design-system' },
+          { label: 'Guidelines', icon: FileText, route: '/guidelines' },
         ],
       },
-      'CUSTOMER DATA': {
+    },
+  },
+  'hidden': {
+    groups: {
+      'Default': {
         items: [
-          { label: 'Labels', route: '/settings?tab=labels' },
-          { label: 'Custom Attributes', route: '/settings?tab=labels', undesigned: true },
-          { label: 'Web Forms', route: '/web-forms' },
-        ],
-      },
-      'AUTOMATION & AI': {
-        items: [
-          { label: 'Automation', route: '/settings?tab=automation' },
-          { label: 'Agent Bots', route: '/settings?tab=ai-training' },
-          { label: 'Canned Responses', route: '/settings?tab=ai-training', undesigned: true },
-        ],
-      },
-      'PERFORMANCE & CONTROL': {
-        items: [
-          { label: 'SLA', route: '/settings?tab=agents', undesigned: true },
-          { label: 'Audit Logs', route: '/settings?tab=agents', undesigned: true },
-        ],
-      },
-      'ACCOUNT & SYSTEM': {
-        items: [
-          { label: 'Account Settings', route: '/settings?tab=agents', undesigned: true },
-          { label: 'Billing', route: '/settings?tab=agents', undesigned: true },
-        ],
-      },
-      'AI KNOWLEDGE BASE': {
-        items: [
-          { label: 'Assistants', route: '/settings?tab=ai-training', undesigned: true },
-          { label: 'Documents', route: '/settings?tab=ai-training', undesigned: true },
-          { label: 'Training History', route: '/settings?tab=training-history' },
+          { label: 'Partner Registration', icon: Award, route: '/partner/register', badge: 'New' },
+          { label: 'Onboarding Wizard', icon: Sparkles, route: '/onboarding', badge: 'New' },
+          { label: 'Auth & Signup Flow', icon: UserCheck, route: '/auth', badge: 'New' },
+          { label: 'Design System', icon: LayoutGrid, route: '/design-system' },
+          { label: 'Guidelines', icon: FileText, route: '/guidelines' },
         ],
       },
     },
@@ -275,6 +256,7 @@ const menuConfigs: Record<string, MenuConfig> = {
 
 function handleItemClick(item: MenuItem) {
   if (item.route) {
+    ui.setActiveParent(item.label, false);
     router.push(item.route);
     ui.closeSecondaryPanel();
   }

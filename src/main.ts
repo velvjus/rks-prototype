@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import VueApexCharts from 'vue3-apexcharts'
+import '@fontsource-variable/inter'
 import './assets/index.css'
 import App from './App.vue'
 import router from './router'

@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>RakanSales — New Automation (redesign)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#16241D;
+    --ink-soft:#5B6E63;
+    --bg:#F2F4EF;
+    --surface:#FFFFFF;
+    --border:#E1E6DD;
+    --primary:#0F7A5B;
+    --primary-dark:#0B5F46;
+    --primary-tint:#E5F3ED;
+    --amber:#C97F1F;
+    --amber-tint:#FAF0DD;
+    --danger:#C24B4B;
+    --danger-tint:#FBEAEA;
+    --radius:14px;
+    --shadow:0 20px 60px -20px rgba(22,36,29,0.28);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Inter',sans-serif;
+    background:
+      radial-gradient(1200px 500px at 15% -10%, #E3EEE6 0%, transparent 60%),
+      var(--bg);
+    color:var(--ink);
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:32px 16px;
+  }
+  h1,h2,h3,.label-font,button{font-family:'Manrope',sans-serif;}
+
+  .stage-note{
+    position:fixed; top:18px; left:50%; transform:translateX(-50%);
+    font-size:12px; color:var(--ink-soft); letter-spacing:.03em;
+    background:var(--surface); padding:6px 14px; border-radius:999px; border:1px solid var(--border);
+  }
+
+  .modal{
+    width:min(880px, 96vw);
+    background:var(--surface);
+    border-radius:20px;
+    box-shadow:var(--shadow);
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    max-height:88vh;
+  }
+
+  /* header */
+  .modal-head{
+    padding:22px 28px 18px;
+    border-bottom:1px solid var(--border);
+    display:flex; justify-content:space-between; align-items:flex-start;
+  }
+  .modal-head h1{margin:0 0 4px; font-size:19px; font-weight:800; letter-spacing:-.01em;}
+  .modal-head p{margin:0; font-size:13px; color:var(--ink-soft);}
+  .close-x{
+    border:none; background:none; color:var(--ink-soft); font-size:18px; cursor:pointer;
+    width:30px; height:30px; border-radius:8px; display:flex; align-items:center; justify-content:center;
+  }
+  .close-x:hover{background:var(--bg);}
+
+  /* live sentence preview — signature element */
+  .preview{
+    margin:16px 28px 0;
+    background:var(--primary-tint);
+    border:1px dashed #9FCBB6;
+    border-radius:12px;
+    padding:13px 16px;
+    font-size:13.5px;
+    line-height:1.6;
+    color:var(--primary-dark);
+  }
+  .preview b{font-weight:700;}
+  .preview .eyebrow{
+    display:block; font-family:'Manrope',sans-serif; font-weight:700; font-size:10.5px;
+    text-transform:uppercase; letter-spacing:.08em; color:var(--primary); margin-bottom:4px;
+  }
+
+  /* body layout */
+  .modal-body{
+    display:flex;
+    flex:1;
+    min-height:0;
+    padding:20px 28px 0;
+    gap:26px;
+  }
+
+  /* stepper */
+  .stepper{
+    width:168px;
+    flex-shrink:0;
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+    padding-top:4px;
+  }
+  .step-item{
+    display:flex; align-items:flex-start; gap:10px;
+    padding:9px 8px;
+    border-radius:10px;
+    cursor:pointer;
+    position:relative;
+  }
+  .step-item .dot{
+    width:22px; height:22px; border-radius:50%; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+    font-size:11px; font-weight:700; font-family:'Manrope',sans-serif;
+    background:var(--bg); color:var(--ink-soft); border:1.5px solid var(--border);
+    margin-top:1px;
+  }
+  .step-item .txt strong{display:block; font-size:12.5px; font-weight:700; color:var(--ink-soft);}
+  .step-item .txt span{display:block; font-size:11px; color:var(--ink-soft); opacity:.75;}
+  .step-item::after{
+    content:''; position:absolute; left:19px; top:32px; width:1.5px; height:20px; background:var(--border);
+  }
+  .step-item:last-child::after{display:none;}
+  .step-item.active .dot{background:var(--primary); color:#fff; border-color:var(--primary);}
+  .step-item.active .txt strong{color:var(--ink);}
+  .step-item.done .dot{background:var(--primary-dark); color:#fff; border-color:var(--primary-dark);}
+  .step-item.skip .dot{background:var(--bg); color:var(--ink-soft); opacity:.5;}
+  .step-item.skip .txt strong, .step-item.skip .txt span{opacity:.45;}
+  .step-item:hover{background:var(--bg);}
+
+  /* content panel */
+  .panel{flex:1; min-width:0; overflow-y:auto; padding-bottom:20px;}
+  .panel::-webkit-scrollbar{width:6px;}
+  .panel::-webkit-scrollbar-thumb{background:var(--border); border-radius:3px;}
+
+  .step-pane{display:none;}
+  .step-pane.active{display:block; animation:fade .18s ease;}
+  @keyframes fade{from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);}}
+
+  .field{margin-bottom:16px;}
+  .field label{display:block; font-size:12.5px; font-weight:700; margin-bottom:6px; color:var(--ink);}
+  .field .hint{font-size:11.5px; color:var(--ink-soft); margin-top:4px;}
+  input[type=text], select, textarea{
+    width:100%; padding:10px 12px; border:1.5px solid var(--border); border-radius:10px;
+    font-family:'Inter',sans-serif; font-size:13.5px; color:var(--ink); background:var(--surface);
+  }
+  input:focus, select:focus, textarea:focus{outline:none; border-color:var(--primary); box-shadow:0 0 0 3px var(--primary-tint);}
+  textarea{resize:vertical; min-height:70px;}
+
+  h2.pane-title{font-size:15.5px; font-weight:800; margin:0 0 3px;}
+  p.pane-sub{font-size:12.5px; color:var(--ink-soft); margin:0 0 18px;}
+
+  /* big picker cards */
+  .picker-row{display:flex; gap:12px; margin-bottom:6px;}
+  .picker-card{
+    flex:1; border:1.5px solid var(--border); border-radius:14px; padding:16px;
+    cursor:pointer; text-align:left; background:var(--surface); transition:.12s;
+  }
+  .picker-card:hover{border-color:#B9CFC2;}
+  .picker-card .ic{font-size:20px; margin-bottom:8px; display:block;}
+  .picker-card strong{display:block; font-size:13.5px; font-weight:800; margin-bottom:4px;}
+  .picker-card p{margin:0; font-size:12px; color:var(--ink-soft); line-height:1.5;}
+  .picker-card.selected{border-color:var(--primary); background:var(--primary-tint);}
+  .picker-card.selected strong{color:var(--primary-dark);}
+
+  .reveal{max-height:0; overflow:hidden; transition:max-height .25s ease;}
+  .reveal.open{max-height:400px;}
+
+  .inline-note{
+    background:var(--bg); border-radius:10px; padding:11px 13px; font-size:12px; color:var(--ink-soft);
+    display:flex; gap:8px; align-items:flex-start; margin-top:4px;
+  }
+
+  /* condition sentence builder */
+  .cond-toggle{display:flex; gap:10px; margin-bottom:14px;}
+  .pill-btn{
+    padding:7px 13px; border-radius:999px; border:1.5px solid var(--border); background:var(--surface);
+    font-size:12.5px; font-weight:600; color:var(--ink-soft); cursor:pointer;
+  }
+  .pill-btn.on{background:var(--ink); color:#fff; border-color:var(--ink);}
+
+  .cond-row{
+    display:flex; align-items:center; gap:8px; background:var(--bg); border-radius:12px; padding:10px 12px; margin-bottom:8px;
+  }
+  .cond-row select{flex:1; min-width:0; padding:8px 10px; font-size:12.5px;}
+  .cond-row .and{font-size:11px; font-weight:700; color:var(--ink-soft); width:34px; flex-shrink:0;}
+  .cond-row .rm{border:none; background:none; color:var(--ink-soft); cursor:pointer; font-size:15px; flex-shrink:0;}
+  .add-link{
+    border:1.5px dashed var(--border); background:none; color:var(--primary-dark); font-weight:700;
+    font-size:12.5px; padding:9px 14px; border-radius:10px; cursor:pointer; width:100%; text-align:left;
+  }
+  .add-link:hover{background:var(--primary-tint); border-color:#B9CFC2;}
+
+  /* action timeline */
+  .timeline{position:relative;}
+  .action-card{
+    display:flex; gap:12px; margin-bottom:10px; position:relative;
+  }
+  .num{
+    width:24px; height:24px; border-radius:50%; background:var(--ink); color:#fff; font-size:11px; font-weight:700;
+    display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px; font-family:'Manrope',sans-serif;
+    z-index:1;
+  }
+  .action-card:not(:last-child) .num::after{
+    content:''; position:absolute; left:11.5px; top:26px; width:1.5px; height:calc(100% + 2px); background:var(--border);
+  }
+  .action-box{flex:1; border:1.5px solid var(--border); border-radius:12px; padding:12px 14px; background:var(--surface);}
+  .action-box .top-row{display:flex; align-items:center; gap:8px; margin-bottom:8px;}
+  .action-box select.type-select{flex:1; font-weight:700; font-size:13px;}
+  .icon-btn{
+    border:1.5px solid var(--border); background:var(--surface); color:var(--ink-soft); width:30px; height:30px;
+    border-radius:8px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:13px; flex-shrink:0;
+  }
+  .icon-btn:hover{background:var(--bg);}
+  .icon-btn.danger:hover{background:var(--danger-tint); color:var(--danger); border-color:#EBBFBF;}
+  .action-box textarea{margin-top:2px;}
+  .wait-chip{
+    display:inline-flex; align-items:center; gap:5px; background:var(--amber-tint); color:var(--amber);
+    font-size:11px; font-weight:700; padding:3px 9px; border-radius:999px; margin-bottom:8px;
+  }
+
+  /* advanced collapsible */
+  .adv{border:1.5px solid var(--border); border-radius:12px; margin-top:18px; overflow:hidden;}
+  .adv-head{
+    display:flex; justify-content:space-between; align-items:center; padding:12px 14px; cursor:pointer; background:var(--bg);
+  }
+  .adv-head strong{font-size:12.5px;}
+  .adv-head span{font-size:11px; color:var(--ink-soft);}
+  .adv-body{padding:14px; display:none; font-size:12.5px; color:var(--ink-soft);}
+  .adv.open .adv-body{display:block;}
+  .adv.open .chev{transform:rotate(180deg);}
+  .chev{transition:.15s; font-size:11px;}
+
+  /* review */
+  .review-card{background:var(--bg); border-radius:12px; padding:16px; font-size:13px; line-height:1.9;}
+  .review-card .r-label{color:var(--ink-soft); display:inline-block; width:96px; font-weight:600;}
+
+  /* footer */
+  .modal-foot{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:16px 28px; border-top:1px solid var(--border); background:var(--surface);
+  }
+  .active-toggle{display:flex; align-items:center; gap:8px; font-size:12.5px; font-weight:700;}
+  .switch{width:34px; height:20px; border-radius:999px; background:var(--primary); position:relative; cursor:pointer; flex-shrink:0;}
+  .switch::after{content:''; position:absolute; width:16px; height:16px; background:#fff; border-radius:50%; top:2px; left:16px; transition:.15s;}
+  .foot-actions{display:flex; gap:10px;}
+  .btn{
+    padding:10px 18px; border-radius:10px; font-size:13px; font-weight:700; cursor:pointer; border:1.5px solid transparent;
+    font-family:'Manrope',sans-serif;
+  }
+  .btn-ghost{background:none; border-color:var(--border); color:var(--ink-soft);}
+  .btn-ghost:hover{background:var(--bg);}
+  .btn-primary{background:var(--primary); color:#fff;}
+  .btn-primary:hover{background:var(--primary-dark);}
+  .btn-primary:disabled{opacity:.45; cursor:not-allowed;}
+
+  /* compact entry-mode toggle, docked in header */
+  .entry-toggle{display:flex; gap:6px;}
+  .entry-toggle .pill-btn{font-size:11.5px; padding:6px 11px;}
+
+  /* slim contextual summary strip, pinned above footer */
+  .summary-strip{
+    margin:0 28px; padding:10px 14px; border-top:1px solid var(--border);
+    font-size:12.5px; color:var(--primary-dark); background:var(--primary-tint);
+    border-radius:10px 10px 0 0; display:flex; gap:8px; align-items:baseline;
+  }
+  .summary-strip b{font-weight:700;}
+  .summary-strip .tag{font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.06em; color:var(--primary); flex-shrink:0;}
+
+  /* edit (single-page) mode */
+  .panel.stacked .step-pane{display:block; margin-bottom:8px; padding-bottom:22px; border-bottom:1px solid var(--border);}
+  .panel.stacked .step-pane:last-of-type{border-bottom:none;}
+  .stepper.toc .step-item{cursor:pointer;}
+  .stepper.toc .step-item .dot{background:var(--bg); color:var(--ink-soft); border-color:var(--border);}
+  .stepper.toc .step-item.in-view .dot{background:var(--primary); color:#fff; border-color:var(--primary);}
+  .stepper.toc .step-item.in-view .txt strong{color:var(--primary-dark);}
+  .stepper.toc .step-item::after{display:none;}
+  .toc-label{font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-soft); opacity:.6; padding:0 8px 8px;}
+  .saved-flash{color:var(--primary-dark)!important; font-weight:700;}
+</style>
+</head>
+<body>
+
+<div class="stage-note">Redesign concept — click through the steps</div>
+
+<div class="modal">
+
+  <div class="modal-head">
+    <div>
+      <h1>New automation</h1>
+      <p>One flow for what used to be separate Macros and Automations.</p>
+    </div>
+    <div style="display:flex; align-items:center; gap:14px;">
+      <div class="entry-toggle">
+        <button class="pill-btn on" id="pillCreate" onclick="setEntryMode('create')">✨ Create</button>
+        <button class="pill-btn" id="pillEdit" onclick="setEntryMode('edit')">✏️ Edit: "Follow up msg"</button>
+      </div>
+      <button class="close-x">✕</button>
+    </div>
+  </div>
+
+  <div class="modal-body">
+
+    <div class="stepper" id="stepper">
+      <div class="step-item active" data-step="1">
+        <div class="dot">1</div>
+        <div class="txt"><strong>Trigger</strong><span>Name &amp; timing</span></div>
+      </div>
+      <div class="step-item" data-step="2" id="stepCondItem">
+        <div class="dot">2</div>
+        <div class="txt"><strong>Conditions</strong><span>Who it applies to</span></div>
+      </div>
+      <div class="step-item" data-step="3">
+        <div class="dot">3</div>
+        <div class="txt"><strong>Actions</strong><span>What happens</span></div>
+      </div>
+      <div class="step-item" data-step="4">
+        <div class="dot">4</div>
+        <div class="txt"><strong>Review</strong><span>Check &amp; save</span></div>
+      </div>
+    </div>
+
+    <div class="panel" id="panel">
+
+      <!-- STEP 1: TRIGGER -->
+      <div class="step-pane active" data-pane="1" id="pane-1">
+        <h2 class="pane-title">Name it, then choose when it runs</h2>
+        <p class="pane-sub">Give your team a name they'll recognise in the conversation list.</p>
+
+        <div class="field">
+          <label>Rule name</label>
+          <input type="text" id="ruleName" placeholder="e.g. Welcome new leads" value="Welcome new leads">
+        </div>
+        <div class="field">
+          <label>Description <span style="font-weight:500;color:var(--ink-soft);">(optional)</span></label>
+          <input type="text" placeholder="What is this rule for?">
+        </div>
+
+        <div class="field">
+          <label>When should this run?</label>
+          <div class="picker-row">
+            <button class="picker-card selected" id="cardAuto" onclick="selectMode('auto')">
+              <span class="ic">⚡</span>
+              <strong>Automatically</strong>
+              <p>Runs by itself when something happens — like a new conversation starting.</p>
+            </button>
+            <button class="picker-card" id="cardManual" onclick="selectMode('manual')">
+              <span class="ic">👆</span>
+              <strong>When an agent clicks it</strong>
+              <p>Shows up as a button inside a conversation. Nothing runs until someone taps it.</p>
+            </button>
+          </div>
+        </div>
+
+        <div class="reveal open" id="autoFields">
+          <div class="field">
+            <label>Run when</label>
+            <select id="triggerEvent" onchange="updatePreview()">
+              <option>A conversation is created</option>
+              <option>A conversation is reopened</option>
+              <option>A customer replies</option>
+              <option>A conversation is assigned</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="reveal" id="manualNote">
+          <div class="inline-note">💡 This becomes a button agents can click from inside a conversation — no conditions needed, so we'll skip that step for you.</div>
+        </div>
+      </div>
+
+      <!-- STEP 2: CONDITIONS -->
+      <div class="step-pane" data-pane="2" id="pane-2">
+        <h2 class="pane-title">Who should this apply to?</h2>
+        <p class="pane-sub">Narrow it down, or leave it open to run for every matching conversation.</p>
+
+        <div class="cond-toggle">
+          <button class="pill-btn on" id="pillAll" onclick="setCondMode(true)">Every conversation</button>
+          <button class="pill-btn" id="pillSome" onclick="setCondMode(false)">Only if conditions match</button>
+        </div>
+
+        <div id="condList">
+          <div class="cond-row">
+            <span class="and" style="visibility:hidden;">Where</span>
+            <select onchange="updatePreview()">
+              <option>Status</option><option>Priority</option><option>Team</option><option>Label</option>
+            </select>
+            <select onchange="updatePreview()">
+              <option>is</option><option>is not</option><option>contains</option>
+            </select>
+            <select id="condValue" onchange="updatePreview()">
+              <option>Open</option><option>Pending</option><option>Resolved</option>
+            </select>
+            <button class="rm" onclick="this.closest('.cond-row').remove(); updatePreview();">✕</button>
+          </div>
+        </div>
+        <button class="add-link" id="addCondBtn" onclick="addCondition()">+ Add another condition (must also be true)</button>
+      </div>
+
+      <!-- STEP 3: ACTIONS -->
+      <div class="step-pane" data-pane="3" id="pane-3">
+        <h2 class="pane-title">Then do this</h2>
+        <p class="pane-sub">Steps run in order, top to bottom.</p>
+
+        <div class="timeline" id="actionList">
+          <div class="action-card">
+            <div class="num">1</div>
+            <div class="action-box">
+              <div class="top-row">
+                <select class="type-select" onchange="updatePreview()">
+                  <option>🙋 Assign to agent</option>
+                  <option>💬 Send a message</option>
+                  <option>🏷️ Add a label</option>
+                  <option>📁 Move to team</option>
+                </select>
+                <button class="icon-btn" title="Add a wait before this step">⏱</button>
+                <button class="icon-btn danger" title="Remove step" onclick="removeAction(this)">🗑</button>
+              </div>
+              <select onchange="updatePreview()">
+                <option>Sarah — Sales</option><option>Amir — Support</option><option>Round robin (whole team)</option>
+              </select>
+            </div>
+          </div>
+          <div class="action-card">
+            <div class="num">2</div>
+            <div class="action-box">
+              <div class="top-row">
+                <select class="type-select" onchange="updatePreview()">
+                  <option>💬 Send a message</option>
+                  <option>🙋 Assign to agent</option>
+                  <option>🏷️ Add a label</option>
+                  <option>📁 Move to team</option>
+                </select>
+                <button class="icon-btn" title="Add a wait before this step">⏱</button>
+                <button class="icon-btn danger" title="Remove step" onclick="removeAction(this)">🗑</button>
+              </div>
+              <textarea placeholder="Enter your message here">Hi! Thanks for reaching out — Sarah will be with you shortly 👋</textarea>
+            </div>
+          </div>
+        </div>
+        <button class="add-link" onclick="addAction()">+ Add a step</button>
+
+        <div class="adv" id="fallbackAdv">
+          <div class="adv-head" onclick="this.parentElement.classList.toggle('open')">
+            <div><strong>If it doesn't work, do something else</strong><br><span>Optional — for reminders and follow-ups when there's no reply</span></div>
+            <span class="chev">▾</span>
+          </div>
+          <div class="adv-body">Add a backup step that only runs if there's no reply after a set time — e.g. "wait 1 hour, then notify the team lead."</div>
+        </div>
+      </div>
+
+      <!-- STEP 4: REVIEW -->
+      <div class="step-pane" data-pane="4" id="pane-4">
+        <h2 class="pane-title">Review &amp; save</h2>
+        <p class="pane-sub">Here's the plain-English version of what you've built.</p>
+
+        <div class="review-card" id="reviewCard"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="summary-strip" id="previewBox">
+    <span class="tag">Summary</span>
+    <span id="previewText">Set a name, then choose when it should run.</span>
+  </div>
+
+  <div class="modal-foot">
+    <div class="active-toggle"><div class="switch"></div> Active</div>
+    <div class="foot-actions">
+      <button class="btn btn-ghost" id="backBtn" onclick="go(-1)" style="visibility:hidden;">Back</button>
+      <button class="btn btn-ghost">Cancel</button>
+      <button class="btn btn-primary" id="nextBtn" onclick="go(1)">Continue →</button>
+      <button class="btn btn-primary" id="saveEditBtn" onclick="flashSaved()" style="display:none;">Save changes</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+let step = 1;
+let mode = 'auto';
+let condAll = true;
+let entryMode = 'create';
+
+function setEntryMode(m){
+  entryMode = m;
+  document.getElementById('pillCreate').classList.toggle('on', m==='create');
+  document.getElementById('pillEdit').classList.toggle('on', m==='edit');
+
+  const panel = document.getElementById('panel');
+  const stepperEl = document.getElementById('stepper');
+  const backBtn = document.getElementById('backBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const saveBtn = document.getElementById('saveEditBtn');
+
+  if(m === 'edit'){
+    panel.classList.add('stacked');
+    stepperEl.classList.add('toc');
+    document.querySelectorAll('.step-pane').forEach(p=>p.classList.add('active'));
+    backBtn.style.display = 'none';
+    nextBtn.style.display = 'none';
+    saveBtn.style.display = 'inline-block';
+
+    // prefill with the existing "Follow up msg" automation
+    document.getElementById('ruleName').value = 'Follow up msg';
+    document.querySelector('#pane-1 input[placeholder="What is this rule for?"]').value = 'No reply after quotation sent';
+    selectMode('auto');
+    document.getElementById('triggerEvent').value = 'A conversation is created';
+    setCondMode(false);
+    document.querySelectorAll('#condList .cond-row select')[0].value = 'Status';
+    document.querySelectorAll('#condList .cond-row select')[2].value = 'Open';
+
+    setupTocObserver();
+  } else {
+    panel.classList.remove('stacked');
+    stepperEl.classList.remove('toc');
+    document.querySelectorAll('.step-item').forEach(s=>s.classList.remove('in-view'));
+    backBtn.style.display = 'inline-block';
+    nextBtn.style.display = 'inline-block';
+    saveBtn.style.display = 'none';
+    step = 1;
+    go(0);
+  }
+  updatePreview();
+}
+
+function flashSaved(){
+  const box = document.getElementById('previewBox');
+  const original = box.style.background;
+  box.style.background = '#CFEADD';
+  const btn = document.getElementById('saveEditBtn');
+  const t = btn.textContent;
+  btn.textContent = '✓ Saved';
+  setTimeout(()=>{ btn.textContent = t; box.style.background = original; }, 1400);
+}
+
+function setupTocObserver(){
+  const items = document.querySelectorAll('.stepper.toc .step-item');
+  items.forEach(it=>{
+    it.onclick = ()=>{
+      document.getElementById('pane-'+it.dataset.step).scrollIntoView({behavior:'smooth', block:'start'});
+    };
+  });
+  const panel = document.getElementById('panel');
+  const panes = document.querySelectorAll('.step-pane');
+  const obs = new IntersectionObserver((entries)=>{
+    entries.forEach(en=>{
+      const item = document.querySelector('.step-item[data-step="'+en.target.dataset.pane+'"]');
+      if(en.isIntersecting) item.classList.add('in-view');
+      else item.classList.remove('in-view');
+    });
+  }, {root: panel, threshold: 0.4});
+  panes.forEach(p=>obs.observe(p));
+}
+
+function selectMode(m){
+  mode = m;
+  document.getElementById('cardAuto').classList.toggle('selected', m==='auto');
+  document.getElementById('cardManual').classList.toggle('selected', m==='manual');
+  document.getElementById('autoFields').classList.toggle('open', m==='auto');
+  document.getElementById('manualNote').classList.toggle('open', m==='manual');
+  const condPane = document.getElementById('pane-2');
+  const condItem = document.getElementById('stepCondItem');
+  if(m==='manual'){
+    condPane.style.display = 'none';
+    condItem.style.display = 'none';
+  } else {
+    condPane.style.display = '';
+    condItem.style.display = '';
+  }
+  updateStepNumbers();
+  updatePreview();
+}
+
+function updateStepNumbers(){
+  const visible = [...document.querySelectorAll('.step-item')].filter(it => it.style.display !== 'none');
+  visible.forEach((it, idx) => { it.querySelector('.dot').textContent = idx + 1; });
+}
+
+function setCondMode(all){
+  condAll = all;
+  document.getElementById('pillAll').classList.toggle('on', all);
+  document.getElementById('pillSome').classList.toggle('on', !all);
+  document.getElementById('condList').style.display = all ? 'none' : 'block';
+  document.getElementById('addCondBtn').style.display = all ? 'none' : 'block';
+  updatePreview();
+}
+
+function addCondition(){
+  const row = document.querySelector('.cond-row').cloneNode(true);
+  row.querySelector('.and').style.visibility = 'visible';
+  row.querySelector('.and').textContent = 'and';
+  document.getElementById('condList').appendChild(row);
+  updatePreview();
+}
+
+function addAction(){
+  const list = document.getElementById('actionList');
+  const card = document.querySelector('.action-card').cloneNode(true);
+  list.appendChild(card);
+  renumber();
+  updatePreview();
+}
+function removeAction(btn){
+  const card = btn.closest('.action-card');
+  if(document.querySelectorAll('.action-card').length > 1) card.remove();
+  renumber();
+  updatePreview();
+}
+function renumber(){
+  document.querySelectorAll('.action-card').forEach((c,i)=>{
+    c.querySelector('.num').textContent = i+1;
+  });
+}
+
+function go(dir){
+  let next = step + dir;
+  if(mode==='manual' && next===2) next = dir>0 ? 3 : 1; // skip conditions
+  if(next < 1) next = 1;
+  if(next > 4){
+    flashSaved();
+    return;
+  }
+  step = next;
+  document.querySelectorAll('.step-pane').forEach(p=>p.classList.toggle('active', p.dataset.pane==String(step)));
+  document.querySelectorAll('.step-item').forEach(s=>{
+    const n = Number(s.dataset.step);
+    s.classList.toggle('active', n===step);
+    s.classList.toggle('done', n<step && !(mode==='manual' && n===2));
+  });
+  document.getElementById('backBtn').style.visibility = step===1 ? 'hidden' : 'visible';
+  document.getElementById('nextBtn').textContent = step===4 ? 'Save automation' : 'Continue →';
+  if(step===4) buildReview();
+}
+
+document.querySelectorAll('.step-item').forEach(s=>{
+  s.addEventListener('click', ()=>{
+    if(entryMode === 'edit') return; // handled by setupTocObserver instead
+    const n = Number(s.dataset.step);
+    if(mode==='manual' && n===2) return;
+    step = n; go(0);
+  });
+});
+
+function updatePreview(){
+  const name = document.getElementById('ruleName').value || 'This rule';
+  let txt = '';
+  if(mode==='auto'){
+    const ev = document.getElementById('triggerEvent').value.toLowerCase();
+    txt += `When <b>${ev}</b>`;
+    if(!condAll){
+      const rows = [...document.querySelectorAll('#condList .cond-row')];
+      const parts = rows.map(r=>{
+        const sel = r.querySelectorAll('select');
+        return `${sel[0].value} ${sel[1].value.toLowerCase()} <b>${sel[2].value}</b>`;
+      });
+      if(parts.length) txt += `, only if ${parts.join(' and ')}`;
+    }
+  } else {
+    txt += `When an agent clicks <b>${name}</b>`;
+  }
+  const actions = [...document.querySelectorAll('.action-box .type-select')].map(s=>s.selectedOptions[0].text.replace(/^\S+\s/,''));
+  if(actions.length) txt += ` → ${actions.join(', then ')}`;
+  document.getElementById('previewText').innerHTML = txt;
+}
+
+function buildReview(){
+  const name = document.getElementById('ruleName').value || 'Untitled rule';
+  const when = mode==='auto'
+    ? document.getElementById('triggerEvent').value
+    : 'Manually — agent clicks a button';
+  const conds = condAll ? 'Every conversation' : [...document.querySelectorAll('#condList .cond-row')].map(r=>{
+      const sel = r.querySelectorAll('select');
+      return `${sel[0].value} ${sel[1].value} ${sel[2].value}`;
+    }).join(' and ');
+  const actions = [...document.querySelectorAll('.action-box .type-select')].map((s,i)=>`${i+1}. ${s.selectedOptions[0].text}`).join('<br>');
+  document.getElementById('reviewCard').innerHTML = `
+    <div><span class="r-label">Name</span>${name}</div>
+    <div><span class="r-label">Runs</span>${when}</div>
+    ${mode==='auto' ? `<div><span class="r-label">Applies to</span>${conds}</div>` : ''}
+    <div><span class="r-label">Then</span>${actions}</div>
+    <div><span class="r-label">Status</span>Active</div>
+  `;
+}
+
+document.getElementById('ruleName').addEventListener('input', updatePreview);
+setCondMode(true);
+updateStepNumbers();
+updatePreview();
+</script>
+
+</body>
+</html>

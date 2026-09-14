@@ -1,20 +1,19 @@
 <template>
   <div class="space-y-6">
     <!-- Header -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-      <div>
-        <h1 class="text-2xl font-extrabold tracking-tight text-gray-900 dark:text-white flex items-center gap-2">
-          <ShieldAlert class="w-6 h-6 text-primary" />
-          Roles & Permissions
-        </h1>
-        <p class="text-sm text-gray-400 mt-0.5">Define role templates, select global permission levels, and manage user access policies.</p>
+    <div class="border-b border-gray-200 dark:border-border pb-5">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 class="text-xl font-semibold text-gray-900 dark:text-white tracking-tight">Roles & Permissions</h1>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Define role templates, select global permission levels, and manage user access policies.</p>
+        </div>
+        <button
+          @click="openCreateModal"
+          class="inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-primary hover:bg-primary/95 text-white font-medium text-xs rounded-xl cursor-pointer shadow-xs transition-colors"
+        >
+          <Plus class="w-3.5 h-3.5" /> Create Custom Role
+        </button>
       </div>
-      <button
-        @click="openCreateModal"
-        class="inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-primary hover:bg-primary/95 text-white font-bold text-xs rounded-xl cursor-pointer shadow-lg shadow-primary/20 hover:scale-[1.02] transition-all duration-200"
-      >
-        <Plus class="w-4 h-4" /> Create Custom Role
-      </button>
     </div>
 
     <!-- Main List and Details Grid -->

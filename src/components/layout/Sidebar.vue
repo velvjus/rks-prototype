@@ -9,7 +9,7 @@
         v-for="item in topNavItems"
         :key="item.label"
         :item="item"
-        :selected="ui.activeParentItem === item.label"
+        :selected="isItemSelected(item)"
         :is-collapsed="ui.isSidebarCollapsed"
         @click="handleItemClick(item)"
       />
@@ -20,18 +20,18 @@
         v-for="item in bottomNavItems"
         :key="item.label"
         :item="item"
-        :selected="ui.activeParentItem === item.label"
+        :selected="isItemSelected(item)"
         :is-collapsed="ui.isSidebarCollapsed"
         @click="handleItemClick(item)"
       />
 
-      <!-- Hidden Design System Item right below Settings -->
-      <div class="opacity-0 hover:opacity-100 transition-opacity duration-200">
+      <!-- Secret Hidden Navigation Item right below Settings -->
+      <div :class="ui.activeParentItem === hiddenNavItem.label && ui.isSecondaryPanelOpen ? 'opacity-100' : 'opacity-0 hover:opacity-100 transition-opacity duration-200'">
         <SidebarItem
-          :item="designSystemItem"
-          :selected="ui.activeParentItem === designSystemItem.label"
+          :item="hiddenNavItem"
+          :selected="ui.activeParentItem === hiddenNavItem.label && ui.isSecondaryPanelOpen"
           :is-collapsed="ui.isSidebarCollapsed"
-          @click="handleItemClick(designSystemItem)"
+          @click="handleItemClick(hiddenNavItem)"
         />
       </div>
     </div>
@@ -40,7 +40,7 @@
 
 <script setup lang="ts">
 import { type Component } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useUIStore } from '@/stores/ui';
 import {
   Layers,
@@ -58,11 +58,13 @@ import {
   LayoutGrid,
   FileText,
   Puzzle,
+  EyeOff,
 } from 'lucide-vue-next';
 import SidebarItem from './SidebarItem.vue';
 
 const ui = useUIStore();
 const router = useRouter();
+const route = useRoute();
 
 interface NavItem {
   label: string;
@@ -88,16 +90,19 @@ const bottomNavItems: NavItem[] = [
   { label: 'Campaigns', icon: Megaphone, hasSubmenu: true },
   { label: 'Reports', icon: BarChart2, hasSubmenu: true },
   { label: 'Help Center', icon: Book, hasSubmenu: true },
-  { label: 'Guidelines', icon: FileText, hasSubmenu: false, route: '/guidelines' },
-  { label: 'Settings', icon: Settings, hasSubmenu: true },
+  { label: 'Settings', icon: Settings, hasSubmenu: false, route: '/settings' },
 ];
 
-const designSystemItem: NavItem = {
-  label: 'Design System',
-  icon: LayoutGrid,
-  hasSubmenu: false,
-  route: '/design-system',
+const hiddenNavItem: NavItem = {
+  label: 'Hidden',
+  icon: EyeOff,
+  hasSubmenu: true,
 };
+
+function isItemSelected(item: NavItem) {
+  if (item.route && route.path === item.route) return true;
+  return ui.activeParentItem === item.label;
+}
 
 function handleItemClick(item: NavItem) {
   ui.setActiveParent(item.label, item.hasSubmenu);

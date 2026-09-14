@@ -73,6 +73,7 @@ export default {
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
+        mono: ['Inter', 'sans-serif'],
       },
     },
   },

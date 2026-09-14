@@ -1,5 +1,9 @@
 <template>
-  <div class="h-screen w-full flex flex-col bg-gray-50 overflow-hidden font-sans">
+  <div v-if="route.meta.standalone" class="h-screen w-full overflow-y-auto bg-gray-50 font-sans">
+    <slot></slot>
+  </div>
+
+  <div v-else class="h-screen w-full flex flex-col bg-gray-50 overflow-hidden font-sans">
     <TopNav />
 
     <div class="flex-1 flex overflow-hidden relative">
