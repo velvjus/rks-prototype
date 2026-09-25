@@ -71,8 +71,17 @@ const routeLabels: Record<string, string> = {
   '/design-system':          'Design System',
   '/addons':                 'Add-ons',
   '/guidelines':             'Guidelines',
-  '/onboarding':             'Onboarding Wizard',
+  '/onboarding':             'Onboarding Wizard v2',
+  '/onboarding-v2':          'Onboarding Wizard v2',
+  '/onboarding-v1':          'Onboarding Wizard v1 (Classic)',
   '/partner/register':       'Partner Registration',
+  '/partner/overview':       'Partner Portal',
+  '/partner/program':        'Partner Program',
+  '/partner/referrals':      'My Referral',
+  '/partner/commissions':    'Commissions',
+  '/partner/earnings':       'Commissions',
+  '/partner/withdrawal':     'Partner Withdrawal',
+  '/setup-wizard':           'Setup Wizard',
 }
 const pageTitle = computed(() => {
   if (route.path.startsWith('/web-forms/builder')) return 'Form Builder'
@@ -105,7 +114,7 @@ const navItems = [
   },
   { to: '/deals',         icon: Briefcase,        label: 'Deals' },
   { to: '/addons',        icon: Puzzle,           label: 'Add-ons' },
-  { to: '/onboarding',    icon: Sparkles,         label: 'Onboarding Wizard' },
+  { to: '/onboarding',    icon: Sparkles,         label: 'Onboarding Wizard v2' },
 ]
 </script>
 

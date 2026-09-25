@@ -59,7 +59,7 @@
             ]"
           >
             <span class="w-1.5 h-1.5 rounded-full" :class="currentStep === 1 ? 'bg-[#23B750]' : 'bg-transparent'"></span>
-            <span>1. Track</span>
+            <span>1. Account Setup</span>
           </button>
           <button
             type="button"
@@ -70,7 +70,7 @@
             ]"
           >
             <span class="w-1.5 h-1.5 rounded-full" :class="currentStep === 2 ? 'bg-[#23B750]' : 'bg-transparent'"></span>
-            <span>2. Account</span>
+            <span>2. {{ userType === 'existing' ? 'Link CRM' : 'Partner Track' }}</span>
           </button>
           <button
             type="button"
@@ -81,7 +81,7 @@
             ]"
           >
             <span class="w-1.5 h-1.5 rounded-full" :class="currentStep === 3 ? 'bg-[#23B750]' : 'bg-transparent'"></span>
-            <span>3. Profile</span>
+            <span>3. {{ userType === 'existing' ? 'Partner Track' : 'Account Details' }}</span>
           </button>
           <button
             type="button"
@@ -132,7 +132,7 @@
                     Step {{ currentStep }} of 3
                   </span>
                   <span class="text-gray-400 font-medium text-[11px]">
-                    {{ currentStep === 1 ? 'Select partner track' : currentStep === 2 ? 'Account information' : 'Referral reach & details' }}
+                    {{ currentStepIndicatorLabel }}
                   </span>
                 </div>
 
@@ -159,12 +159,155 @@
               </p>
             </div>
 
-            <!-- 3. STEP CONTENT (Spacious 375px Stage with Natural Top-Down Flow) -->
-            <div class="h-[375px] shrink-0 flex flex-col justify-start">
+            <!-- 3. STEP CONTENT (Spacious Stage with Natural Top-Down Flow) -->
+            <div class="min-h-[375px] h-[395px] shrink-0 flex flex-col justify-start">
           <!-- ============================================================== -->
-          <!-- STEP 1: PARTNER TYPE (SPACIOUS, NO SCROLLBAR, SUBTLE GREEN TINT) -->
+          <!-- STEP 1: CHOOSE ACCOUNT STATUS (NEW USER VS EXISTING CUSTOMER)  -->
           <!-- ============================================================== -->
           <div v-if="currentStep === 1" class="flex flex-col justify-start animate-in fade-in-50 duration-200 pt-1">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+              <!-- Card 1: New Partner -->
+              <div
+                role="button"
+                tabindex="0"
+                @click="userType = 'new'"
+                @keydown.enter.prevent="userType = 'new'"
+                @keydown.space.prevent="userType = 'new'"
+                class="group relative rounded-2xl border-2 p-6 sm:p-7 flex flex-col justify-start gap-4 cursor-pointer transition-all text-left focus-visible:ring-2 focus-visible:ring-[#23B750] focus-visible:outline-none min-h-[200px]"
+                :class="[
+                  userType === 'new'
+                    ? 'border-[#23B750] bg-emerald-50/50 ring-2 ring-[#23B750]/15 shadow-xs'
+                    : 'border-gray-200 bg-white/70 hover:border-gray-300 hover:bg-white'
+                ]"
+              >
+                <!-- Top Header Row -->
+                <div class="flex items-center justify-between">
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-300">
+                    New
+                  </span>
+                  <div
+                    class="w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all"
+                    :class="userType === 'new' ? 'border-[#23B750] bg-[#23B750] text-white shadow-xs' : 'border-gray-300 bg-white'"
+                  >
+                    <Check v-if="userType === 'new'" class="w-3 h-3 stroke-[3]" />
+                  </div>
+                </div>
+
+                <!-- Info -->
+                <div class="space-y-1.5">
+                  <h3 class="font-bold text-gray-900 text-base sm:text-lg">New Partner Account</h3>
+                  <p class="text-xs sm:text-sm text-gray-500 leading-relaxed">
+                    Create a dedicated partner login to start referring businesses and receiving payouts.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Card 2: Already Using RakanSales -->
+              <div
+                role="button"
+                tabindex="0"
+                @click="userType = 'existing'"
+                @keydown.enter.prevent="userType = 'existing'"
+                @keydown.space.prevent="userType = 'existing'"
+                class="group relative rounded-2xl border-2 p-6 sm:p-7 flex flex-col justify-start gap-4 cursor-pointer transition-all text-left focus-visible:ring-2 focus-visible:ring-[#23B750] focus-visible:outline-none min-h-[200px]"
+                :class="[
+                  userType === 'existing'
+                    ? 'border-[#23B750] bg-emerald-50/50 ring-2 ring-[#23B750]/15 shadow-xs'
+                    : 'border-gray-200 bg-white/70 hover:border-gray-300 hover:bg-white'
+                ]"
+              >
+                <!-- Top Header Row -->
+                <div class="flex items-center justify-between">
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-300">
+                    Existing
+                  </span>
+                  <div
+                    class="w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all"
+                    :class="userType === 'existing' ? 'border-[#23B750] bg-[#23B750] text-white shadow-xs' : 'border-gray-300 bg-white'"
+                  >
+                    <Check v-if="userType === 'existing'" class="w-3 h-3 stroke-[3]" />
+                  </div>
+                </div>
+
+                <!-- Info -->
+                <div class="space-y-1.5">
+                  <h3 class="font-bold text-gray-900 text-base sm:text-lg">Link Existing Account</h3>
+                  <p class="text-xs sm:text-sm text-gray-500 leading-relaxed">
+                    Connect your existing RakanSales login to manage CRM tools and partner earnings together.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Reassuring Footnote -->
+            <p class="text-xs text-gray-500 text-center leading-relaxed mt-4">
+              <Info class="inline-block w-3.5 h-3.5 text-gray-400 align-middle -translate-y-[1px] mr-1" />
+              <span>Both paths include full access to referral tracking links, marketing kits, and automated payouts.</span>
+            </p>
+          </div>
+
+          <!-- ============================================================== -->
+          <!-- STEP 2 (EXISTING USER): LINK ACCOUNT FLOW (REFERENCE IMAGE)    -->
+          <!-- ============================================================== -->
+          <div
+            v-else-if="currentStep === 2 && userType === 'existing'"
+            class="space-y-5 animate-in fade-in-50 duration-200 text-left pt-2"
+          >
+            <!-- Callout Pill: One login for both -->
+            <div class="p-4 sm:p-5 rounded-2xl bg-emerald-50/60 border border-emerald-200/90 flex items-start gap-3.5">
+              <div class="w-9 h-9 rounded-xl bg-white border border-emerald-200 text-[#23B750] flex items-center justify-center shrink-0 mt-0.5 shadow-2xs">
+                <Link class="w-4.5 h-4.5 stroke-[2.5]" />
+              </div>
+              <p class="text-xs sm:text-[13px] text-gray-700 leading-relaxed font-normal">
+                One login for both. Your CRM dashboard and partner earnings dashboard will share the same email and password.
+              </p>
+            </div>
+
+            <!-- Input: CRM account email -->
+            <div class="space-y-2">
+              <label for="link-crm-email" class="block text-xs font-semibold text-gray-700">
+                CRM account email <span class="text-red-500">*</span>
+              </label>
+              <input
+                id="link-crm-email"
+                v-model="crmLinkEmail"
+                type="email"
+                required
+                autocomplete="email"
+                placeholder="Enter your CRM account email"
+                @keydown.enter.prevent="findAccountAndContinue"
+                class="w-full px-3.5 py-2.5 bg-white border border-gray-200 hover:border-gray-300 rounded-xl text-xs sm:text-sm font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#23B750]/30 focus:border-[#23B750] caret-[#23B750] shadow-2xs transition-all"
+              />
+              <p v-if="accountLinkError" class="text-xs text-red-600 mt-1">
+                {{ accountLinkError }}
+              </p>
+            </div>
+          </div>
+
+          <!-- ============================================================== -->
+          <!-- PARTNER TRACK SELECTION (STEP 2 FOR NEW, STEP 3 FOR EXISTING)  -->
+          <!-- ============================================================== -->
+          <div
+            v-else-if="(currentStep === 2 && userType === 'new') || (currentStep === 3 && userType === 'existing')"
+            class="flex flex-col justify-start animate-in fade-in-50 duration-200 pt-1"
+          >
+            <!-- Linked Account Indicator Banner (For existing customers) -->
+            <div
+              v-if="userType === 'existing' && isAccountLinked"
+              class="mb-2.5 px-3.5 py-1.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-medium flex items-center justify-between shadow-2xs"
+            >
+              <div class="flex items-center gap-2">
+                <Check class="w-3.5 h-3.5 text-[#23B750] stroke-[3]" />
+                <span>Linked CRM account: <strong class="text-gray-900 font-semibold">{{ crmLinkEmail }}</strong></span>
+              </div>
+              <button
+                type="button"
+                @click="goToStep(2)"
+                class="text-[11px] text-[#23B750] hover:text-[#1a943e] hover:underline font-semibold cursor-pointer"
+              >
+                Change email
+              </button>
+            </div>
             <!-- 2 Polished Track Cards with Clear Terminology & Earning Heroes -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
               <!-- Card 1: Referral Partner -->
@@ -174,7 +317,7 @@
                 @click="selectedPartnerType = 'referral'"
                 @keydown.enter.prevent="selectedPartnerType = 'referral'"
                 @keydown.space.prevent="selectedPartnerType = 'referral'"
-                class="group relative rounded-2xl border-2 p-4 sm:p-4.5 flex flex-col justify-between cursor-pointer transition-all text-left focus-visible:ring-2 focus-visible:ring-[#23B750] focus-visible:outline-none"
+                class="group relative rounded-2xl border-2 p-4.5 sm:p-5 flex flex-col justify-between cursor-pointer transition-all text-left focus-visible:ring-2 focus-visible:ring-[#23B750] focus-visible:outline-none min-h-[275px] sm:min-h-[285px]"
                 :class="[
                   selectedPartnerType === 'referral'
                     ? 'border-[#23B750] bg-emerald-50/50 ring-2 ring-[#23B750]/15 shadow-xs'
@@ -184,7 +327,7 @@
                 <!-- Top Header Row: Status Badge & Selection Indicator -->
                 <div class="flex items-center justify-between min-h-[24px]">
                   <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-300">
-                    Start Here
+                    Recommended to Start
                   </span>
                   <div
                     class="w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all"
@@ -194,41 +337,21 @@
                   </div>
                 </div>
 
-                <!-- Mascot & Title with Harmonious Breathing Room -->
-                <div class="text-center py-0.5 space-y-1.5">
-                  <h3 class="font-bold text-gray-900 text-base">Referral Partner</h3>
+                <!-- Graphic Hero (Swapped & Enlarged) -->
+                <div class="h-28 sm:h-30 w-full flex items-center justify-center py-0.5">
+                  <img
+                    src="/brand-assets/partner/sales-partner-illustration.png"
+                    alt="Referral Partner Mascot"
+                    class="max-h-26 sm:max-h-28 max-w-full object-contain filter drop-shadow-sm transition-transform group-hover:scale-105 duration-200"
+                  />
+                </div>
 
-                  <!-- Authentic Live Robot Mascot Group Graphic -->
-                  <div class="h-18 sm:h-20 w-full flex items-center justify-center">
-                    <img
-                      src="/brand-assets/partner/referral-partner-illustration.png"
-                      alt="Referral Partner Mascot Team"
-                      class="max-h-18 sm:max-h-20 max-w-full object-contain filter drop-shadow-sm transition-transform group-hover:scale-105 duration-200"
-                    />
-                  </div>
-
-                  <p class="text-xs text-gray-500 leading-normal px-1">
-                    Share your link with contacts. We handle demos & closing.
+                <!-- Title & Description -->
+                <div class="text-center space-y-1 pt-1">
+                  <h3 class="font-bold text-gray-900 text-base sm:text-lg">Referral Partner</h3>
+                  <p class="text-xs sm:text-[13px] text-gray-500 leading-relaxed px-1">
+                    Share your link with contacts. Our sales team conducts demos & closes the sale.
                   </p>
-                </div>
-
-                <!-- Commission Earning Hero Box (Balanced & Spacious) -->
-                <div class="py-1.5 px-2.5 rounded-lg bg-white/90 border border-emerald-200/80 text-center space-y-0.5 shadow-2xs">
-                  <span class="text-[9px] font-bold text-emerald-900 uppercase tracking-wider block">Direct Payout</span>
-                  <div class="text-sm sm:text-base font-semibold text-emerald-900 font-mono leading-tight">RM 300 – RM 500</div>
-                  <span class="text-[10px] text-emerald-800 font-medium block">Flat fee per closed deal</span>
-                </div>
-
-                <!-- Key Highlights Checklist -->
-                <div class="space-y-1.5 pt-2 text-[11px] text-gray-600 border-t border-gray-100/90">
-                  <div class="flex items-center gap-2">
-                    <Check class="w-3.5 h-3.5 text-[#23B750] shrink-0 stroke-[2.5]" />
-                    <span>100% hands-off · No selling needed</span>
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <Check class="w-3.5 h-3.5 text-[#23B750] shrink-0 stroke-[2.5]" />
-                    <span>Bi-weekly payout directly to bank</span>
-                  </div>
                 </div>
               </div>
 
@@ -239,11 +362,13 @@
                 @click="openSalesPartnerModal"
                 @keydown.enter.prevent="openSalesPartnerModal"
                 @keydown.space.prevent="openSalesPartnerModal"
-                class="group relative rounded-2xl border-2 p-4 sm:p-4.5 flex flex-col justify-between text-left transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-[#23B750] focus-visible:outline-none"
+                class="group relative rounded-2xl border-2 p-4.5 sm:p-5 flex flex-col justify-between text-left transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-[#23B750] focus-visible:outline-none min-h-[275px] sm:min-h-[285px]"
                 :class="[
-                  selectedPartnerType === 'sales'
-                    ? 'border-[#23B750] bg-emerald-50/50 ring-2 ring-[#23B750]/15 shadow-xs'
-                    : 'border-gray-200 bg-gray-50/60 hover:bg-white hover:border-gray-300'
+                  !isSalesPartnerUnlocked
+                    ? 'border-gray-200/90 bg-gray-100/70 opacity-60 hover:opacity-85 hover:border-gray-300'
+                    : (selectedPartnerType === 'sales'
+                      ? 'border-[#23B750] bg-emerald-50/50 ring-2 ring-[#23B750]/15 shadow-xs'
+                      : 'border-gray-200 bg-white hover:border-gray-300')
                 ]"
               >
                 <!-- Top Header Row: Status Badge & Lock Indicator -->
@@ -252,9 +377,9 @@
                     class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-semibold transition-colors"
                     :class="salesPartnerBadgeClass"
                   >
-                    <Lock v-if="!isSalesPartnerUnlocked" class="w-3 h-3" />
-                    <Unlock v-else class="w-3 h-3" />
-                    {{ isSalesPartnerUnlocked ? 'Unlocked Preview' : 'Unlocks at 5 Deals' }}
+                    <Lock v-if="!isSalesPartnerUnlocked" class="w-3 h-3 text-gray-500" />
+                    <Unlock v-else class="w-3 h-3 text-emerald-700" />
+                    {{ isSalesPartnerUnlocked ? 'Unlocked' : 'Unlocks at 5 Deals' }}
                   </span>
                   <div
                     class="w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all"
@@ -265,59 +390,44 @@
                   </div>
                 </div>
 
-                <!-- Mascot & Title with Harmonious Breathing Room -->
-                <div class="text-center py-0.5 space-y-1.5">
-                  <h3 class="font-bold text-gray-700 text-base">Sales Partner</h3>
-
-                  <!-- Authentic Live Single Robot Mascot Graphic -->
-                  <div class="h-18 sm:h-20 w-full flex items-center justify-center opacity-85">
-                    <img
-                      src="/brand-assets/partner/sales-partner-illustration.png"
-                      alt="Sales Partner Mascot Robot"
-                      class="max-h-18 sm:max-h-20 max-w-full object-contain filter drop-shadow-sm transition-transform group-hover:scale-105 duration-200"
-                    />
-                  </div>
-
-                  <p class="text-xs text-gray-500 leading-normal px-1">
-                    Pitch leads directly and manage the full sales cycle.
-                  </p>
-                </div>
-
-                <!-- Commission Earning Hero Box (Balanced & Spacious) -->
+                <!-- Graphic Hero (Swapped & Enlarged) -->
                 <div
-                  class="py-1.5 px-2.5 rounded-lg text-center space-y-0.5 transition-colors"
-                  :class="selectedPartnerType === 'sales' ? 'bg-white/90 border border-emerald-200/80 shadow-2xs' : 'bg-gray-100/80 border border-gray-200/80'"
+                  class="h-28 sm:h-30 w-full flex items-center justify-center py-0.5 transition-all"
+                  :class="!isSalesPartnerUnlocked ? 'opacity-70 grayscale-[50%]' : 'opacity-90'"
                 >
-                  <span class="text-[9px] font-bold uppercase tracking-wider block" :class="selectedPartnerType === 'sales' ? 'text-emerald-900' : 'text-gray-600'">Recurring Revenue</span>
-                  <div class="text-sm sm:text-base font-semibold font-mono leading-tight" :class="selectedPartnerType === 'sales' ? 'text-emerald-900' : 'text-gray-900'">10% – 25% MRR</div>
-                  <span class="text-[10px] font-medium block" :class="selectedPartnerType === 'sales' ? 'text-emerald-800' : 'text-gray-500'">Paid monthly for 12 months</span>
+                  <img
+                    src="/brand-assets/partner/referral-partner-illustration.png"
+                    alt="Sales Partner Mascot Team"
+                    class="max-h-26 sm:max-h-28 max-w-full object-contain filter drop-shadow-sm transition-transform group-hover:scale-105 duration-200"
+                  />
                 </div>
 
-                <!-- Key Highlights Checklist -->
-                <div class="space-y-1.5 pt-2 text-[11px] text-gray-600 border-t border-gray-100/90">
-                  <div class="flex items-center gap-2">
-                    <Check class="w-3.5 h-3.5 shrink-0 stroke-[2.5]" :class="selectedPartnerType === 'sales' ? 'text-[#23B750]' : 'text-gray-400'" />
-                    <span>Higher long-term compound income</span>
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <Check class="w-3.5 h-3.5 shrink-0 stroke-[2.5]" :class="selectedPartnerType === 'sales' ? 'text-[#23B750]' : 'text-gray-400'" />
-                    <span>Dedicated CRM deal registration portal</span>
-                  </div>
+                <!-- Title & Description -->
+                <div class="text-center space-y-1 pt-1">
+                  <h3
+                    class="font-bold text-base sm:text-lg transition-colors"
+                    :class="!isSalesPartnerUnlocked ? 'text-gray-500' : (selectedPartnerType === 'sales' ? 'text-gray-900' : 'text-gray-700')"
+                  >
+                    Sales Partner
+                  </h3>
+                  <p class="text-xs sm:text-[13px] text-gray-500 leading-relaxed px-1">
+                    Pitch leads directly and manage the full client sales cycle.
+                  </p>
                 </div>
               </div>
             </div>
 
             <!-- Clear & Reassuring Footnote with Generous Breathing Room Below -->
-            <p class="text-xs text-gray-500 text-center leading-relaxed mt-3.5">
+            <p class="text-xs text-gray-500 text-center leading-relaxed mt-2.5 sm:mt-3 font-normal">
               <Info class="inline-block w-3.5 h-3.5 text-gray-400 align-middle -translate-y-[1px] mr-1" />
-              <span>All new partners start on the <strong class="text-gray-700">Referral Track</strong>. Close 5 successful referrals to unlock the recurring <strong class="text-gray-700">Sales Track</strong>.</span>
+              <span>Every new partner starts on the Referral Track. Close 5 successful referrals to unlock the recurring Sales Track.</span>
             </p>
           </div>
 
           <!-- ============================================== -->
-          <!-- STEP 2: YOUR DETAILS (ONE VIEWPORT, NO SCROLL) -->
+          <!-- STEP 3 (NEW USER): ACCOUNT DETAILS             -->
           <!-- ============================================== -->
-          <div v-else-if="currentStep === 2" class="space-y-5 sm:space-y-5.5 animate-in fade-in-50 duration-200 text-left pt-1">
+          <div v-else-if="currentStep === 3 && userType === 'new'" class="space-y-5 sm:space-y-5.5 animate-in fade-in-50 duration-200 text-left pt-1">
             <!-- Full Name & Company Name (No Redundant "optional") -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
               <div>
@@ -549,146 +659,148 @@
           </div>
 
           <!-- ============================================================== -->
-          <!-- STEP 3: REFERRAL PROFILE (ALL 5 QUESTIONS IN AIRY UN-NESTED UI) -->
+          <!-- REFERRAL PROFILE (TEMPORARILY HIDDEN PER USER REQUEST)         -->
           <!-- ============================================================== -->
-          <div v-else-if="currentStep === 3" class="space-y-5 sm:space-y-5.5 animate-in fade-in-50 duration-200 text-left pt-1">
-            <!-- Row 1: Industry + Discovery Source (2 Cols) -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+          <template v-if="false">
+            <div class="space-y-5 sm:space-y-5.5 animate-in fade-in-50 duration-200 text-left pt-1">
+              <!-- Row 1: Industry + Discovery Source (2 Cols) -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+                <div>
+                  <label for="step3-industry" class="block text-xs font-semibold text-gray-700 mb-2">
+                    Primary client industry
+                  </label>
+                  <div class="relative">
+                    <select
+                      id="step3-industry"
+                      v-model="partnerForm.industry"
+                      class="w-full pl-3.5 pr-8 py-2.5 bg-white border border-gray-200 hover:border-gray-300 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#23B750]/30 focus:border-[#23B750] shadow-2xs transition-all cursor-pointer appearance-none"
+                      :class="partnerForm.industry ? 'text-gray-900' : 'text-gray-400'"
+                    >
+                      <option value="" class="text-gray-400">Select one (optional)</option>
+                      <option value="ecommerce" class="text-gray-900">Retail & E-commerce</option>
+                      <option value="realestate" class="text-gray-900">Real Estate & Property Development</option>
+                      <option value="agency" class="text-gray-900">Marketing & Digital Agency</option>
+                      <option value="tech" class="text-gray-900">IT Consulting & Software Services</option>
+                      <option value="fnb" class="text-gray-900">Food & Beverage / Hospitality</option>
+                      <option value="financial" class="text-gray-900">Financial Services & Insurance</option>
+                      <option value="other" class="text-gray-900">Other B2B Sector</option>
+                    </select>
+                    <ChevronDown class="w-3.5 h-3.5 text-gray-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  </div>
+                </div>
+
+                <div>
+                  <label for="step3-source" class="block text-xs font-semibold text-gray-700 mb-2">
+                    How did you discover our program?
+                  </label>
+                  <div class="relative">
+                    <select
+                      id="step3-source"
+                      v-model="partnerForm.source"
+                      class="w-full pl-3.5 pr-8 py-2.5 bg-white border border-gray-200 hover:border-gray-300 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#23B750]/30 focus:border-[#23B750] shadow-2xs transition-all cursor-pointer appearance-none"
+                      :class="partnerForm.source ? 'text-gray-900' : 'text-gray-400'"
+                    >
+                      <option value="" class="text-gray-400">Select one (optional)</option>
+                      <option value="friend" class="text-gray-900">Colleague or Friend</option>
+                      <option value="social" class="text-gray-900">LinkedIn / Social Media</option>
+                      <option value="search" class="text-gray-900">Google Search</option>
+                      <option value="event" class="text-gray-900">Tech Event / Webinar</option>
+                      <option value="customer" class="text-gray-900">Existing RakanSales Customer</option>
+                      <option value="other" class="text-gray-900">Other Channel</option>
+                    </select>
+                    <ChevronDown class="w-3.5 h-3.5 text-gray-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Row 2: Referral Method + Monthly Reach (2 Cols) -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+                <div>
+                  <label for="step3-refer-channel" class="block text-xs font-semibold text-gray-700 mb-2">
+                    Primary referral channel
+                  </label>
+                  <div class="relative">
+                    <select
+                      id="step3-refer-channel"
+                      v-model="partnerForm.referMethod"
+                      class="w-full pl-3.5 pr-8 py-2.5 bg-white border border-gray-200 hover:border-gray-300 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#23B750]/30 focus:border-[#23B750] shadow-2xs transition-all cursor-pointer appearance-none"
+                      :class="partnerForm.referMethod ? 'text-gray-900' : 'text-gray-400'"
+                    >
+                      <option value="" class="text-gray-400">Select one (optional)</option>
+                      <option value="network" class="text-gray-900">Personal & Business Network</option>
+                      <option value="clients" class="text-gray-900">Existing Corporate Client Base</option>
+                      <option value="whatsapp" class="text-gray-900">WhatsApp & Business Communities</option>
+                      <option value="content" class="text-gray-900">Content Marketing & Social Media</option>
+                      <option value="other" class="text-gray-900">Direct Outreach</option>
+                    </select>
+                    <ChevronDown class="w-3.5 h-3.5 text-gray-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  </div>
+                </div>
+
+                <div>
+                  <label for="step3-monthly-reach" class="block text-xs font-semibold text-gray-700 mb-2">
+                    Estimated monthly reach
+                  </label>
+                  <div class="relative">
+                    <select
+                      id="step3-monthly-reach"
+                      v-model="partnerForm.monthlyReach"
+                      class="w-full pl-3.5 pr-8 py-2.5 bg-white border border-gray-200 hover:border-gray-300 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#23B750]/30 focus:border-[#23B750] shadow-2xs transition-all cursor-pointer appearance-none"
+                      :class="partnerForm.monthlyReach ? 'text-gray-900' : 'text-gray-400'"
+                    >
+                      <option value="" class="text-gray-400">Select one (optional)</option>
+                      <option value="1-10" class="text-gray-900">1 – 10 businesses / month</option>
+                      <option value="11-50" class="text-gray-900">11 – 50 businesses / month</option>
+                      <option value="51-200" class="text-gray-900">51 – 200 businesses / month</option>
+                      <option value="200+" class="text-gray-900">200+ businesses / month</option>
+                    </select>
+                    <ChevronDown class="w-3.5 h-3.5 text-gray-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Row 3: Prior B2B/SaaS Referral Experience -->
               <div>
-                <label for="step3-industry" class="block text-xs font-semibold text-gray-700 mb-2">
-                  Primary client industry
+                <label for="step3-prev-exp" class="block text-xs font-semibold text-gray-700 mb-2">
+                  Have you referred SaaS or B2B tools before?
                 </label>
                 <div class="relative">
                   <select
-                    id="step3-industry"
-                    v-model="partnerForm.industry"
+                    id="step3-prev-exp"
+                    v-model="partnerForm.previousReferral"
                     class="w-full pl-3.5 pr-8 py-2.5 bg-white border border-gray-200 hover:border-gray-300 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#23B750]/30 focus:border-[#23B750] shadow-2xs transition-all cursor-pointer appearance-none"
-                    :class="partnerForm.industry ? 'text-gray-900' : 'text-gray-400'"
+                    :class="partnerForm.previousReferral ? 'text-gray-900' : 'text-gray-400'"
                   >
                     <option value="" class="text-gray-400">Select one (optional)</option>
-                    <option value="ecommerce" class="text-gray-900">Retail & E-commerce</option>
-                    <option value="realestate" class="text-gray-900">Real Estate & Property Development</option>
-                    <option value="agency" class="text-gray-900">Marketing & Digital Agency</option>
-                    <option value="tech" class="text-gray-900">IT Consulting & Software Services</option>
-                    <option value="fnb" class="text-gray-900">Food & Beverage / Hospitality</option>
-                    <option value="financial" class="text-gray-900">Financial Services & Insurance</option>
-                    <option value="other" class="text-gray-900">Other B2B Sector</option>
+                    <option value="yes-regularly" class="text-gray-900">Yes, I regularly refer software and tools</option>
+                    <option value="yes-few" class="text-gray-900">Yes, I have referred business services occasionally</option>
+                    <option value="no-first-time" class="text-gray-900">No, this is my first referral program</option>
                   </select>
                   <ChevronDown class="w-3.5 h-3.5 text-gray-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                 </div>
               </div>
 
-              <div>
-                <label for="step3-source" class="block text-xs font-semibold text-gray-700 mb-2">
-                  How did you discover our program?
+              <!-- Quality Checkbox (Clean & Light) -->
+              <div class="pt-1.5">
+                <label class="flex items-start gap-2.5 cursor-pointer text-xs text-gray-600 leading-relaxed">
+                  <input
+                    type="checkbox"
+                    v-model="partnerForm.confirmedActiveBusinesses"
+                    required
+                    class="mt-0.5 rounded border-gray-300 text-[#23B750] focus:ring-[#23B750] w-4 h-4 cursor-pointer"
+                  />
+                  <span class="text-[11px] sm:text-xs">
+                    I confirm that I will refer active, genuine businesses and will not submit spam or cold scraped lists.
+                  </span>
                 </label>
-                <div class="relative">
-                  <select
-                    id="step3-source"
-                    v-model="partnerForm.source"
-                    class="w-full pl-3.5 pr-8 py-2.5 bg-white border border-gray-200 hover:border-gray-300 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#23B750]/30 focus:border-[#23B750] shadow-2xs transition-all cursor-pointer appearance-none"
-                    :class="partnerForm.source ? 'text-gray-900' : 'text-gray-400'"
-                  >
-                    <option value="" class="text-gray-400">Select one (optional)</option>
-                    <option value="friend" class="text-gray-900">Colleague or Friend</option>
-                    <option value="social" class="text-gray-900">LinkedIn / Social Media</option>
-                    <option value="search" class="text-gray-900">Google Search</option>
-                    <option value="event" class="text-gray-900">Tech Event / Webinar</option>
-                    <option value="customer" class="text-gray-900">Existing RakanSales Customer</option>
-                    <option value="other" class="text-gray-900">Other Channel</option>
-                  </select>
-                  <ChevronDown class="w-3.5 h-3.5 text-gray-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-                </div>
-              </div>
-            </div>
-
-            <!-- Row 2: Referral Method + Monthly Reach (2 Cols) -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
-              <div>
-                <label for="step3-refer-channel" class="block text-xs font-semibold text-gray-700 mb-2">
-                  Primary referral channel
-                </label>
-                <div class="relative">
-                  <select
-                    id="step3-refer-channel"
-                    v-model="partnerForm.referMethod"
-                    class="w-full pl-3.5 pr-8 py-2.5 bg-white border border-gray-200 hover:border-gray-300 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#23B750]/30 focus:border-[#23B750] shadow-2xs transition-all cursor-pointer appearance-none"
-                    :class="partnerForm.referMethod ? 'text-gray-900' : 'text-gray-400'"
-                  >
-                    <option value="" class="text-gray-400">Select one (optional)</option>
-                    <option value="network" class="text-gray-900">Personal & Business Network</option>
-                    <option value="clients" class="text-gray-900">Existing Corporate Client Base</option>
-                    <option value="whatsapp" class="text-gray-900">WhatsApp & Business Communities</option>
-                    <option value="content" class="text-gray-900">Content Marketing & Social Media</option>
-                    <option value="other" class="text-gray-900">Direct Outreach</option>
-                  </select>
-                  <ChevronDown class="w-3.5 h-3.5 text-gray-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-                </div>
               </div>
 
-              <div>
-                <label for="step3-monthly-reach" class="block text-xs font-semibold text-gray-700 mb-2">
-                  Estimated monthly reach
-                </label>
-                <div class="relative">
-                  <select
-                    id="step3-monthly-reach"
-                    v-model="partnerForm.monthlyReach"
-                    class="w-full pl-3.5 pr-8 py-2.5 bg-white border border-gray-200 hover:border-gray-300 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#23B750]/30 focus:border-[#23B750] shadow-2xs transition-all cursor-pointer appearance-none"
-                    :class="partnerForm.monthlyReach ? 'text-gray-900' : 'text-gray-400'"
-                  >
-                    <option value="" class="text-gray-400">Select one (optional)</option>
-                    <option value="1-10" class="text-gray-900">1 – 10 businesses / month</option>
-                    <option value="11-50" class="text-gray-900">11 – 50 businesses / month</option>
-                    <option value="51-200" class="text-gray-900">51 – 200 businesses / month</option>
-                    <option value="200+" class="text-gray-900">200+ businesses / month</option>
-                  </select>
-                  <ChevronDown class="w-3.5 h-3.5 text-gray-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-                </div>
-              </div>
+              <!-- Agreement disclaimer -->
+              <p class="text-[10px] text-gray-400 text-center pt-0.5">
+                By registering, you agree to the <a href="#" class="text-[#23B750] font-medium hover:underline">Partner Agreement</a> and <a href="#" class="text-[#23B750] font-medium hover:underline">Privacy Policy</a>.
+              </p>
             </div>
-
-            <!-- Row 3: Prior B2B/SaaS Referral Experience -->
-            <div>
-              <label for="step3-prev-exp" class="block text-xs font-semibold text-gray-700 mb-2">
-                Have you referred SaaS or B2B tools before?
-              </label>
-              <div class="relative">
-                <select
-                  id="step3-prev-exp"
-                  v-model="partnerForm.previousReferral"
-                  class="w-full pl-3.5 pr-8 py-2.5 bg-white border border-gray-200 hover:border-gray-300 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#23B750]/30 focus:border-[#23B750] shadow-2xs transition-all cursor-pointer appearance-none"
-                  :class="partnerForm.previousReferral ? 'text-gray-900' : 'text-gray-400'"
-                >
-                  <option value="" class="text-gray-400">Select one (optional)</option>
-                  <option value="yes-regularly" class="text-gray-900">Yes, I regularly refer software and tools</option>
-                  <option value="yes-few" class="text-gray-900">Yes, I have referred business services occasionally</option>
-                  <option value="no-first-time" class="text-gray-900">No, this is my first referral program</option>
-                </select>
-                <ChevronDown class="w-3.5 h-3.5 text-gray-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-              </div>
-            </div>
-
-            <!-- Quality Checkbox (Clean & Light) -->
-            <div class="pt-1.5">
-              <label class="flex items-start gap-2.5 cursor-pointer text-xs text-gray-600 leading-relaxed">
-                <input
-                  type="checkbox"
-                  v-model="partnerForm.confirmedActiveBusinesses"
-                  required
-                  class="mt-0.5 rounded border-gray-300 text-[#23B750] focus:ring-[#23B750] w-4 h-4 cursor-pointer"
-                />
-                <span class="text-[11px] sm:text-xs">
-                  I confirm that I will refer active, genuine businesses and will not submit spam or cold scraped lists.
-                </span>
-              </label>
-            </div>
-
-            <!-- Agreement disclaimer -->
-            <p class="text-[10px] text-gray-400 text-center pt-0.5">
-              By registering, you agree to the <a href="#" class="text-[#23B750] font-medium hover:underline">Partner Agreement</a> and <a href="#" class="text-[#23B750] font-medium hover:underline">Privacy Policy</a>.
-            </p>
-          </div>
+          </template>
 
           <!-- ============================================== -->
           <!-- STEP 4: SUCCESS / CONFIRMATION (CLEAN & SIMPLE) -->
@@ -701,16 +813,23 @@
 
             <!-- Heading & Clarity Subtext -->
             <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight mb-2.5">
-              Registration submitted!
+              {{ userType === 'existing' ? 'Partner Account Linked!' : 'Registration submitted!' }}
             </h2>
             <p class="text-sm text-gray-600 max-w-sm leading-relaxed mb-5">
-              We've sent a verification link to
-              <span class="font-semibold text-gray-900">{{ partnerForm.email || 'your email' }}</span>.
-              Please check your inbox to activate your account.
+              <span v-if="userType === 'existing'">
+                Your partner dashboard has been connected to
+                <strong class="text-gray-900">{{ crmLinkEmail }}</strong>. You can now use your existing CRM login to view referral leads and payouts.
+              </span>
+              <span v-else>
+                We've sent a verification link to
+                <strong class="text-gray-900">{{ partnerForm.email || 'your email' }}</strong>.
+                Please check your inbox to activate your account.
+              </span>
             </p>
 
             <!-- Minimal Resend Trigger -->
             <button
+              v-if="userType === 'new'"
               type="button"
               @click="resendVerificationEmail"
               class="text-xs text-gray-500 hover:text-gray-700 transition-colors cursor-pointer focus-visible:outline-none"
@@ -727,14 +846,14 @@
 
         <!-- 4. ACTION CONTROLS (Consistent h-12 Height & text-sm Typography) -->
         <div class="h-[88px] shrink-0 pt-4.5 border-t border-gray-100/90 flex flex-col justify-between">
-          <!-- Step 1 Actions -->
+          <!-- Step 1 Actions (Account Status) -->
           <template v-if="currentStep === 1">
             <button
               type="button"
               @click="goToStep(2)"
               class="w-full h-12 bg-[#23B750] hover:bg-[#1a943e] active:scale-[0.99] text-white font-bold text-sm rounded-xl shadow-sm transition-all cursor-pointer flex items-center justify-center gap-2 focus-visible:ring-2 focus-visible:ring-[#23B750] focus-visible:ring-offset-2 focus-visible:outline-none"
             >
-              <span>Continue to Account Details</span>
+              <span>{{ userType === 'existing' ? 'Continue to Link CRM Account' : 'Continue to Track Selection' }}</span>
               <ArrowRight class="w-4 h-4" />
             </button>
             <div class="text-center pt-1">
@@ -742,7 +861,7 @@
                 to="/auth"
                 class="text-xs text-gray-500 hover:text-gray-800 transition-colors inline-flex items-center gap-1 focus-visible:ring-2 focus-visible:ring-[#23B750] focus-visible:outline-none rounded"
               >
-                <span>Already a partner?</span>
+                <span>Already registered as a partner?</span>
                 <span class="font-semibold text-[#23B750] hover:text-[#1a943e] hover:underline">Sign in</span>
               </router-link>
             </div>
@@ -750,75 +869,139 @@
 
           <!-- Step 2 Actions -->
           <template v-else-if="currentStep === 2">
-            <div class="flex items-center gap-3">
-              <button
-                type="button"
-                @click="goToStep(1)"
-                class="px-5 h-12 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold text-sm rounded-xl transition-colors cursor-pointer min-w-[88px] flex items-center justify-center focus-visible:ring-2 focus-visible:ring-[#23B750] focus-visible:outline-none"
-              >
-                Back
-              </button>
-              <button
-                type="button"
-                @click="submitStep2"
-                class="flex-1 h-12 bg-[#23B750] hover:bg-[#1a943e] text-white font-bold text-sm rounded-xl shadow-xs transition-all cursor-pointer flex items-center justify-center gap-1.5 focus-visible:ring-2 focus-visible:ring-[#23B750] focus-visible:ring-offset-2 focus-visible:outline-none"
-              >
-                <span>Continue to Referral Profile</span>
-                <ArrowRight class="w-4 h-4" />
-              </button>
-            </div>
-            <div class="text-center pt-1">
-              <router-link
-                to="/auth"
-                class="text-xs text-gray-500 hover:text-gray-800 transition-colors inline-flex items-center gap-1 focus-visible:ring-2 focus-visible:ring-[#23B750] focus-visible:outline-none rounded"
-              >
-                <span>Already a partner?</span>
-                <span class="font-semibold text-[#23B750] hover:text-[#1a943e] hover:underline">Sign in</span>
-              </router-link>
-            </div>
+            <!-- Case 2A: New User (Partner Track -> Account Details) -->
+            <template v-if="userType === 'new'">
+              <div class="flex items-center gap-3">
+                <button
+                  type="button"
+                  @click="goToStep(1)"
+                  class="px-5 h-12 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold text-sm rounded-xl transition-colors cursor-pointer min-w-[88px] flex items-center justify-center focus-visible:ring-2 focus-visible:ring-[#23B750] focus-visible:outline-none"
+                >
+                  Back
+                </button>
+                <button
+                  type="button"
+                  @click="goToStep(3)"
+                  class="flex-1 h-12 bg-[#23B750] hover:bg-[#1a943e] text-white font-bold text-sm rounded-xl shadow-xs transition-all cursor-pointer flex items-center justify-center gap-1.5 focus-visible:ring-2 focus-visible:ring-[#23B750] focus-visible:ring-offset-2 focus-visible:outline-none"
+                >
+                  <span>{{ selectedPartnerType === 'sales' ? 'Continue as Sales Partner' : 'Continue as Referral Partner' }}</span>
+                  <ArrowRight class="w-4 h-4" />
+                </button>
+              </div>
+              <div class="text-center pt-1">
+                <router-link
+                  to="/auth"
+                  class="text-xs text-gray-500 hover:text-gray-800 transition-colors inline-flex items-center gap-1 focus-visible:ring-2 focus-visible:ring-[#23B750] focus-visible:outline-none rounded"
+                >
+                  <span>Already registered as a partner?</span>
+                  <span class="font-semibold text-[#23B750] hover:text-[#1a943e] hover:underline">Sign in</span>
+                </router-link>
+              </div>
+            </template>
+
+            <!-- Case 2B: Existing User (Link Account -> Find my account & continue) -->
+            <template v-else>
+              <div class="flex items-center gap-3">
+                <button
+                  type="button"
+                  @click="goToStep(1)"
+                  class="px-5 h-12 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold text-sm rounded-xl transition-colors cursor-pointer min-w-[88px] flex items-center justify-center focus-visible:ring-2 focus-visible:ring-[#23B750] focus-visible:outline-none"
+                >
+                  Back
+                </button>
+                <button
+                  type="button"
+                  @click="findAccountAndContinue"
+                  :disabled="!crmLinkEmail || isFindingAccount"
+                  class="flex-1 h-12 bg-[#23B750] hover:bg-[#1a943e] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-sm rounded-xl shadow-xs transition-all cursor-pointer flex items-center justify-center gap-2 focus-visible:ring-2 focus-visible:ring-[#23B750] focus-visible:ring-offset-2 focus-visible:outline-none"
+                >
+                  <Loader2 v-if="isFindingAccount" class="w-4 h-4 animate-spin text-white" />
+                  <span v-else>Find my account & continue</span>
+                </button>
+              </div>
+              <p class="text-xs text-gray-400 text-center pt-1">
+                You'll pick your partner type next — no need to re-enter your details.
+              </p>
+            </template>
           </template>
 
           <!-- Step 3 Actions -->
           <template v-else-if="currentStep === 3">
-            <div class="flex items-center gap-3">
-              <button
-                type="button"
-                :disabled="isSubmitting"
-                @click="goToStep(2)"
-                class="px-5 h-12 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold text-sm rounded-xl transition-colors cursor-pointer disabled:opacity-50 min-w-[88px] flex items-center justify-center focus-visible:ring-2 focus-visible:ring-[#23B750] focus-visible:outline-none"
-              >
-                Back
-              </button>
-              <button
-                type="button"
-                @click="submitRegistration"
-                :disabled="!partnerForm.confirmedActiveBusinesses || isSubmitting"
-                class="flex-1 h-12 bg-[#23B750] hover:bg-[#1a943e] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-sm rounded-xl shadow-xs transition-all cursor-pointer flex items-center justify-center gap-2 focus-visible:ring-2 focus-visible:ring-[#23B750] focus-visible:ring-offset-2 focus-visible:outline-none"
-              >
-                <Loader2 v-if="isSubmitting" class="w-4 h-4 animate-spin text-white" />
-                <Sparkles v-else class="w-4 h-4" />
-                <span>{{ isSubmitting ? 'Creating partner account...' : 'Complete Partner Registration' }}</span>
-              </button>
-            </div>
-            <div class="text-center pt-1">
-              <router-link
-                to="/auth"
-                class="text-xs text-gray-500 hover:text-gray-800 transition-colors inline-flex items-center gap-1 focus-visible:ring-2 focus-visible:ring-[#23B750] focus-visible:outline-none rounded"
-              >
-                <span>Already a partner?</span>
-                <span class="font-semibold text-[#23B750] hover:text-[#1a943e] hover:underline">Sign in</span>
-              </router-link>
-            </div>
+            <!-- Case 3A: New User (Account Details -> Submit Registration) -->
+            <template v-if="userType === 'new'">
+              <div class="flex items-center gap-3">
+                <button
+                  type="button"
+                  :disabled="isSubmitting"
+                  @click="goToStep(2)"
+                  class="px-5 h-12 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold text-sm rounded-xl transition-colors cursor-pointer disabled:opacity-50 min-w-[88px] flex items-center justify-center focus-visible:ring-2 focus-visible:ring-[#23B750] focus-visible:outline-none"
+                >
+                  Back
+                </button>
+                <button
+                  type="button"
+                  @click="submitRegistration"
+                  :disabled="isSubmitting || !partnerForm.fullName || !partnerForm.email || !partnerForm.password"
+                  class="flex-1 h-12 bg-[#23B750] hover:bg-[#1a943e] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-sm rounded-xl shadow-xs transition-all cursor-pointer flex items-center justify-center gap-2 focus-visible:ring-2 focus-visible:ring-[#23B750] focus-visible:ring-offset-2 focus-visible:outline-none"
+                >
+                  <Loader2 v-if="isSubmitting" class="w-4 h-4 animate-spin text-white" />
+                  <Sparkles v-else class="w-4 h-4" />
+                  <span>{{ isSubmitting ? 'Creating partner account...' : 'Complete Partner Registration' }}</span>
+                </button>
+              </div>
+              <div class="text-center pt-1">
+                <router-link
+                  to="/auth"
+                  class="text-xs text-gray-500 hover:text-gray-800 transition-colors inline-flex items-center gap-1 focus-visible:ring-2 focus-visible:ring-[#23B750] focus-visible:outline-none rounded"
+                >
+                  <span>Already registered as a partner?</span>
+                  <span class="font-semibold text-[#23B750] hover:text-[#1a943e] hover:underline">Sign in</span>
+                </router-link>
+              </div>
+            </template>
+
+            <!-- Case 3B: Existing User (Partner Track -> Complete Activation) -->
+            <template v-else>
+              <div class="flex items-center gap-3">
+                <button
+                  type="button"
+                  :disabled="isSubmitting"
+                  @click="goToStep(2)"
+                  class="px-5 h-12 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold text-sm rounded-xl transition-colors cursor-pointer disabled:opacity-50 min-w-[88px] flex items-center justify-center focus-visible:ring-2 focus-visible:ring-[#23B750] focus-visible:outline-none"
+                >
+                  Back
+                </button>
+                <button
+                  type="button"
+                  @click="submitRegistration"
+                  :disabled="isSubmitting"
+                  class="flex-1 h-12 bg-[#23B750] hover:bg-[#1a943e] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-sm rounded-xl shadow-xs transition-all cursor-pointer flex items-center justify-center gap-2 focus-visible:ring-2 focus-visible:ring-[#23B750] focus-visible:ring-offset-2 focus-visible:outline-none"
+                >
+                  <Loader2 v-if="isSubmitting" class="w-4 h-4 animate-spin text-white" />
+                  <Sparkles v-else class="w-4 h-4" />
+                  <span>{{ isSubmitting ? (selectedPartnerType === 'sales' ? 'Activating sales track...' : 'Activating referral track...') : (selectedPartnerType === 'sales' ? 'Complete Sales Partner Setup' : 'Complete Referral Partner Setup') }}</span>
+                </button>
+              </div>
+              <div class="text-center pt-1">
+                <router-link
+                  to="/auth"
+                  class="text-xs text-gray-500 hover:text-gray-800 transition-colors inline-flex items-center gap-1 focus-visible:ring-2 focus-visible:ring-[#23B750] focus-visible:outline-none rounded"
+                >
+                  <span>Already registered as a partner?</span>
+                  <span class="font-semibold text-[#23B750] hover:text-[#1a943e] hover:underline">Sign in</span>
+                </router-link>
+              </div>
+            </template>
           </template>
 
           <!-- Step 4 Actions -->
           <template v-else-if="currentStep === 4">
             <button
               type="button"
-              @click="goToLogin"
+              @click="goToPartnerOverview"
               class="w-full h-12 bg-[#23B750] hover:bg-[#1a943e] active:scale-[0.99] text-white font-bold text-sm rounded-xl shadow-sm transition-all cursor-pointer flex items-center justify-center gap-2 focus-visible:ring-2 focus-visible:ring-[#23B750] focus-visible:ring-offset-2 focus-visible:outline-none"
             >
-              <span>Proceed to Login</span>
+              <span>{{ userType === 'existing' ? 'Open Partner Dashboard' : 'Go to Partner Dashboard' }}</span>
               <ArrowRight class="w-4 h-4" />
             </button>
             <div class="text-center pt-1">
@@ -885,7 +1068,7 @@
     </div>
 
     <!-- ========================================================= -->
-    <!-- INLINE UNLOCK MODAL DIALOG (CRAFT-POLISHED, NO BROWSER CONFIRM) -->
+    <!-- FRIENDLY SALES TRACK MODAL (OPTION 3 ACCORDION BYPASS)    -->
     <!-- ========================================================= -->
     <div
       v-if="showUnlockModal"
@@ -894,57 +1077,97 @@
       aria-modal="true"
       aria-labelledby="unlock-modal-title"
     >
-      <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl border border-gray-100 p-6 space-y-4 text-left">
-        <div class="flex items-center justify-between">
-          <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center">
-            <Award class="w-5 h-5" />
+      <div class="bg-white w-full max-w-sm sm:max-w-[410px] rounded-2xl shadow-2xl border border-gray-100 p-6 sm:p-7 space-y-4 text-center relative overflow-hidden">
+        <!-- Close Button Top Right -->
+        <button
+          type="button"
+          @click="showUnlockModal = false"
+          class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 p-1.5 rounded-lg cursor-pointer focus-visible:outline-none transition-colors"
+          aria-label="Close dialog"
+        >
+          <X class="w-4 h-4" />
+        </button>
+
+        <!-- Friendly Robot Illustration (Enlarged) -->
+        <div class="pt-1 flex justify-center">
+          <div class="w-full max-w-[260px] h-28 sm:h-32 flex items-center justify-center">
+            <img
+              src="/brand-assets/partner/referral-partner-illustration.png"
+              alt="Sales Partner Mascot Team"
+              class="max-h-full max-w-full object-contain pointer-events-none select-none drop-shadow-sm"
+            />
           </div>
-          <button
-            type="button"
-            @click="showUnlockModal = false"
-            class="text-gray-400 hover:text-gray-600 p-1.5 rounded-lg cursor-pointer focus-visible:outline-none"
-            aria-label="Close dialog"
-          >
-            <X class="w-4 h-4" />
-          </button>
         </div>
 
-        <div class="space-y-1.5">
-          <h3 id="unlock-modal-title" class="text-lg font-semibold text-gray-900">
-            Unlock Sales Partner Track Preview?
+        <!-- Title & Friendly Explanation -->
+        <div class="space-y-2">
+          <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 border border-amber-200/70 text-amber-700 text-[11px] font-semibold">
+            <Lock class="w-3 h-3 stroke-[2.2]" />
+            <span>Unlocks at 5 Deals</span>
+          </div>
+
+          <h3 id="unlock-modal-title" class="text-base sm:text-lg font-bold text-gray-900 tracking-tight">
+            Sales Partner Track
           </h3>
-          <p class="text-xs text-gray-600 leading-relaxed">
-            In live production, the <strong>Sales Partner Track</strong> unlocks automatically after your <strong>5th closed referral</strong>.
-          </p>
-          <p class="text-xs text-gray-500 leading-relaxed pt-1">
-            As this is an interactive prototype, you can unlock preview mode right now to explore the sales tier and recurring commission terms.
+
+          <p class="text-xs text-gray-600 leading-relaxed font-normal px-1">
+            New partners begin on the Referral Track. Close 5 successful referrals to automatically unlock recurring sales commissions.
           </p>
         </div>
 
-        <div class="p-3 bg-amber-50 rounded-xl border border-amber-200 text-xs text-amber-900 space-y-1">
-          <div class="font-bold">Sales Partner Benefits:</div>
-          <ul class="space-y-0.5 text-[11px] text-amber-800 list-disc list-inside">
-            <li>10% – 25% recurring monthly revenue share (12 months)</li>
-            <li>Dedicated Partner Manager & co-pitch collateral</li>
-            <li>Direct CRM deal registration portal</li>
-          </ul>
-        </div>
-
-        <div class="flex items-center gap-3 pt-2">
+        <!-- Optional Expandable "Have a code?" Section -->
+        <div class="pt-2 border-t border-gray-100">
           <button
             type="button"
-            @click="showUnlockModal = false"
-            class="flex-1 py-2.5 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold text-xs rounded-xl transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-[#23B750] focus-visible:outline-none"
+            @click="showCodeInput = !showCodeInput"
+            class="w-full flex items-center justify-center gap-1.5 text-xs font-semibold text-gray-500 hover:text-gray-800 transition-colors py-1 cursor-pointer"
           >
-            Stay on Referral Track
+            <span>Have an approved bypass code? Enter here</span>
+            <ChevronDown
+              class="w-3.5 h-3.5 transition-transform duration-200 text-gray-400"
+              :class="showCodeInput ? 'rotate-180 text-gray-700' : ''"
+            />
           </button>
+
+          <!-- Collapsible Code Input Container -->
+          <div
+            v-if="showCodeInput"
+            class="mt-2.5 p-3 bg-gray-50 border border-gray-200/80 rounded-xl space-y-2 text-left animate-in fade-in-50 duration-150"
+          >
+            <p class="text-[11px] text-gray-500 font-normal">
+              Enter your invitation code to bypass the 5-deal requirement:
+            </p>
+            <div class="flex items-center gap-2">
+              <input
+                v-model="partnerAccessCode"
+                type="text"
+                placeholder="ENTER CODE"
+                @keydown.enter.prevent="submitAccessCode"
+                class="flex-1 px-3 py-2 bg-white border border-gray-200 hover:border-gray-300 rounded-lg text-xs font-semibold text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#23B750]/30 focus:border-[#23B750] caret-[#23B750] uppercase tracking-wider transition-all"
+              />
+              <button
+                type="button"
+                @click="submitAccessCode"
+                class="px-3.5 py-2 bg-[#23B750] hover:bg-[#1a943e] text-white text-xs font-bold rounded-lg transition-colors cursor-pointer shadow-2xs shrink-0"
+              >
+                Unlock
+              </button>
+            </div>
+            <p v-if="codeError" class="text-[11px] text-red-600 font-medium">
+              {{ codeError }}
+            </p>
+          </div>
+        </div>
+
+        <!-- Primary Welcoming Action -->
+        <div class="pt-1">
           <button
             type="button"
-            @click="confirmUnlockSalesPartner"
-            class="flex-1 py-2.5 bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs rounded-xl shadow-xs transition-colors cursor-pointer flex items-center justify-center gap-1.5 focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:outline-none"
+            @click="selectReferralAndClose"
+            class="w-full py-2.5 sm:py-3 bg-[#23B750] hover:bg-[#1a943e] text-white font-bold text-xs sm:text-sm rounded-xl shadow-xs transition-colors cursor-pointer flex items-center justify-center gap-1.5 focus-visible:ring-2 focus-visible:ring-[#23B750] focus-visible:outline-none"
           >
-            <Unlock class="w-3.5 h-3.5" />
-            <span>Unlock Preview</span>
+            <span>Continue on Referral Track</span>
+            <ArrowRight class="w-4 h-4" />
           </button>
         </div>
       </div>
@@ -977,15 +1200,27 @@ import {
   Zap,
   Award,
   Info,
+  Link,
+  UserPlus,
 } from 'lucide-vue-next';
 
 const router = useRouter();
+
+// User flow selection ('new' user vs 'existing' CRM customer)
+const userType = ref<'new' | 'existing'>('new');
+const crmLinkEmail = ref('');
+const isFindingAccount = ref(false);
+const accountLinkError = ref('');
+const isAccountLinked = ref(false);
 
 // Current active wizard step (1 to 4)
 const currentStep = ref<number>(1);
 const selectedPartnerType = ref<'referral' | 'sales'>('referral');
 const isSalesPartnerUnlocked = ref(false);
 const showUnlockModal = ref(false);
+const showCodeInput = ref(false);
+const partnerAccessCode = ref('');
+const codeError = ref('');
 const showPassword = ref(false);
 const isSubmitting = ref(false);
 const isChatOpen = ref(false);
@@ -1012,13 +1247,13 @@ const partnerForm = reactive({
 const currentStepTitle = computed(() => {
   switch (currentStep.value) {
     case 1:
-      return 'Partner Registration';
+      return 'Partner Account Setup';
     case 2:
-      return 'Account details';
+      return userType.value === 'existing' ? 'Link your account' : 'Select your partner track';
     case 3:
-      return 'Referral profile';
+      return userType.value === 'existing' ? 'Select your partner track' : 'Account details';
     case 4:
-      return 'Verify your work email address';
+      return userType.value === 'existing' ? 'Partner Account Linked!' : 'Registration submitted!';
     default:
       return '';
   }
@@ -1027,16 +1262,33 @@ const currentStepTitle = computed(() => {
 const currentStepSubtitle = computed(() => {
   switch (currentStep.value) {
     case 1:
-      return 'Earn money by referring businesses to our CRM platform';
+      return 'Create a new partner account, or link your existing RakanSales login to manage everything in one place.';
     case 2:
-      return "Create the partner login you'll use to view tracked leads and commission payouts.";
+      return userType.value === 'existing'
+        ? "Already a RakanSales CRM customer? Use the same email — we'll link your partner earnings to your existing login, no new password needed."
+        : 'Choose how you want to earn — share links for quick cash bonuses, or manage sales for recurring revenue.';
     case 3:
-      return 'Help us tailor your partner resources and commission routing.';
+      return userType.value === 'existing'
+        ? 'Choose how you want to earn — share links for quick cash bonuses, or manage sales for recurring revenue.'
+        : "Create the partner login you'll use to view tracked leads and commission payouts.";
     case 4:
-      return `We've dispatched an account verification token to ${partnerForm.email || 'your email'}. Confirm within 24 hours to begin earning commission.`;
+      return userType.value === 'existing'
+        ? `Your partner access has been linked to ${crmLinkEmail.value || 'your CRM account'}.`
+        : `We've sent a verification link to ${partnerForm.email || 'your email'}. Please check your inbox to activate your account.`;
     default:
       return '';
   }
+});
+
+const currentStepIndicatorLabel = computed(() => {
+  if (currentStep.value === 1) return 'Account setup';
+  if (currentStep.value === 2) {
+    return userType.value === 'existing' ? 'Link CRM account' : 'Select partner track';
+  }
+  if (currentStep.value === 3) {
+    return userType.value === 'existing' ? 'Select partner track' : 'Account details';
+  }
+  return '';
 });
 
 const referralUrl = computed(() => `https://app.rakansales.com/ref/RKS-8821`);
@@ -1118,16 +1370,49 @@ function goToStep(step: number) {
 
 function openSalesPartnerModal() {
   if (!isSalesPartnerUnlocked.value) {
+    partnerAccessCode.value = '';
+    codeError.value = '';
+    showCodeInput.value = false;
     showUnlockModal.value = true;
   } else {
     selectedPartnerType.value = 'sales';
   }
 }
 
+function selectReferralAndClose() {
+  selectedPartnerType.value = 'referral';
+  showUnlockModal.value = false;
+}
+
+function submitAccessCode() {
+  codeError.value = '';
+  if (!partnerAccessCode.value.trim()) {
+    codeError.value = 'Please enter an access code.';
+    return;
+  }
+  isSalesPartnerUnlocked.value = true;
+  selectedPartnerType.value = 'sales';
+  showUnlockModal.value = false;
+}
+
 function confirmUnlockSalesPartner() {
   isSalesPartnerUnlocked.value = true;
   selectedPartnerType.value = 'sales';
   showUnlockModal.value = false;
+}
+
+function findAccountAndContinue() {
+  accountLinkError.value = '';
+  if (!crmLinkEmail.value || !crmLinkEmail.value.includes('@')) {
+    accountLinkError.value = 'Please enter a valid CRM account email address.';
+    return;
+  }
+  isFindingAccount.value = true;
+  setTimeout(() => {
+    isFindingAccount.value = false;
+    isAccountLinked.value = true;
+    currentStep.value = 3;
+  }, 400);
 }
 
 function submitStep2() {
@@ -1162,8 +1447,12 @@ function copyPartnerCode() {
   }, 2200);
 }
 
+function goToPartnerOverview() {
+  router.push('/partner/overview');
+}
+
 function goToLogin() {
-  router.push('/auth');
+  goToPartnerOverview();
 }
 
 const emailResent = ref(false);
@@ -1177,6 +1466,10 @@ function resendVerificationEmail() {
 
 function resetForm() {
   currentStep.value = 1;
+  userType.value = 'new';
+  crmLinkEmail.value = '';
+  isAccountLinked.value = false;
+  accountLinkError.value = '';
   selectedPartnerType.value = 'referral';
   isSalesPartnerUnlocked.value = false;
   isSubmitting.value = false;

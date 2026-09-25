@@ -1,272 +1,414 @@
 <template>
-  <div class="h-full bg-[#FAFAFA] flex flex-col font-sans selection:bg-[#23B750]/20 selection:text-emerald-900 overflow-hidden">
-    <!-- Clean, Compact Header Banner (Hidden for now) -->
-    <header v-if="showHeader" class="bg-white border-b border-gray-100 px-5 py-2.5 shrink-0 shadow-2xs">
-      <div class="max-w-4xl mx-auto flex items-center justify-between gap-3">
-        <div class="flex items-center gap-2.5">
-          <div class="w-7 h-7 rounded-lg bg-emerald-50 text-[#23B750] flex items-center justify-center font-bold text-xs shrink-0">
-            <Sparkles class="w-3.5 h-3.5" />
-          </div>
-          <div>
-            <h1 class="text-sm sm:text-base font-bold text-gray-900 leading-tight">
-              Welcome to RakanSales
-            </h1>
-            <p class="text-[11px] text-gray-400 leading-none">Set up your workspace in just a few minutes</p>
-          </div>
-        </div>
+  <div class="h-full w-full bg-[#f9fafb] flex flex-col font-sans selection:bg-[#23B750]/20 selection:text-emerald-900 text-slate-800 overflow-hidden relative">
+    <!-- Top Step Progress Bar (Clean Floating Stepper, No Headerbar) -->
+    <OnboardingTopStepper
+      v-if="currentStep <= 4 && !isProvisioning"
+      :current-step="currentStep"
+      :completed-steps="completedSteps"
+      @change-step="goToStep"
+    />
 
-        <div class="flex items-center gap-2">
-          <span class="text-[11px] font-medium text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">
-            Step {{ currentStep }} of 6
-          </span>
-          <router-link
-            to="/omnichannel"
-            class="text-[11px] font-medium text-gray-400 hover:text-gray-700 px-2 py-1 rounded hover:bg-gray-50 transition-colors"
-          >
-            Skip for now →
-          </router-link>
-        </div>
-      </div>
-    </header>
-
-    <!-- Compact Stepper Navigation -->
-    <nav aria-label="Onboarding Steps" class="bg-white border-b border-gray-100 py-2 px-4 shrink-0 overflow-x-auto">
-      <div class="max-w-3xl mx-auto flex items-center justify-between min-w-[480px] px-2">
+    <!-- Main Content Canvas (Single Continuous Flow, Pure & Unboxed, Vertically Centered & Friendly) -->
+    <main class="flex-1 overflow-y-auto custom-scrollbar flex flex-col">
+      <Transition name="step-transition" mode="out-in">
+        <!-- Steps 1–3: Fixed Stage Height (Anchor Title & Buttons in Exact Place) -->
         <div
-          v-for="(step, idx) in steps"
-          :key="step.id"
-          class="flex-1 flex flex-col items-center relative group"
+          v-if="currentStep <= 3"
+          key="form-stage"
+          class="w-full max-w-xl mx-auto px-6 py-4 sm:py-6 my-auto flex flex-col justify-center"
         >
-          <!-- Connector line segment -->
-          <div
-            v-if="idx > 0"
-            class="absolute top-3.5 -left-1/2 right-1/2 h-[2px] -translate-y-1/2 transition-colors duration-200"
-            :class="currentStep >= idx + 1 ? 'bg-[#23B750]' : 'bg-gray-100'"
-            aria-hidden="true"
-          ></div>
-          <div
-            v-if="idx < steps.length - 1"
-            class="absolute top-3.5 left-1/2 -right-1/2 h-[2px] -translate-y-1/2 transition-colors duration-200"
-            :class="currentStep > idx + 1 ? 'bg-[#23B750]' : 'bg-gray-100'"
-            aria-hidden="true"
-          ></div>
+          <div class="w-full min-h-[460px] sm:h-[480px] flex flex-col justify-between">
+            <!-- Step Form Area with Inner Crossfade -->
+            <div class="flex-1 flex flex-col justify-start">
+              <Transition name="inner-step" mode="out-in">
+                <!-- Step 1: Company Name & Type -->
+                <StepCompanyNameType
+                  v-if="currentStep === 1"
+                  key="step-1"
+                  v-model="formData.business"
+                  @continue="nextAction"
+                />
 
-          <!-- Step Button Node -->
-          <button
-            type="button"
-            @click="goToStep(idx + 1)"
-            :aria-current="currentStep === idx + 1 ? 'step' : undefined"
-            class="relative z-10 flex flex-col items-center group cursor-pointer focus:outline-none rounded-lg p-0.5"
-          >
-            <!-- Circle Node -->
-            <div
-              :class="[
-                'w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-semibold transition-all duration-200',
-                currentStep > idx + 1
-                  ? 'bg-[#23B750] text-white shadow-2xs'
-                  : currentStep === idx + 1
-                  ? 'bg-white border-2 border-[#23B750] text-[#23B750] ring-3 ring-emerald-50 shadow-2xs'
-                  : 'bg-gray-50 border border-gray-200 text-gray-400 group-hover:border-gray-300 group-hover:text-gray-600'
-              ]"
-            >
-              <Check v-if="currentStep > idx + 1" class="w-3 h-3 stroke-[2.5]" />
-              <span v-else>{{ idx + 1 }}</span>
+                <!-- Step 2: Country & Currency -->
+                <StepCountryCurrency
+                  v-else-if="currentStep === 2"
+                  key="step-2"
+                  v-model="formData.business"
+                  @continue="nextAction"
+                />
+
+                <!-- Step 3: Team Size & Industry -->
+                <StepTeamIndustry
+                  v-else-if="currentStep === 3"
+                  key="step-3"
+                  v-model="formData.business"
+                  @continue="nextAction"
+                />
+              </Transition>
             </div>
 
-            <!-- Label -->
-            <span
-              :class="[
-                'mt-1 text-[11px] transition-colors',
-                currentStep === idx + 1
-                  ? 'font-semibold text-gray-900'
-                  : currentStep > idx + 1
-                  ? 'font-medium text-emerald-800'
-                  : 'text-gray-400 group-hover:text-gray-600'
-              ]"
-            >
-              {{ step.title }}
-            </span>
-          </button>
-        </div>
-      </div>
-    </nav>
+            <!-- Footer Navigation for Steps 1–3 (Locked at bottom of stage) -->
+            <footer class="pt-5 border-t border-gray-200/70 flex items-center justify-between shrink-0">
+              <button
+                type="button"
+                @click="prevAction"
+                :disabled="currentStep === 1"
+                :class="[
+                  'text-xs font-semibold text-gray-500 hover:text-gray-900 transition-colors flex items-center gap-1 cursor-pointer',
+                  currentStep === 1 ? 'opacity-0 pointer-events-none' : ''
+                ]"
+              >
+                <ArrowLeft class="w-3.5 h-3.5" />
+                <span>Back</span>
+              </button>
 
-    <!-- Main Step Card Container (Compact & Fit to View) -->
-    <main class="flex-1 px-3 py-2.5 sm:px-4 sm:py-3.5 flex items-center justify-center overflow-y-auto custom-scrollbar min-h-0">
-      <div class="w-full max-w-3xl bg-white border border-gray-100 rounded-2xl shadow-xs px-5 py-4 sm:px-6 sm:py-5 flex flex-col justify-between transition-all my-auto">
-        <!-- Step View Rendered Here -->
-        <div class="flex-1">
-          <StepBusiness
-            v-if="currentStep === 1"
-            v-model="formData.business"
-          />
-
-          <StepPlan
-            v-else-if="currentStep === 2"
-            v-model="formData.plan"
-          />
-
-          <StepTeam
-            v-else-if="currentStep === 3"
-            v-model="formData.team"
-          />
-
-          <StepWhatsApp
-            v-else-if="currentStep === 4"
-            v-model="formData.whatsapp"
-          />
-
-          <StepWebsiteWidget
-            v-else-if="currentStep === 5"
-            v-model="formData.widget"
-          />
-
-          <StepReady
-            v-else-if="currentStep === 6"
-            :summary="formData"
-            @launch-crm="launchCRM"
-            @launch-dashboard="launchDashboard"
-          />
-        </div>
-
-        <!-- Bottom Wizard Footer Controls (Steps 1-5) -->
-        <footer
-          v-if="currentStep < 6"
-          class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between gap-3 shrink-0"
-        >
-          <!-- Back Button -->
-          <button
-            type="button"
-            @click="prevStep"
-            :disabled="currentStep === 1"
-            :class="[
-              'h-9 px-3.5 rounded-xl text-xs font-medium transition-all flex items-center gap-1.5 cursor-pointer',
-              currentStep === 1
-                ? 'opacity-0 pointer-events-none'
-                : 'bg-gray-50 hover:bg-gray-100 text-gray-600 hover:text-gray-900 border border-gray-200/80'
-            ]"
-          >
-            <ArrowLeft class="w-3.5 h-3.5" />
-            <span>Back</span>
-          </button>
-
-          <!-- Right Side Actions -->
-          <div class="flex items-center gap-2">
-            <button
-              v-if="currentStep === 3 || currentStep === 4 || currentStep === 5"
-              type="button"
-              @click="nextStep"
-              class="text-xs font-medium text-gray-400 hover:text-gray-700 px-2.5 py-1.5 cursor-pointer transition-colors"
-            >
-              Skip step
-            </button>
-
-            <button
-              type="button"
-              @click="nextStep"
-              class="h-9 px-4.5 bg-[#23B750] hover:bg-[#1fa347] active:bg-[#1b8e3e] text-white text-xs font-semibold rounded-xl shadow-2xs hover:shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
-            >
-              <span>{{ currentStep === 5 ? 'Finish & Preview' : 'Continue' }}</span>
-              <ArrowRight class="w-3.5 h-3.5" />
-            </button>
+              <button
+                type="button"
+                @click="nextAction"
+                :disabled="!isValid"
+                :class="[
+                  'h-11 px-6 text-white text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 cursor-pointer shadow-xs focus-visible:ring-2 focus-visible:ring-[#23B750]',
+                  isValid
+                    ? 'bg-[#23B750] hover:bg-[#1a943e] active:scale-[0.99]'
+                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                ]"
+              >
+                <span>{{ continueText }}</span>
+                <ArrowRight class="w-3.5 h-3.5" />
+              </button>
+            </footer>
           </div>
-        </footer>
-      </div>
-    </main>
+        </div>
 
-    <!-- Bottom Simple Footer -->
-    <footer class="py-1.5 text-center text-[11px] text-gray-400 border-t border-gray-100 bg-white shrink-0">
-      RakanSales CRM · Need help? <a href="#" class="text-emerald-700 hover:underline">Contact support</a>
-    </footer>
+        <!-- Step 4: Choose Plan (Viewport-Fitted 4-Card Grid, Buttons Kept in max-w-xl Place) -->
+        <div
+          v-else-if="currentStep === 4 && !isProvisioning"
+          key="plan-stage"
+          class="w-full max-w-6xl mx-auto px-4 sm:px-6 py-3 sm:py-5 my-auto flex flex-col justify-center"
+        >
+          <div class="space-y-4">
+            <StepPlanSelection
+              v-model="formData.plan"
+              :currency="formData.business.currency"
+              @continue="nextAction"
+            />
+
+            <!-- Footer Navigation for Step 4 (Constrained to max-w-xl so buttons don't run off!) -->
+            <footer class="pt-5 border-t border-gray-200/70 max-w-xl mx-auto w-full flex items-center justify-between shrink-0">
+              <button
+                type="button"
+                @click="prevAction"
+                class="text-xs font-semibold text-gray-500 hover:text-gray-900 transition-colors flex items-center gap-1 cursor-pointer"
+              >
+                <ArrowLeft class="w-3.5 h-3.5" />
+                <span>Back</span>
+              </button>
+
+              <button
+                type="button"
+                @click="nextAction"
+                :disabled="!isValid"
+                :class="[
+                  'h-11 px-6 text-white text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 cursor-pointer shadow-xs focus-visible:ring-2 focus-visible:ring-[#23B750]',
+                  isValid
+                    ? 'bg-[#23B750] hover:bg-[#1a943e] active:scale-[0.99]'
+                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                ]"
+              >
+                <span>Complete Setup & Launch</span>
+                <ArrowRight class="w-3.5 h-3.5" />
+              </button>
+            </footer>
+          </div>
+        </div>
+
+        <!-- 2-Second Workspace Provisioning Loading Stage -->
+        <div
+          v-else-if="isProvisioning"
+          key="provisioning-stage"
+          class="w-full max-w-xl mx-auto px-6 py-16 my-auto flex flex-col items-center justify-center text-center animate-in fade-in-50 duration-300"
+        >
+          <div class="space-y-6 flex flex-col items-center">
+            <!-- Animated Spinner Container -->
+            <div class="w-14 h-14 rounded-2xl bg-emerald-50 border border-emerald-200/80 flex items-center justify-center text-[#23B750] shadow-sm">
+              <Loader2 class="w-7 h-7 animate-spin text-[#23B750]" />
+            </div>
+
+            <div class="space-y-2">
+              <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
+                Setting up your workspace...
+              </h2>
+              <p class="text-xs sm:text-sm text-gray-500 max-w-sm mx-auto leading-relaxed">
+                Configuring pipeline stages, templates, and team settings for
+                <strong class="text-gray-900 font-semibold">{{ formData.business.businessName || 'your team' }}</strong>.
+              </p>
+            </div>
+
+            <!-- Soft 2-second progress bar indicator -->
+            <div class="w-48 h-1.5 bg-gray-200/80 rounded-full overflow-hidden">
+              <div class="h-full bg-[#23B750] rounded-full animate-progress"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 5: Final Success Screen (Simple Clean, Vertically Centered) -->
+        <div
+          v-else-if="currentStep === 5"
+          key="success-stage"
+          class="w-full max-w-md mx-auto px-6 py-16 my-auto flex flex-col justify-center text-center animate-in fade-in-50 duration-300"
+        >
+          <div class="space-y-6">
+            <div class="w-16 h-16 rounded-2xl bg-emerald-50 border border-emerald-200/80 text-[#23B750] flex items-center justify-center mx-auto shadow-sm">
+              <Check class="w-8 h-8 stroke-[3]" />
+            </div>
+
+            <div class="space-y-2">
+              <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
+                You're all set!
+              </h2>
+              <p class="text-xs sm:text-sm text-gray-500 max-w-sm mx-auto leading-relaxed">
+                Your RakanSales workspace has been created for
+                <strong class="text-gray-900 font-semibold">{{ formData.business.businessName || 'your company' }}</strong>
+                on the
+                <strong class="text-[#23B750] font-semibold">{{ selectedPlanName }}</strong> plan.
+              </p>
+            </div>
+
+            <!-- Primary & Secondary Launch CTAs: Launch Dashboard & Complete Setting Up -->
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4">
+              <button
+                type="button"
+                @click="launchDashboard"
+                class="w-full sm:w-auto h-11 px-6 bg-white hover:bg-gray-50 active:scale-[0.99] text-gray-700 hover:text-gray-900 border border-gray-200 text-xs font-bold rounded-xl transition-all shadow-2xs inline-flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <LayoutDashboard class="w-4 h-4 text-gray-500" />
+                <span>Launch Dashboard</span>
+              </button>
+
+              <button
+                type="button"
+                @click="completeSettingUp"
+                class="w-full sm:w-auto h-11 px-7 bg-[#23B750] hover:bg-[#1a943e] active:scale-[0.99] text-white text-xs font-bold rounded-xl transition-all shadow-xs inline-flex items-center justify-center gap-2 cursor-pointer focus-visible:ring-2 focus-visible:ring-[#23B750]"
+              >
+                <span>Complete Setting Up</span>
+                <ArrowRight class="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </Transition>
+    </main>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive, computed } from 'vue';
 import { useRouter } from 'vue-router';
-import { Check, ArrowRight, ArrowLeft, Sparkles } from 'lucide-vue-next';
-import StepBusiness from '@/components/onboarding/StepBusiness.vue';
-import StepPlan from '@/components/onboarding/StepPlan.vue';
-import StepTeam from '@/components/onboarding/StepTeam.vue';
-import StepWhatsApp from '@/components/onboarding/StepWhatsApp.vue';
-import StepWebsiteWidget from '@/components/onboarding/StepWebsiteWidget.vue';
-import StepReady from '@/components/onboarding/StepReady.vue';
+import confetti from 'canvas-confetti';
+import { ArrowRight, ArrowLeft, Check, Loader2, LayoutDashboard } from 'lucide-vue-next';
+
+import OnboardingTopStepper from '@/components/onboarding/v2/OnboardingTopStepper.vue';
+import StepCompanyNameType from '@/components/onboarding/v2/StepCompanyNameType.vue';
+import StepCountryCurrency from '@/components/onboarding/v2/StepCountryCurrency.vue';
+import StepTeamIndustry from '@/components/onboarding/v2/StepTeamIndustry.vue';
+import StepPlanSelection from '@/components/onboarding/v2/StepPlanSelection.vue';
 
 const router = useRouter();
+
+// Continuous single flow steps:
+// 1 = Company (Name & Type)
+// 2 = Location (Country & Currency)
+// 3 = Team (Size & Industry)
+// 4 = Plan (Choose Plan)
+// 5 = Success Screen
 const currentStep = ref(1);
-const showHeader = ref(false);
-
-const progressPercent = computed(() => {
-  return Math.round(((currentStep.value - 1) / (steps.length - 1)) * 100);
-});
-
-const steps = [
-  { id: 1, title: 'Company' },
-  { id: 2, title: 'Plan' },
-  { id: 3, title: 'Team' },
-  { id: 4, title: 'WhatsApp' },
-  { id: 5, title: 'Live Chat' },
-  { id: 6, title: 'Ready' },
-];
+const completedSteps = ref<number[]>([]);
+const isProvisioning = ref(false);
 
 const formData = reactive({
   business: {
-    businessName: 'VeecoTech Solutions',
-    companyType: 'sme',
-    country: 'Malaysia',
-    currency: 'MYR',
-    agentSize: '6–20',
-    industries: ['Real Estate', 'Automotive'],
+    businessName: '',
+    companyType: '',
+    country: '',
+    currency: '',
+    agentSize: '',
+    industries: [] as string[],
+    otherIndustry: '',
   },
   plan: {
-    selectedPlan: 'pro',
+    selectedPlan: '',
     billingCycle: 'yearly' as 'monthly' | 'yearly',
-    prepopulateDemoData: true,
-  },
-  team: {
-    members: [
-      { email: 'ahmad.faizal@veecotech.com', role: 'Agent' as const },
-      { email: 'sarah.chen@veecotech.com', role: 'Manager' as const },
-    ],
-  },
-  whatsapp: {
-    connectionMethod: 'qr' as 'qr' | 'cloud_api',
-    inboxName: 'VeecoTech Sales WhatsApp',
-    isConnected: false,
-    assignedAgents: ['justin@veecotech.com', 'ahmad.faizal@veecotech.com'],
-  },
-  widget: {
-    websiteName: 'VeecoTech Official',
-    websiteDomain: 'www.veecotech.com.my',
-    widgetColor: '#23B750',
-    welcomeHeading: 'Welcome to VeecoTech!',
-    welcomeTagline: 'Chat with our sales engineers in real-time or get a quick quotation.',
-    autoGreeting: true,
-    assignedAgents: ['justin@veecotech.com'],
+    prepopulateDemoData: false,
   },
 });
 
-function nextStep() {
-  if (currentStep.value < 6) {
-    currentStep.value++;
+const isValid = computed(() => {
+  if (currentStep.value === 1) {
+    return formData.business.businessName.trim().length > 0 && !!formData.business.companyType;
+  }
+  if (currentStep.value === 2) {
+    return !!formData.business.country && !!formData.business.currency;
+  }
+  if (currentStep.value === 3) {
+    if (!formData.business.agentSize || formData.business.industries.length === 0) {
+      return false;
+    }
+    if (formData.business.industries.includes('Others')) {
+      return (formData.business.otherIndustry || '').trim().length > 0;
+    }
+    return true;
+  }
+  if (currentStep.value === 4) {
+    return !!formData.plan.selectedPlan;
+  }
+  return true;
+});
+
+const continueText = computed(() => {
+  if (currentStep.value === 1) return 'Continue to Location';
+  if (currentStep.value === 2) return 'Continue to Team';
+  if (currentStep.value === 3) return 'Continue to Plan';
+  if (currentStep.value === 4) return 'Complete Setup & Launch';
+  return 'Continue';
+});
+
+const selectedPlanName = computed(() => {
+  const map: Record<string, string> = {
+    basic: 'Basic',
+    growth: 'Growth',
+    pro: 'Pro',
+    enterprise: 'Enterprise',
+  };
+  return map[formData.plan.selectedPlan] || formData.plan.selectedPlan || 'Pro';
+});
+
+function markStepComplete(stepNum: number) {
+  if (!completedSteps.value.includes(stepNum)) {
+    completedSteps.value.push(stepNum);
   }
 }
 
-function prevStep() {
+function nextAction() {
+  if (!isValid.value) return;
+  markStepComplete(currentStep.value);
+  if (currentStep.value < 4) {
+    currentStep.value++;
+  } else {
+    // 2-second workspace provisioning loading before entering success screen
+    isProvisioning.value = true;
+    setTimeout(() => {
+      isProvisioning.value = false;
+      currentStep.value = 5;
+      fireConfetti();
+    }, 2000);
+  }
+}
+
+function fireConfetti() {
+  confetti({
+    particleCount: 90,
+    spread: 75,
+    origin: { y: 0.6 },
+    colors: ['#23B750', '#62D816', '#10B981', '#34D399', '#3B82F6', '#F59E0B'],
+  });
+
+  setTimeout(() => {
+    confetti({
+      particleCount: 50,
+      angle: 60,
+      spread: 55,
+      origin: { x: 0, y: 0.65 },
+      colors: ['#23B750', '#10B981', '#3B82F6', '#F59E0B'],
+    });
+    confetti({
+      particleCount: 50,
+      angle: 120,
+      spread: 55,
+      origin: { x: 1, y: 0.65 },
+      colors: ['#23B750', '#10B981', '#3B82F6', '#F59E0B'],
+    });
+  }, 250);
+}
+
+function prevAction() {
   if (currentStep.value > 1) {
     currentStep.value--;
   }
 }
 
-function goToStep(step: number) {
-  currentStep.value = step;
-}
-
-function launchCRM() {
-  router.push('/omnichannel');
+function goToStep(stepNum: number) {
+  currentStep.value = stepNum;
+  if (stepNum === 5) {
+    fireConfetti();
+  }
 }
 
 function launchDashboard() {
+  localStorage.setItem('rakansales_has_sample_data', 'true');
   router.push('/dashboard');
 }
+
+function completeSettingUp() {
+  localStorage.setItem('rakansales_has_sample_data', 'true');
+  router.push('/setup-wizard');
+}
 </script>
+
+<style scoped>
+/* Smooth step transition (e.g. step 3 -> step 4) */
+.step-transition-enter-active {
+  transition: opacity 220ms cubic-bezier(0.16, 1, 0.3, 1), transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.step-transition-leave-active {
+  transition: opacity 140ms ease-in, transform 140ms ease-in;
+}
+.step-transition-enter-from {
+  opacity: 0;
+  transform: translateY(6px);
+}
+.step-transition-leave-to {
+  opacity: 0;
+  transform: translateY(-4px);
+}
+
+/* Inner step crossfade for steps 1, 2, and 3 */
+.inner-step-enter-active {
+  transition: opacity 180ms cubic-bezier(0.16, 1, 0.3, 1), transform 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.inner-step-leave-active {
+  transition: opacity 100ms ease-in;
+}
+.inner-step-enter-from {
+  opacity: 0;
+  transform: translateY(4px);
+}
+.inner-step-leave-to {
+  opacity: 0;
+}
+
+/* 2-second progress bar fill */
+@keyframes progress {
+  0% {
+    width: 0%;
+  }
+  60% {
+    width: 75%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+.animate-progress {
+  animation: progress 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .step-transition-enter-active,
+  .step-transition-leave-active,
+  .inner-step-enter-active,
+  .inner-step-leave-active {
+    transition: opacity 80ms linear !important;
+    transform: none !important;
+  }
+}
+</style>

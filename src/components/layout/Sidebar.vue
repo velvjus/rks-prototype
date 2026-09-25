@@ -34,6 +34,16 @@
           @click="handleItemClick(hiddenNavItem)"
         />
       </div>
+
+      <!-- Secret Hidden Navigation Item: Partners (only appears on hover or when active) -->
+      <div :class="isItemSelected(partnersNavItem) || (ui.activeParentItem === partnersNavItem.label && ui.isSecondaryPanelOpen) ? 'opacity-100' : 'opacity-0 hover:opacity-100 transition-opacity duration-200'">
+        <SidebarItem
+          :item="partnersNavItem"
+          :selected="isItemSelected(partnersNavItem)"
+          :is-collapsed="ui.isSidebarCollapsed"
+          @click="handleItemClick(partnersNavItem)"
+        />
+      </div>
     </div>
   </nav>
 </template>
@@ -59,6 +69,7 @@ import {
   FileText,
   Puzzle,
   EyeOff,
+  Handshake,
 } from 'lucide-vue-next';
 import SidebarItem from './SidebarItem.vue';
 
@@ -99,8 +110,15 @@ const hiddenNavItem: NavItem = {
   hasSubmenu: true,
 };
 
+const partnersNavItem: NavItem = {
+  label: 'Partners',
+  icon: Handshake,
+  hasSubmenu: true,
+};
+
 function isItemSelected(item: NavItem) {
   if (item.route && route.path === item.route) return true;
+  if (item.label === 'Partners' && route.path.startsWith('/partner')) return true;
   return ui.activeParentItem === item.label;
 }
 

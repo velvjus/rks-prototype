@@ -45,10 +45,22 @@
               v-for="item in group.items"
               :key="item.label"
               @click="handleItemClick(item)"
-              class="w-full flex items-center px-2.5 py-1 text-[13px] text-gray-300 hover:bg-gray-800 hover:text-white rounded-md transition-colors group text-left"
-              :class="item.undesigned ? 'opacity-80' : ''"
+              class="w-full flex items-center px-2.5 py-1 text-[13px] rounded-md transition-colors group text-left cursor-pointer"
+              :class="[
+                item.route && route.path === item.route
+                  ? 'bg-emerald-950/60 text-[#23B750] font-semibold'
+                  : 'text-gray-300 hover:bg-gray-800 hover:text-white',
+                item.undesigned ? 'opacity-80' : ''
+              ]"
             >
-              <component v-if="item.icon" :is="item.icon" class="w-[15px] h-[15px] mr-1.5 text-gray-500 group-hover:text-gray-300" />
+              <component
+                v-if="item.icon"
+                :is="item.icon"
+                :class="[
+                  'w-[15px] h-[15px] mr-1.5 shrink-0',
+                  item.route && route.path === item.route ? 'text-[#23B750]' : 'text-gray-500 group-hover:text-gray-300'
+                ]"
+              />
               <span class="flex-1 truncate">{{ item.label }}</span>
               <span v-if="item.badge" class="ml-2 bg-gray-800 text-gray-400 px-1.5 py-0.5 rounded text-[8px]">
                 {{ item.badge }}
@@ -68,7 +80,7 @@
 
 <script setup lang="ts">
 import { computed, type Component } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { useUIStore } from '@/stores/ui';
 import {
   Minus, Mail, MessageSquare, Instagram, Globe,
@@ -77,11 +89,12 @@ import {
   Megaphone, Plus, Cpu,
   Book, Grid, LayoutGrid,
   Briefcase, CreditCard, Contact, Shield, MessageSquareQuote, FileText, Terminal, Zap, Clipboard, History,
-  Scan, UserCheck, Sparkles, Award,
+  Scan, UserCheck, Sparkles, Award, UserPlus, Coins, HandCoins, Banknote, Bookmark, Package,
 } from 'lucide-vue-next';
 
 const ui = useUIStore();
 const router = useRouter();
+const route = useRoute();
 
 const props = defineProps<{
   isOpen: boolean;
@@ -230,8 +243,10 @@ const menuConfigs: Record<string, MenuConfig> = {
     groups: {
       'Default': {
         items: [
+          { label: 'Setup Wizard', icon: Sparkles, route: '/setup-wizard', badge: 'Wizard' },
           { label: 'Partner Registration', icon: Award, route: '/partner/register', badge: 'New' },
-          { label: 'Onboarding Wizard', icon: Sparkles, route: '/onboarding', badge: 'New' },
+          { label: 'Onboarding Wizard v2', icon: Sparkles, route: '/onboarding-v2', badge: 'v2' },
+          { label: 'Onboarding Wizard v1', icon: Sparkles, route: '/onboarding-v1', badge: 'v1' },
           { label: 'Auth & Signup Flow', icon: UserCheck, route: '/auth', badge: 'New' },
           { label: 'Design System', icon: LayoutGrid, route: '/design-system' },
           { label: 'Guidelines', icon: FileText, route: '/guidelines' },
@@ -243,11 +258,57 @@ const menuConfigs: Record<string, MenuConfig> = {
     groups: {
       'Default': {
         items: [
+          { label: 'Setup Wizard', icon: Sparkles, route: '/setup-wizard', badge: 'Wizard' },
           { label: 'Partner Registration', icon: Award, route: '/partner/register', badge: 'New' },
-          { label: 'Onboarding Wizard', icon: Sparkles, route: '/onboarding', badge: 'New' },
+          { label: 'Onboarding Wizard v2', icon: Sparkles, route: '/onboarding-v2', badge: 'v2' },
+          { label: 'Onboarding Wizard v1', icon: Sparkles, route: '/onboarding-v1', badge: 'v1' },
           { label: 'Auth & Signup Flow', icon: UserCheck, route: '/auth', badge: 'New' },
           { label: 'Design System', icon: LayoutGrid, route: '/design-system' },
           { label: 'Guidelines', icon: FileText, route: '/guidelines' },
+        ],
+      },
+    },
+  },
+  'Partners': {
+    groups: {
+      'Dashboard': {
+        items: [
+          { label: 'Overview', icon: LayoutGrid, route: '/partner/overview' },
+          { label: 'Partner Program', icon: Bookmark, route: '/partner/program', badge: 'Upgrade' },
+          { label: 'My Referral', icon: UserPlus, route: '/partner/referrals' },
+        ],
+      },
+      'Finance': {
+        items: [
+          { label: 'Commissions', icon: HandCoins, route: '/partner/commissions' },
+          { label: 'Withdrawal', icon: Banknote, route: '/partner/withdrawal' },
+        ],
+      },
+      'Resources': {
+        items: [
+          { label: 'Partner Kit', icon: Package, route: '/partner/kit', badge: 'New' },
+        ],
+      },
+    },
+  },
+  'partners': {
+    groups: {
+      'Dashboard': {
+        items: [
+          { label: 'Overview', icon: LayoutGrid, route: '/partner/overview' },
+          { label: 'Partner Program', icon: Bookmark, route: '/partner/program', badge: 'Upgrade' },
+          { label: 'My Referral', icon: UserPlus, route: '/partner/referrals' },
+        ],
+      },
+      'Finance': {
+        items: [
+          { label: 'Commissions', icon: HandCoins, route: '/partner/commissions' },
+          { label: 'Withdrawal', icon: Banknote, route: '/partner/withdrawal' },
+        ],
+      },
+      'Resources': {
+        items: [
+          { label: 'Partner Kit', icon: Package, route: '/partner/kit', badge: 'New' },
         ],
       },
     },
@@ -256,7 +317,11 @@ const menuConfigs: Record<string, MenuConfig> = {
 
 function handleItemClick(item: MenuItem) {
   if (item.route) {
-    ui.setActiveParent(item.label, false);
+    if (item.route.startsWith('/partner')) {
+      ui.setActiveParent('Partners', false);
+    } else {
+      ui.setActiveParent(item.label, false);
+    }
     router.push(item.route);
     ui.closeSecondaryPanel();
   }

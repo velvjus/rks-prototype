@@ -114,6 +114,18 @@ const router = createRouter({
       meta: { fullWidth: true }
     },
     {
+      path: '/onboarding-v2',
+      name: 'onboarding-v2',
+      component: () => import('../views/OnboardingView.vue'),
+      meta: { fullWidth: true }
+    },
+    {
+      path: '/onboarding-v1',
+      name: 'onboarding-v1',
+      component: () => import('../views/OnboardingV1View.vue'),
+      meta: { fullWidth: true }
+    },
+    {
       path: '/auth',
       name: 'auth',
       component: () => import('../views/AuthView.vue'),
@@ -124,6 +136,52 @@ const router = createRouter({
       name: 'partner-register',
       component: () => import('../views/PartnerRegisterView.vue'),
       meta: { standalone: true }
+    },
+    {
+      path: '/partner/overview',
+      name: 'partner-overview',
+      component: () => import('../views/partner/PartnerOverviewView.vue'),
+      meta: { fullWidth: true }
+    },
+    {
+      path: '/partner/program',
+      name: 'partner-program',
+      component: () => import('../views/partner/PartnerProgramView.vue'),
+      meta: { fullWidth: true }
+    },
+    {
+      path: '/partner/kit',
+      name: 'partner-kit',
+      component: () => import('../views/partner/PartnerKitView.vue'),
+      meta: { fullWidth: true }
+    },
+    {
+      path: '/partner/referrals',
+      name: 'partner-referrals',
+      component: () => import('../views/partner/PartnerReferralsView.vue'),
+      meta: { fullWidth: true }
+    },
+    {
+      path: '/partner/commissions',
+      name: 'partner-commissions',
+      component: () => import('../views/partner/PartnerCommissionsView.vue'),
+      meta: { fullWidth: true }
+    },
+    {
+      path: '/partner/earnings',
+      redirect: '/partner/commissions'
+    },
+    {
+      path: '/partner/withdrawal',
+      name: 'partner-withdrawal',
+      component: () => import('../views/partner/PartnerOverviewView.vue'),
+      meta: { fullWidth: true }
+    },
+    {
+      path: '/setup-wizard',
+      name: 'setup-wizard',
+      component: () => import('../views/SetupWizardView.vue'),
+      meta: { fullWidth: true }
     },
     {
       path: '/',

@@ -1,6 +1,9 @@
 <template>
   <div class="h-full flex flex-col bg-[#FAF5FF]/30 dark:bg-[#0B0F17] text-gray-900 dark:text-gray-100 font-sans antialiased overflow-hidden">
     
+    <!-- 1-Line CRM Setup Status Bar on top of page -->
+    <CrmSetupStatusBar @toast="showToast" />
+
     <!-- Top Header Bar -->
     <header class="bg-white/95 dark:bg-[#111827]/95 backdrop-blur-md border-b border-gray-200/90 dark:border-gray-800/90 px-6 py-3.5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 shrink-0 z-20">
       <div class="flex items-center gap-3">
@@ -42,6 +45,11 @@
           <!-- Date Range Dropdown Popover -->
           <div
             v-if="isDateOpen"
+            class="fixed inset-0 z-40"
+            @click="isDateOpen = false"
+          ></div>
+          <div
+            v-if="isDateOpen"
             class="absolute right-0 mt-1.5 w-60 bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 rounded-xl shadow-lg p-1.5 z-50 text-xs space-y-1 animate-in fade-in zoom-in-95 duration-100"
           >
             <button
@@ -69,6 +77,112 @@
           <Download class="w-3.5 h-3.5" />
           <span>Export CSV</span>
         </button>
+
+        <!-- Kebab Menu (3 dots) -->
+        <div class="relative">
+          <button
+            @click="isKebabOpen = !isKebabOpen"
+            class="relative h-8 w-8 inline-flex items-center justify-center bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white rounded-lg text-xs font-medium shadow-xs transition-colors cursor-pointer"
+            :title="hasSampleData ? 'More actions (Prepopulated sample data active)' : 'More actions'"
+            aria-haspopup="true"
+            :aria-expanded="isKebabOpen"
+          >
+            <MoreVertical class="w-4 h-4" />
+            <!-- Red dot indicator beside 3-dot kebab -->
+            <span
+              v-if="hasSampleData"
+              class="absolute -top-1 -right-1 flex h-2.5 w-2.5"
+              title="Prepopulated sample data active"
+            >
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500 ring-2 ring-white dark:ring-gray-900"></span>
+            </span>
+          </button>
+
+          <!-- Backdrop -->
+          <div
+            v-if="isKebabOpen"
+            class="fixed inset-0 z-40"
+            @click="isKebabOpen = false"
+          ></div>
+
+          <!-- Kebab Dropdown Menu -->
+          <div
+            v-if="isKebabOpen"
+            class="absolute right-0 mt-1.5 w-64 bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 rounded-xl shadow-xl py-1.5 z-50 text-xs animate-in fade-in zoom-in-95 duration-100"
+          >
+            <div class="px-3 py-2 border-b border-gray-100 dark:border-gray-800">
+              <p class="font-bold text-gray-900 dark:text-white text-xs">Dashboard Actions</p>
+              <p class="text-[11px] text-gray-500 dark:text-gray-400">Manage analytics &amp; workspace data</p>
+            </div>
+
+            <div class="p-1 space-y-0.5">
+              <button
+                @click="loadSampleData"
+                class="w-full text-left px-3 py-2 rounded-lg font-medium transition-colors cursor-pointer flex items-center gap-2.5 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800"
+              >
+                <Sparkles class="w-4 h-4 text-[#23B750]" />
+                <div class="flex-1 min-w-0">
+                  <div class="font-medium text-gray-900 dark:text-white flex items-center justify-between">
+                    <span>Load sample data</span>
+                    <span v-if="hasSampleData" class="inline-flex items-center gap-1 text-[10px] text-red-500 font-semibold">
+                      <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Active
+                    </span>
+                  </div>
+                  <div class="text-[10px] text-gray-400">Populate demo leads, deals &amp; metrics</div>
+                </div>
+              </button>
+
+              <button
+                @click="clearSampleData"
+                class="w-full text-left px-3 py-2 rounded-lg font-medium transition-colors cursor-pointer flex items-center gap-2.5 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30"
+              >
+                <Trash2 class="w-4 h-4 text-red-500" />
+                <div class="flex-1 min-w-0">
+                  <div class="font-medium">Clear prepopulated sample data</div>
+                  <div class="text-[10px] text-red-400/80">Reset dashboard to zeroed state</div>
+                </div>
+              </button>
+            </div>
+
+            <div class="my-1 border-t border-gray-100 dark:border-gray-800"></div>
+
+            <div class="p-1 space-y-0.5">
+              <button
+                @click="refreshData"
+                class="w-full text-left px-3 py-2 rounded-lg font-medium transition-colors cursor-pointer flex items-center gap-2.5 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800"
+              >
+                <RotateCw class="w-4 h-4 text-gray-500" />
+                <div class="flex-1 min-w-0">
+                  <div class="font-medium text-gray-900 dark:text-white">Refresh data</div>
+                  <div class="text-[10px] text-gray-400">Sync latest CRM pipeline changes</div>
+                </div>
+              </button>
+
+              <button
+                @click="printDashboard"
+                class="w-full text-left px-3 py-2 rounded-lg font-medium transition-colors cursor-pointer flex items-center gap-2.5 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800"
+              >
+                <Printer class="w-4 h-4 text-gray-500" />
+                <div class="flex-1 min-w-0">
+                  <div class="font-medium text-gray-900 dark:text-white">Print / Export PDF</div>
+                  <div class="text-[10px] text-gray-400">Generate printable executive summary</div>
+                </div>
+              </button>
+
+              <button
+                @click="openSettings"
+                class="w-full text-left px-3 py-2 rounded-lg font-medium transition-colors cursor-pointer flex items-center gap-2.5 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800"
+              >
+                <SlidersHorizontal class="w-4 h-4 text-gray-500" />
+                <div class="flex-1 min-w-0">
+                  <div class="font-medium text-gray-900 dark:text-white">Dashboard settings</div>
+                  <div class="text-[10px] text-gray-400">Configure widgets &amp; KPI targets</div>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </header>
 
@@ -143,10 +257,10 @@
                     </div>
                   </div>
                   <span class="text-[10px] font-bold text-[#23B750] bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-full border border-emerald-150 dark:border-emerald-900/50 tabular-nums">
-                    +7.1%
+                    {{ hasSampleData ? '+7.1%' : '0.0%' }}
                   </span>
                 </div>
-                <div class="text-2xl font-bold text-gray-900 dark:text-white tabular-nums mt-1">RM 3.84M</div>
+                <div class="text-2xl font-bold text-gray-900 dark:text-white tabular-nums mt-1">{{ hasSampleData ? 'RM 3.84M' : 'RM 0.00' }}</div>
               </div>
               <div class="h-9 w-full">
                 <apexchart type="area" height="36" :options="sparklineBlueOptions" :series="sparklinePipelineSeries" />
@@ -165,10 +279,10 @@
                     </div>
                   </div>
                   <span class="text-[10px] font-bold text-[#7C3AED] dark:text-[#A78BFA] bg-purple-50 dark:bg-purple-950/40 px-2 py-0.5 rounded-full border border-purple-150 dark:border-purple-900/50 tabular-nums">
-                    +6.2 pts
+                    {{ hasSampleData ? '+6.2 pts' : '0.0 pts' }}
                   </span>
                 </div>
-                <div class="text-2xl font-bold text-gray-900 dark:text-white tabular-nums mt-1">14.3%</div>
+                <div class="text-2xl font-bold text-gray-900 dark:text-white tabular-nums mt-1">{{ hasSampleData ? '14.3%' : '0.0%' }}</div>
               </div>
               <div class="h-9 w-full">
                 <apexchart type="area" height="36" :options="sparklinePurpleOptions" :series="sparklineConvSeries" />
@@ -187,10 +301,10 @@
                     </div>
                   </div>
                   <span class="text-[10px] font-bold text-[#F97316] bg-orange-50 dark:bg-orange-950/40 px-2 py-0.5 rounded-full border border-orange-150 dark:border-orange-900/50 tabular-nums">
-                    -18% faster
+                    {{ hasSampleData ? '-18% faster' : '0.0%' }}
                   </span>
                 </div>
-                <div class="text-2xl font-bold text-gray-900 dark:text-white tabular-nums mt-1">12m 45s</div>
+                <div class="text-2xl font-bold text-gray-900 dark:text-white tabular-nums mt-1">{{ hasSampleData ? '12m 45s' : '--' }}</div>
               </div>
               <div class="h-9 w-full">
                 <apexchart type="area" height="36" :options="sparklineOrangeOptions" :series="sparklineRespSeries" />
@@ -215,10 +329,10 @@
                 <button
                   @click="nudgeAllStaleDeals"
                   class="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-orange-50 hover:bg-orange-100 text-[#F97316] dark:bg-orange-950/40 dark:hover:bg-orange-900/60 border border-orange-200 dark:border-orange-800/60 rounded-lg text-xs font-bold transition-colors cursor-pointer"
-                  title="Send automated WhatsApp follow-ups to 27 deals inactive for >3 days"
+                  :title="hasSampleData ? 'Send automated WhatsApp follow-ups to 27 deals inactive for >3 days' : 'No stale deals requiring follow-up'"
                 >
                   <Zap class="w-3.5 h-3.5 text-[#F97316] fill-current" />
-                  <span>Send WhatsApp follow-up to 27 stale deals</span>
+                  <span>Send WhatsApp follow-up to {{ hasSampleData ? '27' : '0' }} stale deals</span>
                 </button>
               </div>
             </div>
@@ -227,12 +341,12 @@
               <!-- SLA Compliance Radial Gauge -->
               <div class="flex items-center gap-4 p-3.5 bg-gray-50/60 dark:bg-gray-800/40 rounded-xl border border-gray-150 dark:border-gray-800">
                 <div class="w-16 h-16 flex-shrink-0 flex items-center justify-center">
-                  <apexchart type="radialBar" width="75" height="75" :options="slaRadialOptions" :series="[92]" />
+                  <apexchart type="radialBar" width="75" height="75" :options="slaRadialOptions" :series="[hasSampleData ? 92 : 0]" />
                 </div>
                 <div>
                   <div class="text-xs font-bold text-gray-900 dark:text-white">15-Minute SLA Compliance</div>
-                  <p class="text-[11px] text-gray-500 dark:text-gray-400">92% of new leads contacted &lt; 15 min</p>
-                  <span class="text-[10px] font-semibold text-[#23B750]">Target: 80%+ • Status: On Track</span>
+                  <p class="text-[11px] text-gray-500 dark:text-gray-400">{{ hasSampleData ? '92% of new leads contacted < 15 min' : '0 of 0 leads responded < 15 min' }}</p>
+                  <span class="text-[10px] font-semibold" :class="hasSampleData ? 'text-[#23B750]' : 'text-gray-400'">{{ hasSampleData ? 'Target: 80%+ • Status: On Track' : 'Status: No Inbound Leads' }}</span>
                 </div>
               </div>
 
@@ -240,15 +354,15 @@
               <div class="p-3.5 bg-gray-50/60 dark:bg-gray-800/40 rounded-xl border border-gray-150 dark:border-gray-800 flex flex-col justify-between">
                 <div class="flex justify-between items-center text-xs">
                   <span class="font-bold text-gray-900 dark:text-white">Opportunity Activity Status</span>
-                  <span class="text-[11px] font-semibold text-[#EF4444]">Follow-up Needed</span>
+                  <span class="text-[11px] font-semibold" :class="hasSampleData ? 'text-[#EF4444]' : 'text-gray-400'">{{ hasSampleData ? 'Follow-up Needed' : 'All Clear' }}</span>
                 </div>
                 <div class="w-full h-2.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden flex my-1.5">
-                  <div class="bg-[#23B750] h-full" style="width: 10%;"></div>
-                  <div class="bg-[#EF4444] h-full" style="width: 90%;"></div>
+                  <div class="bg-[#23B750] h-full transition-all duration-300" :style="{ width: hasSampleData ? '10%' : '0%' }"></div>
+                  <div class="bg-[#EF4444] h-full transition-all duration-300" :style="{ width: hasSampleData ? '90%' : '0%' }"></div>
                 </div>
                 <div class="flex justify-between items-center text-[10px] font-semibold text-gray-500">
-                  <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-[#23B750]"></span> 3 active (&le;3d)</span>
-                  <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-[#EF4444]"></span> 27 stale (&gt;3d)</span>
+                  <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-[#23B750]"></span> {{ hasSampleData ? '3 active (≤3d)' : '0 active' }}</span>
+                  <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-[#EF4444]"></span> {{ hasSampleData ? '27 stale (>3d)' : '0 stale' }}</span>
                 </div>
               </div>
 
@@ -256,14 +370,14 @@
               <div class="p-3.5 bg-gray-50/60 dark:bg-gray-800/40 rounded-xl border border-gray-150 dark:border-gray-800 flex flex-col justify-between">
                 <div class="flex justify-between items-center text-xs">
                   <span class="font-bold text-gray-900 dark:text-white">Win Rate Trend (6-Week)</span>
-                  <span class="text-[#23B750] font-bold tabular-nums">+12.2 pts gain</span>
+                  <span class="text-[#23B750] font-bold tabular-nums">{{ hasSampleData ? '+12.2 pts gain' : '+0.0 pts' }}</span>
                 </div>
                 <div class="h-8 w-full my-1">
                   <apexchart type="area" height="35" :options="winRateTrendOptions" :series="winRateTrendSeries" />
                 </div>
                 <div class="flex justify-between text-[10px] text-gray-400">
-                  <span>6 weeks ago (6.3%)</span>
-                  <span class="font-bold text-gray-700 dark:text-gray-300">Current: 18.5%</span>
+                  <span>{{ hasSampleData ? '6 weeks ago (6.3%)' : '6 weeks ago (0.0%)' }}</span>
+                  <span class="font-bold text-gray-700 dark:text-gray-300">{{ hasSampleData ? 'Current: 18.5%' : 'Current: 0.0%' }}</span>
                 </div>
               </div>
             </div>
@@ -301,7 +415,7 @@
 
                 <div class="flex items-baseline gap-2 mt-4">
                   <span class="text-3xl font-extrabold text-gray-900 dark:text-white tabular-nums">RM {{ activeRevenueStats.wonAmount }}</span>
-                  <span class="text-xs font-semibold text-[#23B750]">of RM {{ activeRevenueStats.targetAmount }} target (119% attained)</span>
+                  <span class="text-xs font-semibold text-[#23B750]">of RM {{ activeRevenueStats.targetAmount }} target ({{ hasSampleData ? '119%' : '0%' }} attained)</span>
                 </div>
 
                 <!-- ApexCharts Spline Area Chart -->
@@ -314,15 +428,15 @@
               <div class="grid grid-cols-3 border-t border-gray-150 dark:border-gray-800 pt-4 mt-2 text-center">
                 <div>
                   <p class="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-bold tracking-wider">Overall Conversion</p>
-                  <p class="text-sm font-bold text-gray-900 dark:text-white mt-0.5 tabular-nums">14.3%</p>
+                  <p class="text-sm font-bold text-gray-900 dark:text-white mt-0.5 tabular-nums">{{ hasSampleData ? '14.3%' : '0.0%' }}</p>
                 </div>
                 <div class="border-x border-gray-150 dark:border-gray-800">
                   <p class="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-bold tracking-wider">Avg Deal Velocity</p>
-                  <p class="text-sm font-bold text-gray-900 dark:text-white mt-0.5 tabular-nums">14.2 days</p>
+                  <p class="text-sm font-bold text-gray-900 dark:text-white mt-0.5 tabular-nums">{{ hasSampleData ? '14.2 days' : '0.0 days' }}</p>
                 </div>
                 <div>
                   <p class="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-bold tracking-wider">Pipeline Value</p>
-                  <p class="text-sm font-bold text-gray-900 dark:text-white mt-0.5 tabular-nums">RM 3.84M</p>
+                  <p class="text-sm font-bold text-gray-900 dark:text-white mt-0.5 tabular-nums">{{ hasSampleData ? 'RM 3.84M' : 'RM 0.00' }}</p>
                 </div>
               </div>
             </div>
@@ -359,8 +473,8 @@
 
               <!-- Funnel Summary -->
               <div class="border-t border-gray-150 dark:border-gray-800 pt-3 mt-2 flex justify-between text-xs text-gray-500">
-                <span>Top of Funnel: <strong class="text-gray-900 dark:text-white tabular-nums">349 Inbound Leads</strong></span>
-                <span>Final Win Rate: <strong class="text-[#23B750] tabular-nums">14.3% Closed Won</strong></span>
+                <span>Top of Funnel: <strong class="text-gray-900 dark:text-white tabular-nums">{{ hasSampleData ? '349 Inbound Leads' : '0 Inbound Leads' }}</strong></span>
+                <span>Final Win Rate: <strong class="text-[#23B750] tabular-nums">{{ hasSampleData ? '14.3% Closed Won' : '0.0% Closed Won' }}</strong></span>
               </div>
             </div>
 
@@ -380,7 +494,10 @@
               </div>
 
               <div class="divide-y divide-gray-150 dark:divide-gray-800/60 mt-1">
-                <div v-for="(agent, idx) in topAgents" :key="idx" class="py-3 flex items-center justify-between hover:bg-gray-50/60 dark:hover:bg-gray-800/40 rounded-xl px-2 transition-colors">
+                <div v-if="activeTopAgents.length === 0" class="py-10 text-center text-xs text-gray-400">
+                  No sales agent performance recorded for this period.
+                </div>
+                <div v-for="(agent, idx) in activeTopAgents" :key="idx" class="py-3 flex items-center justify-between hover:bg-gray-50/60 dark:hover:bg-gray-800/40 rounded-xl px-2 transition-colors">
                   <div class="flex items-center gap-3">
                     <span class="text-xs font-bold text-gray-400 tabular-nums w-4">0{{ idx + 1 }}</span>
                     <div :class="['w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white', agent.avatarBg]">
@@ -405,9 +522,9 @@
                 <div class="flex justify-between items-center pb-3 border-b border-gray-150 dark:border-gray-800">
                   <div>
                     <h3 class="text-sm font-bold text-gray-900 dark:text-white">Leads by Communication Channel</h3>
-                    <p class="text-xs text-gray-500 dark:text-gray-400">Origin of 389 inbound customer conversations</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Origin of {{ hasSampleData ? '389' : '0' }} inbound customer conversations</p>
                   </div>
-                  <span class="text-xs font-bold text-gray-400 tabular-nums">389 Total Leads</span>
+                  <span class="text-xs font-bold text-gray-400 tabular-nums">{{ hasSampleData ? '389' : '0' }} Total Leads</span>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center mt-3">
@@ -416,7 +533,7 @@
                   </div>
 
                   <div class="md:col-span-6 space-y-2">
-                    <div v-for="(ch, idx) in overviewChannels" :key="idx" class="flex justify-between items-center text-xs pb-1 border-b border-gray-100 dark:border-gray-800/50">
+                    <div v-for="(ch, idx) in activeOverviewChannels" :key="idx" class="flex justify-between items-center text-xs pb-1 border-b border-gray-100 dark:border-gray-800/50">
                       <div class="flex items-center gap-2">
                         <span class="w-2.5 h-2.5 rounded-full flex-shrink-0" :style="{ backgroundColor: ch.color }"></span>
                         <span class="font-medium text-gray-700 dark:text-gray-300">{{ ch.channel }}</span>
@@ -444,11 +561,11 @@
 
             <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
               <div
-                v-for="day in calendarDays"
+                v-for="day in activeCalendarDays"
                 :key="day.date"
                 :class="[
                   'p-3.5 rounded-xl border transition-all duration-150 flex flex-col justify-between h-24',
-                  day.isToday
+                  day.isToday && day.badge
                     ? 'bg-emerald-50/80 border-[#23B750] dark:bg-emerald-950/30 dark:border-emerald-800 text-[#1a943e] dark:text-[#62D816] shadow-sm shadow-[#23B750]/10'
                     : 'bg-gray-50/50 border-gray-200/80 dark:bg-gray-800/40 dark:border-gray-800 text-gray-600 dark:text-gray-400'
                 ]"
@@ -479,40 +596,40 @@
             <div class="bg-gradient-to-br from-[#23B750] to-[#178537] text-white p-5 rounded-2xl shadow-xs flex flex-col justify-between h-[142px]">
               <span class="text-[11px] font-bold tracking-wider uppercase opacity-90">Conversion Rate</span>
               <div>
-                <div class="text-3xl font-extrabold tracking-tight tabular-nums">14.3%</div>
-                <div class="text-xs text-emerald-100 mt-1 tabular-nums">↑ 6.2 pts vs prior period</div>
+                <div class="text-3xl font-extrabold tracking-tight tabular-nums">{{ hasSampleData ? '14.3%' : '0.0%' }}</div>
+                <div class="text-xs text-emerald-100 mt-1 tabular-nums">{{ hasSampleData ? '↑ 6.2 pts vs prior period' : '0.0 pts vs prior period' }}</div>
               </div>
             </div>
 
             <div class="bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-xs flex flex-col justify-between h-[142px]">
               <span class="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Pipeline Value</span>
               <div>
-                <div class="text-2xl font-bold text-gray-900 dark:text-white tabular-nums">RM 3.84M</div>
-                <div class="text-xs text-gray-400 mt-1 tabular-nums">30 open opportunities</div>
+                <div class="text-2xl font-bold text-gray-900 dark:text-white tabular-nums">{{ hasSampleData ? 'RM 3.84M' : 'RM 0.00' }}</div>
+                <div class="text-xs text-gray-400 mt-1 tabular-nums">{{ hasSampleData ? '30 open opportunities' : '0 open opportunities' }}</div>
               </div>
             </div>
 
             <div class="bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-xs flex flex-col justify-between h-[142px]">
               <span class="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Avg Deal Velocity</span>
               <div>
-                <div class="text-2xl font-bold text-gray-900 dark:text-white tabular-nums">14.2 days</div>
-                <div class="text-xs text-[#23B750] font-semibold mt-1 tabular-nums">↑ 3.4 days faster cycle</div>
+                <div class="text-2xl font-bold text-gray-900 dark:text-white tabular-nums">{{ hasSampleData ? '14.2 days' : '--' }}</div>
+                <div class="text-xs text-[#23B750] font-semibold mt-1 tabular-nums">{{ hasSampleData ? '↑ 3.4 days faster cycle' : 'No cycle data' }}</div>
               </div>
             </div>
 
             <div class="bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-xs flex flex-col justify-between h-[142px]">
               <span class="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Win / Loss Ratio</span>
               <div>
-                <div class="text-2xl font-bold text-gray-900 dark:text-white tabular-nums">0.23 : 1</div>
-                <div class="text-xs text-gray-400 mt-1 tabular-nums">5 won · 22 lost</div>
+                <div class="text-2xl font-bold text-gray-900 dark:text-white tabular-nums">{{ hasSampleData ? '0.23 : 1' : '0 : 0' }}</div>
+                <div class="text-xs text-gray-400 mt-1 tabular-nums">{{ hasSampleData ? '5 won · 22 lost' : '0 won · 0 lost' }}</div>
               </div>
             </div>
 
             <div class="bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-xs flex flex-col justify-between h-[142px]">
               <span class="text-[11px] font-bold text-gray-500 uppercase tracking-wider">SLA Response Speed</span>
               <div>
-                <div class="text-2xl font-bold text-[#23B750] tabular-nums">92%</div>
-                <div class="text-xs text-gray-400 mt-1">&lt; 15 min response time</div>
+                <div class="text-2xl font-bold text-[#23B750] tabular-nums">{{ hasSampleData ? '92%' : '0%' }}</div>
+                <div class="text-xs text-gray-400 mt-1">{{ hasSampleData ? '< 15 min response time' : 'No responses recorded' }}</div>
               </div>
             </div>
           </div>
@@ -535,10 +652,14 @@
                 </div>
               </div>
 
-              <!-- Bottleneck Warning -->
-              <div class="mt-2 p-3.5 bg-orange-50 dark:bg-orange-950/20 border border-orange-200 dark:border-orange-900/40 rounded-xl flex items-start gap-2.5 text-xs text-[#F97316]">
+              <!-- Bottleneck Notice -->
+              <div v-if="hasSampleData" class="mt-2 p-3.5 bg-orange-50 dark:bg-orange-950/20 border border-orange-200 dark:border-orange-900/40 rounded-xl flex items-start gap-2.5 text-xs text-[#F97316]">
                 <AlertCircle class="w-4 h-4 text-[#F97316] shrink-0 mt-0.5" />
                 <span><strong>Bottleneck Identified:</strong> Deals spend an average of 8.9 days in Proposal/Quotation (31% of total cycle). Automate WhatsApp quote reminders to shorten conversion.</span>
+              </div>
+              <div v-else class="mt-2 p-3.5 bg-gray-50 dark:bg-gray-800/40 border border-gray-200 dark:border-gray-800 rounded-xl flex items-start gap-2.5 text-xs text-gray-500">
+                <Info class="w-4 h-4 text-gray-400 shrink-0 mt-0.5" />
+                <span>No bottlenecks detected. Deal durations will calculate once opportunities progress through pipeline stages.</span>
               </div>
             </div>
 
@@ -547,7 +668,7 @@
               <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-3 border-b border-gray-150 dark:border-gray-800">
                 <div>
                   <h3 class="text-sm font-bold text-gray-900 dark:text-white">Lost Deal Root Causes</h3>
-                  <p class="text-xs text-gray-500 dark:text-gray-400">Analysis of 22 lost opportunities</p>
+                  <p class="text-xs text-gray-500 dark:text-gray-400">Analysis of {{ hasSampleData ? '22' : '0' }} lost opportunities</p>
                 </div>
                 <div class="relative w-44">
                   <Search class="w-3.5 h-3.5 text-gray-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
@@ -566,6 +687,9 @@
                   <apexchart type="donut" width="170" height="170" :options="lostReasonDonutOptions" :series="lostReasonDonutSeries" />
                 </div>
                 <div class="md:col-span-7 divide-y divide-gray-150 dark:divide-gray-800/60">
+                  <div v-if="filteredLostReasons.length === 0" class="py-8 text-center text-xs text-gray-400">
+                    No lost deals recorded in this period.
+                  </div>
                   <div v-for="(r, idx) in filteredLostReasons" :key="idx" class="py-2.5 flex items-center justify-between text-xs hover:bg-gray-50/50 dark:hover:bg-gray-800/30 px-2 rounded-xl transition-colors">
                     <span class="font-bold text-gray-800 dark:text-gray-200">{{ r.title }}</span>
                     <div class="flex items-center gap-4 tabular-nums">
@@ -675,11 +799,24 @@
                   <!-- Clear Empty State with Specific Context -->
                   <tr v-if="filteredActiveDeals.length === 0">
                     <td colspan="7" class="py-12 text-center text-gray-400">
-                      <p class="font-medium text-sm text-gray-600 dark:text-gray-300">No active opportunities match "{{ activeDealSearch || activeDealStageFilter }}".</p>
-                      <p class="text-xs text-gray-400 mt-1">Try adjusting your search keywords or resetting stage filters.</p>
-                      <button @click="clearActiveDealFilters" class="mt-3 px-3 py-1.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg text-xs font-bold transition-colors cursor-pointer">
-                        Reset filters
-                      </button>
+                      <div v-if="!hasSampleData" class="space-y-2">
+                        <p class="font-medium text-sm text-gray-600 dark:text-gray-300">No active opportunities in workspace</p>
+                        <p class="text-xs text-gray-400 max-w-sm mx-auto">Sample data is currently cleared. You can load demo data at any time to explore pipeline workflows.</p>
+                        <button
+                          @click="loadSampleData"
+                          class="mt-2 inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-[#23B750] hover:bg-[#1a943e] text-white rounded-lg text-xs font-bold transition-all shadow-xs cursor-pointer"
+                        >
+                          <Sparkles class="w-3.5 h-3.5" />
+                          <span>Load Sample Data</span>
+                        </button>
+                      </div>
+                      <div v-else class="space-y-2">
+                        <p class="font-medium text-sm text-gray-600 dark:text-gray-300">No active opportunities match "{{ activeDealSearch || activeDealStageFilter }}".</p>
+                        <p class="text-xs text-gray-400">Try adjusting your search keywords or resetting stage filters.</p>
+                        <button @click="clearActiveDealFilters" class="mt-2 px-3 py-1.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg text-xs font-bold transition-colors cursor-pointer">
+                          Reset filters
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 </tbody>
@@ -704,40 +841,40 @@
             <div class="bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-xs flex flex-col justify-between h-[135px]">
               <span class="text-xs font-bold text-gray-500 uppercase">Total Sessions</span>
               <div>
-                <div class="text-2xl font-bold text-gray-900 dark:text-white tabular-nums">24,812</div>
-                <div class="text-[11px] font-bold text-[#23B750] mt-1 tabular-nums">↑ 9.4% vs prior period</div>
+                <div class="text-2xl font-bold text-gray-900 dark:text-white tabular-nums">{{ hasSampleData ? '24,812' : '0' }}</div>
+                <div class="text-[11px] font-bold text-[#23B750] mt-1 tabular-nums">{{ hasSampleData ? '↑ 9.4% vs prior period' : '0.0% vs prior period' }}</div>
               </div>
             </div>
 
             <div class="bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-xs flex flex-col justify-between h-[135px]">
               <span class="text-xs font-bold text-gray-500 uppercase">Unique Visitors</span>
               <div>
-                <div class="text-2xl font-bold text-gray-900 dark:text-white tabular-nums">18,204</div>
-                <div class="text-[11px] font-bold text-[#23B750] mt-1 tabular-nums">↑ 7.1% vs prior period</div>
+                <div class="text-2xl font-bold text-gray-900 dark:text-white tabular-nums">{{ hasSampleData ? '18,204' : '0' }}</div>
+                <div class="text-[11px] font-bold text-[#23B750] mt-1 tabular-nums">{{ hasSampleData ? '↑ 7.1% vs prior period' : '0.0% vs prior period' }}</div>
               </div>
             </div>
 
             <div class="bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-xs flex flex-col justify-between h-[135px]">
               <span class="text-xs font-bold text-gray-500 uppercase">Engagement Rate</span>
               <div>
-                <div class="text-2xl font-bold text-gray-900 dark:text-white tabular-nums">62.4%</div>
-                <div class="text-[11px] font-bold text-[#23B750] mt-1 tabular-nums">↑ 3.2 pts vs prior period</div>
+                <div class="text-2xl font-bold text-gray-900 dark:text-white tabular-nums">{{ hasSampleData ? '62.4%' : '0.0%' }}</div>
+                <div class="text-[11px] font-bold text-[#23B750] mt-1 tabular-nums">{{ hasSampleData ? '↑ 3.2 pts vs prior period' : '0.0 pts vs prior period' }}</div>
               </div>
             </div>
 
             <div class="bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-xs flex flex-col justify-between h-[135px]">
               <span class="text-xs font-bold text-gray-500 uppercase">Leads Generated</span>
               <div>
-                <div class="text-2xl font-bold text-gray-900 dark:text-white tabular-nums">847</div>
-                <div class="text-[11px] font-bold text-[#23B750] mt-1 tabular-nums">↑ 8.2% vs prior period</div>
+                <div class="text-2xl font-bold text-gray-900 dark:text-white tabular-nums">{{ hasSampleData ? '847' : '0' }}</div>
+                <div class="text-[11px] font-bold text-[#23B750] mt-1 tabular-nums">{{ hasSampleData ? '↑ 8.2% vs prior period' : '0.0% vs prior period' }}</div>
               </div>
             </div>
 
             <div class="bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-xs flex flex-col justify-between h-[135px]">
               <span class="text-xs font-bold text-gray-500 uppercase">Lead to Customer</span>
               <div>
-                <div class="text-2xl font-bold text-gray-900 dark:text-white tabular-nums">18.3%</div>
-                <div class="text-[11px] font-bold text-[#23B750] mt-1 tabular-nums">↑ 2.1 pts vs prior period</div>
+                <div class="text-2xl font-bold text-gray-900 dark:text-white tabular-nums">{{ hasSampleData ? '18.3%' : '0.0%' }}</div>
+                <div class="text-[11px] font-bold text-[#23B750] mt-1 tabular-nums">{{ hasSampleData ? '↑ 2.1 pts vs prior period' : '0.0 pts vs prior period' }}</div>
               </div>
             </div>
           </div>
@@ -751,7 +888,7 @@
                 <div class="flex justify-between items-start">
                   <div>
                     <h3 class="text-sm font-bold text-gray-900 dark:text-white">Revenue Attribution by Channel</h3>
-                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{{ attributionModel }} model · RM 537.5K attributed revenue</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{{ attributionModel }} model · {{ hasSampleData ? 'RM 537.5K' : 'RM 0.00' }} attributed revenue</p>
                   </div>
                   <div class="flex p-0.5 bg-gray-100 dark:bg-gray-800 rounded-lg" role="group" aria-label="Attribution calculation model">
                     <button
@@ -870,7 +1007,12 @@
                   </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-150 dark:divide-gray-800/60">
-                  <tr v-for="(tr, idx) in marketingSources" :key="idx" class="hover:bg-gray-50/70 dark:hover:bg-gray-800/30 transition-colors">
+                  <tr v-if="activeMarketingSources.length === 0">
+                    <td colspan="7" class="py-8 text-center text-gray-400 font-medium">
+                      No inbound traffic sources recorded in this period.
+                    </td>
+                  </tr>
+                  <tr v-for="(tr, idx) in activeMarketingSources" :key="idx" class="hover:bg-gray-50/70 dark:hover:bg-gray-800/30 transition-colors">
                     <td class="px-4 py-3.5 font-bold text-gray-800 dark:text-gray-200">{{ tr.source }}</td>
                     <td class="px-4 py-3.5 font-bold text-right text-gray-800 dark:text-white tabular-nums">{{ tr.sessions.toLocaleString() }}</td>
                     <td class="px-4 py-3.5 font-bold text-right text-gray-800 dark:text-white tabular-nums">{{ tr.users.toLocaleString() }}</td>
@@ -899,7 +1041,12 @@
                     </tr>
                   </thead>
                   <tbody class="divide-y divide-gray-150 dark:divide-gray-800/60">
-                    <tr v-for="(lp, idx) in topLandingPages" :key="idx" class="hover:bg-gray-50/70 dark:hover:bg-gray-800/30 transition-colors">
+                    <tr v-if="activeTopLandingPages.length === 0">
+                      <td colspan="4" class="py-8 text-center text-gray-400 font-medium">
+                        No landing page metrics recorded in this period.
+                      </td>
+                    </tr>
+                    <tr v-for="(lp, idx) in activeTopLandingPages" :key="idx" class="hover:bg-gray-50/70 dark:hover:bg-gray-800/30 transition-colors">
                       <td class="px-4 py-3 font-semibold text-[#23B750] hover:underline cursor-pointer">{{ lp.page }}</td>
                       <td class="px-4 py-3 font-bold text-right text-gray-800 dark:text-white tabular-nums">{{ lp.sessions.toLocaleString() }}</td>
                       <td class="px-4 py-3 font-bold text-right text-gray-600 dark:text-gray-400 tabular-nums">{{ lp.bounce }}%</td>
@@ -923,7 +1070,12 @@
                     </tr>
                   </thead>
                   <tbody class="divide-y divide-gray-150 dark:divide-gray-800/60">
-                    <tr v-for="(camp, idx) in topUtmCampaigns" :key="idx" class="hover:bg-gray-50/70 dark:hover:bg-gray-800/30 transition-colors">
+                    <tr v-if="activeTopUtmCampaigns.length === 0">
+                      <td colspan="4" class="py-8 text-center text-gray-400 font-medium">
+                        No active UTM campaigns recorded in this period.
+                      </td>
+                    </tr>
+                    <tr v-for="(camp, idx) in activeTopUtmCampaigns" :key="idx" class="hover:bg-gray-50/70 dark:hover:bg-gray-800/30 transition-colors">
                       <td class="px-4 py-3 font-bold text-gray-900 dark:text-white">{{ camp.campaign }}</td>
                       <td class="px-4 py-3 text-gray-600 dark:text-gray-400 font-medium">{{ camp.source }}</td>
                       <td class="px-4 py-3 font-bold text-right text-gray-800 dark:text-white tabular-nums">{{ camp.sessions.toLocaleString() }}</td>
@@ -1014,6 +1166,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import CrmSetupStatusBar from '@/components/dashboard/CrmSetupStatusBar.vue'
 import {
   Calendar,
   ChevronDown,
@@ -1024,7 +1177,15 @@ import {
   AlertCircle,
   Search,
   MessageSquare,
-  DollarSign
+  DollarSign,
+  MoreVertical,
+  Sparkles,
+  Trash2,
+  RotateCw,
+  Printer,
+  SlidersHorizontal,
+  BarChart3,
+  ArrowRight
 } from 'lucide-vue-next'
 
 const tabs = [
@@ -1043,6 +1204,49 @@ function showToast(msg: string) {
       toastMessage.value = ''
     }
   }, 4000)
+}
+
+// ═════════════════════════════════════════════════════════
+// SAMPLE DATA & KEBAB CONTROLS
+// ═════════════════════════════════════════════════════════
+const hasSampleData = ref(localStorage.getItem('rakansales_has_sample_data') !== 'false')
+const isKebabOpen = ref(false)
+
+function loadSampleData() {
+  hasSampleData.value = true
+  localStorage.setItem('rakansales_has_sample_data', 'true')
+  activeDealsList.value = [...defaultActiveDeals]
+  isKebabOpen.value = false
+  showToast('Prepopulated sample data loaded successfully.')
+}
+
+function clearSampleData() {
+  hasSampleData.value = false
+  localStorage.setItem('rakansales_has_sample_data', 'false')
+  activeDealsList.value = []
+  isKebabOpen.value = false
+  showToast('Prepopulated sample data cleared. Showing clean workspace state.')
+}
+
+function refreshData() {
+  isKebabOpen.value = false
+  showToast('Refreshing dashboard analytics & pipeline metrics...')
+  setTimeout(() => {
+    showToast('Dashboard metrics are up to date.')
+  }, 800)
+}
+
+function printDashboard() {
+  isKebabOpen.value = false
+  showToast('Preparing executive summary print layout...')
+  setTimeout(() => {
+    window.print()
+  }, 300)
+}
+
+function openSettings() {
+  isKebabOpen.value = false
+  showToast('Dashboard settings: Custom KPI targets and report widgets configured.')
 }
 
 // ═════════════════════════════════════════════════════════
@@ -1077,6 +1281,9 @@ const revenuePeriod = ref('30D')
 const funnelMode = ref('Count')
 
 const activeRevenueStats = computed(() => {
+  if (!hasSampleData.value) {
+    return { wonAmount: '0.00', targetAmount: '450.0K', growth: '0.0%', dealsCount: 0 }
+  }
   if (revenuePeriod.value === '30D') {
     return { wonAmount: '537.5K', targetAmount: '450.0K', growth: '+27.4%', dealsCount: 5 }
   } else if (revenuePeriod.value === '90D') {
@@ -1094,7 +1301,9 @@ const sparklineBlueOptions = {
   colors: ['#2E91E5'],
   tooltip: { fixed: { enabled: false }, x: { show: false }, y: { title: { formatter: () => '' } } }
 }
-const sparklinePipelineSeries = [{ name: 'Pipeline', data: [2.8, 3.1, 3.0, 3.4, 3.2, 3.6, 3.84] }]
+const sparklinePipelineSeries = computed(() => [
+  { name: 'Pipeline', data: hasSampleData.value ? [2.8, 3.1, 3.0, 3.4, 3.2, 3.6, 3.84] : [0, 0, 0, 0, 0, 0, 0] }
+])
 
 const sparklinePurpleOptions = {
   chart: { type: 'area', sparkline: { enabled: true } },
@@ -1103,7 +1312,9 @@ const sparklinePurpleOptions = {
   colors: ['#7C3AED'],
   tooltip: { fixed: { enabled: false }, x: { show: false } }
 }
-const sparklineConvSeries = [{ name: 'Conv Rate', data: [11.2, 12.0, 11.8, 13.2, 13.8, 14.1, 14.3] }]
+const sparklineConvSeries = computed(() => [
+  { name: 'Conv Rate', data: hasSampleData.value ? [11.2, 12.0, 11.8, 13.2, 13.8, 14.1, 14.3] : [0, 0, 0, 0, 0, 0, 0] }
+])
 
 const sparklineOrangeOptions = {
   chart: { type: 'area', sparkline: { enabled: true } },
@@ -1112,7 +1323,9 @@ const sparklineOrangeOptions = {
   colors: ['#F97316'],
   tooltip: { fixed: { enabled: false }, x: { show: false } }
 }
-const sparklineRespSeries = [{ name: 'Response (min)', data: [18.2, 16.5, 15.0, 14.2, 13.5, 13.0, 12.75] }]
+const sparklineRespSeries = computed(() => [
+  { name: 'Response (min)', data: hasSampleData.value ? [18.2, 16.5, 15.0, 14.2, 13.5, 13.0, 12.75] : [0, 0, 0, 0, 0, 0, 0] }
+])
 
 // Sales Health SLA Radial
 const slaRadialOptions = {
@@ -1141,7 +1354,9 @@ const winRateTrendOptions = {
   fill: { type: 'gradient', gradient: { opacityFrom: 0.4, opacityTo: 0 } },
   colors: ['#23B750']
 }
-const winRateTrendSeries = [{ name: 'Win Rate', data: [12.0, 14.5, 13.8, 16.2, 17.5, 18.5] }]
+const winRateTrendSeries = computed(() => [
+  { name: 'Win Rate', data: hasSampleData.value ? [12.0, 14.5, 13.8, 16.2, 17.5, 18.5] : [0, 0, 0, 0, 0, 0] }
+])
 
 // Revenue vs Target Apex Chart
 const revenueApexOptions = computed(() => ({
@@ -1190,6 +1405,9 @@ const revenueApexOptions = computed(() => ({
 }))
 
 const revenueApexSeries = computed(() => {
+  if (!hasSampleData.value) {
+    return [{ name: 'Revenue Won', data: revenuePeriod.value === '90D' ? [0, 0, 0] : [0, 0, 0, 0] }]
+  }
   if (revenuePeriod.value === '30D') {
     return [{ name: 'Revenue Won', data: [120, 245, 390, 537.5] }]
   } else if (revenuePeriod.value === '90D') {
@@ -1230,6 +1448,9 @@ const funnelApexOptions = computed(() => ({
 }))
 
 const funnelApexSeries = computed(() => {
+  if (!hasSampleData.value) {
+    return [{ name: funnelMode.value === 'Count' ? 'Deals' : 'Pipeline Value', data: [0, 0, 0, 0, 0] }]
+  }
   if (funnelMode.value === 'Count') {
     return [{ name: 'Deals', data: [10, 48, 125, 210, 349] }]
   } else {
@@ -1242,6 +1463,7 @@ const topAgents = [
   { rank: '02', name: 'Amirul Mokhtar', initials: 'AM', avatarBg: 'bg-[#7C3AED]', won: 2, open: 17, revenue: '15.3K', winRate: 100 },
   { rank: '03', name: 'Kausalya Saundarajan', initials: 'KS', avatarBg: 'bg-[#2E91E5]', won: 1, open: 1, revenue: '216', winRate: 100 }
 ]
+const activeTopAgents = computed(() => hasSampleData.value ? topAgents : [])
 
 const overviewChannels = [
   { channel: 'WhatsApp Direct', count: 238, pct: 61, color: '#2E91E5' },
@@ -1249,8 +1471,14 @@ const overviewChannels = [
   { channel: 'Website LiveChat', count: 0, pct: 0, color: '#23B750' },
   { channel: 'Facebook Messenger', count: 0, pct: 0, color: '#3b82f6' }
 ]
+const activeOverviewChannels = computed(() => {
+  if (!hasSampleData.value) {
+    return overviewChannels.map(c => ({ ...c, count: 0, pct: 0 }))
+  }
+  return overviewChannels
+})
 
-const channelDonutOptions = {
+const channelDonutOptions = computed(() => ({
   chart: { type: 'donut', fontFamily: 'Inter, sans-serif' },
   labels: ['WhatsApp Direct', 'Email Inbound'],
   colors: ['#2E91E5', '#7C3AED'],
@@ -1267,15 +1495,15 @@ const channelDonutOptions = {
             label: 'Total Leads',
             fontSize: '10px',
             fontWeight: 600,
-            formatter: () => '389'
+            formatter: () => hasSampleData.value ? '389' : '0'
           }
         }
       }
     }
   },
   tooltip: { theme: 'dark' }
-}
-const channelDonutSeries = [238, 151]
+}))
+const channelDonutSeries = computed(() => hasSampleData.value ? [238, 151] : [0, 0])
 
 const calendarDays = [
   { label: 'MON 17', date: '17', isToday: false, badge: false },
@@ -1284,8 +1512,18 @@ const calendarDays = [
   { label: 'THU · TODAY', date: '20', isToday: true, badge: true },
   { label: 'FRI 21', date: '21', isToday: false, badge: false }
 ]
+const activeCalendarDays = computed(() => {
+  if (!hasSampleData.value) {
+    return calendarDays.map(d => ({ ...d, badge: false }))
+  }
+  return calendarDays
+})
 
 function nudgeAllStaleDeals() {
+  if (!hasSampleData.value) {
+    showToast('No stale opportunities detected in current workspace.')
+    return
+  }
   showToast('Automated WhatsApp follow-up sequence queued for 27 stale opportunities.')
 }
 
@@ -1320,7 +1558,9 @@ const velocityApexOptions = {
   grid: { show: false },
   tooltip: { theme: 'dark' }
 }
-const velocityApexSeries = [{ name: 'Avg Duration', data: [3.2, 8.9, 4.1, 1.8, 2.1] }]
+const velocityApexSeries = computed(() => [
+  { name: 'Avg Duration', data: hasSampleData.value ? [3.2, 8.9, 4.1, 1.8, 2.1] : [0, 0, 0, 0, 0] }
+])
 
 const lostReasonSearch = ref('')
 const lostReasonsList = [
@@ -1331,12 +1571,13 @@ const lostReasonsList = [
 ]
 
 const filteredLostReasons = computed(() => {
+  if (!hasSampleData.value) return []
   if (!lostReasonSearch.value) return lostReasonsList
   const q = lostReasonSearch.value.toLowerCase()
   return lostReasonsList.filter(r => r.title.toLowerCase().includes(q))
 })
 
-const lostReasonDonutOptions = {
+const lostReasonDonutOptions = computed(() => ({
   chart: { type: 'donut', fontFamily: 'Inter, sans-serif' },
   labels: ['Competitor', 'Budget', 'Unreachable', 'Timing'],
   colors: ['#2E91E5', '#F97316', '#EF4444', '#23B750'],
@@ -1352,15 +1593,15 @@ const lostReasonDonutOptions = {
             show: true,
             label: 'Lost Deals',
             fontSize: '10px',
-            formatter: () => '22'
+            formatter: () => hasSampleData.value ? '22' : '0'
           }
         }
       }
     }
   },
   tooltip: { theme: 'dark' }
-}
-const lostReasonDonutSeries = [8, 6, 5, 3]
+}))
+const lostReasonDonutSeries = computed(() => hasSampleData.value ? [8, 6, 5, 3] : [0, 0, 0, 0])
 
 const activeDealSearch = ref('')
 const activeDealStageFilter = ref('All')
@@ -1377,7 +1618,7 @@ interface ActiveDeal {
   source: string
 }
 
-const activeDealsList = ref<ActiveDeal[]>([
+const defaultActiveDeals: ActiveDeal[] = [
   { id: 1, title: 'Whetstone Corporate Event Space booking [Jan-12] / 500 pax', company: 'Whetstone Corporate Events', value: '15.3K', stage: 'Follow up/Negotiation', age: '2 days inactive', isStale: false, owner: 'Kausalya', source: 'WhatsApp' },
   { id: 2, title: 'G2G B2B MATCH APP Enterprise Rollout', company: 'Touch Point Tech', value: '200.0K', stage: 'Follow up/Negotiation', age: '27 days (Stale >3d)', isStale: true, owner: 'Yee Ling', source: 'WhatsApp' },
   { id: 3, title: 'ERP Crystal Tech Implementation', company: 'Nova Star Systems', value: '97.2K', stage: 'Proposal/Quotation', age: '5 days inactive', isStale: false, owner: 'Amirul Mokhtar', source: 'WhatsApp' },
@@ -1385,7 +1626,11 @@ const activeDealsList = ref<ActiveDeal[]>([
   { id: 5, title: 'AMS Victory Logistics Integration', company: 'Victory Log Sdn Bhd', value: '26.1K', stage: 'Follow up/Negotiation', age: '6 days inactive', isStale: false, owner: 'Amirul Mokhtar', source: 'WhatsApp' },
   { id: 6, title: 'Realbox Pro E-Commerce Storefront', company: 'Real Box Co', value: '16.2K', stage: 'Follow up/Negotiation', age: '6 days inactive', isStale: false, owner: 'Amirul Mokhtar', source: 'WhatsApp' },
   { id: 7, title: 'Lemmex Corporate Portal', company: 'Lemmex Corp', value: '38.0K', stage: 'Proposal/Quotation', age: '20 days (Stale >3d)', isStale: true, owner: 'Amirul Mokhtar', source: 'WhatsApp' }
-])
+]
+
+const activeDealsList = ref<ActiveDeal[]>(
+  hasSampleData.value ? [...defaultActiveDeals] : []
+)
 
 const filteredActiveDeals = computed(() => {
   return activeDealsList.value.filter(d => {
@@ -1425,6 +1670,14 @@ const attributionModel = ref('Last-touch')
 const sessionsView = ref('Weekly')
 
 const activeAttributionChannels = computed(() => {
+  if (!hasSampleData.value) {
+    return [
+      { name: 'WhatsApp Direct', val: '0.00', pct: 0, color: '#23B750' },
+      { name: 'Direct Website Search', val: '0.00', pct: 0, color: '#62D816' },
+      { name: 'Google Organic', val: '0.00', pct: 0, color: '#7C3AED' },
+      { name: 'Meta Ads', val: '0.00', pct: 0, color: '#F97316' }
+    ]
+  }
   if (attributionModel.value === 'Last-touch') {
     return [
       { name: 'WhatsApp Direct (Last Touch)', val: '378K', pct: 70, color: '#23B750' },
@@ -1463,7 +1716,7 @@ const attributionApexOptions = computed(() => ({
             show: true,
             label: 'Attributed',
             fontSize: '10px',
-            formatter: () => 'RM 537.5K'
+            formatter: () => hasSampleData.value ? 'RM 537.5K' : 'RM 0.00'
           }
         }
       }
@@ -1496,10 +1749,10 @@ const channelBarApexOptions = {
   grid: { borderColor: '#e2e8f0', strokeDashArray: 3 },
   tooltip: { theme: 'dark' }
 }
-const channelBarApexSeries = [
-  { name: 'Leads Generated', data: [380, 190, 170, 70, 60, 75] },
-  { name: 'Leads Converted', data: [80, 35, 40, 15, 18, 12] }
-]
+const channelBarApexSeries = computed(() => [
+  { name: 'Leads Generated', data: hasSampleData.value ? [380, 190, 170, 70, 60, 75] : [0, 0, 0, 0, 0, 0] },
+  { name: 'Leads Converted', data: hasSampleData.value ? [80, 35, 40, 15, 18, 12] : [0, 0, 0, 0, 0, 0] }
+])
 
 // Sessions Dual-Axis Line Chart
 const sessionsDualApexOptions = {
@@ -1525,10 +1778,10 @@ const sessionsDualApexOptions = {
   grid: { borderColor: '#e2e8f0', strokeDashArray: 3 },
   tooltip: { theme: 'dark' }
 }
-const sessionsDualApexSeries = [
-  { name: 'Sessions', type: 'line', data: [2900, 3200, 3450, 3600, 3850, 4100] },
-  { name: 'Key Events', type: 'line', data: [145, 170, 185, 205, 220, 240] }
-]
+const sessionsDualApexSeries = computed(() => [
+  { name: 'Sessions', type: 'line', data: hasSampleData.value ? [2900, 3200, 3450, 3600, 3850, 4100] : [0, 0, 0, 0, 0, 0] },
+  { name: 'Key Events', type: 'line', data: hasSampleData.value ? [145, 170, 185, 205, 220, 240] : [0, 0, 0, 0, 0, 0] }
+])
 
 // Lead Quality Stacked Horizontal
 const qualityStackedApexOptions = {
@@ -1544,10 +1797,10 @@ const qualityStackedApexOptions = {
   grid: { show: false },
   tooltip: { theme: 'dark' }
 }
-const qualityStackedApexSeries = [
-  { name: 'Qualified (%)', data: [75, 0, 67, 83, 70] },
-  { name: 'Unqualified (%)', data: [25, 100, 33, 17, 30] }
-]
+const qualityStackedApexSeries = computed(() => [
+  { name: 'Qualified (%)', data: hasSampleData.value ? [75, 0, 67, 83, 70] : [0, 0, 0, 0, 0] },
+  { name: 'Unqualified (%)', data: hasSampleData.value ? [25, 100, 33, 17, 30] : [0, 0, 0, 0, 0] }
+])
 
 const marketingSources = [
   { source: 'Direct / (none)', sessions: 18420, users: 14200, engagement: '68.4%', events: 34200, leads: 520, convRate: 2.8 },
@@ -1556,6 +1809,7 @@ const marketingSources = [
   { source: 'whatsapp / direct', sessions: 2900, users: 2450, engagement: '82.1%', events: 9800, leads: 238, convRate: 8.2 },
   { source: 'email / newsletter', sessions: 1850, users: 1520, engagement: '74.5%', events: 4500, leads: 151, convRate: 8.1 }
 ]
+const activeMarketingSources = computed(() => hasSampleData.value ? marketingSources : [])
 
 const topLandingPages = [
   { page: '/pricing', sessions: 8420, bounce: 32.4, leads: 240 },
@@ -1564,6 +1818,7 @@ const topLandingPages = [
   { page: '/contact', sessions: 2150, bounce: 19.8, leads: 142 },
   { page: '/solutions/whatsapp-crm', sessions: 1980, bounce: 24.1, leads: 120 }
 ]
+const activeTopLandingPages = computed(() => hasSampleData.value ? topLandingPages : [])
 
 const topUtmCampaigns = [
   { campaign: 'c4_launch_google', source: 'Google Ads', sessions: 4200, leads: 145, convRate: 3.4 },
@@ -1572,6 +1827,7 @@ const topUtmCampaigns = [
   { campaign: 'newsletter_august', source: 'Email', sessions: 1850, leads: 151, convRate: 8.1 },
   { campaign: 'linkedin_b2b_enterprise', source: 'LinkedIn', sessions: 1200, leads: 62, convRate: 5.1 }
 ]
+const activeTopUtmCampaigns = computed(() => hasSampleData.value ? topUtmCampaigns : [])
 </script>
 
 <style scoped>
