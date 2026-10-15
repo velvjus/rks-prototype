@@ -82,6 +82,7 @@
 import { computed, type Component } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useUIStore } from '@/stores/ui';
+import { usePartnerStore } from '@/stores/partner';
 import {
   Minus, Mail, MessageSquare, Instagram, Globe,
   Calendar, Layout, Clock, Settings as SettingsIcon,
@@ -93,6 +94,7 @@ import {
 } from 'lucide-vue-next';
 
 const ui = useUIStore();
+const partnerStore = usePartnerStore();
 const router = useRouter();
 const route = useRoute();
 
@@ -243,6 +245,7 @@ const menuConfigs: Record<string, MenuConfig> = {
     groups: {
       'Default': {
         items: [
+          { label: 'AI Assistants', icon: Bot, route: '/settings/ai-assistants', badge: 'New' },
           { label: 'Setup Wizard', icon: Sparkles, route: '/setup-wizard', badge: 'Wizard' },
           { label: 'Partner Registration', icon: Award, route: '/partner/register', badge: 'New' },
           { label: 'Onboarding Wizard v2', icon: Sparkles, route: '/onboarding-v2', badge: 'v2' },
@@ -258,6 +261,7 @@ const menuConfigs: Record<string, MenuConfig> = {
     groups: {
       'Default': {
         items: [
+          { label: 'AI Assistants', icon: Bot, route: '/settings/ai-assistants', badge: 'New' },
           { label: 'Setup Wizard', icon: Sparkles, route: '/setup-wizard', badge: 'Wizard' },
           { label: 'Partner Registration', icon: Award, route: '/partner/register', badge: 'New' },
           { label: 'Onboarding Wizard v2', icon: Sparkles, route: '/onboarding-v2', badge: 'v2' },
@@ -265,6 +269,27 @@ const menuConfigs: Record<string, MenuConfig> = {
           { label: 'Auth & Signup Flow', icon: UserCheck, route: '/auth', badge: 'New' },
           { label: 'Design System', icon: LayoutGrid, route: '/design-system' },
           { label: 'Guidelines', icon: FileText, route: '/guidelines' },
+        ],
+      },
+    },
+  },
+  'Settings': {
+    groups: {
+      'AI Assistant': {
+        items: [
+          { label: 'AI Assistants', icon: Bot, route: '/settings/ai-assistants', badge: 'New' },
+          { label: 'AI Behaviour', icon: SettingsIcon, route: '/settings?tab=ai-behaviour' },
+          { label: 'AI Inboxes', icon: Cpu, route: '/settings?tab=ai-inboxes' },
+          { label: 'Playground', icon: Terminal, route: '/settings?tab=ai-playground' },
+          { label: 'Knowledgebase', icon: Book, route: '/settings?tab=ai-training' },
+        ],
+      },
+      'Team & Workspace': {
+        items: [
+          { label: 'Inboxes', icon: Inbox, route: '/settings?tab=inboxes' },
+          { label: 'Teams', icon: Users, route: '/settings?tab=teams' },
+          { label: 'Agents', icon: User, route: '/settings?tab=agents' },
+          { label: 'Roles', icon: Shield, route: '/settings?tab=roles' },
         ],
       },
     },
@@ -327,8 +352,40 @@ function handleItemClick(item: MenuItem) {
   }
 }
 
-const currentMenu = computed(() => {
+const currentMenu = computed<MenuConfig | null>(() => {
   if (!props.title) return null;
+  
+  if (props.title.toLowerCase() === 'partners') {
+    const isSales = partnerStore.activeTrack === 'sales';
+    return {
+      groups: {
+        'Dashboard': {
+          items: [
+            { label: 'Overview', icon: LayoutGrid, route: '/partner/overview' },
+            { label: 'Partner Program', icon: Bookmark, route: '/partner/program', badge: isSales ? 'Tier 2' : 'Upgrade' },
+            { 
+              label: isSales ? 'Deal Pipeline' : 'My Referral', 
+              icon: isSales ? Briefcase : UserPlus, 
+              route: '/partner/referrals',
+              badge: isSales ? `${partnerStore.activeDeals.length} Deals` : undefined
+            },
+          ],
+        },
+        'Finance': {
+          items: [
+            { label: 'Commissions', icon: HandCoins, route: '/partner/commissions', badge: isSales ? 'MRR' : undefined },
+            { label: 'Withdrawal', icon: Banknote, route: '/partner/withdrawal' },
+          ],
+        },
+        'Resources': {
+          items: [
+            { label: 'Partner Kit', icon: Package, route: '/partner/kit', badge: isSales ? 'B2B' : 'New' },
+          ],
+        },
+      },
+    } as MenuConfig;
+  }
+
   return menuConfigs[props.title] ?? null;
 });
 

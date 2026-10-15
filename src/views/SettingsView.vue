@@ -148,6 +148,11 @@
             </div>
           </div>
 
+          <!-- ══════════════ TAB: AI ASSISTANTS ══════════════ -->
+          <div v-if="activeTab === 'ai-assistants'" class="space-y-6">
+            <AIAssistantsTab @toast="addToast" />
+          </div>
+
           <!-- ══════════════ TAB: AI TRAINING HUB ══════════════ -->
           <div v-if="activeTab === 'ai-training'" class="space-y-6 animate-fade-in">
             <div class="border-b border-gray-200 pb-5">
@@ -2127,6 +2132,7 @@ import AgentsTab from '../components/settings/AgentsTab.vue';
 import TeamsTab from '../components/settings/TeamsTab.vue';
 import RolesTab from '../components/settings/RolesTab.vue';
 import AutomationTab from '../components/settings/AutomationTab.vue';
+import AIAssistantsTab from '../components/settings/AIAssistantsTab.vue';
 import {
   Settings, Sparkles, FileText, Upload, CheckCircle2, Play, Pause,
   Mail, MessageSquare, Tag, Zap, Shield, Users, Smartphone,
@@ -2149,10 +2155,10 @@ const vFocus = {
 };
 
 // ═══════════════════ TOAST SYSTEM ═══════════════════
-interface Toast { id: number; title: string; message: string; type: 'success' | 'warning'; }
+interface Toast { id: number; title: string; message: string; type: 'success' | 'warning' | 'info'; }
 const toasts = ref<Toast[]>([]);
 let toastIdCounter = 0;
-function addToast(title: string, message: string, type: 'success' | 'warning' = 'success') {
+function addToast(title: string, message: string, type: 'success' | 'warning' | 'info' = 'success') {
   const id = ++toastIdCounter;
   toasts.value.push({ id, title, message, type });
   setTimeout(() => closeToast(id), 4000);
@@ -2364,7 +2370,8 @@ const settingsGroups: SettingsGroupDef[] = [
     id: 'ai-assistant',
     title: 'AI Assistant',
     items: [
-      { id: 'ai-behaviour', name: 'AI Behaviour', category: 'ai-assistant', categoryName: 'AI Assistant', description: 'System prompts, tone of voice, guardrails, compliance rules, and topic filters.', icon: Bot, keywords: ['persona', 'prompt', 'guardrails', 'rules', 'instructions', 'tone'] },
+      { id: 'ai-assistants', name: 'AI Assistants', category: 'ai-assistant', categoryName: 'AI Assistant', description: 'Build separate assistants for different jobs — one for sales, one for support — each with its own knowledge, rules, and inbox.', icon: Bot, badge: 'New', keywords: ['assistants', 'agents', 'copilot', 'bot', 'knowledge', 'veecotech', 'sales', 'support'] },
+      { id: 'ai-behaviour', name: 'AI Behaviour', category: 'ai-assistant', categoryName: 'AI Assistant', description: 'System prompts, tone of voice, guardrails, compliance rules, and topic filters.', icon: Sliders, keywords: ['persona', 'prompt', 'guardrails', 'rules', 'instructions', 'tone'] },
       { id: 'ai-inboxes', name: 'AI Inboxes', category: 'ai-assistant', categoryName: 'AI Assistant', description: 'Enable or disable AI copilot draft suggestions and autonomous auto-pilot by channel.', icon: Cpu, keywords: ['autopilot', 'copilot', 'channel enable', 'threshold', 'handover'] },
       { id: 'ai-playground', name: 'Playground', category: 'ai-assistant', categoryName: 'AI Assistant', description: 'Interactive testing sandbox to simulate conversations and verify response quality.', icon: Terminal, keywords: ['sandbox', 'test', 'simulation', 'chat test', 'prompt debug'] },
       { id: 'ai-training', name: 'Knowledgebase', category: 'ai-assistant', categoryName: 'AI Assistant', description: 'Document indexing, PDF upload training, vector embeddings, and training logs.', icon: BookOpen, keywords: ['knowledge base', 'sops', 'pdf', 'documents', 'training', 'embeddings'] },

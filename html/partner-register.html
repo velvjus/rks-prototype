@@ -1,0 +1,1549 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RakanSales — Partner Program Registration</title>
+  
+  <!-- Inter Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          spacing: {
+            '4.5': '1.125rem',
+            '5.5': '1.375rem',
+            '6.5': '1.625rem',
+            '8.5': '2.125rem',
+          },
+          colors: {
+            brand: {
+              DEFAULT: '#23B750',
+              hover: '#1a943e',
+              light: '#f0fdf4',
+            }
+          },
+          boxShadow: {
+            '2xs': '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+            'xs': '0 1px 3px 0 rgba(0, 0, 0, 0.08), 0 1px 2px -1px rgba(0, 0, 0, 0.08)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- Canvas Confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+  <style>
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 5px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="min-h-screen lg:h-screen w-full bg-[#f9fafb] flex flex-col font-sans selection:bg-[#23B750]/20 selection:text-emerald-900 text-slate-800 overflow-x-hidden lg:overflow-hidden relative">
+
+  <!-- ========================================================= -->
+  <!-- MOBILE TOP BAR (PERSISTENT LOGO + BACK LINK)             -->
+  <!-- ========================================================= -->
+  <header class="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-md border-b border-gray-200/70 px-4 py-2.5 flex items-center justify-between lg:hidden shadow-2xs">
+    <a href="onboarding-wizard.html" class="flex items-center gap-2" title="Return to RakanSales">
+      <svg class="h-6 w-auto text-[#23B750]" viewBox="0 0 1085 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#23b750" d="M256.46,25.78A38.7,38.7,0,0,1,270,32.54a28.91,28.91,0,0,1,8.39,10.8,34.87,34.87,0,0,1,2.87,14.45q0,12-5.9,19.88T258.71,89.32l22.83,38.21H253.43l-20.51-35.1H218.16v35.1H194.24V23.45h44A65.53,65.53,0,0,1,256.46,25.78ZM237.58,73.63a29.66,29.66,0,0,0,7.77-.93A17.41,17.41,0,0,0,251.17,70a11.71,11.71,0,0,0,3.65-4.35,13.48,13.48,0,0,0,0-11.34A11.1,11.1,0,0,0,251.17,50a19.36,19.36,0,0,0-5.82-2.72,27.56,27.56,0,0,0-7.77-1H218.16V73.63Z"/>
+        <path fill="#23b750" d="M378.48,127.53H355.33V117.9a25.23,25.23,0,0,1-9.24,8.08q-5.67,3-14.37,3a39.14,39.14,0,0,1-15.93-3.18,35.9,35.9,0,0,1-12.34-8.86,40.81,40.81,0,0,1-8-13.43,47.89,47.89,0,0,1-2.88-16.78,49.46,49.46,0,0,1,2.88-17.17,39.16,39.16,0,0,1,8.07-13.43A38.45,38.45,0,0,1,316,47.22,38,38,0,0,1,331.72,44q8.7,0,14.37,3a25.59,25.59,0,0,1,9.24,8.32V45.51h23.15Zm-23.15-43.8a17.49,17.49,0,0,0-1.94-6.68,18.57,18.57,0,0,0-4.2-5.36,20.86,20.86,0,0,0-21.35-3.34,17,17,0,0,0-6.06,4.35,20.74,20.74,0,0,0-5.28,14,20.27,20.27,0,0,0,1.39,7.45,19,19,0,0,0,3.89,6.22,17.76,17.76,0,0,0,6.14,4.19,21.26,21.26,0,0,0,15.37.24,20.76,20.76,0,0,0,5.9-3.5,17.58,17.58,0,0,0,4.2-5.28,17.3,17.3,0,0,0,1.94-6.52Z"/>
+        <path fill="#23b750" d="M395.88,15.68H419V75h5.75l18.49-29.52h28.12L446.21,85.9l28.9,41.63H445.28l-20-30.75H419v30.75H395.88Z"/>
+        <path fill="#23b750" d="M564.58,127.53H541.44V117.9a25.34,25.34,0,0,1-9.25,8.08q-5.67,3-14.37,3a39.09,39.09,0,0,1-15.92-3.18,35.84,35.84,0,0,1-12.35-8.86,41,41,0,0,1-8-13.43,47.89,47.89,0,0,1-2.88-16.78,49.46,49.46,0,0,1,2.88-17.17,39.34,39.34,0,0,1,8.08-13.43,38.41,38.41,0,0,1,12.42-8.86A38,38,0,0,1,517.82,44q8.7,0,14.37,3a25.71,25.71,0,0,1,9.25,8.32V45.51h23.14Zm-23.14-43.8a17.67,17.67,0,0,0-1.94-6.68,18.57,18.57,0,0,0-4.2-5.36,20.34,20.34,0,0,0-5.9-3.58,21.51,21.51,0,0,0-15.46.24,17.16,17.16,0,0,0-6.06,4.35,20.87,20.87,0,0,0-5.28,14,20.28,20.28,0,0,0,1.4,7.45,19,19,0,0,0,3.88,6.22,17.85,17.85,0,0,0,6.14,4.19,21.29,21.29,0,0,0,15.38.24,21,21,0,0,0,5.9-3.5,17.81,17.81,0,0,0,6.14-11.8Z"/>
+        <path fill="#23b750" d="M582,45.51h23.15v12a30.75,30.75,0,0,1,11-9.94A31.47,31.47,0,0,1,631.23,44a29.68,29.68,0,0,1,11.88,2.25A25.87,25.87,0,0,1,652,52.42a28.3,28.3,0,0,1,5.67,9.48,35.4,35.4,0,0,1,2,12.2v53.43H636.51V82.17a17,17,0,0,0-1.09-6.29,15.3,15.3,0,0,0-2.95-4.74,12.84,12.84,0,0,0-4.35-3.1A13.73,13.73,0,0,0,622.53,67a14.77,14.77,0,0,0-7,1.63,17.47,17.47,0,0,0-5.36,4.35,21.64,21.64,0,0,0-3.58,6.21,23.63,23.63,0,0,0-1.47,7.38v41H582Z"/>
+        <path fill="#23b750" d="M679.38,54.21q0-15.54,10.64-23.93t30.37-8.38q20.36,0,30.84,9.09t10.64,25.09H737.32a15.65,15.65,0,0,0-1.08-5.83,12.14,12.14,0,0,0-3.19-4.59,14.33,14.33,0,0,0-5.44-2.87,27.89,27.89,0,0,0-8-1c-5,0-8.89,1-11.73,2.88a9.24,9.24,0,0,0-4.27,8.15,8.91,8.91,0,0,0,1.7,5.52,13.91,13.91,0,0,0,4.59,3.8,30.41,30.41,0,0,0,6.68,2.57q3.79,1,8,1.94,6.52,1.39,13.51,3a50.09,50.09,0,0,1,12.82,4.82,27.25,27.25,0,0,1,9.55,8.61q3.74,5.45,3.73,14.45a31.89,31.89,0,0,1-2.56,13,25.34,25.34,0,0,1-7.92,9.94,39.21,39.21,0,0,1-13.37,6.37,70.52,70.52,0,0,1-18.87,2.25,72.06,72.06,0,0,1-19.34-2.33,39.21,39.21,0,0,1-13.9-6.76,28,28,0,0,1-8.39-10.72,34.52,34.52,0,0,1-2.8-14.21H701.6q.61,7,5.67,10.64t14.37,3.65q8.39,0,13-2.87t4.58-7.7a8.56,8.56,0,0,0-1.79-5.59,13.16,13.16,0,0,0-4.89-3.57,38.3,38.3,0,0,0-7.22-2.33c-2.75-.62-5.62-1.19-8.63-1.71q-6.36-1.25-13-2.87a43.56,43.56,0,0,1-12-4.9,25.57,25.57,0,0,1-8.85-8.93Q679.38,63.22,679.38,54.21Z"/>
+        <path fill="#23b750" d="M861,127.53H837.83V117.9a25.23,25.23,0,0,1-9.24,8.08q-5.67,3-14.37,3a39.05,39.05,0,0,1-15.92-3.18A35.84,35.84,0,0,1,786,116.89a40.81,40.81,0,0,1-8-13.43,47.89,47.89,0,0,1-2.88-16.78A49.46,49.46,0,0,1,778,69.51,39.16,39.16,0,0,1,786,56.08a38.56,38.56,0,0,1,12.43-8.86A38,38,0,0,1,814.22,44q8.7,0,14.37,3a25.59,25.59,0,0,1,9.24,8.32V45.51H861Zm-23.15-43.8a17.31,17.31,0,0,0-1.94-6.68,18.71,18.71,0,0,0-4.19-5.36,20.34,20.34,0,0,0-5.9-3.58,21.51,21.51,0,0,0-15.46.24,17.07,17.07,0,0,0-6.06,4.35,21.09,21.09,0,0,0-3.89,6.36A20.82,20.82,0,0,0,799,86.68a20.27,20.27,0,0,0,1.39,7.45,19.17,19.17,0,0,0,3.89,6.22,17.85,17.85,0,0,0,6.14,4.19,21.29,21.29,0,0,0,15.38.24,21,21,0,0,0,5.9-3.5A17.7,17.7,0,0,0,835.89,96a17.12,17.12,0,0,0,1.94-6.52Z"/>
+        <path fill="#23b750" d="M878.38,15.68h23.14V127.53H878.38Z"/>
+        <path fill="#23b750" d="M938.34,91.65a21.47,21.47,0,0,0,2.25,6.6,18.11,18.11,0,0,0,9.94,8.62,21,21,0,0,0,7.38,1.24,17.63,17.63,0,0,0,9.17-2.48,17.9,17.9,0,0,0,6.37-6.06h25a36,36,0,0,1-14.14,21.36,41.25,41.25,0,0,1-12.11,5.91,50.39,50.39,0,0,1-14.76,2.09,45.31,45.31,0,0,1-17.17-3.18,41,41,0,0,1-13.59-8.86,39.83,39.83,0,0,1-8.93-13.43,44.13,44.13,0,0,1-3.19-16.94,44.7,44.7,0,0,1,3.19-17,39.79,39.79,0,0,1,22.29-22.37A44.68,44.68,0,0,1,957.14,44a47.42,47.42,0,0,1,16.08,2.64,41.56,41.56,0,0,1,13,7.38,39.39,39.39,0,0,1,9.16,11.26,37.25,37.25,0,0,1,4.35,14.45q.31,3.42.39,6.13t-.07,5.83Zm36.82-12.74a15.26,15.26,0,0,0-2-5.67,17,17,0,0,0-3.88-4.43,18.86,18.86,0,0,0-11.81-4,20.81,20.81,0,0,0-6.6,1,17.37,17.37,0,0,0-5.36,2.88,17,17,0,0,0-4,4.51,20.13,20.13,0,0,0-2.41,5.74Z"/>
+        <path fill="#23b750" d="M1011.66,69.9q0-12.42,9-19.18T1045.84,44q16.94,0,25.71,7.07t9.09,19.8h-23.46a8.79,8.79,0,0,0-3-6.76q-2.87-2.4-8.15-2.4-5.61,0-8.47,1.86a6.08,6.08,0,0,0-2.87,5.44,6.26,6.26,0,0,0,3.49,5.82A32.12,32.12,0,0,0,1047,77.9q5.35,1.17,11.49,2.33A49.28,49.28,0,0,1,1070,83.88a24.33,24.33,0,0,1,8.94,7q3.57,4.51,3.57,12.28,0,11.8-8.93,18.72t-27,6.91a61.55,61.55,0,0,1-16.16-1.87,33.92,33.92,0,0,1-11.5-5.35,21.64,21.64,0,0,1-6.91-8.55,27,27,0,0,1-2.25-11.11h23.3a8.71,8.71,0,0,0,3.65,7c2.23,1.56,5.51,2.33,9.87,2.33,4.14,0,7.24-.62,9.32-1.86a6,6,0,0,0,3.1-5.44,5.69,5.69,0,0,0-3.57-5.44,39.17,39.17,0,0,0-8.78-2.79q-5.2-1.08-11.34-2.18a44.7,44.7,0,0,1-11.41-3.57,22.78,22.78,0,0,1-8.78-7.22Q1011.67,78,1011.66,69.9Z"/>
+        <path fill="#23b750" d="M2.5,10.85V120.08a9,9,0,0,0,14.23,7.41l31-21.69V24a8.66,8.66,0,0,1,8.66-8.66h0a8.64,8.64,0,0,1,7.42,4.2l51.74,86.23h13.57a9,9,0,0,0,9-9V10.85a9,9,0,0,0-9-9H11.54A9,9,0,0,0,2.5,10.85Z"/>
+        <path fill="#62d816" d="M47.72,105.8v45.44a7,7,0,0,0,3.84,6.22h0a7,7,0,0,0,8.68-2.05l20.26-27a7.86,7.86,0,0,1,8.75-2.73L122,136.6a6.56,6.56,0,0,0,5-.36h0a6.54,6.54,0,0,0,2.51-9.47l-14-21Z"/>
+      </svg>
+    </a>
+    <a
+      href="onboarding-wizard.html"
+      class="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-600 hover:text-gray-900 px-2.5 py-1 rounded-lg border border-gray-200 bg-white shadow-2xs"
+    >
+      <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+      <span>Back to CRM</span>
+    </a>
+  </header>
+
+  <!-- ========================================================= -->
+  <!-- PERSISTENT TOP-LEFT BRAND LOGO (DESKTOP ONLY)            -->
+  <!-- ========================================================= -->
+  <div class="hidden lg:block fixed top-5 left-8 lg:left-10 z-40">
+    <a
+      href="onboarding-wizard.html"
+      class="inline-block transition-opacity hover:opacity-80 focus-visible:ring-2 focus-visible:ring-[#23B750] focus-visible:outline-none rounded"
+      title="Return to RakanSales CRM"
+    >
+      <svg class="h-7 sm:h-8 w-auto text-[#23B750]" viewBox="0 0 1085 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#23b750" d="M256.46,25.78A38.7,38.7,0,0,1,270,32.54a28.91,28.91,0,0,1,8.39,10.8,34.87,34.87,0,0,1,2.87,14.45q0,12-5.9,19.88T258.71,89.32l22.83,38.21H253.43l-20.51-35.1H218.16v35.1H194.24V23.45h44A65.53,65.53,0,0,1,256.46,25.78ZM237.58,73.63a29.66,29.66,0,0,0,7.77-.93A17.41,17.41,0,0,0,251.17,70a11.71,11.71,0,0,0,3.65-4.35,13.48,13.48,0,0,0,0-11.34A11.1,11.1,0,0,0,251.17,50a19.36,19.36,0,0,0-5.82-2.72,27.56,27.56,0,0,0-7.77-1H218.16V73.63Z"/>
+        <path fill="#23b750" d="M378.48,127.53H355.33V117.9a25.23,25.23,0,0,1-9.24,8.08q-5.67,3-14.37,3a39.14,39.14,0,0,1-15.93-3.18,35.9,35.9,0,0,1-12.34-8.86,40.81,40.81,0,0,1-8-13.43,47.89,47.89,0,0,1-2.88-16.78,49.46,49.46,0,0,1,2.88-17.17,39.16,39.16,0,0,1,8.07-13.43A38.45,38.45,0,0,1,316,47.22,38,38,0,0,1,331.72,44q8.7,0,14.37,3a25.59,25.59,0,0,1,9.24,8.32V45.51h23.15Zm-23.15-43.8a17.49,17.49,0,0,0-1.94-6.68,18.57,18.57,0,0,0-4.2-5.36,20.86,20.86,0,0,0-21.35-3.34,17,17,0,0,0-6.06,4.35,20.74,20.74,0,0,0-5.28,14,20.27,20.27,0,0,0,1.39,7.45,19,19,0,0,0,3.89,6.22,17.76,17.76,0,0,0,6.14,4.19,21.26,21.26,0,0,0,15.37.24,20.76,20.76,0,0,0,5.9-3.5,17.58,17.58,0,0,0,4.2-5.28,17.3,17.3,0,0,0,1.94-6.52Z"/>
+        <path fill="#23b750" d="M395.88,15.68H419V75h5.75l18.49-29.52h28.12L446.21,85.9l28.9,41.63H445.28l-20-30.75H419v30.75H395.88Z"/>
+        <path fill="#23b750" d="M564.58,127.53H541.44V117.9a25.34,25.34,0,0,1-9.25,8.08q-5.67,3-14.37,3a39.09,39.09,0,0,1-15.92-3.18,35.84,35.84,0,0,1-12.35-8.86,41,41,0,0,1-8-13.43,47.89,47.89,0,0,1-2.88-16.78,49.46,49.46,0,0,1,2.88-17.17,39.34,39.34,0,0,1,8.08-13.43,38.41,38.41,0,0,1,12.42-8.86A38,38,0,0,1,517.82,44q8.7,0,14.37,3a25.71,25.71,0,0,1,9.25,8.32V45.51h23.14Zm-23.14-43.8a17.67,17.67,0,0,0-1.94-6.68,18.57,18.57,0,0,0-4.2-5.36,20.34,20.34,0,0,0-5.9-3.58,21.51,21.51,0,0,0-15.46.24,17.16,17.16,0,0,0-6.06,4.35,20.87,20.87,0,0,0-5.28,14,20.28,20.28,0,0,0,1.4,7.45,19,19,0,0,0,3.88,6.22,17.85,17.85,0,0,0,6.14,4.19,21.29,21.29,0,0,0,15.38.24,21,21,0,0,0,5.9-3.5,17.81,17.81,0,0,0,6.14-11.8Z"/>
+        <path fill="#23b750" d="M582,45.51h23.15v12a30.75,30.75,0,0,1,11-9.94A31.47,31.47,0,0,1,631.23,44a29.68,29.68,0,0,1,11.88,2.25A25.87,25.87,0,0,1,652,52.42a28.3,28.3,0,0,1,5.67,9.48,35.4,35.4,0,0,1,2,12.2v53.43H636.51V82.17a17,17,0,0,0-1.09-6.29,15.3,15.3,0,0,0-2.95-4.74,12.84,12.84,0,0,0-4.35-3.1A13.73,13.73,0,0,0,622.53,67a14.77,14.77,0,0,0-7,1.63,17.47,17.47,0,0,0-5.36,4.35,21.64,21.64,0,0,0-3.58,6.21,23.63,23.63,0,0,0-1.47,7.38v41H582Z"/>
+        <path fill="#23b750" d="M679.38,54.21q0-15.54,10.64-23.93t30.37-8.38q20.36,0,30.84,9.09t10.64,25.09H737.32a15.65,15.65,0,0,0-1.08-5.83,12.14,12.14,0,0,0-3.19-4.59,14.33,14.33,0,0,0-5.44-2.87,27.89,27.89,0,0,0-8-1c-5,0-8.89,1-11.73,2.88a9.24,9.24,0,0,0-4.27,8.15,8.91,8.91,0,0,0,1.7,5.52,13.91,13.91,0,0,0,4.59,3.8,30.41,30.41,0,0,0,6.68,2.57q3.79,1,8,1.94,6.52,1.39,13.51,3a50.09,50.09,0,0,1,12.82,4.82,27.25,27.25,0,0,1,9.55,8.61q3.74,5.45,3.73,14.45a31.89,31.89,0,0,1-2.56,13,25.34,25.34,0,0,1-7.92,9.94,39.21,39.21,0,0,1-13.37,6.37,70.52,70.52,0,0,1-18.87,2.25,72.06,72.06,0,0,1-19.34-2.33,39.21,39.21,0,0,1-13.9-6.76,28,28,0,0,1-8.39-10.72,34.52,34.52,0,0,1-2.8-14.21H701.6q.61,7,5.67,10.64t14.37,3.65q8.39,0,13-2.87t4.58-7.7a8.56,8.56,0,0,0-1.79-5.59,13.16,13.16,0,0,0-4.89-3.57,38.3,38.3,0,0,0-7.22-2.33c-2.75-.62-5.62-1.19-8.63-1.71q-6.36-1.25-13-2.87a43.56,43.56,0,0,1-12-4.9,25.57,25.57,0,0,1-8.85-8.93Q679.38,63.22,679.38,54.21Z"/>
+        <path fill="#23b750" d="M861,127.53H837.83V117.9a25.23,25.23,0,0,1-9.24,8.08q-5.67,3-14.37,3a39.05,39.05,0,0,1-15.92-3.18A35.84,35.84,0,0,1,786,116.89a40.81,40.81,0,0,1-8-13.43,47.89,47.89,0,0,1-2.88-16.78A49.46,49.46,0,0,1,778,69.51,39.16,39.16,0,0,1,786,56.08a38.56,38.56,0,0,1,12.43-8.86A38,38,0,0,1,814.22,44q8.7,0,14.37,3a25.59,25.59,0,0,1,9.24,8.32V45.51H861Zm-23.15-43.8a17.31,17.31,0,0,0-1.94-6.68,18.71,18.71,0,0,0-4.19-5.36,20.34,20.34,0,0,0-5.9-3.58,21.51,21.51,0,0,0-15.46.24,17.07,17.07,0,0,0-6.06,4.35,21.09,21.09,0,0,0-3.89,6.36A20.82,20.82,0,0,0,799,86.68a20.27,20.27,0,0,0,1.39,7.45,19.17,19.17,0,0,0,3.89,6.22,17.85,17.85,0,0,0,6.14,4.19,21.29,21.29,0,0,0,15.38.24,21,21,0,0,0,5.9-3.5A17.7,17.7,0,0,0,835.89,96a17.12,17.12,0,0,0,1.94-6.52Z"/>
+        <path fill="#23b750" d="M878.38,15.68h23.14V127.53H878.38Z"/>
+        <path fill="#23b750" d="M938.34,91.65a21.47,21.47,0,0,0,2.25,6.6,18.11,18.11,0,0,0,9.94,8.62,21,21,0,0,0,7.38,1.24,17.63,17.63,0,0,0,9.17-2.48,17.9,17.9,0,0,0,6.37-6.06h25a36,36,0,0,1-14.14,21.36,41.25,41.25,0,0,1-12.11,5.91,50.39,50.39,0,0,1-14.76,2.09,45.31,45.31,0,0,1-17.17-3.18,41,41,0,0,1-13.59-8.86,39.83,39.83,0,0,1-8.93-13.43,44.13,44.13,0,0,1-3.19-16.94,44.7,44.7,0,0,1,3.19-17,39.79,39.79,0,0,1,22.29-22.37A44.68,44.68,0,0,1,957.14,44a47.42,47.42,0,0,1,16.08,2.64,41.56,41.56,0,0,1,13,7.38,39.39,39.39,0,0,1,9.16,11.26,37.25,37.25,0,0,1,4.35,14.45q.31,3.42.39,6.13t-.07,5.83Zm36.82-12.74a15.26,15.26,0,0,0-2-5.67,17,17,0,0,0-3.88-4.43,18.86,18.86,0,0,0-11.81-4,20.81,20.81,0,0,0-6.6,1,17.37,17.37,0,0,0-5.36,2.88,17,17,0,0,0-4,4.51,20.13,20.13,0,0,0-2.41,5.74Z"/>
+        <path fill="#23b750" d="M1011.66,69.9q0-12.42,9-19.18T1045.84,44q16.94,0,25.71,7.07t9.09,19.8h-23.46a8.79,8.79,0,0,0-3-6.76q-2.87-2.4-8.15-2.4-5.61,0-8.47,1.86a6.08,6.08,0,0,0-2.87,5.44,6.26,6.26,0,0,0,3.49,5.82A32.12,32.12,0,0,0,1047,77.9q5.35,1.17,11.49,2.33A49.28,49.28,0,0,1,1070,83.88a24.33,24.33,0,0,1,8.94,7q3.57,4.51,3.57,12.28,0,11.8-8.93,18.72t-27,6.91a61.55,61.55,0,0,1-16.16-1.87,33.92,33.92,0,0,1-11.5-5.35,21.64,21.64,0,0,1-6.91-8.55,27,27,0,0,1-2.25-11.11h23.3a8.71,8.71,0,0,0,3.65,7c2.23,1.56,5.51,2.33,9.87,2.33,4.14,0,7.24-.62,9.32-1.86a6,6,0,0,0,3.1-5.44,5.69,5.69,0,0,0-3.57-5.44,39.17,39.17,0,0,0-8.78-2.79q-5.2-1.08-11.34-2.18a44.7,44.7,0,0,1-11.41-3.57,22.78,22.78,0,0,1-8.78-7.22Q1011.67,78,1011.66,69.9Z"/>
+        <path fill="#23b750" d="M2.5,10.85V120.08a9,9,0,0,0,14.23,7.41l31-21.69V24a8.66,8.66,0,0,1,8.66-8.66h0a8.64,8.64,0,0,1,7.42,4.2l51.74,86.23h13.57a9,9,0,0,0,9-9V10.85a9,9,0,0,0-9-9H11.54A9,9,0,0,0,2.5,10.85Z"/>
+        <path fill="#62d816" d="M47.72,105.8v45.44a7,7,0,0,0,3.84,6.22h0a7,7,0,0,0,8.68-2.05l20.26-27a7.86,7.86,0,0,1,8.75-2.73L122,136.6a6.56,6.56,0,0,0,5-.36h0a6.54,6.54,0,0,0,2.51-9.47l-14-21Z"/>
+      </svg>
+    </a>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- GLOBAL TOP HEADER (TOTALLY HIDDEN, REVEALS ONLY ON HOVER) -->
+  <!-- ========================================================= -->
+  <div class="hidden lg:block fixed top-0 left-0 w-full z-50 group pointer-events-none">
+    <!-- Hover sensor strip -->
+    <div class="absolute top-0 left-0 h-6 w-full pointer-events-auto"></div>
+
+    <header class="w-full bg-white/95 backdrop-blur-md border-b border-gray-200/80 px-6 sm:px-10 py-3 flex items-center justify-between shadow-md transition-all duration-300 ease-out transform -translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 pointer-events-auto">
+      <div class="flex items-center gap-3">
+        <a href="onboarding-wizard.html" class="flex items-center gap-2.5" title="Return to RakanSales">
+          <svg class="h-7 w-auto text-[#23B750]" viewBox="0 0 1085 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill="#23b750" d="M256.46,25.78A38.7,38.7,0,0,1,270,32.54a28.91,28.91,0,0,1,8.39,10.8,34.87,34.87,0,0,1,2.87,14.45q0,12-5.9,19.88T258.71,89.32l22.83,38.21H253.43l-20.51-35.1H218.16v35.1H194.24V23.45h44A65.53,65.53,0,0,1,256.46,25.78ZM237.58,73.63a29.66,29.66,0,0,0,7.77-.93A17.41,17.41,0,0,0,251.17,70a11.71,11.71,0,0,0,3.65-4.35,13.48,13.48,0,0,0,0-11.34A11.1,11.1,0,0,0,251.17,50a19.36,19.36,0,0,0-5.82-2.72,27.56,27.56,0,0,0-7.77-1H218.16V73.63Z"/>
+            <path fill="#23b750" d="M378.48,127.53H355.33V117.9a25.23,25.23,0,0,1-9.24,8.08q-5.67,3-14.37,3a39.14,39.14,0,0,1-15.93-3.18,35.9,35.9,0,0,1-12.34-8.86,40.81,40.81,0,0,1-8-13.43,47.89,47.89,0,0,1-2.88-16.78,49.46,49.46,0,0,1,2.88-17.17,39.16,39.16,0,0,1,8.07-13.43A38.45,38.45,0,0,1,316,47.22,38,38,0,0,1,331.72,44q8.7,0,14.37,3a25.59,25.59,0,0,1,9.24,8.32V45.51h23.15Zm-23.15-43.8a17.49,17.49,0,0,0-1.94-6.68,18.57,18.57,0,0,0-4.2-5.36,20.86,20.86,0,0,0-21.35-3.34,17,17,0,0,0-6.06,4.35,20.74,20.74,0,0,0-5.28,14,20.27,20.27,0,0,0,1.39,7.45,19,19,0,0,0,3.89,6.22,17.76,17.76,0,0,0,6.14,4.19,21.26,21.26,0,0,0,15.37.24,20.76,20.76,0,0,0,5.9-3.5,17.58,17.58,0,0,0,4.2-5.28,17.3,17.3,0,0,0,1.94-6.52Z"/>
+            <path fill="#23b750" d="M395.88,15.68H419V75h5.75l18.49-29.52h28.12L446.21,85.9l28.9,41.63H445.28l-20-30.75H419v30.75H395.88Z"/>
+            <path fill="#23b750" d="M564.58,127.53H541.44V117.9a25.34,25.34,0,0,1-9.25,8.08q-5.67,3-14.37,3a39.09,39.09,0,0,1-15.92-3.18,35.84,35.84,0,0,1-12.35-8.86,41,41,0,0,1-8-13.43,47.89,47.89,0,0,1-2.88-16.78,49.46,49.46,0,0,1,2.88-17.17,39.34,39.34,0,0,1,8.08-13.43,38.41,38.41,0,0,1,12.42-8.86A38,38,0,0,1,517.82,44q8.7,0,14.37,3a25.71,25.71,0,0,1,9.25,8.32V45.51h23.14Zm-23.14-43.8a17.67,17.67,0,0,0-1.94-6.68,18.57,18.57,0,0,0-4.2-5.36,20.34,20.34,0,0,0-5.9-3.58,21.51,21.51,0,0,0-15.46.24,17.16,17.16,0,0,0-6.06,4.35,20.87,20.87,0,0,0-5.28,14,20.28,20.28,0,0,0,1.4,7.45,19,19,0,0,0,3.88,6.22,17.85,17.85,0,0,0,6.14,4.19,21.29,21.29,0,0,0,15.38.24,21,21,0,0,0,5.9-3.5,17.81,17.81,0,0,0,6.14-11.8Z"/>
+            <path fill="#23b750" d="M582,45.51h23.15v12a30.75,30.75,0,0,1,11-9.94A31.47,31.47,0,0,1,631.23,44a29.68,29.68,0,0,1,11.88,2.25A25.87,25.87,0,0,1,652,52.42a28.3,28.3,0,0,1,5.67,9.48,35.4,35.4,0,0,1,2,12.2v53.43H636.51V82.17a17,17,0,0,0-1.09-6.29,15.3,15.3,0,0,0-2.95-4.74,12.84,12.84,0,0,0-4.35-3.1A13.73,13.73,0,0,0,622.53,67a14.77,14.77,0,0,0-7,1.63,17.47,17.47,0,0,0-5.36,4.35,21.64,21.64,0,0,0-3.58,6.21,23.63,23.63,0,0,0-1.47,7.38v41H582Z"/>
+            <path fill="#23b750" d="M679.38,54.21q0-15.54,10.64-23.93t30.37-8.38q20.36,0,30.84,9.09t10.64,25.09H737.32a15.65,15.65,0,0,0-1.08-5.83,12.14,12.14,0,0,0-3.19-4.59,14.33,14.33,0,0,0-5.44-2.87,27.89,27.89,0,0,0-8-1c-5,0-8.89,1-11.73,2.88a9.24,9.24,0,0,0-4.27,8.15,8.91,8.91,0,0,0,1.7,5.52,13.91,13.91,0,0,0,4.59,3.8,30.41,30.41,0,0,0,6.68,2.57q3.79,1,8,1.94,6.52,1.39,13.51,3a50.09,50.09,0,0,1,12.82,4.82,27.25,27.25,0,0,1,9.55,8.61q3.74,5.45,3.73,14.45a31.89,31.89,0,0,1-2.56,13,25.34,25.34,0,0,1-7.92,9.94,39.21,39.21,0,0,1-13.37,6.37,70.52,70.52,0,0,1-18.87,2.25,72.06,72.06,0,0,1-19.34-2.33,39.21,39.21,0,0,1-13.9-6.76,28,28,0,0,1-8.39-10.72,34.52,34.52,0,0,1-2.8-14.21H701.6q.61,7,5.67,10.64t14.37,3.65q8.39,0,13-2.87t4.58-7.7a8.56,8.56,0,0,0-1.79-5.59,13.16,13.16,0,0,0-4.89-3.57,38.3,38.3,0,0,0-7.22-2.33c-2.75-.62-5.62-1.19-8.63-1.71q-6.36-1.25-13-2.87a43.56,43.56,0,0,1-12-4.9,25.57,25.57,0,0,1-8.85-8.93Q679.38,63.22,679.38,54.21Z"/>
+            <path fill="#23b750" d="M861,127.53H837.83V117.9a25.23,25.23,0,0,1-9.24,8.08q-5.67,3-14.37,3a39.05,39.05,0,0,1-15.92-3.18A35.84,35.84,0,0,1,786,116.89a40.81,40.81,0,0,1-8-13.43,47.89,47.89,0,0,1-2.88-16.78A49.46,49.46,0,0,1,778,69.51,39.16,39.16,0,0,1,786,56.08a38.56,38.56,0,0,1,12.43-8.86A38,38,0,0,1,814.22,44q8.7,0,14.37,3a25.59,25.59,0,0,1,9.24,8.32V45.51H861Zm-23.15-43.8a17.31,17.31,0,0,0-1.94-6.68,18.71,18.71,0,0,0-4.19-5.36,20.34,20.34,0,0,0-5.9-3.58,21.51,21.51,0,0,0-15.46.24,17.07,17.07,0,0,0-6.06,4.35,21.09,21.09,0,0,0-3.89,6.36A20.82,20.82,0,0,0,799,86.68a20.27,20.27,0,0,0,1.39,7.45,19.17,19.17,0,0,0,3.89,6.22,17.85,17.85,0,0,0,6.14,4.19,21.29,21.29,0,0,0,15.38.24,21,21,0,0,0,5.9-3.5A17.7,17.7,0,0,0,835.89,96a17.12,17.12,0,0,0,1.94-6.52Z"/>
+            <path fill="#23b750" d="M878.38,15.68h23.14V127.53H878.38Z"/>
+            <path fill="#23b750" d="M938.34,91.65a21.47,21.47,0,0,0,2.25,6.6,18.11,18.11,0,0,0,9.94,8.62,21,21,0,0,0,7.38,1.24,17.63,17.63,0,0,0,9.17-2.48,17.9,17.9,0,0,0,6.37-6.06h25a36,36,0,0,1-14.14,21.36,41.25,41.25,0,0,1-12.11,5.91,50.39,50.39,0,0,1-14.76,2.09,45.31,45.31,0,0,1-17.17-3.18,41,41,0,0,1-13.59-8.86,39.83,39.83,0,0,1-8.93-13.43,44.13,44.13,0,0,1-3.19-16.94,44.7,44.7,0,0,1,3.19-17,39.79,39.79,0,0,1,22.29-22.37A44.68,44.68,0,0,1,957.14,44a47.42,47.42,0,0,1,16.08,2.64,41.56,41.56,0,0,1,13,7.38,39.39,39.39,0,0,1,9.16,11.26,37.25,37.25,0,0,1,4.35,14.45q.31,3.42.39,6.13t-.07,5.83Zm36.82-12.74a15.26,15.26,0,0,0-2-5.67,17,17,0,0,0-3.88-4.43,18.86,18.86,0,0,0-11.81-4,20.81,20.81,0,0,0-6.6,1,17.37,17.37,0,0,0-5.36,2.88,17,17,0,0,0-4,4.51,20.13,20.13,0,0,0-2.41,5.74Z"/>
+            <path fill="#23b750" d="M1011.66,69.9q0-12.42,9-19.18T1045.84,44q16.94,0,25.71,7.07t9.09,19.8h-23.46a8.79,8.79,0,0,0-3-6.76q-2.87-2.4-8.15-2.4-5.61,0-8.47,1.86a6.08,6.08,0,0,0-2.87,5.44,6.26,6.26,0,0,0,3.49,5.82A32.12,32.12,0,0,0,1047,77.9q5.35,1.17,11.49,2.33A49.28,49.28,0,0,1,1070,83.88a24.33,24.33,0,0,1,8.94,7q3.57,4.51,3.57,12.28,0,11.8-8.93,18.72t-27,6.91a61.55,61.55,0,0,1-16.16-1.87,33.92,33.92,0,0,1-11.5-5.35,21.64,21.64,0,0,1-6.91-8.55,27,27,0,0,1-2.25-11.11h23.3a8.71,8.71,0,0,0,3.65,7c2.23,1.56,5.51,2.33,9.87,2.33,4.14,0,7.24-.62,9.32-1.86a6,6,0,0,0,3.1-5.44,5.69,5.69,0,0,0-3.57-5.44,39.17,39.17,0,0,0-8.78-2.79q-5.2-1.08-11.34-2.18a44.7,44.7,0,0,1-11.41-3.57,22.78,22.78,0,0,1-8.78-7.22Q1011.67,78,1011.66,69.9Z"/>
+            <path fill="#23b750" d="M2.5,10.85V120.08a9,9,0,0,0,14.23,7.41l31-21.69V24a8.66,8.66,0,0,1,8.66-8.66h0a8.64,8.64,0,0,1,7.42,4.2l51.74,86.23h13.57a9,9,0,0,0,9-9V10.85a9,9,0,0,0-9-9H11.54A9,9,0,0,0,2.5,10.85Z"/>
+            <path fill="#62d816" d="M47.72,105.8v45.44a7,7,0,0,0,3.84,6.22h0a7,7,0,0,0,8.68-2.05l20.26-27a7.86,7.86,0,0,1,8.75-2.73L122,136.6a6.56,6.56,0,0,0,5-.36h0a6.54,6.54,0,0,0,2.51-9.47l-14-21Z"/>
+          </svg>
+        </a>
+        <span class="text-xs font-semibold text-gray-400 select-none">/</span>
+        <span class="text-xs font-semibold text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200 select-none">
+          Partner Network
+        </span>
+      </div>
+
+      <!-- Prototype Step Switcher -->
+      <nav aria-label="Step progress switcher" class="hidden md:flex items-center gap-1 bg-gray-100/90 p-1 rounded-xl text-xs font-semibold">
+        <button
+          type="button"
+          onclick="goToStep(1)"
+          id="nav-step-1"
+          class="px-3 py-1 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 bg-white text-gray-900 shadow-xs font-bold"
+        >
+          <span class="w-1.5 h-1.5 rounded-full bg-[#23B750]" id="nav-dot-1"></span>
+          <span>1. Account Setup</span>
+        </button>
+        <button
+          type="button"
+          onclick="goToStep(2)"
+          id="nav-step-2"
+          class="px-3 py-1 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 text-gray-500 hover:text-gray-900"
+        >
+          <span class="w-1.5 h-1.5 rounded-full bg-transparent" id="nav-dot-2"></span>
+          <span id="nav-label-2">2. Partner Track</span>
+        </button>
+        <button
+          type="button"
+          onclick="goToStep(3)"
+          id="nav-step-3"
+          class="px-3 py-1 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 text-gray-500 hover:text-gray-900"
+        >
+          <span class="w-1.5 h-1.5 rounded-full bg-transparent" id="nav-dot-3"></span>
+          <span id="nav-label-3">3. Account Details</span>
+        </button>
+        <button
+          type="button"
+          onclick="goToStep(4)"
+          id="nav-step-4"
+          class="px-3 py-1 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 text-gray-500 hover:text-gray-900"
+        >
+          <span>Success</span>
+        </button>
+      </nav>
+
+      <!-- Right: Escape hatch back to CRM Dashboard -->
+      <div class="flex items-center gap-3">
+        <a
+          href="onboarding-wizard.html"
+          class="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-600 hover:text-gray-900 hover:bg-gray-100 px-3 py-1.5 rounded-lg transition-colors border border-gray-200 shadow-2xs"
+        >
+          <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+          <span>Back to CRM</span>
+        </a>
+      </div>
+    </header>
+  </div>
+
+  <!-- Full-Screen Split Stage: Form Area (Left) + Visual Canvas (Right) -->
+  <div class="flex-1 flex flex-col lg:flex-row w-full min-h-0 relative overflow-x-hidden lg:overflow-hidden">
+    <!-- ========================================================= -->
+    <!-- LEFT PANE: REGISTRATION WIZARD                           -->
+    <!-- ========================================================= -->
+    <section
+      id="left-pane"
+      aria-label="Registration Form Container"
+      class="w-full flex-1 lg:h-full flex flex-col justify-start lg:justify-between px-4 sm:px-8 md:px-12 lg:px-14 xl:px-20 py-5 sm:py-7 lg:pt-8 lg:pb-4 bg-[#f9fafb] lg:border-r border-gray-200/70 overflow-y-auto relative transition-all duration-500 ease-out lg:w-[70%]"
+    >
+      <!-- Balanced Wizard Container -->
+      <div class="w-full max-w-xl mx-auto flex-1 flex flex-col justify-start lg:justify-center min-h-0 py-1 sm:py-2">
+        <!-- Wizard Stage -->
+        <div class="w-full min-h-0 lg:h-[660px] flex flex-col justify-start lg:justify-between gap-5 sm:gap-6 lg:gap-0 shrink-0">
+          
+          <!-- 1. STEPPER PROGRESS BAR -->
+          <div class="h-auto lg:h-[32px] shrink-0" id="stepper-container">
+            <div id="stepper-progress-box" class="w-full space-y-1.5">
+              <div class="flex items-center justify-between text-xs">
+                <span id="step-counter-text" class="font-semibold text-[#23B750] tracking-wide uppercase text-[11px]">
+                  Step 1 of 3
+                </span>
+                <span id="step-indicator-label" class="text-gray-400 font-medium text-[11px]">
+                  Account setup
+                </span>
+              </div>
+
+              <!-- Progress Segment Bars -->
+              <div class="grid grid-cols-3 gap-2" role="progressbar">
+                <div id="prog-bar-1" class="h-1.5 rounded-full transition-all duration-300 bg-[#23B750]"></div>
+                <div id="prog-bar-2" class="h-1.5 rounded-full transition-all duration-300 bg-gray-100"></div>
+                <div id="prog-bar-3" class="h-1.5 rounded-full transition-all duration-300 bg-gray-100"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. STEP TITLE & SUBTITLE BLOCK -->
+          <div id="step-header-block" class="min-h-0 lg:h-[54px] shrink-0 text-center flex flex-col justify-center transition-opacity duration-200">
+            <h1 id="step-main-title" class="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 tracking-tight leading-tight">
+              Partner Account Setup
+            </h1>
+            <p id="step-main-subtitle" class="text-xs sm:text-sm text-gray-500 leading-relaxed mt-1">
+              Create a new partner account, or link your existing RakanSales login to manage everything in one place.
+            </p>
+          </div>
+
+          <!-- 3. STEP CONTENT -->
+          <div class="min-h-0 lg:min-h-[375px] lg:h-[395px] shrink-0 flex flex-col justify-start">
+
+            <!-- ─────────────────────────────────────────
+                 STEP 1: CHOOSE ACCOUNT STATUS
+                 ───────────────────────────────────────── -->
+            <div id="step-1-content" class="flex flex-col justify-start pt-1">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+                <!-- Card 1: New Partner Account -->
+                <div
+                  id="card-user-new"
+                  role="button"
+                  tabindex="0"
+                  onclick="selectUserType('new')"
+                  class="group relative rounded-2xl border-2 p-4.5 sm:p-7 flex flex-col justify-start gap-3 sm:gap-4 cursor-pointer transition-all text-left border-[#23B750] bg-emerald-50/50 ring-2 ring-[#23B750]/15 shadow-xs min-h-0 sm:min-h-[200px]"
+                >
+                  <div class="flex items-center justify-between">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-300">
+                      New
+                    </span>
+                    <div id="check-user-new" class="w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all border-[#23B750] bg-[#23B750] text-white shadow-xs">
+                      <i data-lucide="check" class="w-3 h-3 stroke-[3]"></i>
+                    </div>
+                  </div>
+
+                  <div class="space-y-1.5">
+                    <h3 class="font-bold text-gray-900 text-base sm:text-lg">New Partner Account</h3>
+                    <p class="text-xs sm:text-sm text-gray-500 leading-relaxed">
+                      Create a dedicated partner login to start referring businesses and receiving payouts.
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Card 2: Link Existing Account -->
+                <div
+                  id="card-user-existing"
+                  role="button"
+                  tabindex="0"
+                  onclick="selectUserType('existing')"
+                  class="group relative rounded-2xl border-2 p-4.5 sm:p-7 flex flex-col justify-start gap-3 sm:gap-4 cursor-pointer transition-all text-left border-gray-200 bg-white/70 hover:border-gray-300 hover:bg-white min-h-0 sm:min-h-[200px]"
+                >
+                  <div class="flex items-center justify-between">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-300">
+                      Existing
+                    </span>
+                    <div id="check-user-existing" class="w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all border-gray-300 bg-white">
+                      <!-- Checked icon inserted dynamically -->
+                    </div>
+                  </div>
+
+                  <div class="space-y-1.5">
+                    <h3 class="font-bold text-gray-900 text-base sm:text-lg">Link Existing Account</h3>
+                    <p class="text-xs sm:text-sm text-gray-500 leading-relaxed">
+                      Connect your existing RakanSales login to manage CRM tools and partner earnings together.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Reassuring Footnote -->
+              <p class="text-xs text-gray-500 text-center leading-relaxed mt-4">
+                <i data-lucide="info" class="inline-block w-3.5 h-3.5 text-gray-400 align-middle -translate-y-[1px] mr-1"></i>
+                <span>Both paths include full access to referral tracking links, marketing kits, and automated payouts.</span>
+              </p>
+            </div>
+
+            <!-- ─────────────────────────────────────────
+                 STEP 2 (EXISTING USER): LINK ACCOUNT
+                 ───────────────────────────────────────── -->
+            <div id="step-2-existing-content" class="space-y-5 text-left pt-2 hidden">
+              <!-- Callout Pill: One login for both -->
+              <div class="p-4 sm:p-5 rounded-2xl bg-emerald-50/60 border border-emerald-200/90 flex items-start gap-3.5">
+                <div class="w-9 h-9 rounded-xl bg-white border border-emerald-200 text-[#23B750] flex items-center justify-center shrink-0 mt-0.5 shadow-2xs">
+                  <i data-lucide="link" class="w-4.5 h-4.5 stroke-[2.5]"></i>
+                </div>
+                <p class="text-xs sm:text-[13px] text-gray-700 leading-relaxed font-normal">
+                  One login for both. Your CRM dashboard and partner earnings dashboard will share the same email and password.
+                </p>
+              </div>
+
+              <!-- Input: CRM account email -->
+              <div class="space-y-2">
+                <label for="link-crm-email" class="block text-xs font-semibold text-gray-700">
+                  CRM account email <span class="text-red-500">*</span>
+                </label>
+                <input
+                  id="link-crm-email"
+                  type="email"
+                  required
+                  placeholder="Enter your CRM account email"
+                  class="w-full px-3.5 py-2.5 bg-white border border-gray-200 hover:border-gray-300 rounded-xl text-sm font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#23B750]/30 focus:border-[#23B750] caret-[#23B750] shadow-2xs transition-all h-10"
+                  onkeydown="if(event.key === 'Enter'){ findAccountAndContinue(); }"
+                  oninput="clearAccountLinkError()"
+                />
+                <p id="account-link-error" class="text-xs text-red-600 mt-1 hidden"></p>
+              </div>
+            </div>
+
+            <!-- ─────────────────────────────────────────
+                 PARTNER TRACK SELECTION
+                 (STEP 2 FOR NEW, STEP 3 FOR EXISTING)
+                 ───────────────────────────────────────── -->
+            <div id="step-track-content" class="flex flex-col justify-start pt-1 hidden">
+              <!-- Linked Account Indicator Banner (For existing customers) -->
+              <div
+                id="linked-account-banner"
+                class="mb-2.5 px-3.5 py-1.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-medium flex items-center justify-between shadow-2xs hidden"
+              >
+                <div class="flex items-center gap-2">
+                  <i data-lucide="check" class="w-3.5 h-3.5 text-[#23B750] stroke-[3]"></i>
+                  <span>Linked CRM account: <strong id="banner-linked-email" class="text-gray-900 font-semibold"></strong></span>
+                </div>
+                <button
+                  type="button"
+                  onclick="goToStep(2)"
+                  class="text-[11px] text-[#23B750] hover:text-[#1a943e] hover:underline font-semibold cursor-pointer"
+                >
+                  Change email
+                </button>
+              </div>
+
+              <!-- 2 Track Cards -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+                <!-- Card 1: Referral Partner -->
+                <div
+                  id="card-track-referral"
+                  role="button"
+                  tabindex="0"
+                  onclick="selectPartnerTrack('referral')"
+                  class="group relative rounded-2xl border-2 p-4 sm:p-4.5 lg:p-5 flex flex-col justify-between cursor-pointer transition-all text-left border-[#23B750] bg-emerald-50/50 ring-2 ring-[#23B750]/15 shadow-xs min-h-0 sm:min-h-[275px] lg:min-h-[285px]"
+                >
+                  <!-- Top Row -->
+                  <div class="flex items-center justify-between min-h-[24px]">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-300">
+                      Recommended to Start
+                    </span>
+                    <div id="check-track-referral" class="w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all border-[#23B750] bg-[#23B750] text-white shadow-xs">
+                      <i data-lucide="check" class="w-3 h-3 stroke-[3]"></i>
+                    </div>
+                  </div>
+
+                  <!-- Graphic Hero -->
+                  <div class="h-24 sm:h-28 lg:h-30 w-full flex items-center justify-center py-0.5">
+                    <img
+                      src="../public/brand-assets/partner/sales-partner-illustration.png"
+                      onerror="if(!this.dataset.retried){this.dataset.retried=1;this.src='/brand-assets/partner/sales-partner-illustration.png';}"
+                      alt="Referral Partner Mascot"
+                      class="max-h-22 sm:max-h-26 lg:max-h-28 max-w-full object-contain filter drop-shadow-sm transition-transform group-hover:scale-105 duration-200"
+                    />
+                  </div>
+
+                  <!-- Title & Description -->
+                  <div class="text-center space-y-1 pt-1">
+                    <h3 class="font-bold text-gray-900 text-base sm:text-lg">Referral Partner</h3>
+                    <p class="text-xs sm:text-[13px] text-gray-500 leading-relaxed px-1">
+                      Share your link with contacts. Our sales team conducts demos & closes the sale.
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Card 2: Sales Partner -->
+                <div
+                  id="card-track-sales"
+                  role="button"
+                  tabindex="0"
+                  onclick="handleSalesPartnerCardClick()"
+                  class="group relative rounded-2xl border-2 p-4 sm:p-4.5 lg:p-5 flex flex-col justify-between text-left transition-all cursor-pointer border-gray-200/90 bg-gray-100/70 opacity-60 hover:opacity-85 hover:border-gray-300 min-h-0 sm:min-h-[275px] lg:min-h-[285px]"
+                >
+                  <!-- Top Row -->
+                  <div class="flex items-center justify-between min-h-[24px]">
+                    <span
+                      id="sales-partner-badge"
+                      class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-semibold transition-colors bg-slate-100 text-slate-700 border border-slate-200"
+                    >
+                      <i data-lucide="lock" class="w-3 h-3 text-gray-500" id="sales-badge-icon"></i>
+                      <span id="sales-badge-text">Unlocks at 5 Deals</span>
+                    </span>
+                    <div id="check-track-sales" class="w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all border-gray-300 bg-white">
+                      <i data-lucide="lock" class="w-2.5 h-2.5 text-gray-400"></i>
+                    </div>
+                  </div>
+
+                  <!-- Graphic Hero -->
+                  <div
+                    id="sales-hero-wrapper"
+                    class="h-24 sm:h-28 lg:h-30 w-full flex items-center justify-center py-0.5 transition-all opacity-70 grayscale-[50%]"
+                  >
+                    <img
+                      src="../public/brand-assets/partner/referral-partner-illustration.png"
+                      onerror="if(!this.dataset.retried){this.dataset.retried=1;this.src='/brand-assets/partner/referral-partner-illustration.png';}"
+                      alt="Sales Partner Mascot Team"
+                      class="max-h-22 sm:max-h-26 lg:max-h-28 max-w-full object-contain filter drop-shadow-sm transition-transform group-hover:scale-105 duration-200"
+                    />
+                  </div>
+
+                  <!-- Title & Description -->
+                  <div class="text-center space-y-1 pt-1">
+                    <h3 id="sales-title-text" class="font-bold text-base sm:text-lg transition-colors text-gray-500">
+                      Sales Partner
+                    </h3>
+                    <p class="text-xs sm:text-[13px] text-gray-500 leading-relaxed px-1">
+                      Pitch leads directly and manage the full client sales cycle.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Reassuring Footnote -->
+              <p class="text-xs text-gray-500 text-center leading-relaxed mt-2.5 sm:mt-3 font-normal">
+                <i data-lucide="info" class="inline-block w-3.5 h-3.5 text-gray-400 align-middle -translate-y-[1px] mr-1"></i>
+                <span>Every new partner starts on the Referral Track. Close 5 successful referrals to unlock the recurring Sales Track.</span>
+              </p>
+            </div>
+
+            <!-- ─────────────────────────────────────────
+                 STEP 3 (NEW USER): ACCOUNT DETAILS
+                 ───────────────────────────────────────── -->
+            <div id="step-3-new-content" class="space-y-4 sm:space-y-4.5 text-left pt-1 hidden">
+              <!-- Full Name & Company Name -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label for="reg-fullname" class="block text-xs font-semibold text-gray-700 mb-1.5">
+                    Full name <span class="text-red-500">*</span>
+                  </label>
+                  <input
+                    id="reg-fullname"
+                    type="text"
+                    required
+                    placeholder="e.g. Ahmad Haziq"
+                    class="w-full px-3.5 py-2.5 bg-white border border-gray-200 hover:border-gray-300 rounded-xl text-sm font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#23B750]/30 focus:border-[#23B750] caret-[#23B750] shadow-2xs transition-all h-10"
+                    oninput="validateNewUserForm()"
+                  />
+                </div>
+                <div>
+                  <label for="reg-company" class="block text-xs font-semibold text-gray-700 mb-1.5">
+                    Company or agency name
+                  </label>
+                  <input
+                    id="reg-company"
+                    type="text"
+                    placeholder="e.g. Syarikat Sdn Bhd or Studio Name"
+                    class="w-full px-3.5 py-2.5 bg-white border border-gray-200 hover:border-gray-300 rounded-xl text-sm font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#23B750]/30 focus:border-[#23B750] caret-[#23B750] shadow-2xs transition-all h-10"
+                  />
+                </div>
+              </div>
+
+              <!-- Email Address & WhatsApp Number -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label for="reg-email" class="block text-xs font-semibold text-gray-700 mb-1.5">
+                    Work email address <span class="text-red-500">*</span>
+                  </label>
+                  <input
+                    id="reg-email"
+                    type="email"
+                    required
+                    placeholder="ahmad@company.com"
+                    class="w-full px-3.5 py-2.5 bg-white border border-gray-200 hover:border-gray-300 rounded-xl text-sm font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#23B750]/30 focus:border-[#23B750] caret-[#23B750] shadow-2xs transition-all h-10"
+                    oninput="validateNewUserForm()"
+                  />
+                </div>
+                <div>
+                  <label for="reg-whatsapp" class="block text-xs font-semibold text-gray-700 mb-1.5">
+                    WhatsApp mobile number <span class="text-red-500">*</span>
+                  </label>
+                  <div class="relative flex items-center">
+                    <div class="absolute left-3 flex items-center gap-1.5 text-xs font-semibold text-gray-600 select-none border-r border-gray-200 pr-2">
+                      <span class="text-sm leading-none">🇲🇾</span>
+                      <span>+60</span>
+                    </div>
+                    <input
+                      id="reg-whatsapp"
+                      type="tel"
+                      required
+                      placeholder="12-345 6789"
+                      class="w-full pl-20 pr-3.5 py-2.5 bg-white border border-gray-200 hover:border-gray-300 rounded-xl text-sm font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#23B750]/30 focus:border-[#23B750] caret-[#23B750] shadow-2xs transition-all h-10"
+                      oninput="validateNewUserForm()"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Password & Confirm Password -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label for="reg-password" class="block text-xs font-semibold text-gray-700 mb-1.5">
+                    Create password <span class="text-red-500">*</span>
+                  </label>
+                  <div class="relative">
+                    <input
+                      id="reg-password"
+                      type="password"
+                      required
+                      placeholder="Minimum 8 characters"
+                      class="w-full pl-3.5 pr-10 py-2.5 bg-white border border-gray-200 hover:border-gray-300 rounded-xl text-sm font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#23B750]/30 focus:border-[#23B750] caret-[#23B750] shadow-2xs transition-all h-10"
+                      oninput="onPasswordChanged()"
+                    />
+                    <button
+                      type="button"
+                      id="toggle-pwd-btn"
+                      onclick="togglePasswordVisibility()"
+                      class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer focus:outline-none p-1"
+                      title="Toggle password view"
+                    >
+                      <i data-lucide="eye" class="w-4 h-4"></i>
+                    </button>
+                  </div>
+                </div>
+                <div>
+                  <label for="reg-confirm-password" class="block text-xs font-semibold text-gray-700 mb-1.5">
+                    Confirm password <span class="text-red-500">*</span>
+                  </label>
+                  <input
+                    id="reg-confirm-password"
+                    type="password"
+                    required
+                    placeholder="Re-enter your password"
+                    class="w-full px-3.5 py-2.5 bg-white border border-gray-200 hover:border-gray-300 rounded-xl text-sm font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#23B750]/30 focus:border-[#23B750] caret-[#23B750] shadow-2xs transition-all h-10"
+                    oninput="onPasswordChanged()"
+                  />
+                </div>
+              </div>
+
+              <!-- Redesigned Password Security Strength Card -->
+              <div class="p-3 sm:p-3.5 bg-white/95 rounded-xl border border-gray-200/90 shadow-2xs space-y-2.5">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-1.5">
+                    <div id="shield-icon-container" class="w-5 h-5 rounded-lg flex items-center justify-center bg-gray-100 text-gray-500 transition-colors">
+                      <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+                    </div>
+                    <span class="text-xs font-semibold text-gray-700">Password security</span>
+                  </div>
+                  <span
+                    id="pwd-strength-badge"
+                    class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-gray-100 text-gray-500 border border-gray-200/60 transition-all duration-200"
+                  >
+                    Enter password
+                  </span>
+                </div>
+
+                <!-- Segmented Progress Track -->
+                <div class="grid grid-cols-4 gap-1.5 h-1.5">
+                  <div id="pwd-bar-1" class="rounded-full transition-all duration-300 bg-gray-100"></div>
+                  <div id="pwd-bar-2" class="rounded-full transition-all duration-300 bg-gray-100"></div>
+                  <div id="pwd-bar-3" class="rounded-full transition-all duration-300 bg-gray-100"></div>
+                  <div id="pwd-bar-4" class="rounded-full transition-all duration-300 bg-gray-100"></div>
+                </div>
+
+                <!-- Sleek Criteria Checklist -->
+                <div class="grid grid-cols-2 gap-x-3 gap-y-1.5 pt-0.5 text-[11px]">
+                  <!-- Criteria 1 -->
+                  <div id="crit-length" class="flex items-center gap-1.5 text-gray-400 transition-colors duration-150">
+                    <div class="w-3.5 h-3.5 rounded-full flex items-center justify-center bg-gray-100 shrink-0" id="crit-icon-length">
+                      <div class="w-1.5 h-1.5 rounded-full bg-gray-300"></div>
+                    </div>
+                    <span>Min 8 characters</span>
+                  </div>
+
+                  <!-- Criteria 2 -->
+                  <div id="crit-upper" class="flex items-center gap-1.5 text-gray-400 transition-colors duration-150">
+                    <div class="w-3.5 h-3.5 rounded-full flex items-center justify-center bg-gray-100 shrink-0" id="crit-icon-upper">
+                      <div class="w-1.5 h-1.5 rounded-full bg-gray-300"></div>
+                    </div>
+                    <span>Uppercase letter</span>
+                  </div>
+
+                  <!-- Criteria 3 -->
+                  <div id="crit-lower" class="flex items-center gap-1.5 text-gray-400 transition-colors duration-150">
+                    <div class="w-3.5 h-3.5 rounded-full flex items-center justify-center bg-gray-100 shrink-0" id="crit-icon-lower">
+                      <div class="w-1.5 h-1.5 rounded-full bg-gray-300"></div>
+                    </div>
+                    <span>Lowercase letter</span>
+                  </div>
+
+                  <!-- Criteria 4 -->
+                  <div id="crit-match" class="flex items-center gap-1.5 text-gray-400 transition-colors duration-150">
+                    <div class="w-3.5 h-3.5 rounded-full flex items-center justify-center bg-gray-100 shrink-0" id="crit-icon-match">
+                      <div class="w-1.5 h-1.5 rounded-full bg-gray-300"></div>
+                    </div>
+                    <span>Passwords match</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ─────────────────────────────────────────
+                 STEP 4: SUCCESS / CONFIRMATION
+                 ───────────────────────────────────────── -->
+            <div id="step-4-content" class="h-full flex flex-col items-center justify-center text-center px-4 animate-in fade-in-50 duration-300 hidden">
+              <!-- Celebratory Checkmark Icon Badge -->
+              <div class="w-16 h-16 rounded-2xl bg-emerald-50 border-2 border-emerald-200/80 flex items-center justify-center text-[#23B750] shadow-sm mb-5">
+                <i data-lucide="check" class="w-8 h-8 stroke-[2.5]"></i>
+              </div>
+
+              <!-- Heading & Clarity Subtext -->
+              <h2 id="success-title" class="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight mb-2.5">
+                Registration submitted!
+              </h2>
+              <p id="success-desc" class="text-sm text-gray-600 max-w-sm leading-relaxed mb-5">
+                We've sent a verification link to your email. Please check your inbox to activate your account.
+              </p>
+
+              <!-- Resend Trigger -->
+              <button
+                id="resend-email-btn"
+                type="button"
+                onclick="resendVerificationEmail()"
+                class="text-xs text-gray-500 hover:text-gray-700 transition-colors cursor-pointer focus:outline-none"
+              >
+                <span>Didn't receive the email? <span class="text-[#23B750] font-semibold underline hover:text-[#1a943e]">Click to resend</span></span>
+              </button>
+            </div>
+
+          </div>
+
+          <!-- 4. ACTION CONTROLS -->
+          <div class="min-h-[80px] lg:h-[88px] shrink-0 pt-4 lg:pt-4.5 border-t border-gray-100/90 flex flex-col justify-between gap-2.5 lg:gap-0 mt-4 lg:mt-0">
+            <!-- Dynamic Actions Container -->
+            <div id="actions-container" class="w-full">
+              <!-- Injected dynamically in updateUI() -->
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 5. FOOTER -->
+      <footer class="w-full max-w-xl mx-auto shrink-0 pt-3 pb-2 flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-3 text-xs text-gray-400 border-t border-gray-100/60 text-center sm:text-left">
+        <p>© 2026 RakanSales</p>
+        <div class="flex items-center gap-3 text-xs">
+          <a href="#" class="hover:text-gray-600 transition-colors">Terms</a>
+          <span>·</span>
+          <a href="#" class="hover:text-gray-600 transition-colors">Privacy</a>
+          <span>·</span>
+          <a href="#" class="hover:text-gray-600 transition-colors">Help Center</a>
+        </div>
+      </footer>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- RIGHT PANE: BRAND GRAPHIC & TITLE (EXPANDS 50% ON HOVER)  -->
+    <!-- ========================================================= -->
+    <section
+      id="right-pane"
+      aria-label="Partner Program Showcase"
+      onmouseenter="setRightPaneHovered(true)"
+      onmouseleave="setRightPaneHovered(false)"
+      class="hidden lg:flex bg-gradient-to-b from-[#f8fcf9] to-[#edf7f1] flex-col justify-end items-center relative overflow-hidden select-none border-l border-emerald-100/60 p-0 transition-all duration-500 ease-out cursor-default lg:w-[30%]"
+    >
+      <!-- Title: Aligned middle initially, glides to top position and scales when pane expands -->
+      <div
+        id="right-pane-title-box"
+        class="absolute inset-x-0 text-center px-6 z-20 pointer-events-none select-none transition-all duration-500 ease-out origin-center top-[30%] -translate-y-1/2 scale-100"
+      >
+        <h2 class="text-2xl sm:text-3xl xl:text-3xl font-semibold text-gray-900 tracking-tight leading-[1.2]">
+          Grow Together,<br />
+          <span class="text-[#23B750]">Earn Together.</span>
+        </h2>
+      </div>
+
+      <!-- 100% Width Graphic Aligned Bottom -->
+      <img
+        src="../public/brand-assets/partner/partner-earnings-hero.png"
+        onerror="if(!this.dataset.retried){this.dataset.retried=1;this.src='/brand-assets/partner/partner-earnings-hero.png';}"
+        alt="Grow Together, Earn Together with RakanSales CRM"
+        class="w-full h-auto object-contain object-bottom pointer-events-none select-none block relative z-10 transition-all duration-500 ease-out"
+      />
+    </section>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- FRIENDLY SALES TRACK MODAL                                -->
+  <!-- ========================================================= -->
+  <div
+    id="unlock-modal"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/50 backdrop-blur-xs p-4 hidden"
+    role="dialog"
+    aria-modal="true"
+    onclick="if(event.target === this) closeSalesPartnerModal();"
+  >
+    <div class="bg-white w-full max-w-sm sm:max-w-[410px] max-h-[90vh] overflow-y-auto custom-scrollbar rounded-2xl shadow-2xl border border-gray-100 p-5 sm:p-7 space-y-4 text-center relative">
+      <!-- Close Button Top Right -->
+      <button
+        type="button"
+        onclick="closeSalesPartnerModal()"
+        class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 p-1.5 rounded-lg cursor-pointer focus:outline-none transition-colors"
+        aria-label="Close dialog"
+      >
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+
+      <!-- Friendly Robot Illustration -->
+      <div class="pt-1 flex justify-center">
+        <div class="w-full max-w-[260px] h-28 sm:h-32 flex items-center justify-center">
+          <img
+            src="../public/brand-assets/partner/referral-partner-illustration.png"
+            onerror="if(!this.dataset.retried){this.dataset.retried=1;this.src='/brand-assets/partner/referral-partner-illustration.png';}"
+            alt="Sales Partner Mascot Team"
+            class="max-h-full max-w-full object-contain pointer-events-none select-none drop-shadow-sm"
+          />
+        </div>
+      </div>
+
+      <!-- Title & Friendly Explanation -->
+      <div class="space-y-2">
+        <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 border border-amber-200/70 text-amber-700 text-[11px] font-semibold">
+          <i data-lucide="lock" class="w-3 h-3 stroke-[2.2]"></i>
+          <span>Unlocks at 5 Deals</span>
+        </div>
+
+        <h3 class="text-base sm:text-lg font-bold text-gray-900 tracking-tight">
+          Sales Partner Track
+        </h3>
+
+        <p class="text-xs text-gray-600 leading-relaxed font-normal px-1">
+          New partners begin on the Referral Track. Close 5 successful referrals to automatically unlock recurring sales commissions.
+        </p>
+      </div>
+
+      <!-- Optional Expandable "Have a code?" Section -->
+      <div class="pt-2 border-t border-gray-100">
+        <button
+          type="button"
+          onclick="toggleCodeInput()"
+          class="w-full flex items-center justify-center gap-1.5 text-xs font-semibold text-gray-500 hover:text-gray-800 transition-colors py-1 cursor-pointer"
+        >
+          <span>Have an approved bypass code? Enter here</span>
+          <i data-lucide="chevron-down" id="code-chevron" class="w-3.5 h-3.5 transition-transform duration-200 text-gray-400"></i>
+        </button>
+
+        <!-- Collapsible Code Input Container -->
+        <div
+          id="code-input-container"
+          class="mt-2.5 p-3 bg-gray-50 border border-gray-200/80 rounded-xl space-y-2 text-left hidden"
+        >
+          <p class="text-[11px] text-gray-500 font-normal">
+            Enter your invitation code to bypass the 5-deal requirement:
+          </p>
+          <div class="flex items-center gap-2">
+            <input
+              id="partner-access-code"
+              type="text"
+              placeholder="ENTER CODE"
+              class="flex-1 px-3 py-2 bg-white border border-gray-200 hover:border-gray-300 rounded-lg text-xs font-semibold text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#23B750]/30 focus:border-[#23B750] caret-[#23B750] uppercase tracking-wider transition-all h-9"
+              onkeydown="if(event.key === 'Enter'){ submitAccessCode(); }"
+            />
+            <button
+              type="button"
+              onclick="submitAccessCode()"
+              class="px-3.5 py-2 bg-[#23B750] hover:bg-[#1a943e] text-white text-xs font-bold rounded-lg transition-colors cursor-pointer shadow-2xs shrink-0 h-9"
+            >
+              Unlock
+            </button>
+          </div>
+          <p id="code-error-msg" class="text-[11px] text-red-600 font-medium hidden"></p>
+        </div>
+      </div>
+
+      <!-- Primary Action -->
+      <div class="pt-1">
+        <button
+          type="button"
+          onclick="selectReferralAndClose()"
+          class="w-full py-2.5 sm:py-3 bg-[#23B750] hover:bg-[#1a943e] text-white font-bold text-xs sm:text-sm rounded-xl shadow-xs transition-colors cursor-pointer flex items-center justify-center gap-1.5 focus:outline-none"
+        >
+          <span>Continue on Referral Track</span>
+          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- JAVASCRIPT LOGIC & INTERACTIONS                          -->
+  <!-- ========================================================= -->
+  <script>
+    // State Model
+    const state = {
+      currentStep: 1,
+      userType: 'new', // 'new' | 'existing'
+      selectedPartnerType: 'referral', // 'referral' | 'sales'
+      crmLinkEmail: '',
+      isAccountLinked: false,
+      isSalesPartnerUnlocked: false,
+      isSubmitting: false,
+      isFindingAccount: false,
+      showPassword: false,
+      showCodeInput: false,
+      isRightPaneHovered: false,
+      partnerForm: {
+        fullName: '',
+        companyName: '',
+        email: '',
+        whatsapp: '',
+        password: '',
+        confirmPassword: ''
+      }
+    };
+
+    // ─────────────────────────────────────────
+    // Navigation & UI Synchronization
+    // ─────────────────────────────────────────
+    function goToStep(step) {
+      state.currentStep = step;
+      updateUI();
+    }
+
+    function selectUserType(type) {
+      state.userType = type;
+      updateStep1Cards();
+      updateUI();
+    }
+
+    function selectPartnerTrack(track) {
+      state.selectedPartnerType = track;
+      updateTrackCards();
+      updateActions();
+    }
+
+    function setRightPaneHovered(hovered) {
+      state.isRightPaneHovered = hovered;
+      const leftPane = document.getElementById('left-pane');
+      const rightPane = document.getElementById('right-pane');
+      const titleBox = document.getElementById('right-pane-title-box');
+
+      if (hovered) {
+        leftPane.classList.remove('lg:w-[70%]');
+        leftPane.classList.add('lg:w-1/2');
+        rightPane.classList.remove('lg:w-[30%]');
+        rightPane.classList.add('lg:w-1/2');
+
+        titleBox.className = 'absolute inset-x-0 text-center px-6 z-20 pointer-events-none select-none transition-all duration-500 ease-out origin-center top-[10%] xl:top-[12%] 2xl:top-[14%] -translate-y-0 scale-120 xl:scale-130';
+      } else {
+        leftPane.classList.remove('lg:w-1/2');
+        leftPane.classList.add('lg:w-[70%]');
+        rightPane.classList.remove('lg:w-1/2');
+        rightPane.classList.add('lg:w-[30%]');
+
+        titleBox.className = 'absolute inset-x-0 text-center px-6 z-20 pointer-events-none select-none transition-all duration-500 ease-out origin-center top-[30%] -translate-y-1/2 scale-100';
+      }
+    }
+
+    function updateStep1Cards() {
+      const cardNew = document.getElementById('card-user-new');
+      const checkNew = document.getElementById('check-user-new');
+      const cardExist = document.getElementById('card-user-existing');
+      const checkExist = document.getElementById('check-user-existing');
+
+      if (state.userType === 'new') {
+        cardNew.className = 'group relative rounded-2xl border-2 p-4.5 sm:p-7 flex flex-col justify-start gap-3 sm:gap-4 cursor-pointer transition-all text-left border-[#23B750] bg-emerald-50/50 ring-2 ring-[#23B750]/15 shadow-xs min-h-0 sm:min-h-[200px]';
+        checkNew.className = 'w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all border-[#23B750] bg-[#23B750] text-white shadow-xs';
+        checkNew.innerHTML = '<i data-lucide="check" class="w-3 h-3 stroke-[3]"></i>';
+
+        cardExist.className = 'group relative rounded-2xl border-2 p-4.5 sm:p-7 flex flex-col justify-start gap-3 sm:gap-4 cursor-pointer transition-all text-left border-gray-200 bg-white/70 hover:border-gray-300 hover:bg-white min-h-0 sm:min-h-[200px]';
+        checkExist.className = 'w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all border-gray-300 bg-white';
+        checkExist.innerHTML = '';
+      } else {
+        cardExist.className = 'group relative rounded-2xl border-2 p-4.5 sm:p-7 flex flex-col justify-start gap-3 sm:gap-4 cursor-pointer transition-all text-left border-[#23B750] bg-emerald-50/50 ring-2 ring-[#23B750]/15 shadow-xs min-h-0 sm:min-h-[200px]';
+        checkExist.className = 'w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all border-[#23B750] bg-[#23B750] text-white shadow-xs';
+        checkExist.innerHTML = '<i data-lucide="check" class="w-3 h-3 stroke-[3]"></i>';
+
+        cardNew.className = 'group relative rounded-2xl border-2 p-4.5 sm:p-7 flex flex-col justify-start gap-3 sm:gap-4 cursor-pointer transition-all text-left border-gray-200 bg-white/70 hover:border-gray-300 hover:bg-white min-h-0 sm:min-h-[200px]';
+        checkNew.className = 'w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all border-gray-300 bg-white';
+        checkNew.innerHTML = '';
+      }
+      lucide.createIcons();
+    }
+
+    function updateTrackCards() {
+      const cardRef = document.getElementById('card-track-referral');
+      const checkRef = document.getElementById('check-track-referral');
+      const cardSales = document.getElementById('card-track-sales');
+      const checkSales = document.getElementById('check-track-sales');
+      const salesBadge = document.getElementById('sales-partner-badge');
+      const salesHero = document.getElementById('sales-hero-wrapper');
+      const salesTitle = document.getElementById('sales-title-text');
+
+      if (state.selectedPartnerType === 'referral') {
+        cardRef.className = 'group relative rounded-2xl border-2 p-4 sm:p-4.5 lg:p-5 flex flex-col justify-between cursor-pointer transition-all text-left border-[#23B750] bg-emerald-50/50 ring-2 ring-[#23B750]/15 shadow-xs min-h-0 sm:min-h-[275px] lg:min-h-[285px]';
+        checkRef.className = 'w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all border-[#23B750] bg-[#23B750] text-white shadow-xs';
+        checkRef.innerHTML = '<i data-lucide="check" class="w-3 h-3 stroke-[3]"></i>';
+
+        if (!state.isSalesPartnerUnlocked) {
+          cardSales.className = 'group relative rounded-2xl border-2 p-4 sm:p-4.5 lg:p-5 flex flex-col justify-between text-left transition-all cursor-pointer border-gray-200/90 bg-gray-100/70 opacity-60 hover:opacity-85 hover:border-gray-300 min-h-0 sm:min-h-[275px] lg:min-h-[285px]';
+          checkSales.className = 'w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all border-gray-300 bg-white';
+          checkSales.innerHTML = '<i data-lucide="lock" class="w-2.5 h-2.5 text-gray-400"></i>';
+          salesBadge.className = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-semibold transition-colors bg-slate-100 text-slate-700 border border-slate-200';
+          document.getElementById('sales-badge-icon').setAttribute('data-lucide', 'lock');
+          document.getElementById('sales-badge-text').textContent = 'Unlocks at 5 Deals';
+          salesHero.className = 'h-24 sm:h-28 lg:h-30 w-full flex items-center justify-center py-0.5 transition-all opacity-70 grayscale-[50%]';
+          salesTitle.className = 'font-bold text-base sm:text-lg transition-colors text-gray-500';
+        } else {
+          cardSales.className = 'group relative rounded-2xl border-2 p-4 sm:p-4.5 lg:p-5 flex flex-col justify-between text-left transition-all cursor-pointer border-gray-200 bg-white hover:border-gray-300 min-h-0 sm:min-h-[275px] lg:min-h-[285px]';
+          checkSales.className = 'w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all border-gray-300 bg-white';
+          checkSales.innerHTML = '';
+          salesBadge.className = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-semibold transition-colors bg-amber-100 text-amber-900 border border-amber-300';
+          document.getElementById('sales-badge-icon').setAttribute('data-lucide', 'unlock');
+          document.getElementById('sales-badge-text').textContent = 'Unlocked';
+          salesHero.className = 'h-24 sm:h-28 lg:h-30 w-full flex items-center justify-center py-0.5 transition-all opacity-90';
+          salesTitle.className = 'font-bold text-base sm:text-lg transition-colors text-gray-700';
+        }
+      } else {
+        // Sales selected
+        cardSales.className = 'group relative rounded-2xl border-2 p-4 sm:p-4.5 lg:p-5 flex flex-col justify-between text-left transition-all cursor-pointer border-[#23B750] bg-emerald-50/50 ring-2 ring-[#23B750]/15 shadow-xs min-h-0 sm:min-h-[275px] lg:min-h-[285px]';
+        checkSales.className = 'w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all border-[#23B750] bg-[#23B750] text-white shadow-xs';
+        checkSales.innerHTML = '<i data-lucide="check" class="w-3 h-3 stroke-[3]"></i>';
+        salesBadge.className = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-semibold transition-colors bg-amber-100 text-amber-900 border border-amber-300';
+        document.getElementById('sales-badge-icon').setAttribute('data-lucide', 'unlock');
+        document.getElementById('sales-badge-text').textContent = 'Unlocked';
+        salesHero.className = 'h-24 sm:h-28 lg:h-30 w-full flex items-center justify-center py-0.5 transition-all opacity-90';
+        salesTitle.className = 'font-bold text-base sm:text-lg transition-colors text-gray-900';
+
+        cardRef.className = 'group relative rounded-2xl border-2 p-4 sm:p-4.5 lg:p-5 flex flex-col justify-between cursor-pointer transition-all text-left border-gray-200 bg-white/70 hover:border-gray-300 hover:bg-white min-h-0 sm:min-h-[275px] lg:min-h-[285px]';
+        checkRef.className = 'w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all border-gray-300 bg-white';
+        checkRef.innerHTML = '';
+      }
+      lucide.createIcons();
+    }
+
+    function updateUI() {
+      const step = state.currentStep;
+      const isNew = state.userType === 'new';
+
+      // Titles & Subtitles
+      const titles = {
+        1: 'Partner Account Setup',
+        2: isNew ? 'Select your partner track' : 'Link your account',
+        3: isNew ? 'Account details' : 'Select your partner track',
+        4: isNew ? 'Registration submitted!' : 'Partner Account Linked!'
+      };
+
+      const subtitles = {
+        1: 'Create a new partner account, or link your existing RakanSales login to manage everything in one place.',
+        2: isNew
+          ? 'Choose how you want to earn — share links for quick cash bonuses, or manage sales for recurring revenue.'
+          : "Already a RakanSales CRM customer? Use the same email — we'll link your partner earnings to your existing login, no new password needed.",
+        3: isNew
+          ? "Create the partner login you'll use to view tracked leads and commission payouts."
+          : 'Choose how you want to earn — share links for quick cash bonuses, or manage sales for recurring revenue.',
+        4: isNew
+          ? `We've sent a verification link to ${state.partnerForm.email || 'your email'}. Please check your inbox to activate your account.`
+          : `Your partner access has been linked to ${state.crmLinkEmail || 'your CRM account'}.`
+      };
+
+      const indicatorLabels = {
+        1: 'Account setup',
+        2: isNew ? 'Select partner track' : 'Link CRM account',
+        3: isNew ? 'Account details' : 'Select partner track'
+      };
+
+      // Header block visibility & text
+      const headerBlock = document.getElementById('step-header-block');
+      if (step === 4) {
+        headerBlock.classList.add('opacity-0', 'pointer-events-none');
+      } else {
+        headerBlock.classList.remove('opacity-0', 'pointer-events-none');
+        document.getElementById('step-main-title').textContent = titles[step];
+        document.getElementById('step-main-subtitle').textContent = subtitles[step];
+      }
+
+      // Stepper bars & counter
+      const stepperBox = document.getElementById('stepper-progress-box');
+      if (step <= 3) {
+        stepperBox.classList.remove('hidden');
+        document.getElementById('step-counter-text').textContent = `Step ${step} of 3`;
+        document.getElementById('step-indicator-label').textContent = indicatorLabels[step];
+
+        for (let s = 1; s <= 3; s++) {
+          const b = document.getElementById(`prog-bar-${s}`);
+          b.className = `h-1.5 rounded-full transition-all duration-300 ${step >= s ? 'bg-[#23B750]' : 'bg-gray-100'}`;
+        }
+      } else {
+        stepperBox.classList.add('hidden');
+      }
+
+      // Top Prototype Switcher active states
+      for (let s = 1; s <= 4; s++) {
+        const navBtn = document.getElementById(`nav-step-${s}`);
+        const navDot = document.getElementById(`nav-dot-${s}`);
+        if (s === step) {
+          if (s === 4) {
+            navBtn.className = 'px-3 py-1 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 bg-[#23B750] text-white shadow-xs font-bold';
+          } else {
+            navBtn.className = 'px-3 py-1 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 bg-white text-gray-900 shadow-xs font-bold';
+            if (navDot) navDot.className = 'w-1.5 h-1.5 rounded-full bg-[#23B750]';
+          }
+        } else {
+          navBtn.className = 'px-3 py-1 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 text-gray-500 hover:text-gray-900';
+          if (navDot) navDot.className = 'w-1.5 h-1.5 rounded-full bg-transparent';
+        }
+      }
+
+      // Nav label dynamically adjusts based on userType
+      document.getElementById('nav-label-2').textContent = isNew ? '2. Partner Track' : '2. Link CRM';
+      document.getElementById('nav-label-3').textContent = isNew ? '3. Account Details' : '3. Partner Track';
+
+      // Step Contents Toggle
+      document.getElementById('step-1-content').classList.toggle('hidden', step !== 1);
+      document.getElementById('step-2-existing-content').classList.toggle('hidden', !(step === 2 && !isNew));
+      document.getElementById('step-track-content').classList.toggle('hidden', !((step === 2 && isNew) || (step === 3 && !isNew)));
+      document.getElementById('step-3-new-content').classList.toggle('hidden', !(step === 3 && isNew));
+      document.getElementById('step-4-content').classList.toggle('hidden', step !== 4);
+
+      // Existing Linked Banner in Track content
+      const banner = document.getElementById('linked-account-banner');
+      if (!isNew && state.isAccountLinked && step === 3) {
+        banner.classList.remove('hidden');
+        document.getElementById('banner-linked-email').textContent = state.crmLinkEmail;
+      } else {
+        banner.classList.add('hidden');
+      }
+
+      // Success text
+      if (step === 4) {
+        document.getElementById('success-title').textContent = isNew ? 'Registration submitted!' : 'Partner Account Linked!';
+        const resendBtn = document.getElementById('resend-email-btn');
+        if (isNew) {
+          document.getElementById('success-desc').innerHTML = `We've sent a verification link to <strong class="text-gray-900">${state.partnerForm.email || 'your email'}</strong>. Please check your inbox to activate your account.`;
+          resendBtn.classList.remove('hidden');
+        } else {
+          document.getElementById('success-desc').innerHTML = `Your partner dashboard has been connected to <strong class="text-gray-900">${state.crmLinkEmail}</strong>. You can now use your existing CRM login to view referral leads and payouts.`;
+          resendBtn.classList.add('hidden');
+        }
+        fireConfetti();
+      }
+
+      updateTrackCards();
+      updateActions();
+      lucide.createIcons();
+    }
+
+    // ─────────────────────────────────────────
+    // Action Buttons Generator
+    // ─────────────────────────────────────────
+    function updateActions() {
+      const container = document.getElementById('actions-container');
+      const step = state.currentStep;
+      const isNew = state.userType === 'new';
+
+      if (step === 1) {
+        const label = isNew ? 'Continue to Track Selection' : 'Continue to Link CRM Account';
+        container.innerHTML = `
+          <button
+            type="button"
+            onclick="goToStep(2)"
+            class="w-full h-12 bg-[#23B750] hover:bg-[#1a943e] active:scale-[0.99] text-white font-bold text-sm rounded-xl shadow-sm transition-all cursor-pointer flex items-center justify-center gap-2 focus:outline-none"
+          >
+            <span>${label}</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </button>
+          <div class="text-center pt-1">
+            <a
+              href="onboarding-wizard.html"
+              class="text-xs text-gray-500 hover:text-gray-800 transition-colors inline-flex items-center gap-1 rounded"
+            >
+              <span>Already registered as a partner?</span>
+              <span class="font-semibold text-[#23B750] hover:text-[#1a943e] hover:underline">Sign in</span>
+            </a>
+          </div>
+        `;
+      } else if (step === 2) {
+        if (isNew) {
+          const trackLabel = state.selectedPartnerType === 'sales' ? 'Continue as Sales Partner' : 'Continue as Referral Partner';
+          container.innerHTML = `
+            <div class="flex items-center gap-3">
+              <button
+                type="button"
+                onclick="goToStep(1)"
+                class="px-5 h-12 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold text-sm rounded-xl transition-colors cursor-pointer min-w-[88px] flex items-center justify-center focus:outline-none"
+              >
+                Back
+              </button>
+              <button
+                type="button"
+                onclick="goToStep(3)"
+                class="flex-1 h-12 bg-[#23B750] hover:bg-[#1a943e] text-white font-bold text-sm rounded-xl shadow-xs transition-all cursor-pointer flex items-center justify-center gap-1.5 focus:outline-none"
+              >
+                <span>${trackLabel}</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+              </button>
+            </div>
+            <div class="text-center pt-1">
+              <a
+                href="onboarding-wizard.html"
+                class="text-xs text-gray-500 hover:text-gray-800 transition-colors inline-flex items-center gap-1 rounded"
+              >
+                <span>Already registered as a partner?</span>
+                <span class="font-semibold text-[#23B750] hover:text-[#1a943e] hover:underline">Sign in</span>
+              </a>
+            </div>
+          `;
+        } else {
+          // Existing customer linking email
+          const disabledAttr = (!state.crmLinkEmail || state.isFindingAccount) ? 'disabled' : '';
+          const disabledClasses = (!state.crmLinkEmail || state.isFindingAccount) ? 'disabled:opacity-50 disabled:cursor-not-allowed' : '';
+          container.innerHTML = `
+            <div class="flex items-center gap-3">
+              <button
+                type="button"
+                onclick="goToStep(1)"
+                class="px-5 h-12 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold text-sm rounded-xl transition-colors cursor-pointer min-w-[88px] flex items-center justify-center focus:outline-none"
+              >
+                Back
+              </button>
+              <button
+                type="button"
+                id="btn-find-account"
+                onclick="findAccountAndContinue()"
+                ${disabledAttr}
+                class="flex-1 h-12 bg-[#23B750] hover:bg-[#1a943e] ${disabledClasses} text-white font-bold text-sm rounded-xl shadow-xs transition-all cursor-pointer flex items-center justify-center gap-2 focus:outline-none"
+              >
+                <span>${state.isFindingAccount ? 'Finding account...' : 'Find my account & continue'}</span>
+              </button>
+            </div>
+            <p class="text-xs text-gray-400 text-center pt-1">
+              You'll pick your partner type next — no need to re-enter your details.
+            </p>
+          `;
+        }
+      } else if (step === 3) {
+        if (isNew) {
+          const isValid = state.partnerForm.fullName && state.partnerForm.email && state.partnerForm.password;
+          const disabledAttr = (!isValid || state.isSubmitting) ? 'disabled' : '';
+          const disabledClasses = (!isValid || state.isSubmitting) ? 'disabled:opacity-50 disabled:cursor-not-allowed' : '';
+          container.innerHTML = `
+            <div class="flex items-center gap-3">
+              <button
+                type="button"
+                onclick="goToStep(2)"
+                class="px-5 h-12 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold text-sm rounded-xl transition-colors cursor-pointer min-w-[88px] flex items-center justify-center focus:outline-none"
+              >
+                Back
+              </button>
+              <button
+                type="button"
+                onclick="submitRegistration()"
+                ${disabledAttr}
+                class="flex-1 h-12 bg-[#23B750] hover:bg-[#1a943e] ${disabledClasses} text-white font-bold text-sm rounded-xl shadow-xs transition-all cursor-pointer flex items-center justify-center gap-2 focus:outline-none"
+              >
+                <i data-lucide="${state.isSubmitting ? 'loader-2' : 'sparkles'}" class="w-4 h-4 ${state.isSubmitting ? 'animate-spin' : ''}"></i>
+                <span>${state.isSubmitting ? 'Creating partner account...' : 'Complete Partner Registration'}</span>
+              </button>
+            </div>
+            <div class="text-center pt-1">
+              <a
+                href="onboarding-wizard.html"
+                class="text-xs text-gray-500 hover:text-gray-800 transition-colors inline-flex items-center gap-1 rounded"
+              >
+                <span>Already registered as a partner?</span>
+                <span class="font-semibold text-[#23B750] hover:text-[#1a943e] hover:underline">Sign in</span>
+              </a>
+            </div>
+          `;
+        } else {
+          // Existing customer submitting track choice
+          const trackText = state.selectedPartnerType === 'sales' ? 'Complete Sales Partner Setup' : 'Complete Referral Partner Setup';
+          container.innerHTML = `
+            <div class="flex items-center gap-3">
+              <button
+                type="button"
+                onclick="goToStep(2)"
+                class="px-5 h-12 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold text-sm rounded-xl transition-colors cursor-pointer min-w-[88px] flex items-center justify-center focus:outline-none"
+              >
+                Back
+              </button>
+              <button
+                type="button"
+                onclick="submitRegistration()"
+                class="flex-1 h-12 bg-[#23B750] hover:bg-[#1a943e] text-white font-bold text-sm rounded-xl shadow-xs transition-all cursor-pointer flex items-center justify-center gap-2 focus:outline-none"
+              >
+                <i data-lucide="${state.isSubmitting ? 'loader-2' : 'sparkles'}" class="w-4 h-4 ${state.isSubmitting ? 'animate-spin' : ''}"></i>
+                <span>${state.isSubmitting ? 'Activating track...' : trackText}</span>
+              </button>
+            </div>
+            <div class="text-center pt-1">
+              <a
+                href="onboarding-wizard.html"
+                class="text-xs text-gray-500 hover:text-gray-800 transition-colors inline-flex items-center gap-1 rounded"
+              >
+                <span>Already registered as a partner?</span>
+                <span class="font-semibold text-[#23B750] hover:text-[#1a943e] hover:underline">Sign in</span>
+              </a>
+            </div>
+          `;
+        }
+      } else if (step === 4) {
+        const dashboardText = isNew ? 'Go to Partner Dashboard' : 'Open Partner Dashboard';
+        container.innerHTML = `
+          <button
+            type="button"
+            onclick="alert('Navigating to Partner Overview Dashboard...');"
+            class="w-full h-12 bg-[#23B750] hover:bg-[#1a943e] active:scale-[0.99] text-white font-bold text-sm rounded-xl shadow-sm transition-all cursor-pointer flex items-center justify-center gap-2 focus:outline-none"
+          >
+            <span>${dashboardText}</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </button>
+          <div class="text-center pt-1">
+            <button
+              type="button"
+              onclick="resetForm()"
+              class="text-xs font-semibold text-gray-500 hover:text-gray-800 transition-colors cursor-pointer focus:outline-none"
+            >
+              Register another partner account
+            </button>
+          </div>
+        `;
+      }
+      lucide.createIcons();
+    }
+
+    // ─────────────────────────────────────────
+    // Existing Account Linking Simulation
+    // ─────────────────────────────────────────
+    function clearAccountLinkError() {
+      state.crmLinkEmail = document.getElementById('link-crm-email').value.trim();
+      const errEl = document.getElementById('account-link-error');
+      errEl.classList.add('hidden');
+      errEl.textContent = '';
+      updateActions();
+    }
+
+    function findAccountAndContinue() {
+      const emailInput = document.getElementById('link-crm-email');
+      const email = emailInput ? emailInput.value.trim() : state.crmLinkEmail;
+      state.crmLinkEmail = email;
+
+      const errEl = document.getElementById('account-link-error');
+      if (!email || !email.includes('@')) {
+        errEl.textContent = 'Please enter a valid CRM account email address.';
+        errEl.classList.remove('hidden');
+        return;
+      }
+
+      state.isFindingAccount = true;
+      updateActions();
+
+      setTimeout(() => {
+        state.isFindingAccount = false;
+        state.isAccountLinked = true;
+        goToStep(3);
+      }, 400);
+    }
+
+    // ─────────────────────────────────────────
+    // Registration Submission
+    // ─────────────────────────────────────────
+    function submitRegistration() {
+      state.isSubmitting = true;
+      updateActions();
+
+      setTimeout(() => {
+        state.isSubmitting = false;
+        goToStep(4);
+      }, 750);
+    }
+
+    // ─────────────────────────────────────────
+    // Form Inputs & Password Strength Engine
+    // ─────────────────────────────────────────
+    function togglePasswordVisibility() {
+      state.showPassword = !state.showPassword;
+      const pwdInput = document.getElementById('reg-password');
+      pwdInput.type = state.showPassword ? 'text' : 'password';
+      const btn = document.getElementById('toggle-pwd-btn');
+      btn.innerHTML = `<i data-lucide="${state.showPassword ? 'eye-off' : 'eye'}" class="w-4 h-4"></i>`;
+      lucide.createIcons();
+    }
+
+    function validateNewUserForm() {
+      state.partnerForm.fullName = document.getElementById('reg-fullname')?.value.trim() || '';
+      state.partnerForm.email = document.getElementById('reg-email')?.value.trim() || '';
+      state.partnerForm.whatsapp = document.getElementById('reg-whatsapp')?.value.trim() || '';
+      updateActions();
+    }
+
+    function onPasswordChanged() {
+      const pwd = document.getElementById('reg-password')?.value || '';
+      const confirmPwd = document.getElementById('reg-confirm-password')?.value || '';
+      state.partnerForm.password = pwd;
+      state.partnerForm.confirmPassword = confirmPwd;
+
+      calculatePasswordStrength(pwd, confirmPwd);
+      validateNewUserForm();
+    }
+
+    function calculatePasswordStrength(pwd, confirmPwd) {
+      let score = 0;
+      const hasLength = pwd.length >= 8;
+      const hasUpper = /[A-Z]/.test(pwd);
+      const hasLower = /[a-z]/.test(pwd);
+      const hasMatch = pwd.length > 0 && pwd === confirmPwd;
+
+      if (hasLength) score++;
+      if (hasUpper) score++;
+      if (hasLower) score++;
+      if (hasMatch || (/[0-9!@#$%^&*(),.?":{}|<>]/.test(pwd) && hasLength)) score++;
+      score = Math.min(score, 4);
+
+      // Update Criteria Indicators
+      updateCriteriaEl('crit-length', 'crit-icon-length', hasLength);
+      updateCriteriaEl('crit-upper', 'crit-icon-upper', hasUpper);
+      updateCriteriaEl('crit-lower', 'crit-icon-lower', hasLower);
+      updateCriteriaEl('crit-match', 'crit-icon-match', hasMatch);
+
+      // Update Progress Track & Shield
+      const badge = document.getElementById('pwd-strength-badge');
+      const shield = document.getElementById('shield-icon-container');
+
+      const labels = ['Enter password', 'Weak', 'Fair', 'Good', 'Strong'];
+      const badgeClasses = [
+        'bg-gray-100 text-gray-500 border border-gray-200/60',
+        'bg-rose-50 text-rose-700 border border-rose-200/80',
+        'bg-amber-50 text-amber-700 border border-amber-200/80',
+        'bg-sky-50 text-sky-700 border border-sky-200/80',
+        'bg-emerald-50 text-emerald-800 border border-emerald-300 font-bold'
+      ];
+      const barColors = ['bg-gray-100', 'bg-rose-500', 'bg-amber-500', 'bg-sky-500', 'bg-[#23B750]'];
+
+      if (!pwd) {
+        badge.className = `inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold ${badgeClasses[0]} transition-all duration-200`;
+        badge.innerHTML = labels[0];
+        shield.className = 'w-5 h-5 rounded-lg flex items-center justify-center bg-gray-100 text-gray-500 transition-colors';
+        for (let i = 1; i <= 4; i++) {
+          document.getElementById(`pwd-bar-${i}`).className = 'rounded-full transition-all duration-300 bg-gray-100';
+        }
+      } else {
+        const curScore = Math.max(score, 1);
+        badge.className = `inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold ${badgeClasses[curScore]} transition-all duration-200`;
+        badge.innerHTML = (curScore === 4 ? '<i data-lucide="sparkles" class="w-2.5 h-2.5 text-emerald-600"></i> ' : '') + labels[curScore];
+        shield.className = curScore === 4
+          ? 'w-5 h-5 rounded-lg flex items-center justify-center bg-emerald-100 text-emerald-800 transition-colors'
+          : 'w-5 h-5 rounded-lg flex items-center justify-center bg-gray-100 text-gray-500 transition-colors';
+
+        const colorClass = barColors[curScore];
+        for (let i = 1; i <= 4; i++) {
+          document.getElementById(`pwd-bar-${i}`).className = `rounded-full transition-all duration-300 ${i <= curScore ? colorClass : 'bg-gray-100'}`;
+        }
+      }
+      lucide.createIcons();
+    }
+
+    function updateCriteriaEl(textId, iconId, pass) {
+      const textEl = document.getElementById(textId);
+      const iconEl = document.getElementById(iconId);
+      if (pass) {
+        textEl.className = 'flex items-center gap-1.5 transition-colors duration-150 text-emerald-700 font-medium';
+        iconEl.className = 'w-3.5 h-3.5 rounded-full flex items-center justify-center bg-emerald-100 text-emerald-700 shrink-0';
+        iconEl.innerHTML = '<i data-lucide="check" class="w-2.5 h-2.5 stroke-[3]"></i>';
+      } else {
+        textEl.className = 'flex items-center gap-1.5 transition-colors duration-150 text-gray-400';
+        iconEl.className = 'w-3.5 h-3.5 rounded-full flex items-center justify-center bg-gray-100 shrink-0';
+        iconEl.innerHTML = '<div class="w-1.5 h-1.5 rounded-full bg-gray-300"></div>';
+      }
+    }
+
+    // ─────────────────────────────────────────
+    // Sales Track Modal
+    // ─────────────────────────────────────────
+    function handleSalesPartnerCardClick() {
+      if (!state.isSalesPartnerUnlocked) {
+        document.getElementById('partner-access-code').value = '';
+        document.getElementById('code-error-msg').classList.add('hidden');
+        document.getElementById('code-input-container').classList.add('hidden');
+        document.getElementById('code-chevron').classList.remove('rotate-180');
+        state.showCodeInput = false;
+        document.getElementById('unlock-modal').classList.remove('hidden');
+        lucide.createIcons();
+      } else {
+        selectPartnerTrack('sales');
+      }
+    }
+
+    function closeSalesPartnerModal() {
+      document.getElementById('unlock-modal').classList.add('hidden');
+    }
+
+    function selectReferralAndClose() {
+      selectPartnerTrack('referral');
+      closeSalesPartnerModal();
+    }
+
+    function toggleCodeInput() {
+      state.showCodeInput = !state.showCodeInput;
+      const container = document.getElementById('code-input-container');
+      const chevron = document.getElementById('code-chevron');
+      if (state.showCodeInput) {
+        container.classList.remove('hidden');
+        chevron.classList.add('rotate-180');
+        setTimeout(() => document.getElementById('partner-access-code')?.focus(), 50);
+      } else {
+        container.classList.add('hidden');
+        chevron.classList.remove('rotate-180');
+      }
+    }
+
+    function submitAccessCode() {
+      const codeInput = document.getElementById('partner-access-code');
+      const code = codeInput ? codeInput.value.trim() : '';
+      const errorMsg = document.getElementById('code-error-msg');
+
+      if (!code) {
+        errorMsg.textContent = 'Please enter an access code.';
+        errorMsg.classList.remove('hidden');
+        return;
+      }
+
+      state.isSalesPartnerUnlocked = true;
+      selectPartnerTrack('sales');
+      closeSalesPartnerModal();
+    }
+
+    // ─────────────────────────────────────────
+    // Email Resend Trigger
+    // ─────────────────────────────────────────
+    function resendVerificationEmail() {
+      const btn = document.getElementById('resend-email-btn');
+      btn.innerHTML = '<span class="text-emerald-700 font-bold inline-flex items-center gap-1"><i data-lucide="check" class="w-3.5 h-3.5"></i> Verification email resent</span>';
+      lucide.createIcons();
+
+      setTimeout(() => {
+        btn.innerHTML = '<span>Didn\'t receive the email? <span class="text-[#23B750] font-semibold underline hover:text-[#1a943e]">Click to resend</span></span>';
+      }, 3500);
+    }
+
+    // ─────────────────────────────────────────
+    // Reset Form
+    // ─────────────────────────────────────────
+    function resetForm() {
+      state.currentStep = 1;
+      state.userType = 'new';
+      state.crmLinkEmail = '';
+      state.isAccountLinked = false;
+      state.selectedPartnerType = 'referral';
+      state.isSalesPartnerUnlocked = false;
+      state.isSubmitting = false;
+      state.partnerForm = {
+        fullName: '',
+        companyName: '',
+        email: '',
+        whatsapp: '',
+        password: '',
+        confirmPassword: ''
+      };
+
+      if (document.getElementById('link-crm-email')) document.getElementById('link-crm-email').value = '';
+      if (document.getElementById('reg-fullname')) document.getElementById('reg-fullname').value = '';
+      if (document.getElementById('reg-company')) document.getElementById('reg-company').value = '';
+      if (document.getElementById('reg-email')) document.getElementById('reg-email').value = '';
+      if (document.getElementById('reg-whatsapp')) document.getElementById('reg-whatsapp').value = '';
+      if (document.getElementById('reg-password')) document.getElementById('reg-password').value = '';
+      if (document.getElementById('reg-confirm-password')) document.getElementById('reg-confirm-password').value = '';
+
+      updateStep1Cards();
+      updateUI();
+    }
+
+    // ─────────────────────────────────────────
+    // Confetti Fireworks
+    // ─────────────────────────────────────────
+    function fireConfetti() {
+      if (typeof confetti === 'function') {
+        confetti({
+          particleCount: 90,
+          spread: 75,
+          origin: { y: 0.6 },
+          colors: ['#23B750', '#62D816', '#10B981', '#34D399', '#3B82F6', '#F59E0B']
+        });
+
+        setTimeout(() => {
+          confetti({
+            particleCount: 50,
+            angle: 60,
+            spread: 55,
+            origin: { x: 0, y: 0.65 },
+            colors: ['#23B750', '#10B981', '#3B82F6', '#F59E0B']
+          });
+          confetti({
+            particleCount: 50,
+            angle: 120,
+            spread: 55,
+            origin: { x: 1, y: 0.65 },
+            colors: ['#23B750', '#10B981', '#3B82F6', '#F59E0B']
+          });
+        }, 250);
+      }
+    }
+
+    // ─────────────────────────────────────────
+    // Init on Mount
+    // ─────────────────────────────────────────
+    window.addEventListener('DOMContentLoaded', () => {
+      updateStep1Cards();
+      updateUI();
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>

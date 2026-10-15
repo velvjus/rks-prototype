@@ -35,7 +35,7 @@
     </div>
 
     <!-- Right Cluster -->
-    <div class="flex items-center gap-2 w-[202px] justify-end">
+    <div class="flex items-center gap-2 justify-end min-w-[202px]">
       <!-- Circle Help Utility (Question Mark Icon) -->
       <DropdownMenu v-model:open="isHelpDropdownOpen">
         <DropdownMenuTrigger as-child>
@@ -119,7 +119,7 @@
             <!-- 4. Ask RakanAI -->
             <DropdownMenuItem
               @click="handleAskAI"
-              class="flex items-start gap-2.5 px-2.5 py-2 rounded-lg cursor-pointer hover:bg-emerald-50/70 focus:bg-emerald-50/70 text-gray-800 transition-colors group"
+              class="flex items-start gap-2.5 px-2.5 py-2 rounded-lg cursor-pointer hover:bg-emerald-50/70 focus:bg-emerald-50/70 text-emerald-950 transition-colors group"
             >
               <Sparkles class="w-4 h-4 text-emerald-600 shrink-0 mt-0.5 group-hover:scale-110 transition-transform" />
               <div class="flex-1 min-w-0">

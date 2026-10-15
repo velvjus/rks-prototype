@@ -45,7 +45,7 @@
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6 w-full">
 
         <!-- Banner Card -->
-        <div class="relative bg-gradient-to-br from-gray-900 via-[#0E131F] to-gray-900 text-white rounded-3xl p-6 sm:p-8 border border-gray-800 shadow-xl overflow-hidden">
+        <div class="relative bg-gradient-to-br from-gray-900 via-[#0E131F] to-gray-900 text-white rounded-2xl p-6 sm:p-8 border border-gray-800 shadow-xl overflow-hidden">
           <div class="absolute -top-24 -right-24 w-80 h-80 bg-[#23B750]/15 rounded-full blur-3xl pointer-events-none"></div>
           <div class="relative z-10 max-w-2xl space-y-2">
             <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-950/60 text-emerald-300 border border-emerald-500/30">
@@ -86,7 +86,7 @@
             <div class="space-y-3">
               <div class="flex items-center justify-between">
                 <span class="px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
-                  {{ asset.format }} &bull; {{ asset.size }}
+                  {{ asset.format }} · {{ asset.size }}
                 </span>
                 <span class="text-[11px] font-semibold text-gray-400 dark:text-gray-500">
                   {{ asset.category }}
@@ -142,8 +142,10 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { ArrowLeft, Download, Package } from 'lucide-vue-next';
+import { usePartnerStore } from '@/stores/partner';
+import { ArrowLeft, Download, Package, Shield, FileText } from 'lucide-vue-next';
 
+const partnerStore = usePartnerStore();
 const activeCategory = ref('All');
 const toastMessage = ref('');
 let toastTimer: number | null = null;
@@ -164,10 +166,10 @@ function downloadAll() {
   showToast('Packaging all enablement assets into a .ZIP archive...');
 }
 
-const assets = [
+const referralAssets = [
   {
     id: 1,
-    title: 'Partner Pitch Deck 2026',
+    title: 'Referral Partner Quickstart Deck 2026',
     category: 'Decks',
     format: 'PDF',
     size: '14.2 MB',
@@ -175,7 +177,7 @@ const assets = [
   },
   {
     id: 2,
-    title: 'Brand Assets & Logo Kit',
+    title: 'Brand Assets & Social Badges Kit',
     category: 'Brand',
     format: 'ZIP',
     size: '28.5 MB',
@@ -183,7 +185,7 @@ const assets = [
   },
   {
     id: 3,
-    title: 'WhatsApp Sales Scripts & Follow-ups',
+    title: 'WhatsApp Referral Scripts & Follow-ups',
     category: 'Scripts',
     format: 'DOCX',
     size: '1.8 MB',
@@ -191,7 +193,7 @@ const assets = [
   },
   {
     id: 4,
-    title: 'CRM Competitive Battlecard',
+    title: 'CRM Competitive Battlecard (Summary)',
     category: 'Battlecards',
     format: 'PDF',
     size: '4.1 MB',
@@ -199,7 +201,7 @@ const assets = [
   },
   {
     id: 5,
-    title: 'One-Page Executive Solution Brief',
+    title: 'One-Page Product Solution Brief',
     category: 'Decks',
     format: 'PDF',
     size: '2.4 MB',
@@ -207,7 +209,7 @@ const assets = [
   },
   {
     id: 6,
-    title: 'Email Sequence Templates',
+    title: 'Email Sequence Templates for Affiliates',
     category: 'Scripts',
     format: 'DOCX',
     size: '1.2 MB',
@@ -215,8 +217,60 @@ const assets = [
   }
 ];
 
+const salesAssets = [
+  {
+    id: 101,
+    title: 'Enterprise Reseller Pitch Deck (Customizable)',
+    category: 'Decks',
+    format: 'PPTX',
+    size: '24.8 MB',
+    description: 'Full 38-slide sales presentation with ROI modeling, WhatsApp CRM automation, and Malaysian e-Invoicing workflows.'
+  },
+  {
+    id: 102,
+    title: 'Enterprise CRM Battlecard: RakanSales vs HubSpot & Salesforce',
+    category: 'Battlecards',
+    format: 'PDF',
+    size: '5.6 MB',
+    description: 'Comprehensive objection handling, feature matrix, and TCO cost justification tailored for ASEAN B2B.'
+  },
+  {
+    id: 103,
+    title: 'PDPA Compliance & Cloud Security Technical Whitepaper',
+    category: 'Decks',
+    format: 'PDF',
+    size: '8.4 MB',
+    description: 'Essential compliance documentation for enterprise IT procurement, data sovereignty, and encryption standards.'
+  },
+  {
+    id: 104,
+    title: 'Reseller Commercial Terms & 20% Margin Schedule',
+    category: 'Brand',
+    format: 'PDF',
+    size: '3.1 MB',
+    description: 'Official partner contract parameters, 120-day domain registration rules, and tier advancement criteria.'
+  },
+  {
+    id: 105,
+    title: 'Technical Discovery & Webhook RFP Questionnaire',
+    category: 'Scripts',
+    format: 'XLSX',
+    size: '2.2 MB',
+    description: 'Client scoping template to assess ERP integration requirements, WhatsApp Business API numbers, and seat count.'
+  },
+  {
+    id: 106,
+    title: 'Enterprise Closing Playbook & Objection Handling Guide',
+    category: 'Scripts',
+    format: 'PDF',
+    size: '4.7 MB',
+    description: 'Battle-tested negotiation frameworks, competitive comparisons against HubSpot & Salesforce, and procurement closing scripts.'
+  }
+];
+
 const filteredAssets = computed(() => {
-  if (activeCategory.value === 'All') return assets;
-  return assets.filter(a => a.category === activeCategory.value);
+  const currentList = partnerStore.activeTrack === 'sales' ? salesAssets : referralAssets;
+  if (activeCategory.value === 'All') return currentList;
+  return currentList.filter(a => a.category === activeCategory.value);
 });
 </script>

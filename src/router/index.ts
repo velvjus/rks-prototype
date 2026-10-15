@@ -60,6 +60,12 @@ const router = createRouter({
       meta: { fullWidth: true }
     },
     {
+      path: '/settings/ai-assistants',
+      name: 'settings-ai-assistants',
+      redirect: { path: '/settings', query: { tab: 'ai-assistants' } },
+      meta: { fullWidth: true }
+    },
+    {
       path: '/guidelines',
       name: 'guidelines',
       component: GuidelinesView,
@@ -174,7 +180,7 @@ const router = createRouter({
     {
       path: '/partner/withdrawal',
       name: 'partner-withdrawal',
-      component: () => import('../views/partner/PartnerOverviewView.vue'),
+      component: () => import('../views/partner/PartnerWithdrawalView.vue'),
       meta: { fullWidth: true }
     },
     {

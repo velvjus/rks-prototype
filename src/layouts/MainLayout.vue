@@ -82,6 +82,8 @@ const routeLabels: Record<string, string> = {
   '/partner/earnings':       'Commissions',
   '/partner/withdrawal':     'Partner Withdrawal',
   '/setup-wizard':           'Setup Wizard',
+  '/settings':               'Settings',
+  '/settings/ai-assistants': 'AI Assistants',
 }
 const pageTitle = computed(() => {
   if (route.path.startsWith('/web-forms/builder')) return 'Form Builder'

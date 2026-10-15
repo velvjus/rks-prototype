@@ -118,6 +118,7 @@ const partnersNavItem: NavItem = {
 
 function isItemSelected(item: NavItem) {
   if (item.route && route.path === item.route) return true;
+  if (item.label === 'Settings' && route.path.startsWith('/settings')) return true;
   if (item.label === 'Partners' && route.path.startsWith('/partner')) return true;
   return ui.activeParentItem === item.label;
 }

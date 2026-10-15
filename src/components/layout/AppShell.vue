@@ -24,11 +24,14 @@
       />
 
       <!-- Main Content Area -->
-      <main :class="['flex-1 bg-gray-50 transition-all duration-200', route.meta.fullWidth ? 'overflow-hidden h-full max-h-full flex flex-col min-h-0' : 'overflow-y-auto [scrollbar-gutter:stable]']">
+      <main :class="['flex-1 bg-gray-50 transition-all duration-200 relative', route.meta.fullWidth ? 'overflow-hidden h-full max-h-full flex flex-col min-h-0' : 'overflow-y-auto [scrollbar-gutter:stable]']">
         <div v-if="!route.meta.fullWidth" class="px-4 sm:px-6 lg:px-8 py-6 md:py-8 max-w-7xl mx-auto w-full">
           <slot></slot>
         </div>
         <slot v-else></slot>
+
+        <!-- Small Simple Partner Track Switcher Tab (Bottom left of content screen) -->
+        <PartnerTrackSwitcher v-if="route.path.startsWith('/partner') && route.name !== 'partner-register'" />
       </main>
     </div>
   </div>
@@ -41,6 +44,7 @@ import { useUIStore } from '@/stores/ui';
 import TopNav from './TopNav.vue';
 import Sidebar from './Sidebar.vue';
 import SecondaryPanel from './SecondaryPanel.vue';
+import PartnerTrackSwitcher from '@/components/partner/PartnerTrackSwitcher.vue';
 
 const ui = useUIStore();
 const route = useRoute();

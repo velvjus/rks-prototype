@@ -27,91 +27,198 @@
       </div>
 
       <div class="flex items-center gap-2">
-        <button
-          @click="showWithdrawModal = true"
+        <router-link
+          to="/partner/withdrawal?from=commissions"
           class="px-3.5 py-1.5 text-xs font-bold text-white bg-[#23B750] hover:bg-[#1fa848] rounded-xl shadow-sm shadow-[#23B750]/20 transition-all cursor-pointer inline-flex items-center gap-1.5"
         >
           <Banknote class="w-3.5 h-3.5" />
           <span>Withdraw Balance</span>
-        </button>
+        </router-link>
       </div>
     </header>
 
     <!-- Main Content Body -->
     <main class="flex-1 overflow-y-auto w-full [scrollbar-gutter:stable]">
-      <div class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 space-y-6 w-full">
-        <!-- 3-Column Financial Metrics Summary Grid (Ordered by Immediate Actionability) -->
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <!-- Metric 1: Available Balance (Most Relevant / Immediate Action) -->
-        <div class="bg-white dark:bg-[#0E131F] border border-gray-200/80 dark:border-gray-800/80 rounded-2xl p-4 sm:p-5 shadow-xs flex flex-col justify-between">
-          <div>
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-semibold text-gray-500 dark:text-gray-400">Available Balance</span>
-              <div class="w-7 h-7 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
-                <Wallet class="w-4 h-4" />
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6 w-full">
+        <!-- 3-Column Financial Metrics Summary Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <!-- Metric 1 -->
+          <div class="bg-white dark:bg-[#0E131F] border border-gray-200/80 dark:border-gray-800/80 rounded-2xl p-5 shadow-xs flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-semibold text-gray-500 dark:text-gray-400">
+                  {{ partnerStore.activeTrack === 'sales' ? 'Monthly Recurring RevShare' : 'Available Balance' }}
+                </span>
+                <div class="w-7 h-7 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-[#23B750] flex items-center justify-center shrink-0">
+                  <Wallet class="w-4 h-4" />
+                </div>
               </div>
+              <p class="text-2xl font-extrabold font-mono text-[#23B750] mt-2">
+                {{ partnerStore.activeTrack === 'sales' ? 'RM 1,480' : 'RM 1,200' }}
+              </p>
+              <p class="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">
+                {{ partnerStore.activeTrack === 'sales' ? 'Next disbursement on 05 Nov 2026' : 'Ready for immediate withdrawal' }}
+              </p>
             </div>
-            <p class="text-2xl font-extrabold font-mono text-emerald-600 dark:text-emerald-400 mt-2">RM 1,200</p>
-            <p class="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">Ready for immediate withdrawal</p>
+
+            <div class="mt-4 pt-3 border-t border-gray-100 dark:border-gray-800/80 flex items-center justify-between text-[11px]">
+              <router-link
+                to="/partner/withdrawal?from=commissions"
+                class="inline-flex items-center gap-1 font-bold text-[#23B750] hover:text-[#1fa848] dark:text-[#23B750] hover:underline cursor-pointer group/link"
+              >
+                <span>{{ partnerStore.activeTrack === 'sales' ? 'View remittance' : 'Withdraw now' }}</span>
+                <ArrowRight class="w-3.5 h-3.5 transition-transform group-hover/link:translate-x-0.5" />
+              </router-link>
+              <span class="text-gray-400 dark:text-gray-500 text-[10.5px]">
+                {{ partnerStore.activeTrack === 'sales' ? 'Auto-bank remittance' : 'Direct bank transfer' }}
+              </span>
+            </div>
           </div>
 
-          <div class="mt-4 pt-3 border-t border-gray-100 dark:border-gray-800/80 flex items-center justify-between text-[11px]">
-            <button
-              @click="showWithdrawModal = true"
-              class="inline-flex items-center gap-1 font-bold text-[#23B750] hover:text-[#1fa848] dark:text-[#23B750] hover:underline cursor-pointer group/link"
-            >
-              <span>Withdraw now</span>
-              <ArrowRight class="w-3.5 h-3.5 transition-transform group-hover/link:translate-x-0.5" />
-            </button>
-            <span class="text-gray-400 dark:text-gray-500 text-[10.5px]">Direct bank transfer</span>
+          <!-- Metric 2 -->
+          <div class="bg-white dark:bg-[#0E131F] border border-gray-200/80 dark:border-gray-800/80 rounded-2xl p-5 shadow-xs flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-semibold text-gray-500 dark:text-gray-400">
+                  {{ partnerStore.activeTrack === 'sales' ? 'Active 12-Mo Cohorts' : 'In Clearance' }}
+                </span>
+                <div class="w-7 h-7 rounded-lg bg-amber-50 dark:bg-amber-950/40 text-amber-500 flex items-center justify-center shrink-0">
+                  <Clock class="w-4 h-4" />
+                </div>
+              </div>
+              <p class="text-2xl font-extrabold font-mono text-amber-600 dark:text-amber-400 mt-2">
+                {{ partnerStore.activeTrack === 'sales' ? '4 Accounts' : 'RM 1,500' }}
+              </p>
+              <p class="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">
+                {{ partnerStore.activeTrack === 'sales' ? 'Generating monthly recurring RevShare' : 'Deal clearance hold (30-day lock)' }}
+              </p>
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-gray-100 dark:border-gray-800/80 flex items-center justify-between text-[11px] text-gray-500 dark:text-gray-400">
+              <span>{{ partnerStore.activeTrack === 'sales' ? 'Reseller tier' : 'Deal clearance' }}</span>
+              <span class="font-mono font-bold text-amber-600 dark:text-amber-400">
+                {{ partnerStore.activeTrack === 'sales' ? '20% Certified' : '5 deals' }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Metric 3 -->
+          <div class="bg-white dark:bg-[#0E131F] border border-gray-200/80 dark:border-gray-800/80 rounded-2xl p-5 shadow-xs flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-semibold text-gray-500 dark:text-gray-400">
+                  {{ partnerStore.activeTrack === 'sales' ? 'Total Cumulative LTV' : 'Lifetime Earned' }}
+                </span>
+                <div class="w-7 h-7 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 flex items-center justify-center shrink-0">
+                  <Banknote class="w-4 h-4" />
+                </div>
+              </div>
+              <p class="text-2xl font-extrabold font-mono text-gray-900 dark:text-white mt-2">
+                {{ partnerStore.activeTrack === 'sales' ? 'RM 14,480' : 'RM 2,700' }}
+              </p>
+              <p class="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5">
+                {{ partnerStore.activeTrack === 'sales' ? 'Cumulative contract commissions paid' : 'RM 1,200 cleared + RM 1,500 clearing' }}
+              </p>
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-gray-100 dark:border-gray-800/80 flex items-center justify-between text-[11px] text-gray-500 dark:text-gray-400">
+              <span>{{ partnerStore.activeTrack === 'sales' ? 'Total Client Book' : 'All-time converted deals' }}</span>
+              <span class="font-mono font-bold text-gray-900 dark:text-white">
+                {{ partnerStore.activeTrack === 'sales' ? 'RM 124,800 ARR' : '9 deals' }}
+              </span>
+            </div>
           </div>
         </div>
 
-        <!-- Metric 2: In Clearance (Pending Payout Pipeline) -->
-        <div class="bg-white dark:bg-[#0E131F] border border-gray-200/80 dark:border-gray-800/80 rounded-2xl p-4 sm:p-5 shadow-xs flex flex-col justify-between">
-          <div>
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-semibold text-gray-500 dark:text-gray-400">In Clearance</span>
-              <div class="w-7 h-7 rounded-lg bg-amber-50 dark:bg-amber-950/40 text-amber-500 flex items-center justify-center shrink-0">
-                <Clock class="w-4 h-4" />
+        <!-- SALES TRACK: Recurring RevShare Cohort Schedule -->
+        <div
+          v-if="partnerStore.activeTrack === 'sales'"
+          class="bg-white dark:bg-[#0E131F] border border-gray-200/80 dark:border-gray-800/80 rounded-2xl shadow-xs overflow-hidden"
+        >
+          <div class="px-5 py-4 border-b border-gray-200/80 dark:border-gray-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 class="text-sm font-bold text-gray-900 dark:text-white">Active Client Subscriptions & RevShare Cohorts</h3>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-[#23B750] border border-emerald-500/20">
+                  20% Margin Active
+                </span>
               </div>
+              <p class="text-xs text-gray-500 dark:text-gray-400">12-month recurring MRR share schedule for active client accounts</p>
             </div>
-            <p class="text-2xl font-extrabold font-mono text-amber-600 dark:text-amber-400 mt-2">RM 1,500</p>
-            <p class="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">Clearing in standard 30-day cycle</p>
+            <div class="flex items-center gap-2 text-xs">
+              <span class="text-gray-500">Total Monthly RevShare:</span>
+              <span class="font-mono font-bold text-[#23B750] text-sm">RM {{ partnerStore.monthlyRecurringCommission.toLocaleString() }} / mo</span>
+            </div>
           </div>
 
-          <div class="mt-4 pt-3 border-t border-gray-100 dark:border-gray-800/80 flex items-center justify-between text-[11px] text-gray-500 dark:text-gray-400">
-            <span>Pending settlement</span>
-            <span class="font-mono font-bold text-amber-600 dark:text-amber-400">5 deals</span>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr class="border-b border-gray-200 dark:border-gray-800 bg-gray-50/60 dark:bg-gray-900/40 text-gray-500 dark:text-gray-400">
+                  <th class="py-3 px-4 font-semibold">Client & Deal ID</th>
+                  <th class="py-3 px-4 font-semibold">Plan & Client MRR</th>
+                  <th class="py-3 px-4 font-semibold">RevShare Margin</th>
+                  <th class="py-3 px-4 font-semibold">Monthly Commission</th>
+                  <th class="py-3 px-4 font-semibold">12-Month Cohort Progress</th>
+                  <th class="py-3 px-4 font-semibold">Next Disbursement</th>
+                  <th class="py-3 px-4 font-semibold text-right">Cumulative Paid</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-100 dark:divide-gray-800/60">
+                <tr
+                  v-for="sub in partnerStore.recurringCommissions"
+                  :key="sub.id"
+                  class="hover:bg-gray-50/70 dark:hover:bg-gray-800/40 transition-colors"
+                >
+                  <td class="py-3.5 px-4">
+                    <p class="font-bold text-gray-900 dark:text-white">{{ sub.clientName }}</p>
+                    <p class="text-[10px] text-gray-400 font-mono">{{ sub.dealId }}</p>
+                  </td>
+                  <td class="py-3.5 px-4">
+                    <span class="font-mono font-bold text-gray-900 dark:text-white">RM {{ sub.clientMRR.toLocaleString() }}/mo</span>
+                    <span class="ml-1 text-[9px] font-semibold px-1.5 py-0.5 rounded bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300">
+                      {{ sub.plan }}
+                    </span>
+                  </td>
+                  <td class="py-3.5 px-4 font-mono font-bold text-emerald-600 dark:text-emerald-400">
+                    {{ sub.revSharePercent }}%
+                  </td>
+                  <td class="py-3.5 px-4 font-mono font-bold text-[#23B750]">
+                    RM {{ sub.monthlyCommission.toLocaleString() }}/mo
+                  </td>
+                  <td class="py-3.5 px-4">
+                    <div class="space-y-1 w-32">
+                      <div class="flex items-center justify-between text-[10px] text-gray-500">
+                        <span>Month {{ sub.monthElapsed }} of {{ sub.totalMonths }}</span>
+                        <span class="font-bold">{{ Math.round((sub.monthElapsed / sub.totalMonths) * 100) }}%</span>
+                      </div>
+                      <div class="w-full bg-gray-200 dark:bg-gray-800 h-1.5 rounded-full overflow-hidden">
+                        <div
+                          class="h-full bg-[#23B750] rounded-full"
+                          :style="{ width: `${(sub.monthElapsed / sub.totalMonths) * 100}%` }"
+                        ></div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="py-3.5 px-4 font-mono text-gray-600 dark:text-gray-300">
+                    {{ sub.nextDisbursementDate }}
+                  </td>
+                  <td class="py-3.5 px-4 text-right font-mono font-extrabold text-gray-900 dark:text-white">
+                    RM {{ sub.cumulativePaid.toLocaleString() }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
 
-        <!-- Metric 3: Lifetime Earned (Cumulative Historical Commission) -->
-        <div class="bg-white dark:bg-[#0E131F] border border-gray-200/80 dark:border-gray-800/80 rounded-2xl p-4 sm:p-5 shadow-xs flex flex-col justify-between">
-          <div>
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-semibold text-gray-500 dark:text-gray-400">Lifetime Earned</span>
-              <div class="w-7 h-7 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 flex items-center justify-center shrink-0">
-                <Banknote class="w-4 h-4" />
-              </div>
-            </div>
-            <p class="text-2xl font-extrabold font-mono text-gray-900 dark:text-white mt-2">RM 2,700</p>
-            <p class="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5">
-              <span class="font-mono font-bold text-emerald-600 dark:text-emerald-400">RM 1,200</span> cleared + <span class="font-mono font-bold text-amber-600 dark:text-amber-400">RM 1,500</span> clearing
-            </p>
-          </div>
-
-          <div class="mt-4 pt-3 border-t border-gray-100 dark:border-gray-800/80 flex items-center justify-between text-[11px] text-gray-500 dark:text-gray-400">
-            <span>All-time converted deals</span>
-            <span class="font-mono font-bold text-gray-900 dark:text-white">9 deals</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Commission Records Ledger Table Card with Quick Filter Tabs, Filter & Sort Menu -->
-      <div class="bg-white dark:bg-[#0E131F] border border-gray-200/80 dark:border-gray-800/80 rounded-2xl shadow-xs overflow-hidden">
-        <!-- Table Toolbar -->
-        <div class="border-b border-gray-200/80 dark:border-gray-800/80">
+        <!-- REFERRAL TRACK: Commission Records Ledger Table Card -->
+        <div
+          v-else
+          class="bg-white dark:bg-[#0E131F] border border-gray-200/80 dark:border-gray-800/80 rounded-2xl shadow-xs overflow-hidden"
+        >
+          <!-- Table Toolbar -->
+          <div class="border-b border-gray-200/80 dark:border-gray-800/80">
           <!-- Top Row: Title, Search, Filter Icon, Sort Dropdown -->
           <div class="px-4 sm:px-5 pt-4 pb-2 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2.5">
             <div>
@@ -133,68 +240,10 @@
                 />
               </div>
 
-              <!-- Filter Icon Button with Active Indicator & Popover -->
-              <div class="relative">
-                <button
-                  @click="isFilterMenuOpen = !isFilterMenuOpen; isSortMenuOpen = false"
-                  :class="[
-                    'p-2 rounded-xl border text-xs font-medium inline-flex items-center gap-1.5 transition-colors cursor-pointer',
-                    statusFilter !== 'all'
-                      ? 'border-[#23B750] bg-emerald-50 dark:bg-emerald-950/40 text-[#1a943e] dark:text-emerald-400'
-                      : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-750'
-                  ]"
-                  title="Filter by clearance status"
-                >
-                  <Filter class="w-3.5 h-3.5" />
-                  <span class="hidden sm:inline">Filter</span>
-                  <span v-if="statusFilter !== 'all'" class="w-1.5 h-1.5 rounded-full bg-[#23B750]"></span>
-                </button>
-
-                <!-- Filter Dropdown Popover -->
-                <div
-                  v-if="isFilterMenuOpen"
-                  class="absolute right-0 mt-1.5 w-48 bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 rounded-xl shadow-xl py-1 z-30 text-xs space-y-0.5 animate-in fade-in zoom-in-95 duration-100"
-                >
-                  <div class="px-3 py-1.5 font-semibold text-gray-500 dark:text-gray-400 border-b border-gray-100 dark:border-gray-800 text-[11px]">
-                    Filter by Status
-                  </div>
-                  <button
-                    @click="statusFilter = 'all'; isFilterMenuOpen = false; currentPage = 1"
-                    :class="[
-                      'w-full text-left px-3 py-1.5 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer transition-colors',
-                      statusFilter === 'all' ? 'text-[#23B750] font-bold' : 'text-gray-700 dark:text-gray-300'
-                    ]"
-                  >
-                    <span>All Records</span>
-                    <Check v-if="statusFilter === 'all'" class="w-3.5 h-3.5 text-[#23B750]" />
-                  </button>
-                  <button
-                    @click="statusFilter = 'Cleared'; isFilterMenuOpen = false; currentPage = 1"
-                    :class="[
-                      'w-full text-left px-3 py-1.5 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer transition-colors',
-                      statusFilter === 'Cleared' ? 'text-[#23B750] font-bold' : 'text-gray-700 dark:text-gray-300'
-                    ]"
-                  >
-                    <span>Cleared</span>
-                    <Check v-if="statusFilter === 'Cleared'" class="w-3.5 h-3.5 text-[#23B750]" />
-                  </button>
-                  <button
-                    @click="statusFilter = 'In Clearance'; isFilterMenuOpen = false; currentPage = 1"
-                    :class="[
-                      'w-full text-left px-3 py-1.5 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer transition-colors',
-                      statusFilter === 'In Clearance' ? 'text-[#23B750] font-bold' : 'text-gray-700 dark:text-gray-300'
-                    ]"
-                  >
-                    <span>In Clearance</span>
-                    <Check v-if="statusFilter === 'In Clearance'" class="w-3.5 h-3.5 text-[#23B750]" />
-                  </button>
-                </div>
-              </div>
-
               <!-- Sort Dropdown Button with Active Indicator & Popover -->
               <div class="relative">
                 <button
-                  @click="isSortMenuOpen = !isSortMenuOpen; isFilterMenuOpen = false"
+                  @click="isSortMenuOpen = !isSortMenuOpen"
                   :class="[
                     'p-2 rounded-xl border text-xs font-medium inline-flex items-center gap-1.5 transition-colors cursor-pointer',
                     isCustomSort
@@ -379,7 +428,7 @@
         </div>
 
         <!-- Table Footer: Results summary, page size selector & pagination -->
-        <div class="px-4 sm:px-5 py-3 bg-gray-50/60 dark:bg-gray-800/30 border-t border-gray-200/80 dark:border-gray-800/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-500 dark:text-gray-400">
+        <div class="px-5 py-3.5 bg-gray-50/50 dark:bg-gray-800/30 border-t border-gray-200/80 dark:border-gray-800/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-500 dark:text-gray-400">
           <div class="flex items-center gap-3">
             <span>
               Showing <strong class="text-gray-700 dark:text-gray-200 font-mono">{{ paginationStart }}</strong> to
@@ -430,77 +479,13 @@
       </div>
       </div>
     </main>
-
-    <!-- Withdraw Earnings Modal -->
-    <div
-      v-if="showWithdrawModal"
-      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-950/70 backdrop-blur-xs animate-in fade-in duration-150"
-      @click.self="showWithdrawModal = false"
-    >
-      <div class="bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-4 animate-in zoom-in-95 duration-150">
-        <div class="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 pb-3">
-          <div class="flex items-center gap-2">
-            <div class="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-[#23B750] flex items-center justify-center">
-              <Banknote class="w-4 h-4" />
-            </div>
-            <div>
-              <h3 class="text-base font-bold text-gray-900 dark:text-white">Withdraw Earnings</h3>
-              <p class="text-xs text-gray-500 dark:text-gray-400">Transfer to your Malaysian bank account</p>
-            </div>
-          </div>
-          <button @click="showWithdrawModal = false" class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 p-1 cursor-pointer" aria-label="Close modal">✕</button>
-        </div>
-
-        <div class="space-y-3.5 text-xs">
-          <div class="bg-emerald-50/50 dark:bg-emerald-950/30 p-3 rounded-xl border border-emerald-200 dark:border-emerald-800 flex justify-between items-center">
-            <span class="text-gray-600 dark:text-gray-400 font-medium">Available Balance</span>
-            <span class="font-mono font-extrabold text-base text-emerald-700 dark:text-emerald-400">RM 1,200</span>
-          </div>
-
-          <div class="space-y-1">
-            <label class="font-semibold text-gray-700 dark:text-gray-300">Bank Account</label>
-            <select
-              v-model="withdrawBank"
-              class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-gray-100 text-xs focus:outline-none focus:border-[#23B750]"
-            >
-              <option value="Maybank">Maybank (5140 **** 8921)</option>
-              <option value="CIMB Bank">CIMB Bank (7012 **** 4432)</option>
-              <option value="Public Bank">Public Bank (3198 **** 1120)</option>
-            </select>
-          </div>
-
-          <div class="space-y-1">
-            <label class="font-semibold text-gray-700 dark:text-gray-300">Withdraw Amount (RM)</label>
-            <input
-              type="number"
-              v-model="withdrawAmount"
-              class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-900 dark:text-gray-100 text-xs font-mono focus:outline-none focus:border-[#23B750]"
-            />
-          </div>
-        </div>
-
-        <div class="flex items-center justify-end gap-2 pt-3 border-t border-gray-100 dark:border-gray-800">
-          <button
-            @click="showWithdrawModal = false"
-            class="px-4 py-2 text-xs font-semibold text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl cursor-pointer"
-          >
-            Cancel
-          </button>
-          <button
-            @click="handleConfirmWithdrawal"
-            class="px-5 py-2 bg-[#23B750] hover:bg-[#1fa848] text-white text-xs font-bold rounded-xl shadow-md shadow-[#23B750]/20 cursor-pointer"
-          >
-            Confirm Withdrawal
-          </button>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useRoute } from 'vue-router';
+import { usePartnerStore } from '@/stores/partner';
 import {
   ArrowLeft,
   ArrowRight,
@@ -516,8 +501,12 @@ import {
   Wallet,
   Clock,
   Banknote,
+  Briefcase,
+  ShieldCheck,
+  CheckCircle2,
 } from 'lucide-vue-next';
 
+const partnerStore = usePartnerStore();
 const route = useRoute();
 
 // Show back button only when navigated from Overview
@@ -548,21 +537,12 @@ const sortOptions: SortOption[] = [
 
 const searchQuery = ref('');
 const statusFilter = ref<'all' | 'Cleared' | 'In Clearance'>('all');
-const isFilterMenuOpen = ref(false);
 const isSortMenuOpen = ref(false);
 const currentSortOptionId = ref('date-desc');
 const sortField = ref<'refId' | 'company' | 'clearingDate' | 'status' | 'payout'>('clearingDate');
 const sortOrder = ref<'asc' | 'desc'>('desc');
 const pageSize = ref(10);
 const currentPage = ref(1);
-const showWithdrawModal = ref(false);
-const withdrawBank = ref('Maybank');
-const withdrawAmount = ref(1200);
-
-function handleConfirmWithdrawal() {
-  showWithdrawModal.value = false;
-  alert(`Withdrawal request of RM ${withdrawAmount.value} to ${withdrawBank.value} submitted.`);
-}
 
 // Reconciled ledger dataset across portal
 const commissions = [

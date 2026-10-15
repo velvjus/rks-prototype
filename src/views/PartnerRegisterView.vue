@@ -1,9 +1,25 @@
 <template>
-  <div class="h-screen w-full bg-[#f9fafb] flex flex-col font-sans selection:bg-[#23B750]/20 selection:text-emerald-900 text-slate-800 overflow-hidden relative">
+  <div class="min-h-screen lg:h-screen w-full bg-[#f9fafb] flex flex-col font-sans selection:bg-[#23B750]/20 selection:text-emerald-900 text-slate-800 overflow-x-hidden lg:overflow-hidden relative">
     <!-- ========================================================= -->
-    <!-- PERSISTENT TOP-LEFT BRAND LOGO                            -->
+    <!-- MOBILE TOP BAR (PERSISTENT LOGO + BACK LINK)             -->
     <!-- ========================================================= -->
-    <div class="fixed top-5 left-6 sm:left-8 lg:left-10 z-40">
+    <header class="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-md border-b border-gray-200/70 px-4 py-2.5 flex items-center justify-between lg:hidden shadow-2xs">
+      <router-link to="/dashboard" class="flex items-center gap-2" title="Return to RakanSales CRM">
+        <img :src="lightLogoUrl" class="h-6 w-auto" alt="RakanSales Logo" />
+      </router-link>
+      <router-link
+        to="/dashboard"
+        class="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-600 hover:text-gray-900 px-2.5 py-1 rounded-lg border border-gray-200 bg-white shadow-2xs"
+      >
+        <ArrowLeft class="w-3.5 h-3.5" />
+        <span>Back to CRM</span>
+      </router-link>
+    </header>
+
+    <!-- ========================================================= -->
+    <!-- PERSISTENT TOP-LEFT BRAND LOGO (DESKTOP ONLY)            -->
+    <!-- ========================================================= -->
+    <div class="hidden lg:block fixed top-5 left-8 lg:left-10 z-40">
       <router-link
         to="/dashboard"
         class="inline-block transition-opacity hover:opacity-80 focus-visible:ring-2 focus-visible:ring-[#23B750] focus-visible:outline-none rounded"
@@ -16,7 +32,7 @@
     <!-- ========================================================= -->
     <!-- GLOBAL TOP HEADER (TOTALLY HIDDEN, REVEALS ONLY ON HOVER) -->
     <!-- ========================================================= -->
-    <div class="fixed top-0 left-0 w-full z-50 group pointer-events-none">
+    <div class="hidden lg:block fixed top-0 left-0 w-full z-50 group pointer-events-none">
       <!-- Invisible hover sensor strip at the top edge of viewport (absolute, zero layout impact) -->
       <div class="absolute top-0 left-0 h-6 w-full pointer-events-auto"></div>
 
@@ -109,7 +125,7 @@
     </div>
 
     <!-- Full-Screen Split Stage: Form Area (Left) + Visual Canvas (Right) -->
-    <div class="flex-1 flex flex-col lg:flex-row w-full h-full min-h-0 relative overflow-hidden">
+    <div class="flex-1 flex flex-col lg:flex-row w-full min-h-0 relative overflow-x-hidden lg:overflow-hidden">
       <!-- ========================================================= -->
       <!-- LEFT PANE: PIXEL-PERFECT ANCHORED REGISTRATION WIZARD    -->
       <!-- ========================================================= -->
@@ -117,15 +133,15 @@
         aria-label="Registration Form Container"
         :class="[
           isRightPaneHovered ? 'lg:w-1/2' : 'lg:w-[70%]',
-          'w-full h-full flex flex-col justify-between px-6 sm:px-12 md:px-16 lg:px-14 xl:px-20 pt-6 sm:pt-8 pb-3 sm:pb-4 bg-[#f9fafb] border-r border-gray-200/70 overflow-y-auto relative transition-all duration-500 ease-out'
+          'w-full flex-1 lg:h-full flex flex-col justify-start lg:justify-between px-4 sm:px-8 md:px-12 lg:px-14 xl:px-20 py-5 sm:py-7 lg:pt-8 lg:pb-4 bg-[#f9fafb] lg:border-r border-gray-200/70 overflow-y-auto relative transition-all duration-500 ease-out'
         ]"
       >
         <!-- BALANCED WIZARD CONTAINER (Generous Breathing Room, Never Mushed) -->
-        <div class="w-full max-w-xl mx-auto flex-1 flex flex-col justify-center min-h-0 py-2 my-auto">
-          <!-- FIXED-HEIGHT WIZARD STAGE (Progress Bar Higher, Buttons Lower) -->
-          <div class="w-full h-[660px] flex flex-col justify-between shrink-0">
-            <!-- 1. STEPPER PROGRESS BAR (Fixed Height & Position - Moved Higher) -->
-            <div class="h-[32px] shrink-0">
+        <div class="w-full max-w-xl mx-auto flex-1 flex flex-col justify-start lg:justify-center min-h-0 py-1 sm:py-2">
+          <!-- WIZARD STAGE (Adaptive on Mobile, Anchored on Desktop) -->
+          <div class="w-full min-h-0 lg:h-[660px] flex flex-col justify-start lg:justify-between gap-5 sm:gap-6 lg:gap-0 shrink-0">
+            <!-- 1. STEPPER PROGRESS BAR (Fixed Height & Position on Desktop) -->
+            <div class="h-auto lg:h-[32px] shrink-0">
               <div v-if="currentStep <= 3" class="w-full space-y-1.5">
                 <div class="flex items-center justify-between text-xs">
                   <span class="font-semibold text-[#23B750] tracking-wide uppercase text-[11px]">
@@ -148,19 +164,19 @@
 
             <!-- 2. STEP TITLE & SUBTITLE BLOCK -->
             <div
-              class="h-[54px] shrink-0 text-center flex flex-col justify-center transition-opacity duration-200"
+              class="min-h-0 lg:h-[54px] shrink-0 text-center flex flex-col justify-center transition-opacity duration-200"
               :class="currentStep === 4 ? 'opacity-0 pointer-events-none' : ''"
             >
-              <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight">
+              <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 tracking-tight leading-tight">
                 {{ currentStepTitle }}
               </h1>
-              <p class="text-xs sm:text-sm text-gray-500 leading-relaxed mt-0.5">
+              <p class="text-xs sm:text-sm text-gray-500 leading-relaxed mt-1">
                 {{ currentStepSubtitle }}
               </p>
             </div>
 
             <!-- 3. STEP CONTENT (Spacious Stage with Natural Top-Down Flow) -->
-            <div class="min-h-[375px] h-[395px] shrink-0 flex flex-col justify-start">
+            <div class="min-h-0 lg:min-h-[375px] lg:h-[395px] shrink-0 flex flex-col justify-start">
           <!-- ============================================================== -->
           <!-- STEP 1: CHOOSE ACCOUNT STATUS (NEW USER VS EXISTING CUSTOMER)  -->
           <!-- ============================================================== -->
@@ -173,7 +189,7 @@
                 @click="userType = 'new'"
                 @keydown.enter.prevent="userType = 'new'"
                 @keydown.space.prevent="userType = 'new'"
-                class="group relative rounded-2xl border-2 p-6 sm:p-7 flex flex-col justify-start gap-4 cursor-pointer transition-all text-left focus-visible:ring-2 focus-visible:ring-[#23B750] focus-visible:outline-none min-h-[200px]"
+                class="group relative rounded-2xl border-2 p-4.5 sm:p-7 flex flex-col justify-start gap-3 sm:gap-4 cursor-pointer transition-all text-left focus-visible:ring-2 focus-visible:ring-[#23B750] focus-visible:outline-none min-h-0 sm:min-h-[200px]"
                 :class="[
                   userType === 'new'
                     ? 'border-[#23B750] bg-emerald-50/50 ring-2 ring-[#23B750]/15 shadow-xs'
@@ -209,7 +225,7 @@
                 @click="userType = 'existing'"
                 @keydown.enter.prevent="userType = 'existing'"
                 @keydown.space.prevent="userType = 'existing'"
-                class="group relative rounded-2xl border-2 p-6 sm:p-7 flex flex-col justify-start gap-4 cursor-pointer transition-all text-left focus-visible:ring-2 focus-visible:ring-[#23B750] focus-visible:outline-none min-h-[200px]"
+                class="group relative rounded-2xl border-2 p-4.5 sm:p-7 flex flex-col justify-start gap-3 sm:gap-4 cursor-pointer transition-all text-left focus-visible:ring-2 focus-visible:ring-[#23B750] focus-visible:outline-none min-h-0 sm:min-h-[200px]"
                 :class="[
                   userType === 'existing'
                     ? 'border-[#23B750] bg-emerald-50/50 ring-2 ring-[#23B750]/15 shadow-xs'
@@ -276,7 +292,7 @@
                 autocomplete="email"
                 placeholder="Enter your CRM account email"
                 @keydown.enter.prevent="findAccountAndContinue"
-                class="w-full px-3.5 py-2.5 bg-white border border-gray-200 hover:border-gray-300 rounded-xl text-xs sm:text-sm font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#23B750]/30 focus:border-[#23B750] caret-[#23B750] shadow-2xs transition-all"
+                class="w-full px-3.5 py-2.5 bg-white border border-gray-200 hover:border-gray-300 rounded-xl text-base sm:text-xs font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#23B750]/30 focus:border-[#23B750] caret-[#23B750] shadow-2xs transition-all"
               />
               <p v-if="accountLinkError" class="text-xs text-red-600 mt-1">
                 {{ accountLinkError }}
@@ -317,7 +333,7 @@
                 @click="selectedPartnerType = 'referral'"
                 @keydown.enter.prevent="selectedPartnerType = 'referral'"
                 @keydown.space.prevent="selectedPartnerType = 'referral'"
-                class="group relative rounded-2xl border-2 p-4.5 sm:p-5 flex flex-col justify-between cursor-pointer transition-all text-left focus-visible:ring-2 focus-visible:ring-[#23B750] focus-visible:outline-none min-h-[275px] sm:min-h-[285px]"
+                class="group relative rounded-2xl border-2 p-4 sm:p-4.5 lg:p-5 flex flex-col justify-between cursor-pointer transition-all text-left focus-visible:ring-2 focus-visible:ring-[#23B750] focus-visible:outline-none min-h-0 sm:min-h-[275px] lg:min-h-[285px]"
                 :class="[
                   selectedPartnerType === 'referral'
                     ? 'border-[#23B750] bg-emerald-50/50 ring-2 ring-[#23B750]/15 shadow-xs'
@@ -338,11 +354,11 @@
                 </div>
 
                 <!-- Graphic Hero (Swapped & Enlarged) -->
-                <div class="h-28 sm:h-30 w-full flex items-center justify-center py-0.5">
+                <div class="h-24 sm:h-28 lg:h-30 w-full flex items-center justify-center py-0.5">
                   <img
                     src="/brand-assets/partner/sales-partner-illustration.png"
                     alt="Referral Partner Mascot"
-                    class="max-h-26 sm:max-h-28 max-w-full object-contain filter drop-shadow-sm transition-transform group-hover:scale-105 duration-200"
+                    class="max-h-22 sm:max-h-26 lg:max-h-28 max-w-full object-contain filter drop-shadow-sm transition-transform group-hover:scale-105 duration-200"
                   />
                 </div>
 
@@ -362,7 +378,7 @@
                 @click="openSalesPartnerModal"
                 @keydown.enter.prevent="openSalesPartnerModal"
                 @keydown.space.prevent="openSalesPartnerModal"
-                class="group relative rounded-2xl border-2 p-4.5 sm:p-5 flex flex-col justify-between text-left transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-[#23B750] focus-visible:outline-none min-h-[275px] sm:min-h-[285px]"
+                class="group relative rounded-2xl border-2 p-4 sm:p-4.5 lg:p-5 flex flex-col justify-between text-left transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-[#23B750] focus-visible:outline-none min-h-0 sm:min-h-[275px] lg:min-h-[285px]"
                 :class="[
                   !isSalesPartnerUnlocked
                     ? 'border-gray-200/90 bg-gray-100/70 opacity-60 hover:opacity-85 hover:border-gray-300'
@@ -392,13 +408,13 @@
 
                 <!-- Graphic Hero (Swapped & Enlarged) -->
                 <div
-                  class="h-28 sm:h-30 w-full flex items-center justify-center py-0.5 transition-all"
+                  class="h-24 sm:h-28 lg:h-30 w-full flex items-center justify-center py-0.5 transition-all"
                   :class="!isSalesPartnerUnlocked ? 'opacity-70 grayscale-[50%]' : 'opacity-90'"
                 >
                   <img
                     src="/brand-assets/partner/referral-partner-illustration.png"
                     alt="Sales Partner Mascot Team"
-                    class="max-h-26 sm:max-h-28 max-w-full object-contain filter drop-shadow-sm transition-transform group-hover:scale-105 duration-200"
+                    class="max-h-22 sm:max-h-26 lg:max-h-28 max-w-full object-contain filter drop-shadow-sm transition-transform group-hover:scale-105 duration-200"
                   />
                 </div>
 
@@ -441,7 +457,7 @@
                   required
                   autocomplete="name"
                   placeholder="e.g. Ahmad Haziq"
-                  class="w-full px-3.5 py-2.5 bg-white border border-gray-200 hover:border-gray-300 rounded-xl text-xs font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#23B750]/30 focus:border-[#23B750] caret-[#23B750] shadow-2xs transition-all"
+                  class="w-full px-3.5 py-2.5 bg-white border border-gray-200 hover:border-gray-300 rounded-xl text-base sm:text-xs font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#23B750]/30 focus:border-[#23B750] caret-[#23B750] shadow-2xs transition-all"
                 />
               </div>
               <div>
@@ -454,7 +470,7 @@
                   type="text"
                   autocomplete="organization"
                   placeholder="e.g. Syarikat Sdn Bhd or Studio Name"
-                  class="w-full px-3.5 py-2.5 bg-white border border-gray-200 hover:border-gray-300 rounded-xl text-xs font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#23B750]/30 focus:border-[#23B750] caret-[#23B750] shadow-2xs transition-all"
+                  class="w-full px-3.5 py-2.5 bg-white border border-gray-200 hover:border-gray-300 rounded-xl text-base sm:text-xs font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#23B750]/30 focus:border-[#23B750] caret-[#23B750] shadow-2xs transition-all"
                 />
               </div>
             </div>
@@ -472,7 +488,7 @@
                   required
                   autocomplete="email"
                   placeholder="ahmad@company.com"
-                  class="w-full px-3.5 py-2.5 bg-white border border-gray-200 hover:border-gray-300 rounded-xl text-xs font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#23B750]/30 focus:border-[#23B750] caret-[#23B750] shadow-2xs transition-all"
+                  class="w-full px-3.5 py-2.5 bg-white border border-gray-200 hover:border-gray-300 rounded-xl text-base sm:text-xs font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#23B750]/30 focus:border-[#23B750] caret-[#23B750] shadow-2xs transition-all"
                 />
               </div>
               <div>
@@ -491,7 +507,7 @@
                     required
                     autocomplete="tel"
                     placeholder="12-345 6789"
-                    class="w-full pl-20 pr-3.5 py-2.5 bg-white border border-gray-200 hover:border-gray-300 rounded-xl text-xs font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#23B750]/30 focus:border-[#23B750] caret-[#23B750] shadow-2xs transition-all"
+                    class="w-full pl-20 pr-3.5 py-2.5 bg-white border border-gray-200 hover:border-gray-300 rounded-xl text-base sm:text-xs font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#23B750]/30 focus:border-[#23B750] caret-[#23B750] shadow-2xs transition-all"
                   />
                 </div>
               </div>
@@ -511,7 +527,7 @@
                     required
                     autocomplete="new-password"
                     placeholder="Minimum 8 characters"
-                    class="w-full pl-3.5 pr-9 py-2.5 bg-white border border-gray-200 hover:border-gray-300 rounded-xl text-xs font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#23B750]/30 focus:border-[#23B750] caret-[#23B750] shadow-2xs transition-all"
+                    class="w-full pl-3.5 pr-9 py-2.5 bg-white border border-gray-200 hover:border-gray-300 rounded-xl text-base sm:text-xs font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#23B750]/30 focus:border-[#23B750] caret-[#23B750] shadow-2xs transition-all"
                   />
                   <button
                     type="button"
@@ -536,7 +552,7 @@
                   required
                   autocomplete="new-password"
                   placeholder="Re-enter your password"
-                  class="w-full px-3.5 py-2.5 bg-white border border-gray-200 hover:border-gray-300 rounded-xl text-xs font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#23B750]/30 focus:border-[#23B750] caret-[#23B750] shadow-2xs transition-all"
+                  class="w-full px-3.5 py-2.5 bg-white border border-gray-200 hover:border-gray-300 rounded-xl text-base sm:text-xs font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#23B750]/30 focus:border-[#23B750] caret-[#23B750] shadow-2xs transition-all"
                 />
               </div>
             </div>
@@ -845,7 +861,7 @@
         </div>
 
         <!-- 4. ACTION CONTROLS (Consistent h-12 Height & text-sm Typography) -->
-        <div class="h-[88px] shrink-0 pt-4.5 border-t border-gray-100/90 flex flex-col justify-between">
+        <div class="min-h-[80px] lg:h-[88px] shrink-0 pt-4 lg:pt-4.5 border-t border-gray-100/90 flex flex-col justify-between gap-2.5 lg:gap-0 mt-4 lg:mt-0">
           <!-- Step 1 Actions (Account Status) -->
           <template v-if="currentStep === 1">
             <button
@@ -1019,7 +1035,7 @@
     </div>
 
         <!-- 5. FOOTER (Anchored at Bottom Edge) -->
-        <footer class="w-full max-w-xl mx-auto shrink-0 pt-3 pb-2 flex items-center justify-between text-xs text-gray-400 border-t border-gray-100/60">
+        <footer class="w-full max-w-xl mx-auto shrink-0 pt-3 pb-2 flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-3 text-xs text-gray-400 border-t border-gray-100/60 text-center sm:text-left">
           <p>© 2026 RakanSales</p>
           <div class="flex items-center gap-3 text-xs">
             <a href="#" class="hover:text-gray-600 transition-colors">Terms</a>
@@ -1077,7 +1093,7 @@
       aria-modal="true"
       aria-labelledby="unlock-modal-title"
     >
-      <div class="bg-white w-full max-w-sm sm:max-w-[410px] rounded-2xl shadow-2xl border border-gray-100 p-6 sm:p-7 space-y-4 text-center relative overflow-hidden">
+      <div class="bg-white w-full max-w-sm sm:max-w-[410px] max-h-[90vh] overflow-y-auto custom-scrollbar rounded-2xl shadow-2xl border border-gray-100 p-5 sm:p-7 space-y-4 text-center relative">
         <!-- Close Button Top Right -->
         <button
           type="button"

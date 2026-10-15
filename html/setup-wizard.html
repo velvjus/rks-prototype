@@ -1,0 +1,1985 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RakanSales — Workspace Setup Wizard</title>
+  
+  <!-- Inter Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          spacing: {
+            '4.5': '1.125rem',
+            '5.5': '1.375rem',
+            '6.5': '1.625rem',
+            '8.5': '2.125rem',
+          },
+          colors: {
+            brand: {
+              DEFAULT: '#23B750',
+              hover: '#1a943e',
+              light: '#f0fdf4',
+            }
+          },
+          boxShadow: {
+            '2xs': '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+            'xs': '0 1px 3px 0 rgba(0, 0, 0, 0.08), 0 1px 2px -1px rgba(0, 0, 0, 0.08)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- Canvas Confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+  <style>
+    @keyframes progress {
+      0% { width: 0%; }
+      60% { width: 75%; }
+      100% { width: 100%; }
+    }
+    .animate-progress {
+      animation: progress 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .step-content {
+      transition: opacity 180ms ease, transform 180ms ease;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #e2e8f0;
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #cbd5e1;
+    }
+  </style>
+</head>
+<body class="h-full bg-[#f9fafb] text-slate-800 font-sans flex flex-col overflow-hidden selection:bg-[#23B750]/20 selection:text-emerald-900 relative">
+
+  <!-- Secret Reset Button (Appears on hover at top-left) -->
+  <div class="absolute top-3 left-3 sm:top-4 sm:left-4 z-50 opacity-0 hover:opacity-100 transition-opacity duration-200">
+    <button
+      type="button"
+      onclick="resetWizard()"
+      class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white hover:bg-gray-50 text-gray-400 hover:text-rose-600 border border-gray-200/90 shadow-2xs text-[11px] font-semibold transition-colors cursor-pointer"
+      title="Reset all setup steps"
+    >
+      <i data-lucide="rotate-ccw" class="w-3 h-3"></i>
+      <span>Reset Wizard</span>
+    </button>
+  </div>
+
+  <!-- TOP STEPPER (Steps 1–4) -->
+  <nav id="top-stepper" aria-label="Setup Wizard Progress" class="w-full bg-transparent pt-4 sm:pt-5 pb-3 px-6 shrink-0">
+    <div class="max-w-xl mx-auto space-y-2">
+      <!-- Top Text Row -->
+      <div class="flex items-center justify-between text-xs">
+        <span id="step-counter" class="font-bold text-[#23B750] tracking-wider uppercase text-[11px]">
+          Step 1 of 4
+        </span>
+        <div class="flex items-center gap-2.5">
+          <span id="step-subtitle" class="text-gray-400 font-medium text-xs">
+            Setup overview & pending checklist
+          </span>
+          <span class="text-gray-300 select-none">·</span>
+          <a href="onboarding-wizard.html" class="text-xs font-medium text-gray-400 hover:text-gray-700 transition-colors">
+            Exit
+          </a>
+        </div>
+      </div>
+
+      <!-- Segmented 4-Bar Progress Indicator -->
+      <div class="grid grid-cols-4 gap-2.5" role="progressbar">
+        <button type="button" onclick="goToStep(1)" id="bar-1" class="h-1.5 rounded-full transition-all duration-300 bg-[#23B750] cursor-pointer" title="Go to step 1"></button>
+        <button type="button" onclick="goToStep(2)" id="bar-2" class="h-1.5 rounded-full transition-all duration-300 bg-gray-200/80 cursor-default" title="Go to step 2"></button>
+        <button type="button" onclick="goToStep(3)" id="bar-3" class="h-1.5 rounded-full transition-all duration-300 bg-gray-200/80 cursor-default" title="Go to step 3"></button>
+        <button type="button" onclick="goToStep(4)" id="bar-4" class="h-1.5 rounded-full transition-all duration-300 bg-gray-200/80 cursor-default" title="Go to step 4"></button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN VIEWPORT CONTAINER -->
+  <main class="flex-1 overflow-y-auto custom-scrollbar flex flex-col px-4 sm:px-6 pt-1 sm:pt-2 pb-4 sm:pb-5 min-h-0">
+
+    <!-- ══════════════════════════════════════════
+         STEPS 1–4 CONTAINER (Max-w-xl Locked Stage)
+         ══════════════════════════════════════════ -->
+    <div id="stage-steps-1-4" class="w-full max-w-xl mx-auto flex-1 flex flex-col justify-between min-h-0">
+      
+      <!-- STEP FORM CONTENT AREA -->
+      <div class="flex-1 flex flex-col justify-start min-h-0">
+
+        <!-- ─────────────────────────────────────────
+             STEP 1: SETUP CHECKLIST
+             ───────────────────────────────────────── -->
+        <div id="step-1" class="space-y-4 text-left">
+          <div class="shrink-0 space-y-1">
+            <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
+              Let's complete your setup
+            </h2>
+            <p class="text-xs sm:text-sm text-gray-500 leading-relaxed">
+              Acknowledge pending tasks to activate incoming leads, messaging channels, and team collaboration.
+            </p>
+          </div>
+
+          <!-- Progress Meter Strip -->
+          <div class="space-y-1.5 pt-1">
+            <div class="flex items-center justify-between text-xs">
+              <span class="text-gray-500 font-medium text-[11px]">Workspace setup progress</span>
+              <span id="checklist-progress-text" class="font-bold text-gray-900 text-xs">0/3 completed</span>
+            </div>
+            <div class="w-full bg-gray-200/80 h-1.5 rounded-full overflow-hidden">
+              <div id="checklist-progress-bar" class="bg-[#23B750] h-full transition-all duration-500 rounded-full" style="width: 0%"></div>
+            </div>
+          </div>
+
+          <!-- 3 Checklist Items -->
+          <div class="space-y-2.5 pt-1">
+            <!-- Item 1: Sales Team -->
+            <button
+              type="button"
+              onclick="goToStep(2)"
+              id="checklist-card-team"
+              class="w-full p-4 rounded-2xl border transition-all duration-150 cursor-pointer flex items-center justify-between gap-3 text-left group border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50/60 shadow-2xs"
+            >
+              <div class="flex items-center gap-3.5 min-w-0">
+                <div id="checklist-icon-team" class="w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition-colors bg-gray-100 text-gray-500 group-hover:bg-[#23B750]/10 group-hover:text-[#23B750]">
+                  <i data-lucide="users" class="w-5 h-5"></i>
+                </div>
+                <div class="min-w-0">
+                  <div class="text-sm font-semibold text-gray-900">
+                    1. Sales Team
+                  </div>
+                  <p class="text-xs text-gray-500 mt-0.5 leading-snug">
+                    Invite reps, assign sales squads, and grant routing permissions.
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-center gap-1 text-xs font-semibold text-[#23B750] shrink-0 group-hover:translate-x-0.5 transition-transform">
+                <span id="checklist-status-team">Set up</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+              </div>
+            </button>
+
+            <!-- Item 2: WhatsApp Channel -->
+            <button
+              type="button"
+              onclick="goToStep(3)"
+              id="checklist-card-whatsapp"
+              class="w-full p-4 rounded-2xl border transition-all duration-150 cursor-pointer flex items-center justify-between gap-3 text-left group border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50/60 shadow-2xs"
+            >
+              <div class="flex items-center gap-3.5 min-w-0">
+                <div id="checklist-icon-whatsapp" class="w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition-colors bg-gray-100 text-gray-500 group-hover:bg-[#23B750]/10 group-hover:text-[#23B750]">
+                  <i data-lucide="message-circle" class="w-5 h-5"></i>
+                </div>
+                <div class="min-w-0">
+                  <div class="text-sm font-semibold text-gray-900">
+                    2. WhatsApp Channel
+                  </div>
+                  <p class="text-xs text-gray-500 mt-0.5 leading-snug">
+                    Connect WhatsApp QR or Cloud API for unified customer chat.
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-center gap-1 text-xs font-semibold text-[#23B750] shrink-0 group-hover:translate-x-0.5 transition-transform">
+                <span id="checklist-status-whatsapp">Connect</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+              </div>
+            </button>
+
+            <!-- Item 3: Website LiveChat -->
+            <button
+              type="button"
+              onclick="goToStep(4)"
+              id="checklist-card-livechat"
+              class="w-full p-4 rounded-2xl border transition-all duration-150 cursor-pointer flex items-center justify-between gap-3 text-left group border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50/60 shadow-2xs"
+            >
+              <div class="flex items-center gap-3.5 min-w-0">
+                <div id="checklist-icon-livechat" class="w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition-colors bg-gray-100 text-gray-500 group-hover:bg-[#23B750]/10 group-hover:text-[#23B750]">
+                  <i data-lucide="message-square-code" class="w-5 h-5"></i>
+                </div>
+                <div class="min-w-0">
+                  <div class="text-sm font-semibold text-gray-900">
+                    3. LiveChat Widget
+                  </div>
+                  <p class="text-xs text-gray-500 mt-0.5 leading-snug">
+                    Customize theme colors and embed website JavaScript snippet.
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-center gap-1 text-xs font-semibold text-[#23B750] shrink-0 group-hover:translate-x-0.5 transition-transform">
+                <span id="checklist-status-livechat">Install</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- ─────────────────────────────────────────
+             STEP 2: SALES TEAM SETUP
+             ───────────────────────────────────────── -->
+        <div id="step-2" class="h-full flex flex-col justify-between space-y-3.5 text-left hidden">
+          <div class="shrink-0 space-y-1">
+            <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
+              Invite your sales team
+            </h2>
+            <p class="text-xs sm:text-sm text-gray-500 leading-relaxed">
+              Add colleagues to collaborate on customer conversations and manage deals together.
+            </p>
+          </div>
+
+          <!-- Multi-Email Invite Section -->
+          <div class="shrink-0 space-y-1.5 pt-0.5">
+            <label class="block text-xs font-semibold text-gray-700">
+              Invite by Email
+            </label>
+
+            <div class="space-y-1.5">
+              <div class="flex flex-col sm:flex-row items-stretch sm:items-start gap-2">
+                <!-- Multi-email container box with pending chips -->
+                <div
+                  id="email-input-box"
+                  class="flex-1 min-h-[44px] px-3 py-1.5 bg-white border border-gray-200 rounded-xl flex flex-wrap items-center gap-1.5 focus-within:ring-2 focus-within:ring-[#23B750]/20 focus-within:border-[#23B750] transition-all shadow-2xs cursor-text"
+                  onclick="document.getElementById('team-email-input').focus()"
+                >
+                  <div id="pending-chips-container" class="contents"></div>
+                  <input
+                    id="team-email-input"
+                    type="text"
+                    placeholder="name@company.com"
+                    class="flex-1 min-w-[140px] h-7 bg-transparent text-sm font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none"
+                  />
+                </div>
+
+                <!-- Role Selector -->
+                <div class="relative w-full sm:w-36 shrink-0">
+                  <select
+                    id="team-role-select"
+                    class="w-full h-11 px-3 pr-8 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#23B750]/20 focus:border-[#23B750] appearance-none cursor-pointer shadow-2xs"
+                  >
+                    <option value="Agent">Sales Agent</option>
+                    <option value="Manager">Manager</option>
+                    <option value="Admin">Administrator</option>
+                  </select>
+                  <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-gray-400">
+                    <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                  </div>
+                </div>
+
+                <!-- Submit Invites Button -->
+                <button
+                  type="button"
+                  id="team-invite-btn"
+                  onclick="commitInvites()"
+                  disabled
+                  class="h-11 px-5 bg-[#23B750] hover:bg-[#1a943e] disabled:opacity-40 disabled:hover:bg-[#23B750] text-white text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-1.5 shadow-xs cursor-pointer shrink-0"
+                >
+                  <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                  <span id="team-invite-btn-text">Invite</span>
+                </button>
+              </div>
+
+              <!-- Invite link -->
+              <div class="flex items-center justify-between text-xs pt-0.5 px-0.5">
+                <span class="text-gray-400 text-[11px]">Or share direct invitation link with your team</span>
+                <button
+                  type="button"
+                  id="copy-invite-link-btn"
+                  onclick="copyInviteLink()"
+                  class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#23B750] hover:text-[#1a943e] cursor-pointer transition-colors"
+                >
+                  <i data-lucide="link-2" class="w-3.5 h-3.5"></i>
+                  <span id="copy-link-text">Copy invite link</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Workspace Members List Box -->
+          <div class="bg-gray-50 border border-gray-200/80 rounded-2xl p-3.5 sm:p-4 flex-1 flex flex-col min-h-0 space-y-2.5 shadow-2xs">
+            <div class="flex items-center justify-between text-xs shrink-0">
+              <span class="font-bold text-gray-800 text-xs">Workspace Members</span>
+              <span id="members-count-badge" class="text-[11px] font-semibold text-gray-500">1 active member</span>
+            </div>
+
+            <div id="members-list" class="flex-1 overflow-y-auto custom-scrollbar space-y-2 pr-1 min-h-[140px]">
+              <!-- Owner (You) -->
+              <div class="flex items-center justify-between p-3 bg-white border border-gray-200/90 rounded-xl text-xs shadow-2xs">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-full bg-[#23B750] text-white font-bold flex items-center justify-center text-[10px] shadow-2xs">
+                    YOU
+                  </div>
+                  <div>
+                    <div class="font-bold text-gray-900 leading-none">
+                      You
+                    </div>
+                    <span class="text-gray-400 text-[11px] mt-1 block leading-none">Workspace Administrator</span>
+                  </div>
+                </div>
+                <span class="px-2.5 py-1 rounded-lg bg-gray-100 text-gray-700 font-semibold text-xs">Owner</span>
+              </div>
+              <!-- Injected dynamically -->
+            </div>
+          </div>
+        </div>
+
+        <!-- ─────────────────────────────────────────
+             STEP 3: WHATSAPP SETUP
+             ───────────────────────────────────────── -->
+        <div id="step-3" class="h-full flex flex-col justify-between space-y-3.5 text-left hidden">
+          <div class="shrink-0 space-y-1">
+            <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
+              Connect WhatsApp Business
+            </h2>
+            <p class="text-xs sm:text-sm text-gray-500 leading-relaxed">
+              Link your company phone number so your team can reply to customer messages in one shared inbox.
+            </p>
+          </div>
+
+          <!-- 1-Line Sub-step Switcher Pills -->
+          <div class="shrink-0 flex items-center p-1 bg-gray-100 rounded-xl w-full max-w-sm mx-auto text-xs border border-gray-200/60 shadow-2xs select-none">
+            <button
+              type="button"
+              onclick="setWhatsAppSubStep(1)"
+              id="wa-tab-1"
+              class="flex-1 h-8 px-2 rounded-lg transition-all flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer shrink-0 bg-white text-gray-900 shadow-2xs font-semibold"
+            >
+              <span class="w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 bg-[#23B750] text-white" id="wa-tab-num-1">1</span>
+              <span class="text-xs">Method</span>
+            </button>
+
+            <button
+              type="button"
+              onclick="goToWhatsAppLinkPhone()"
+              id="wa-tab-2"
+              class="flex-1 h-8 px-2 rounded-lg transition-all flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer shrink-0 text-gray-500 hover:text-gray-900 font-medium"
+            >
+              <span class="w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 bg-gray-200 text-gray-600" id="wa-tab-num-2">2</span>
+              <span class="text-xs">Link Phone</span>
+            </button>
+
+            <button
+              type="button"
+              onclick="setWhatsAppSubStep(3)"
+              id="wa-tab-3"
+              class="flex-1 h-8 px-2 rounded-lg transition-all flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer shrink-0 text-gray-500 hover:text-gray-900 font-medium"
+            >
+              <span class="w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 bg-gray-200 text-gray-600" id="wa-tab-num-3">3</span>
+              <span class="text-xs">Assign Team</span>
+            </button>
+          </div>
+
+          <!-- WA SUB-STEP 1: METHOD -->
+          <div id="wa-substep-1" class="space-y-3 pt-1 flex-1 flex flex-col justify-start">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <!-- QR Option -->
+              <button
+                type="button"
+                onclick="selectWhatsAppMethod('qr')"
+                id="wa-method-qr"
+                class="p-4 rounded-2xl border text-left transition-all duration-150 cursor-pointer flex flex-col justify-between group border-[#23B750] bg-emerald-50/50 ring-2 ring-[#23B750]/15 shadow-xs"
+              >
+                <div class="space-y-2.5">
+                  <div class="flex items-center justify-between">
+                    <div class="w-10 h-10 rounded-xl flex items-center justify-center transition-colors bg-[#23B750]/10 text-[#23B750]">
+                      <i data-lucide="qr-code" class="w-5 h-5"></i>
+                    </div>
+                    <span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 font-bold text-[9px] rounded-full uppercase tracking-wider">
+                      Fastest
+                    </span>
+                  </div>
+                  <div>
+                    <h3 class="text-sm font-semibold text-gray-900">QR Code Link</h3>
+                    <p class="text-xs text-gray-500 mt-0.5 leading-relaxed">
+                      Scan with WhatsApp on your phone, just like WhatsApp Web. Fast and simple.
+                    </p>
+                  </div>
+                </div>
+                <div class="mt-4 pt-2.5 border-t border-gray-100 flex items-center justify-between text-xs font-semibold text-[#23B750]">
+                  <span>Ready in under 1 min</span>
+                  <span class="group-hover:translate-x-0.5 transition-transform">→</span>
+                </div>
+              </button>
+
+              <!-- Cloud API Option -->
+              <button
+                type="button"
+                onclick="selectWhatsAppMethod('cloud_api')"
+                id="wa-method-cloud_api"
+                class="p-4 rounded-2xl border text-left transition-all duration-150 cursor-pointer flex flex-col justify-between group border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50/60 shadow-2xs"
+              >
+                <div class="space-y-2.5">
+                  <div class="flex items-center justify-between">
+                    <div class="w-10 h-10 rounded-xl flex items-center justify-center transition-colors bg-gray-100 text-gray-600">
+                      <i data-lucide="message-square" class="w-5 h-5"></i>
+                    </div>
+                    <span class="px-2 py-0.5 bg-blue-100 text-blue-800 font-bold text-[9px] rounded-full uppercase tracking-wider">
+                      Official API
+                    </span>
+                  </div>
+                  <div>
+                    <h3 class="text-sm font-semibold text-gray-900">WhatsApp Cloud API</h3>
+                    <p class="text-xs text-gray-500 mt-0.5 leading-relaxed">
+                      Connect via Meta Business Manager for high-volume broadcasts and verified green tick.
+                    </p>
+                  </div>
+                </div>
+                <div class="mt-4 pt-2.5 border-t border-gray-100 flex items-center justify-between text-xs font-semibold text-gray-600 group-hover:text-gray-900">
+                  <span>High-volume teams</span>
+                  <span class="group-hover:translate-x-0.5 transition-transform">→</span>
+                </div>
+              </button>
+            </div>
+
+            <div class="pt-2 flex justify-center">
+              <button
+                type="button"
+                onclick="goToWhatsAppLinkPhone()"
+                class="h-9 px-4 bg-[#23B750] hover:bg-[#1a943e] text-white rounded-xl text-xs font-bold shadow-xs cursor-pointer transition-colors flex items-center gap-1.5"
+              >
+                <span>Continue to Link Phone</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- WA SUB-STEP 2: LINK PHONE -->
+          <div id="wa-substep-2" class="space-y-3 pt-1 flex-1 flex flex-col justify-start hidden">
+            <!-- Channel Name -->
+            <div class="space-y-1 shrink-0">
+              <label class="block text-xs font-semibold text-gray-700">
+                Inbox Channel Name <span class="text-red-500">*</span>
+              </label>
+              <input
+                id="wa-inbox-name"
+                type="text"
+                placeholder="e.g. VeecoTech Sales WhatsApp"
+                value="Sales Team WhatsApp"
+                class="w-full h-10 px-3.5 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#23B750]/20 focus:border-[#23B750] shadow-2xs transition-all"
+              />
+            </div>
+
+            <!-- Flow State: Generating -->
+            <div
+              id="wa-flow-generating"
+              class="p-6 bg-white border border-gray-200/90 rounded-2xl shadow-2xs text-center space-y-3 hidden"
+            >
+              <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-[#23B750] mx-auto flex items-center justify-center shadow-xs">
+                <i data-lucide="loader-2" class="w-6 h-6 animate-spin text-[#23B750]"></i>
+              </div>
+              <div class="space-y-1">
+                <h3 class="text-sm font-bold text-gray-900">Generating Encrypted QR Session...</h3>
+                <p class="text-xs text-gray-500">Creating a secure Webhook handshake for your workspace.</p>
+              </div>
+              <div class="w-36 h-1 bg-gray-100 rounded-full mx-auto overflow-hidden">
+                <div class="w-full h-full bg-[#23B750] animate-pulse"></div>
+              </div>
+            </div>
+
+            <!-- Flow State: Ready QR to Scan -->
+            <div
+              id="wa-flow-ready"
+              class="p-4 sm:p-5 bg-white border border-gray-200/90 rounded-2xl shadow-2xs text-center space-y-3"
+            >
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
+                <div class="flex flex-col items-center justify-center p-3.5 bg-gray-50/80 rounded-xl border border-gray-200">
+                  <h4 class="text-xs font-semibold text-gray-700 mb-2">Scan with WhatsApp</h4>
+
+                  <div class="p-2 bg-white rounded-xl border border-gray-200 shadow-2xs relative">
+                    <img
+                      src="https://api.qrserver.com/v1/create-qr-code/?size=112x112&data=https://rakansales.com/auth-device-session"
+                      alt="WhatsApp QR Code"
+                      class="w-24 h-24 rounded-lg"
+                    />
+                  </div>
+
+                  <button
+                    type="button"
+                    onclick="startWhatsAppLinkingSimulation()"
+                    class="mt-3 h-9 px-3.5 bg-[#23B750] hover:bg-[#1a943e] text-white rounded-xl text-xs font-bold shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
+                  >
+                    <i data-lucide="smartphone" class="w-3.5 h-3.5"></i>
+                    <span>Simulate Scan from Phone</span>
+                  </button>
+                </div>
+
+                <div class="text-left space-y-2 text-xs">
+                  <h4 class="text-[11px] font-bold text-gray-800 uppercase tracking-wider">How to scan:</h4>
+                  <ol class="space-y-1.5 text-gray-600 text-[11px]">
+                    <li class="flex items-start gap-2">
+                      <span class="w-4 h-4 rounded-full bg-emerald-50 text-emerald-800 font-semibold flex items-center justify-center text-[10px] shrink-0 border border-emerald-200">1</span>
+                      <span>Open WhatsApp on your mobile phone</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                      <span class="w-4 h-4 rounded-full bg-emerald-50 text-emerald-800 font-semibold flex items-center justify-center text-[10px] shrink-0 border border-emerald-200">2</span>
+                      <span>Go to <strong>Settings</strong> or tap <strong>Menu (⋮)</strong></span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                      <span class="w-4 h-4 rounded-full bg-emerald-50 text-emerald-800 font-semibold flex items-center justify-center text-[10px] shrink-0 border border-emerald-200">3</span>
+                      <span>Tap <strong>Linked Devices</strong> → <strong>Link a Device</strong></span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                      <span class="w-4 h-4 rounded-full bg-emerald-50 text-emerald-800 font-semibold flex items-center justify-center text-[10px] shrink-0 border border-emerald-200">4</span>
+                      <span>Point your camera at the QR code</span>
+                    </li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+
+            <!-- Flow State: Linking in Progress -->
+            <div
+              id="wa-flow-linking"
+              class="p-6 bg-white border border-gray-200/90 rounded-2xl shadow-2xs text-center space-y-3 hidden"
+            >
+              <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-[#23B750] mx-auto flex items-center justify-center shadow-xs">
+                <i data-lucide="smartphone" class="w-6 h-6 animate-pulse text-[#23B750]"></i>
+              </div>
+              <div class="space-y-1">
+                <h3 class="text-sm font-bold text-gray-900">Pairing Device +60 12-345 6789...</h3>
+                <p class="text-xs text-gray-500">Syncing chat history and registering WhatsApp Web session token.</p>
+              </div>
+              <div class="w-40 h-1.5 bg-gray-100 rounded-full mx-auto overflow-hidden">
+                <div class="w-full h-full bg-[#23B750] animate-pulse"></div>
+              </div>
+            </div>
+
+            <!-- Flow State: Connected -->
+            <div id="wa-flow-connected" class="space-y-3 hidden">
+              <div class="p-5 bg-white border border-emerald-200 rounded-2xl shadow-2xs text-center space-y-3">
+                <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-[#23B750] mx-auto flex items-center justify-center shadow-xs border border-emerald-200/70">
+                  <i data-lucide="check-circle-2" class="w-7 h-7"></i>
+                </div>
+                <div class="space-y-0.5">
+                  <h3 class="text-sm font-bold text-gray-900">WhatsApp Number Connected!</h3>
+                  <p class="text-xs text-gray-500 max-w-sm mx-auto leading-relaxed">
+                    Linked as <strong class="text-gray-900 font-semibold">+60 12-345 6789</strong> (<span id="wa-connected-label">Sales Team WhatsApp</span>). Incoming customer messages will sync to your shared inbox.
+                  </p>
+                </div>
+                <div class="pt-1 flex justify-center">
+                  <button
+                    type="button"
+                    onclick="disconnectWhatsApp()"
+                    class="text-xs text-gray-400 hover:text-red-500 font-medium cursor-pointer transition-colors"
+                  >
+                    Disconnect / Re-link
+                  </button>
+                </div>
+              </div>
+
+              <div class="pt-1 flex justify-center">
+                <button
+                  type="button"
+                  onclick="setWhatsAppSubStep(3)"
+                  class="h-9 px-4 bg-[#23B750] hover:bg-[#1a943e] text-white rounded-xl text-xs font-bold shadow-xs cursor-pointer transition-colors flex items-center gap-1.5"
+                >
+                  <span>Assign Team Reps</span>
+                  <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- WA SUB-STEP 3: ASSIGN AGENTS -->
+          <div id="wa-substep-3" class="space-y-3 pt-1 flex-1 flex flex-col min-h-0 hidden">
+            <!-- Phone Number Banner -->
+            <div class="shrink-0 p-3 bg-emerald-50/60 border border-emerald-200/70 rounded-xl flex items-center gap-2.5 text-xs shadow-2xs">
+              <div class="w-8 h-8 rounded-lg bg-[#23B750] text-white flex items-center justify-center shrink-0 shadow-2xs">
+                <i data-lucide="message-circle" class="w-4 h-4"></i>
+              </div>
+              <div class="min-w-0">
+                <div class="font-bold text-gray-900 text-xs leading-none">+60 12-345 6789</div>
+                <span id="wa-banner-label" class="text-gray-500 text-[11px] truncate block mt-1 leading-none">Sales Team WhatsApp</span>
+              </div>
+            </div>
+
+            <!-- Agents list container -->
+            <div class="bg-gray-50 border border-gray-200/80 rounded-2xl p-3.5 sm:p-4 flex-1 flex flex-col min-h-0 space-y-2.5 shadow-2xs">
+              <div class="flex items-center justify-between text-xs shrink-0">
+                <span class="font-bold text-gray-800 text-xs">Assigned Team Reps</span>
+                <span id="wa-agents-count-badge" class="text-[11px] font-semibold text-gray-500">1 of 3 assigned</span>
+              </div>
+
+              <div id="wa-agents-list" class="flex-1 overflow-y-auto custom-scrollbar space-y-2 pr-1 min-h-[140px]">
+                <!-- Injected dynamically -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ─────────────────────────────────────────
+             STEP 4: WEBSITE LIVECHAT
+             ───────────────────────────────────────── -->
+        <div id="step-4" class="space-y-4 text-left flex-1 flex flex-col min-h-0 hidden">
+          <div class="shrink-0 space-y-1">
+            <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
+              Configure website LiveChat
+            </h2>
+            <p class="text-xs sm:text-sm text-gray-500 leading-relaxed">
+              Customize your chat widget appearance and install the embed snippet on your website.
+            </p>
+          </div>
+
+          <!-- 1-Line Sub-step Switcher Pills -->
+          <div class="flex items-center p-1 bg-gray-100 rounded-xl w-full max-w-sm mx-auto text-xs border border-gray-200/60 shadow-2xs select-none">
+            <button
+              type="button"
+              onclick="setLiveChatSubStep(1)"
+              id="lc-tab-1"
+              class="flex-1 h-8 px-2 rounded-lg transition-all flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer shrink-0 bg-white text-gray-900 shadow-2xs font-semibold"
+            >
+              <span class="w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 bg-[#23B750] text-white" id="lc-tab-num-1">1</span>
+              <span class="text-xs">Customize</span>
+            </button>
+
+            <button
+              type="button"
+              onclick="setLiveChatSubStep(2)"
+              id="lc-tab-2"
+              class="flex-1 h-8 px-2 rounded-lg transition-all flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer shrink-0 text-gray-500 hover:text-gray-900 font-medium"
+            >
+              <span class="w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 bg-gray-200 text-gray-600" id="lc-tab-num-2">2</span>
+              <span class="text-xs">Assign</span>
+            </button>
+
+            <button
+              type="button"
+              onclick="setLiveChatSubStep(3)"
+              id="lc-tab-3"
+              class="flex-1 h-8 px-2 rounded-lg transition-all flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer shrink-0 text-gray-500 hover:text-gray-900 font-medium"
+            >
+              <span class="w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 bg-gray-200 text-gray-600" id="lc-tab-num-3">3</span>
+              <span class="text-xs">Install</span>
+            </button>
+          </div>
+
+          <!-- LC SUB-STEP 1: CUSTOMIZE -->
+          <div id="lc-substep-1" class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+            <!-- Inputs Column -->
+            <div class="space-y-3">
+              <div class="space-y-1">
+                <label class="block text-xs font-semibold text-gray-700">Website Name</label>
+                <input
+                  id="lc-website-name"
+                  type="text"
+                  placeholder="e.g. Acme Corp"
+                  class="w-full h-10 px-3.5 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#23B750]/20 focus:border-[#23B750] shadow-2xs transition-all"
+                  oninput="updateLiveChatPreview()"
+                />
+              </div>
+
+              <div class="space-y-1">
+                <label class="block text-xs font-semibold text-gray-700">Domain</label>
+                <input
+                  id="lc-website-domain"
+                  type="text"
+                  placeholder="e.g. www.acme.com"
+                  class="w-full h-10 px-3.5 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#23B750]/20 focus:border-[#23B750] shadow-2xs transition-all"
+                  oninput="updateLiveChatPreview()"
+                />
+              </div>
+
+              <!-- Brand Accent Color -->
+              <div class="space-y-1.5">
+                <div class="flex items-center justify-between">
+                  <label class="block text-xs font-semibold text-gray-700">Brand Accent Color</label>
+                  <span id="lc-color-hex-label" class="text-[11px] font-mono text-gray-400">#23B750</span>
+                </div>
+
+                <div class="flex items-center gap-2 flex-wrap" id="color-swatches-container">
+                  <!-- Swatches generated in JS -->
+                </div>
+              </div>
+
+              <div class="space-y-1">
+                <label class="block text-xs font-semibold text-gray-700">Greeting Heading</label>
+                <input
+                  id="lc-greeting-heading"
+                  type="text"
+                  placeholder="e.g. Welcome! How can we help?"
+                  value="Welcome!"
+                  class="w-full h-10 px-3.5 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#23B750]/20 focus:border-[#23B750] shadow-2xs transition-all"
+                  oninput="updateLiveChatPreview()"
+                />
+              </div>
+
+              <!-- Auto Greeting Toggle -->
+              <div class="p-2.5 bg-white border border-gray-200 rounded-xl flex items-center justify-between shadow-2xs">
+                <div>
+                  <div class="text-xs font-semibold text-gray-900">Auto-show greeting bubble</div>
+                  <div class="text-[10px] text-gray-500">Show welcome prompt to visitors</div>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer shrink-0">
+                  <input
+                    id="lc-autogreeting-toggle"
+                    type="checkbox"
+                    checked
+                    class="sr-only peer"
+                    onchange="updateLiveChatPreview()"
+                  />
+                  <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#23B750] shadow-2xs"></div>
+                </label>
+              </div>
+            </div>
+
+            <!-- Preview Column -->
+            <div class="flex flex-col">
+              <div class="text-xs font-semibold text-gray-500 mb-1">
+                <span>Live Appearance Preview</span>
+              </div>
+
+              <!-- Browser Mockup Window -->
+              <div class="flex-1 bg-white border border-gray-200 rounded-2xl shadow-2xs overflow-hidden flex flex-col h-full min-h-[250px] relative">
+                <div class="bg-gray-100 px-3 py-1.5 border-b border-gray-200 flex items-center gap-2 text-xs text-gray-500 shrink-0">
+                  <div class="flex items-center gap-1">
+                    <span class="w-2 h-2 rounded-full bg-[#FF5F56]"></span>
+                    <span class="w-2 h-2 rounded-full bg-[#FFBD2E]"></span>
+                    <span class="w-2 h-2 rounded-full bg-[#27C93F]"></span>
+                  </div>
+                  <div id="lc-preview-url" class="flex-1 bg-white px-2 py-0.5 rounded-md text-[10px] text-gray-600 truncate text-center border border-gray-200 shadow-2xs font-mono">
+                    https://www.yourwebsite.com
+                  </div>
+                </div>
+
+                <!-- Website canvas -->
+                <div class="p-3.5 flex-1 bg-gradient-to-b from-gray-50/60 to-gray-100/30 flex flex-col justify-between relative overflow-hidden">
+                  <div class="space-y-1.5 opacity-50">
+                    <div class="h-2.5 bg-gray-300 rounded w-1/3"></div>
+                    <div class="h-2 bg-gray-200 rounded w-3/4"></div>
+                    <div class="h-2 bg-gray-200 rounded w-1/2"></div>
+                  </div>
+
+                  <!-- Floating Widget -->
+                  <div class="absolute bottom-2.5 right-2.5 flex flex-col items-end space-y-1.5 max-w-[190px]">
+                    <!-- Greeting Bubble -->
+                    <div
+                      id="lc-preview-bubble"
+                      class="p-2 rounded-xl bg-white border border-gray-200 shadow-md text-left text-xs space-y-0.5"
+                    >
+                      <div class="flex items-center gap-1 font-bold text-gray-900 text-[11px]">
+                        <span id="lc-bubble-dot" class="w-1.5 h-1.5 rounded-full bg-[#23B750]"></span>
+                        <span id="lc-preview-heading-text" class="truncate">Welcome!</span>
+                      </div>
+                      <p class="text-[9px] text-gray-500 leading-tight line-clamp-2">
+                        Chat with our sales team or get a quick quotation.
+                      </p>
+                    </div>
+
+                    <!-- Main Button -->
+                    <button
+                      type="button"
+                      id="lc-preview-circle-btn"
+                      class="w-9 h-9 rounded-full text-white flex items-center justify-center shadow-md hover:scale-105 transition-all cursor-pointer bg-[#23B750]"
+                    >
+                      <i data-lucide="message-square" class="w-4 h-4"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Proceed to Assign -->
+            <div class="col-span-full pt-1.5 flex justify-center">
+              <button
+                type="button"
+                onclick="setLiveChatSubStep(2)"
+                class="h-9 px-4 bg-[#23B750] hover:bg-[#1a943e] text-white rounded-xl text-xs font-bold shadow-xs cursor-pointer transition-colors flex items-center gap-1.5"
+              >
+                <span>Continue to Assign Reps</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- LC SUB-STEP 2: ASSIGN AGENTS -->
+          <div id="lc-substep-2" class="space-y-3 pt-1 text-left flex-1 flex flex-col min-h-0 hidden">
+            <div class="p-3 bg-emerald-50/60 border border-emerald-200/70 rounded-xl text-xs text-emerald-900 flex items-center gap-2 shrink-0">
+              <i data-lucide="info" class="w-4 h-4 text-[#23B750] shrink-0"></i>
+              <span>Select team members who will receive incoming live chats from this website widget.</span>
+            </div>
+
+            <div class="bg-gray-50 border border-gray-200/80 rounded-2xl p-3.5 sm:p-4 flex-1 flex flex-col min-h-0 space-y-2.5 shadow-2xs">
+              <div class="flex items-center justify-between text-xs shrink-0">
+                <span class="font-bold text-gray-800 text-xs">Widget Chat Reps</span>
+                <span id="lc-agents-count-badge" class="text-[11px] font-semibold text-gray-500">1 of 3 assigned</span>
+              </div>
+
+              <div id="lc-agents-list" class="flex-1 overflow-y-auto custom-scrollbar space-y-2 pr-1 min-h-[140px]">
+                <!-- Injected dynamically -->
+              </div>
+            </div>
+
+            <div class="pt-1.5 flex justify-center shrink-0">
+              <button
+                type="button"
+                onclick="setLiveChatSubStep(3)"
+                class="h-9 px-4 bg-[#23B750] hover:bg-[#1a943e] text-white rounded-xl text-xs font-bold shadow-xs cursor-pointer transition-colors flex items-center gap-1.5"
+              >
+                <span>Continue to Install Code</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- LC SUB-STEP 3: INSTALL CODE -->
+          <div id="lc-substep-3" class="space-y-3 pt-1 text-left hidden">
+            <div class="p-3.5 bg-white border border-gray-200 rounded-2xl space-y-2.5 shadow-2xs">
+              <div class="flex items-center justify-between">
+                <div>
+                  <h3 class="text-xs font-bold text-gray-900">Add to your website HTML</h3>
+                  <p class="text-[11px] text-gray-500 mt-0.5">Paste this lightweight snippet before your closing &lt;/body&gt; tag.</p>
+                </div>
+                <button
+                  type="button"
+                  id="copy-snippet-btn"
+                  onclick="copyLiveChatSnippet()"
+                  class="h-8.5 px-3.5 bg-[#23B750] hover:bg-[#1a943e] text-white rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs"
+                >
+                  <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                  <span id="copy-snippet-text">Copy Code</span>
+                </button>
+              </div>
+
+              <div class="p-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs font-mono text-gray-800 overflow-x-auto select-all leading-relaxed">
+                &lt;script src="https://app.rakansales.com/widget.js" data-token="rks_live_wgt_9824f8" defer&gt;&lt;/script&gt;
+              </div>
+            </div>
+
+            <div class="p-3 bg-white border border-gray-200 rounded-xl text-xs text-gray-600 flex items-center justify-between gap-3 shadow-2xs">
+              <div class="flex items-center gap-2">
+                <i data-lucide="mail" class="w-4 h-4 text-gray-400"></i>
+                <span class="text-xs">Need your developer or webmaster to install it?</span>
+              </div>
+              <button
+                type="button"
+                onclick="emailSnippet()"
+                class="px-3 py-1.5 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-lg font-semibold text-gray-800 transition-colors cursor-pointer text-xs flex items-center gap-1.5 shadow-2xs"
+              >
+                <i data-lucide="mail" class="w-3.5 h-3.5 text-gray-500"></i>
+                <span>Email Developer</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- FOOTER NAVIGATION (Steps 1–4) -->
+      <footer class="pt-3.5 border-t border-gray-200/70 flex items-center justify-between shrink-0 mt-3">
+        <button
+          type="button"
+          id="btn-back"
+          onclick="prevStep()"
+          class="text-xs font-semibold text-gray-500 hover:text-gray-900 transition-colors flex items-center gap-1 cursor-pointer opacity-0 pointer-events-none"
+        >
+          <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+          <span>Back</span>
+        </button>
+
+        <div class="flex items-center gap-2">
+          <button
+            type="button"
+            id="btn-skip-step"
+            onclick="triggerSkipModal()"
+            class="text-xs font-medium text-gray-400 hover:text-gray-700 px-2.5 py-1.5 cursor-pointer transition-colors hidden"
+          >
+            Skip step
+          </button>
+
+          <button
+            type="button"
+            id="btn-continue"
+            onclick="handleContinueClick()"
+            class="h-10 px-6 active:scale-[0.99] text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 cursor-pointer focus-visible:ring-2 focus-visible:ring-[#23B750] bg-[#23B750] hover:bg-[#1a943e] text-white shadow-xs"
+          >
+            <span id="btn-continue-text">Continue to Team</span>
+            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+      </footer>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         PROVISIONING LOADING STAGE
+         ══════════════════════════════════════════ -->
+    <div
+      id="stage-provisioning"
+      class="w-full max-w-xl mx-auto px-6 py-16 my-auto flex flex-col items-center justify-center text-center hidden"
+    >
+      <div class="space-y-6 flex flex-col items-center">
+        <div class="w-14 h-14 rounded-2xl bg-emerald-50 border border-emerald-200/80 flex items-center justify-center text-[#23B750] shadow-sm">
+          <i data-lucide="loader-2" class="w-7 h-7 animate-spin text-[#23B750]"></i>
+        </div>
+
+        <div class="space-y-2">
+          <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
+            Setting up your workspace...
+          </h2>
+          <p class="text-xs sm:text-sm text-gray-500 max-w-sm mx-auto leading-relaxed">
+            Activating WhatsApp routing, LiveChat embed keys, and team permissions for
+            <strong id="provisioning-company-name" class="text-gray-900 font-semibold">your workspace</strong>.
+          </p>
+        </div>
+
+        <div class="w-48 h-1.5 bg-gray-200/80 rounded-full overflow-hidden">
+          <div class="h-full bg-[#23B750] rounded-full animate-progress"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         STEP 5: READY / SUCCESS CELEBRATION
+         ══════════════════════════════════════════ -->
+    <div
+      id="stage-success"
+      class="w-full max-w-md mx-auto px-6 py-16 my-auto flex flex-col justify-center text-center hidden"
+    >
+      <div class="space-y-6">
+        <div class="w-16 h-16 rounded-2xl bg-emerald-50 border border-emerald-200/80 text-[#23B750] flex items-center justify-center mx-auto shadow-sm">
+          <i data-lucide="check" class="w-8 h-8 stroke-[3]"></i>
+        </div>
+
+        <div class="space-y-2">
+          <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
+            You're all set!
+          </h2>
+          <p class="text-xs sm:text-sm text-gray-500 max-w-sm mx-auto leading-relaxed">
+            Your RakanSales setup is complete. Your sales channels and team permissions are active.
+          </p>
+        </div>
+
+        <!-- Primary & Secondary Launch CTAs -->
+        <div class="pt-4 space-y-3">
+          <button
+            type="button"
+            onclick="alert('Launch Dashboard clicked! (In Vue, this routes to /dashboard)');"
+            class="h-11 px-8 bg-[#23B750] hover:bg-[#1a943e] active:scale-[0.99] text-white text-xs font-bold rounded-xl transition-all shadow-xs inline-flex items-center gap-2 cursor-pointer focus-visible:ring-2 focus-visible:ring-[#23B750]"
+          >
+            <span>Launch Dashboard</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </button>
+
+          <div class="pt-1">
+            <a
+              href="javascript:void(0)"
+              onclick="alert('Direct Omnichannel clicked! (In Vue, this routes to /omnichannel)');"
+              class="text-xs font-semibold text-gray-500 hover:text-gray-900 transition-colors"
+            >
+              Or go directly to Omnichannel Conversations →
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ══════════════════════════════════════════
+       SKIP CONFIRMATION MODAL
+       ══════════════════════════════════════════ -->
+  <div
+    id="skip-modal"
+    class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs hidden"
+    onclick="if(event.target === this) cancelSkip();"
+  >
+    <div class="bg-white rounded-2xl max-w-sm w-full p-5 border border-gray-200/90 shadow-xl space-y-4 text-left">
+      <div class="flex items-start gap-3">
+        <div class="w-10 h-10 rounded-xl bg-amber-50 border border-amber-200/60 text-amber-600 flex items-center justify-center shrink-0">
+          <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+        </div>
+        <div class="space-y-1">
+          <h3 id="skip-modal-title" class="text-sm font-bold text-gray-900">
+            Skip Step?
+          </h3>
+          <p id="skip-modal-desc" class="text-xs text-gray-500 leading-relaxed">
+            Are you sure you want to skip this setup step?
+          </p>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-2 pt-2 border-t border-gray-100">
+        <button
+          type="button"
+          onclick="cancelSkip()"
+          class="px-3.5 py-2 text-xs font-semibold text-gray-600 hover:text-gray-900 bg-gray-100 hover:bg-gray-200/80 rounded-xl transition-colors cursor-pointer"
+        >
+          Keep Configuring
+        </button>
+        <button
+          type="button"
+          onclick="confirmSkipAnyway()"
+          class="px-3.5 py-2 text-xs font-bold text-white bg-gray-900 hover:bg-black rounded-xl transition-all cursor-pointer shadow-xs"
+        >
+          Skip Anyway
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       JAVASCRIPT STATE & INTERACTIONS ENGINE
+       ══════════════════════════════════════════ -->
+  <script>
+    const STORAGE_KEY = 'rakansales_crm_setup_checklist_v5';
+
+    // Core Wizard State
+    const state = {
+      currentStep: 1,
+      completedSteps: [],
+      taskStatus: {
+        team: false,
+        whatsapp: false,
+        livechat: false,
+      },
+      team: {
+        members: [] // { email, role }
+      },
+      whatsapp: {
+        connectionMethod: 'qr',
+        inboxName: 'Sales Team WhatsApp',
+        isConnected: false,
+        assignedAgents: ['justin@veecotech.com']
+      },
+      widget: {
+        websiteName: '',
+        websiteDomain: '',
+        widgetColor: '#23B750',
+        welcomeHeading: 'Welcome!',
+        welcomeTagline: 'Chat with our sales team or get a quick quotation.',
+        autoGreeting: true,
+        assignedAgents: ['justin@veecotech.com']
+      },
+      companyName: ''
+    };
+
+    // Sub-step tabs
+    let currentWaSubStep = 1;
+    let currentLcSubStep = 1;
+    let pendingEmails = [];
+    let isCustomColorInputActive = false;
+
+    const defaultColors = [
+      { name: 'Emerald Green', hex: '#23B750' },
+      { name: 'Sky Blue', hex: '#0284C7' },
+      { name: 'Indigo', hex: '#6366F1' },
+      { name: 'Purple', hex: '#8B5CF6' },
+      { name: 'Pink Rose', hex: '#EC4899' },
+      { name: 'Vibrant Orange', hex: '#F97316' },
+      { name: 'Teal', hex: '#14B8A6' },
+      { name: 'Slate Dark', hex: '#0F172A' },
+    ];
+
+    const baseAgentList = [
+      { name: 'Justin (You)', email: 'justin@veecotech.com', role: 'Administrator', initials: 'JU' },
+      { name: 'Ahmad Faizal', email: 'ahmad@veecotech.com', role: 'Sales Agent', initials: 'AF' },
+      { name: 'Sarah Chen', email: 'sarah@veecotech.com', role: 'Sales Lead', initials: 'SC' },
+    ];
+
+    const subtitles = {
+      1: 'Setup overview & pending checklist',
+      2: 'Invite colleagues & assign roles',
+      3: 'Connect WhatsApp Business channel',
+      4: 'Configure website LiveChat widget',
+    };
+
+    // ─────────────────────────────────────────
+    // Initializer & State Loader
+    // ─────────────────────────────────────────
+    function init() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed.team !== undefined) state.taskStatus.team = !!parsed.team;
+          if (parsed.whatsapp !== undefined) {
+            state.taskStatus.whatsapp = !!parsed.whatsapp;
+            state.whatsapp.isConnected = !!parsed.whatsapp;
+          }
+          if (parsed.livechat !== undefined) state.taskStatus.livechat = !!parsed.livechat;
+        }
+
+        const compName = localStorage.getItem('rakansales_company_name');
+        if (compName) {
+          state.companyName = compName;
+          const pEl = document.getElementById('provisioning-company-name');
+          if (pEl) pEl.textContent = compName;
+        }
+      } catch (e) {
+        console.error('Failed to load state', e);
+      }
+
+      setupEmailInputHandlers();
+      renderColorSwatches();
+      updateChecklistUI();
+      renderMembersList();
+      renderWhatsAppAgentsList();
+      renderLiveChatAgentsList();
+      updateLiveChatPreview();
+      updateNavUI();
+      lucide.createIcons();
+    }
+
+    function persistState() {
+      try {
+        localStorage.setItem(
+          STORAGE_KEY,
+          JSON.stringify({
+            team: state.taskStatus.team,
+            whatsapp: state.taskStatus.whatsapp,
+            livechat: state.taskStatus.livechat,
+          })
+        );
+      } catch (e) {
+        console.error('Failed to persist state', e);
+      }
+    }
+
+    function resetWizard() {
+      if (confirm('Are you sure you want to reset all setup steps?')) {
+        localStorage.removeItem(STORAGE_KEY);
+        state.currentStep = 1;
+        state.completedSteps = [];
+        state.taskStatus.team = false;
+        state.taskStatus.whatsapp = false;
+        state.taskStatus.livechat = false;
+        state.team.members = [];
+        state.whatsapp.isConnected = false;
+        state.whatsapp.inboxName = 'Sales Team WhatsApp';
+        state.whatsapp.assignedAgents = ['justin@veecotech.com'];
+        state.widget.websiteName = '';
+        state.widget.websiteDomain = '';
+        state.widget.widgetColor = '#23B750';
+        state.widget.welcomeHeading = 'Welcome!';
+        state.widget.autoGreeting = true;
+        state.widget.assignedAgents = ['justin@veecotech.com'];
+        pendingEmails = [];
+
+        document.getElementById('stage-provisioning').classList.add('hidden');
+        document.getElementById('stage-success').classList.add('hidden');
+        document.getElementById('top-stepper').classList.remove('hidden');
+        document.getElementById('stage-steps-1-4').classList.remove('hidden');
+
+        currentWaSubStep = 1;
+        currentLcSubStep = 1;
+
+        updateChecklistUI();
+        renderMembersList();
+        renderWhatsAppAgentsList();
+        renderLiveChatAgentsList();
+        updateLiveChatPreview();
+        goToStep(1);
+      }
+    }
+
+    // ─────────────────────────────────────────
+    // Navigation & Steps
+    // ─────────────────────────────────────────
+    function goToStep(stepNum) {
+      if (stepNum < 1 || stepNum > 4) return;
+      state.currentStep = stepNum;
+
+      // Hide all step sections
+      for (let s = 1; s <= 4; s++) {
+        const el = document.getElementById(`step-${s}`);
+        if (el) el.classList.toggle('hidden', s !== stepNum);
+      }
+
+      updateNavUI();
+      lucide.createIcons();
+    }
+
+    function nextStep() {
+      markStepComplete(state.currentStep);
+
+      if (state.currentStep === 2) {
+        state.taskStatus.team = true;
+        persistState();
+      } else if (state.currentStep === 3) {
+        state.taskStatus.whatsapp = true;
+        state.whatsapp.isConnected = true;
+        persistState();
+      } else if (state.currentStep === 4) {
+        state.taskStatus.livechat = true;
+        persistState();
+      }
+
+      if (state.currentStep < 4) {
+        goToStep(state.currentStep + 1);
+      } else {
+        // Complete Setup & Launch
+        state.taskStatus.team = true;
+        state.taskStatus.whatsapp = true;
+        state.taskStatus.livechat = true;
+        persistState();
+
+        showProvisioningScreen();
+      }
+    }
+
+    function prevStep() {
+      if (state.currentStep > 1) {
+        goToStep(state.currentStep - 1);
+      }
+    }
+
+    function markStepComplete(stepNum) {
+      if (!state.completedSteps.includes(stepNum)) {
+        state.completedSteps.push(stepNum);
+      }
+    }
+
+    function isStepConfigured() {
+      if (state.currentStep === 1) return true;
+      if (state.currentStep === 2) {
+        return state.team.members.length > 0 || state.taskStatus.team;
+      }
+      if (state.currentStep === 3) {
+        return state.whatsapp.isConnected || state.taskStatus.whatsapp;
+      }
+      if (state.currentStep === 4) {
+        const domain = (document.getElementById('lc-website-domain')?.value || '').trim();
+        return domain.length > 0 || state.taskStatus.livechat;
+      }
+      return true;
+    }
+
+    function handleContinueClick() {
+      if (state.currentStep === 1) {
+        nextStep();
+        return;
+      }
+
+      if (isStepConfigured()) {
+        nextStep();
+      } else {
+        triggerSkipModal();
+      }
+    }
+
+    function updateNavUI() {
+      const step = state.currentStep;
+
+      // Update Top Stepper text
+      document.getElementById('step-counter').textContent = `Step ${step} of 4`;
+      document.getElementById('step-subtitle').textContent = subtitles[step] || 'Workspace setup';
+
+      // Update Progress Bars
+      for (let s = 1; s <= 4; s++) {
+        const bar = document.getElementById(`bar-${s}`);
+        if (!bar) continue;
+        const isClickable = state.completedSteps.includes(s) || s <= step;
+        bar.className = `h-1.5 rounded-full transition-all duration-300 ${
+          step >= s ? 'bg-[#23B750]' : 'bg-gray-200/80'
+        } ${isClickable ? 'cursor-pointer hover:opacity-80' : 'cursor-default'}`;
+      }
+
+      // Back Button
+      const backBtn = document.getElementById('btn-back');
+      if (step === 1) {
+        backBtn.classList.add('opacity-0', 'pointer-events-none');
+      } else {
+        backBtn.classList.remove('opacity-0', 'pointer-events-none');
+      }
+
+      // Skip Button
+      const skipBtn = document.getElementById('btn-skip-step');
+      if (step >= 2 && step <= 4) {
+        skipBtn.classList.remove('hidden');
+      } else {
+        skipBtn.classList.add('hidden');
+      }
+
+      // Continue Button Label & Styling
+      const continueBtn = document.getElementById('btn-continue');
+      const continueText = document.getElementById('btn-continue-text');
+      const continueTexts = {
+        1: 'Continue to Team',
+        2: 'Continue to WhatsApp',
+        3: 'Continue to LiveChat',
+        4: 'Complete Setup & Launch'
+      };
+      continueText.textContent = continueTexts[step] || 'Continue';
+
+      const configured = (step === 1 || isStepConfigured());
+      if (configured) {
+        continueBtn.className = 'h-10 px-6 active:scale-[0.99] text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 cursor-pointer focus-visible:ring-2 focus-visible:ring-[#23B750] bg-[#23B750] hover:bg-[#1a943e] text-white shadow-xs';
+      } else {
+        continueBtn.className = 'h-10 px-6 active:scale-[0.99] text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 cursor-pointer focus-visible:ring-2 focus-visible:ring-[#23B750] bg-gray-200 hover:bg-gray-300 text-gray-700 shadow-2xs';
+      }
+    }
+
+    // ─────────────────────────────────────────
+    // Skip Confirmation Modal
+    // ─────────────────────────────────────────
+    function triggerSkipModal() {
+      const step = state.currentStep;
+      const titles = {
+        2: 'Skip Team Setup?',
+        3: 'Skip WhatsApp Setup?',
+        4: 'Skip LiveChat Setup?'
+      };
+      const messages = {
+        2: 'You have not added any team members yet. Are you sure you want to proceed without inviting your team?',
+        3: 'WhatsApp is not connected yet. Incoming customer messages will not sync until linked. Are you sure you want to skip?',
+        4: 'Your website LiveChat widget has not been configured yet. Website visitors will not see the chat bubble. Are you sure you want to skip?'
+      };
+
+      document.getElementById('skip-modal-title').textContent = titles[step] || 'Skip this step?';
+      document.getElementById('skip-modal-desc').textContent = messages[step] || 'Are you sure you want to skip this setup step?';
+      document.getElementById('skip-modal').classList.remove('hidden');
+    }
+
+    function cancelSkip() {
+      document.getElementById('skip-modal').classList.add('hidden');
+    }
+
+    function confirmSkipAnyway() {
+      cancelSkip();
+      nextStep();
+    }
+
+    // ─────────────────────────────────────────
+    // Step 1: Checklist Dynamic Updating
+    // ─────────────────────────────────────────
+    function updateChecklistUI() {
+      let count = 0;
+      if (state.taskStatus.team) count++;
+      if (state.taskStatus.whatsapp) count++;
+      if (state.taskStatus.livechat) count++;
+
+      const pct = Math.round((count / 3) * 100);
+      document.getElementById('checklist-progress-text').textContent = `${count}/3 completed`;
+      document.getElementById('checklist-progress-bar').style.width = `${pct}%`;
+
+      // Team card
+      updateChecklistCard('team', state.taskStatus.team, 'users', 'Set up', 'Review');
+      // WhatsApp card
+      updateChecklistCard('whatsapp', state.taskStatus.whatsapp, 'message-circle', 'Connect', 'Review');
+      // LiveChat card
+      updateChecklistCard('livechat', state.taskStatus.livechat, 'message-square-code', 'Install', 'Review');
+
+      lucide.createIcons();
+    }
+
+    function updateChecklistCard(type, isCompleted, defaultIcon, defaultStatus, completedStatus) {
+      const card = document.getElementById(`checklist-card-${type}`);
+      const iconContainer = document.getElementById(`checklist-icon-${type}`);
+      const statusText = document.getElementById(`checklist-status-${type}`);
+
+      if (isCompleted) {
+        card.className = 'w-full p-4 rounded-2xl border transition-all duration-150 cursor-pointer flex items-center justify-between gap-3 text-left group border-[#23B750] bg-emerald-50/40 ring-1 ring-[#23B750]/20 shadow-2xs';
+        iconContainer.className = 'w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition-colors bg-[#23B750] text-white shadow-2xs';
+        iconContainer.innerHTML = '<i data-lucide="check" class="w-5 h-5 stroke-[2.5]"></i>';
+        statusText.textContent = completedStatus;
+      } else {
+        card.className = 'w-full p-4 rounded-2xl border transition-all duration-150 cursor-pointer flex items-center justify-between gap-3 text-left group border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50/60 shadow-2xs';
+        iconContainer.className = 'w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition-colors bg-gray-100 text-gray-500 group-hover:bg-[#23B750]/10 group-hover:text-[#23B750]';
+        iconContainer.innerHTML = `<i data-lucide="${defaultIcon}" class="w-5 h-5"></i>`;
+        statusText.textContent = defaultStatus;
+      }
+    }
+
+    // ─────────────────────────────────────────
+    // Step 2: Multi-Email Input & Team Members
+    // ─────────────────────────────────────────
+    function isValidEmail(val) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val.trim());
+    }
+
+    function setupEmailInputHandlers() {
+      const input = document.getElementById('team-email-input');
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ',' || e.key === ' ') {
+          e.preventDefault();
+          if (input.value.trim()) {
+            addPendingEmail(input.value);
+            input.value = '';
+          }
+        } else if (e.key === 'Backspace' && input.value === '' && pendingEmails.length > 0) {
+          pendingEmails.pop();
+          renderPendingChips();
+          updateInviteBtnState();
+        }
+      });
+
+      input.addEventListener('input', () => {
+        updateInviteBtnState();
+      });
+
+      input.addEventListener('paste', (e) => {
+        const paste = (e.clipboardData || window.clipboardData).getData('text') || '';
+        if (paste.includes(',') || paste.includes(' ') || paste.includes('\n')) {
+          e.preventDefault();
+          const split = paste.split(/[\s,\n]+/);
+          split.forEach((em) => {
+            if (em.trim()) addPendingEmail(em);
+          });
+          input.value = '';
+        }
+      });
+    }
+
+    function addPendingEmail(val) {
+      const cleaned = val.trim().toLowerCase();
+      if (
+        isValidEmail(cleaned) &&
+        !pendingEmails.includes(cleaned) &&
+        !state.team.members.some((m) => m.email === cleaned)
+      ) {
+        pendingEmails.push(cleaned);
+        renderPendingChips();
+        updateInviteBtnState();
+      }
+    }
+
+    function removePendingEmail(idx) {
+      pendingEmails.splice(idx, 1);
+      renderPendingChips();
+      updateInviteBtnState();
+    }
+
+    function renderPendingChips() {
+      const container = document.getElementById('pending-chips-container');
+      container.innerHTML = pendingEmails.map((email, idx) => `
+        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-gray-100 border border-gray-200 text-gray-800 text-xs font-medium">
+          <span>${email}</span>
+          <button
+            type="button"
+            onclick="removePendingEmail(${idx})"
+            class="text-gray-400 hover:text-gray-700 hover:bg-gray-200 rounded-full p-0.5 transition-colors cursor-pointer"
+            title="Remove email"
+          >
+            <i data-lucide="x" class="w-3 h-3"></i>
+          </button>
+        </span>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    function updateInviteBtnState() {
+      const input = document.getElementById('team-email-input');
+      const hasTypedValid = isValidEmail(input.value);
+      const total = pendingEmails.length + (hasTypedValid ? 1 : 0);
+
+      const btn = document.getElementById('team-invite-btn');
+      const btnText = document.getElementById('team-invite-btn-text');
+
+      if (total > 0) {
+        btn.disabled = false;
+        btnText.textContent = total > 1 ? `Invite (${total})` : 'Invite';
+      } else {
+        btn.disabled = true;
+        btnText.textContent = 'Invite';
+      }
+    }
+
+    function commitInvites() {
+      const input = document.getElementById('team-email-input');
+      if (input.value.trim()) {
+        addPendingEmail(input.value);
+        input.value = '';
+      }
+
+      const role = document.getElementById('team-role-select').value;
+      pendingEmails.forEach((email) => {
+        if (!state.team.members.some((m) => m.email === email)) {
+          state.team.members.push({ email, role });
+        }
+      });
+
+      pendingEmails = [];
+      renderPendingChips();
+      updateInviteBtnState();
+      renderMembersList();
+      renderWhatsAppAgentsList();
+      renderLiveChatAgentsList();
+      updateNavUI();
+    }
+
+    function removeMember(idx) {
+      state.team.members.splice(idx, 1);
+      renderMembersList();
+      renderWhatsAppAgentsList();
+      renderLiveChatAgentsList();
+      updateNavUI();
+    }
+
+    function updateMemberRole(idx, newRole) {
+      if (state.team.members[idx]) {
+        state.team.members[idx].role = newRole;
+      }
+    }
+
+    function renderMembersList() {
+      const list = document.getElementById('members-list');
+      const countBadge = document.getElementById('members-count-badge');
+      const totalCount = state.team.members.length + 1;
+      countBadge.textContent = `${totalCount} active member${totalCount > 1 ? 's' : ''}`;
+
+      const membersHtml = state.team.members.map((member, idx) => `
+        <div class="flex items-center justify-between p-3 bg-white border border-gray-200/90 rounded-xl text-xs group hover:border-gray-300 transition-colors shadow-2xs">
+          <div class="flex items-center gap-3 min-w-0">
+            <div class="w-8 h-8 rounded-full bg-emerald-50 text-emerald-800 font-bold flex items-center justify-center text-[10px] border border-emerald-200/70 shrink-0">
+              ${member.email.slice(0, 2).toUpperCase()}
+            </div>
+            <div class="min-w-0">
+              <div class="font-bold text-gray-900 leading-none truncate">${member.email}</div>
+              <div class="text-[11px] text-gray-500 leading-none mt-1">Role: ${member.role}</div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2 shrink-0">
+            <div class="relative">
+              <select
+                onchange="updateMemberRole(${idx}, this.value)"
+                class="h-7 pl-2.5 pr-6 bg-gray-100 hover:bg-gray-200 border border-gray-200 rounded-lg text-xs font-semibold text-gray-800 focus:outline-none appearance-none cursor-pointer transition-colors"
+              >
+                <option value="Agent" ${member.role === 'Agent' ? 'selected' : ''}>Agent</option>
+                <option value="Manager" ${member.role === 'Manager' ? 'selected' : ''}>Manager</option>
+                <option value="Admin" ${member.role === 'Admin' ? 'selected' : ''}>Admin</option>
+              </select>
+              <i data-lucide="chevron-down" class="w-3 h-3 text-gray-500 absolute right-1.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+            </div>
+
+            <button
+              type="button"
+              onclick="removeMember(${idx})"
+              class="p-1.5 text-gray-400 hover:text-rose-600 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer"
+              title="Remove invite"
+            >
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+        </div>
+      `).join('');
+
+      list.innerHTML = `
+        <div class="flex items-center justify-between p-3 bg-white border border-gray-200/90 rounded-xl text-xs shadow-2xs">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-[#23B750] text-white font-bold flex items-center justify-center text-[10px] shadow-2xs">
+              YOU
+            </div>
+            <div>
+              <div class="font-bold text-gray-900 leading-none">You</div>
+              <span class="text-gray-400 text-[11px] mt-1 block leading-none">Workspace Administrator</span>
+            </div>
+          </div>
+          <span class="px-2.5 py-1 rounded-lg bg-gray-100 text-gray-700 font-semibold text-xs">Owner</span>
+        </div>
+        ${membersHtml}
+      `;
+      lucide.createIcons();
+    }
+
+    function copyInviteLink() {
+      navigator.clipboard.writeText('https://rakansales.com/join/workspace-invite-8371');
+      const textEl = document.getElementById('copy-link-text');
+      textEl.textContent = 'Copied link!';
+      setTimeout(() => {
+        textEl.textContent = 'Copy invite link';
+      }, 2000);
+    }
+
+    // ─────────────────────────────────────────
+    // Step 3: WhatsApp Interactive Flows
+    // ─────────────────────────────────────────
+    function setWhatsAppSubStep(sub) {
+      currentWaSubStep = sub;
+      for (let i = 1; i <= 3; i++) {
+        const el = document.getElementById(`wa-substep-${i}`);
+        const tab = document.getElementById(`wa-tab-${i}`);
+        const tabNum = document.getElementById(`wa-tab-num-${i}`);
+
+        if (el) el.classList.toggle('hidden', i !== sub);
+        if (tab) {
+          if (i === sub) {
+            tab.className = 'flex-1 h-8 px-2 rounded-lg transition-all flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer shrink-0 bg-white text-gray-900 shadow-2xs font-semibold';
+            tabNum.className = 'w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 bg-[#23B750] text-white';
+          } else {
+            tab.className = 'flex-1 h-8 px-2 rounded-lg transition-all flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer shrink-0 text-gray-500 hover:text-gray-900 font-medium';
+            tabNum.className = 'w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 bg-gray-200 text-gray-600';
+          }
+        }
+      }
+      lucide.createIcons();
+    }
+
+    function selectWhatsAppMethod(method) {
+      state.whatsapp.connectionMethod = method;
+      const qrBtn = document.getElementById('wa-method-qr');
+      const cloudBtn = document.getElementById('wa-method-cloud_api');
+
+      if (method === 'qr') {
+        qrBtn.className = 'p-4 rounded-2xl border text-left transition-all duration-150 cursor-pointer flex flex-col justify-between group border-[#23B750] bg-emerald-50/50 ring-2 ring-[#23B750]/15 shadow-xs';
+        cloudBtn.className = 'p-4 rounded-2xl border text-left transition-all duration-150 cursor-pointer flex flex-col justify-between group border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50/60 shadow-2xs';
+      } else {
+        cloudBtn.className = 'p-4 rounded-2xl border text-left transition-all duration-150 cursor-pointer flex flex-col justify-between group border-[#23B750] bg-emerald-50/50 ring-2 ring-[#23B750]/15 shadow-xs';
+        qrBtn.className = 'p-4 rounded-2xl border text-left transition-all duration-150 cursor-pointer flex flex-col justify-between group border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50/60 shadow-2xs';
+      }
+    }
+
+    function goToWhatsAppLinkPhone() {
+      setWhatsAppSubStep(2);
+      if (!state.whatsapp.isConnected) {
+        showWhatsAppFlowState('generating');
+        setTimeout(() => {
+          showWhatsAppFlowState('ready');
+        }, 800);
+      } else {
+        showWhatsAppFlowState('connected');
+      }
+    }
+
+    function showWhatsAppFlowState(stateName) {
+      ['generating', 'ready', 'linking', 'connected'].forEach((s) => {
+        const el = document.getElementById(`wa-flow-${s}`);
+        if (el) el.classList.toggle('hidden', s !== stateName);
+      });
+      lucide.createIcons();
+    }
+
+    function startWhatsAppLinkingSimulation() {
+      showWhatsAppFlowState('linking');
+      setTimeout(() => {
+        state.whatsapp.isConnected = true;
+        state.taskStatus.whatsapp = true;
+        persistState();
+        const inboxName = document.getElementById('wa-inbox-name')?.value || 'Sales Team WhatsApp';
+        state.whatsapp.inboxName = inboxName;
+        document.getElementById('wa-connected-label').textContent = inboxName;
+        document.getElementById('wa-banner-label').textContent = inboxName;
+        showWhatsAppFlowState('connected');
+        updateChecklistUI();
+        updateNavUI();
+      }, 1400);
+    }
+
+    function disconnectWhatsApp() {
+      state.whatsapp.isConnected = false;
+      state.taskStatus.whatsapp = false;
+      persistState();
+      updateChecklistUI();
+      updateNavUI();
+      showWhatsAppFlowState('generating');
+      setTimeout(() => {
+        showWhatsAppFlowState('ready');
+      }, 700);
+    }
+
+    function getAllAgents() {
+      const invited = state.team.members.map((m) => ({
+        name: m.email.split('@')[0],
+        email: m.email,
+        role: m.role,
+        initials: m.email.slice(0, 2).toUpperCase()
+      }));
+      return [...baseAgentList, ...invited];
+    }
+
+    function renderWhatsAppAgentsList() {
+      const container = document.getElementById('wa-agents-list');
+      const agents = getAllAgents();
+      const countBadge = document.getElementById('wa-agents-count-badge');
+      const assigned = state.whatsapp.assignedAgents;
+      countBadge.textContent = `${assigned.length} of ${agents.length} assigned`;
+
+      container.innerHTML = agents.map((agent) => `
+        <div class="flex items-center justify-between p-3 bg-white border border-gray-200/90 rounded-xl text-xs hover:border-gray-300 transition-colors shadow-2xs">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-full bg-emerald-50 text-emerald-800 font-bold flex items-center justify-center text-[10px] border border-emerald-200/60">
+              ${agent.initials}
+            </div>
+            <div>
+              <div class="font-bold text-gray-900 leading-none">${agent.name}</div>
+              <div class="text-gray-500 text-[11px] leading-none mt-1">${agent.role} · ${agent.email}</div>
+            </div>
+          </div>
+
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              ${assigned.includes(agent.email) ? 'checked' : ''}
+              onchange="toggleWhatsAppAgent('${agent.email}')"
+              class="sr-only peer"
+            />
+            <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#23B750] shadow-2xs"></div>
+          </label>
+        </div>
+      `).join('');
+    }
+
+    function toggleWhatsAppAgent(email) {
+      const list = state.whatsapp.assignedAgents;
+      const idx = list.indexOf(email);
+      if (idx >= 0) {
+        list.splice(idx, 1);
+      } else {
+        list.push(email);
+      }
+      renderWhatsAppAgentsList();
+    }
+
+    // ─────────────────────────────────────────
+    // Step 4: Website LiveChat
+    // ─────────────────────────────────────────
+    function setLiveChatSubStep(sub) {
+      currentLcSubStep = sub;
+      for (let i = 1; i <= 3; i++) {
+        const el = document.getElementById(`lc-substep-${i}`);
+        const tab = document.getElementById(`lc-tab-${i}`);
+        const tabNum = document.getElementById(`lc-tab-num-${i}`);
+
+        if (el) el.classList.toggle('hidden', i !== sub);
+        if (tab) {
+          if (i === sub) {
+            tab.className = 'flex-1 h-8 px-2 rounded-lg transition-all flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer shrink-0 bg-white text-gray-900 shadow-2xs font-semibold';
+            tabNum.className = 'w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 bg-[#23B750] text-white';
+          } else {
+            tab.className = 'flex-1 h-8 px-2 rounded-lg transition-all flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer shrink-0 text-gray-500 hover:text-gray-900 font-medium';
+            tabNum.className = 'w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 bg-gray-200 text-gray-600';
+          }
+        }
+      }
+      lucide.createIcons();
+    }
+
+    function renderColorSwatches() {
+      const container = document.getElementById('color-swatches-container');
+      const currentColor = state.widget.widgetColor.toLowerCase();
+
+      const swatchesHtml = defaultColors.map((color) => {
+        const isSelected = currentColor === color.hex.toLowerCase();
+        return `
+          <button
+            type="button"
+            onclick="setWidgetColor('${color.hex}')"
+            class="w-6 h-6 rounded-full border transition-all flex items-center justify-center cursor-pointer shadow-2xs ${
+              isSelected ? 'border-gray-900 ring-2 ring-gray-900/20 scale-110' : 'border-black/10 hover:scale-105'
+            }"
+            style="background-color: ${color.hex};"
+            title="${color.name}"
+          >
+            ${isSelected ? '<i data-lucide="check" class="w-3 h-3 text-white stroke-[2.5]"></i>' : ''}
+          </button>
+        `;
+      }).join('');
+
+      container.innerHTML = `
+        ${swatchesHtml}
+        <button
+          type="button"
+          onclick="toggleCustomColorInput()"
+          class="w-6 h-6 rounded-full border transition-all flex items-center justify-center cursor-pointer shadow-2xs ${
+            isCustomColorInputActive
+              ? 'border-gray-900 ring-2 ring-gray-900/20 scale-110 bg-white'
+              : 'border-dashed border-gray-300 hover:border-gray-400 bg-white text-gray-500 hover:text-gray-700 hover:scale-105'
+          }"
+          title="Add custom color"
+        >
+          <i data-lucide="plus" class="w-3.5 h-3.5 stroke-[2.5]"></i>
+        </button>
+        <div
+          id="custom-hex-box"
+          class="flex items-center h-7 px-2 bg-white border border-gray-200 rounded-lg text-xs font-mono text-gray-800 shadow-2xs focus-within:ring-1 focus-within:ring-[#23B750] focus-within:border-[#23B750] ${
+            isCustomColorInputActive ? '' : 'hidden'
+          }"
+        >
+          <span class="text-gray-400 text-xs mr-0.5">#</span>
+          <input
+            id="custom-hex-input"
+            type="text"
+            placeholder="23B750"
+            maxlength="6"
+            class="w-14 bg-transparent outline-none uppercase font-mono text-xs"
+            oninput="handleCustomHexInput(this.value)"
+          />
+        </div>
+      `;
+      lucide.createIcons();
+    }
+
+    function setWidgetColor(hex) {
+      state.widget.widgetColor = hex;
+      isCustomColorInputActive = false;
+      document.getElementById('lc-color-hex-label').textContent = hex;
+      renderColorSwatches();
+      updateLiveChatPreview();
+    }
+
+    function toggleCustomColorInput() {
+      isCustomColorInputActive = !isCustomColorInputActive;
+      renderColorSwatches();
+      if (isCustomColorInputActive) {
+        setTimeout(() => document.getElementById('custom-hex-input')?.focus(), 50);
+      }
+    }
+
+    function handleCustomHexInput(val) {
+      if (/^[0-9A-Fa-f]{6}$/.test(val)) {
+        state.widget.widgetColor = '#' + val.toUpperCase();
+        document.getElementById('lc-color-hex-label').textContent = state.widget.widgetColor;
+        updateLiveChatPreview();
+      }
+    }
+
+    function updateLiveChatPreview() {
+      const domainInput = document.getElementById('lc-website-domain')?.value.trim();
+      const headingInput = document.getElementById('lc-greeting-heading')?.value.trim();
+      const autoGreeting = document.getElementById('lc-autogreeting-toggle')?.checked;
+      const color = state.widget.widgetColor;
+
+      // Update URL Preview
+      document.getElementById('lc-preview-url').textContent = domainInput ? `https://${domainInput}` : 'https://www.yourwebsite.com';
+
+      // Update Greeting Heading & Dot
+      document.getElementById('lc-preview-heading-text').textContent = headingInput || 'Welcome!';
+      document.getElementById('lc-bubble-dot').style.backgroundColor = color;
+      document.getElementById('lc-preview-circle-btn').style.backgroundColor = color;
+
+      // Auto greeting toggle
+      const bubble = document.getElementById('lc-preview-bubble');
+      if (autoGreeting) {
+        bubble.classList.remove('hidden');
+      } else {
+        bubble.classList.add('hidden');
+      }
+
+      updateNavUI();
+    }
+
+    function renderLiveChatAgentsList() {
+      const container = document.getElementById('lc-agents-list');
+      const agents = getAllAgents();
+      const countBadge = document.getElementById('lc-agents-count-badge');
+      const assigned = state.widget.assignedAgents;
+      countBadge.textContent = `${assigned.length} of ${agents.length} assigned`;
+
+      container.innerHTML = agents.map((agent) => `
+        <div class="flex items-center justify-between p-3 bg-white border border-gray-200/90 rounded-xl text-xs hover:border-gray-300 transition-colors shadow-2xs">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-full bg-emerald-50 text-emerald-800 font-bold flex items-center justify-center text-[10px] border border-emerald-200/60">
+              ${agent.initials}
+            </div>
+            <div>
+              <div class="font-bold text-gray-900 leading-none">${agent.name}</div>
+              <div class="text-gray-500 text-[11px] leading-none mt-1">${agent.role} · ${agent.email}</div>
+            </div>
+          </div>
+
+          <label class="relative inline-flex items-center cursor-pointer shrink-0">
+            <input
+              type="checkbox"
+              ${assigned.includes(agent.email) ? 'checked' : ''}
+              onchange="toggleLiveChatAgent('${agent.email}')"
+              class="sr-only peer"
+            />
+            <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#23B750] shadow-2xs"></div>
+          </label>
+        </div>
+      `).join('');
+    }
+
+    function toggleLiveChatAgent(email) {
+      const list = state.widget.assignedAgents;
+      const idx = list.indexOf(email);
+      if (idx >= 0) {
+        list.splice(idx, 1);
+      } else {
+        list.push(email);
+      }
+      renderLiveChatAgentsList();
+    }
+
+    function copyLiveChatSnippet() {
+      const code = '<script src="https://app.rakansales.com/widget.js" data-token="rks_live_wgt_9824f8" defer><\/script>';
+      navigator.clipboard.writeText(code);
+      const textEl = document.getElementById('copy-snippet-text');
+      textEl.textContent = 'Copied!';
+      setTimeout(() => {
+        textEl.textContent = 'Copy Code';
+      }, 2000);
+    }
+
+    function emailSnippet() {
+      const subject = encodeURIComponent('RakanSales LiveChat Widget Installation Snippet');
+      const body = encodeURIComponent('Hi developer,\n\nPlease install our RakanSales LiveChat widget before the closing </body> tag:\n\n<script src="https://app.rakansales.com/widget.js" data-token="rks_live_wgt_9824f8" defer><\/script>\n\nThank you!');
+      window.open(`mailto:developer@company.com?subject=${subject}&body=${body}`);
+    }
+
+    // ─────────────────────────────────────────
+    // Provisioning & Success Celebration
+    // ─────────────────────────────────────────
+    function showProvisioningScreen() {
+      document.getElementById('top-stepper').classList.add('hidden');
+      document.getElementById('stage-steps-1-4').classList.add('hidden');
+      document.getElementById('stage-provisioning').classList.remove('hidden');
+      lucide.createIcons();
+
+      setTimeout(() => {
+        showSuccessScreen();
+      }, 1500);
+    }
+
+    function showSuccessScreen() {
+      state.currentStep = 5;
+      document.getElementById('stage-provisioning').classList.add('hidden');
+      document.getElementById('stage-success').classList.remove('hidden');
+      lucide.createIcons();
+      fireConfetti();
+    }
+
+    function fireConfetti() {
+      if (typeof confetti === 'function') {
+        confetti({
+          particleCount: 90,
+          spread: 75,
+          origin: { y: 0.6 },
+          colors: ['#23B750', '#62D816', '#10B981', '#34D399', '#3B82F6', '#F59E0B']
+        });
+
+        setTimeout(() => {
+          confetti({
+            particleCount: 50,
+            angle: 60,
+            spread: 55,
+            origin: { x: 0, y: 0.65 },
+            colors: ['#23B750', '#10B981', '#3B82F6', '#F59E0B']
+          });
+          confetti({
+            particleCount: 50,
+            angle: 120,
+            spread: 55,
+            origin: { x: 1, y: 0.65 },
+            colors: ['#23B750', '#10B981', '#3B82F6', '#F59E0B']
+          });
+        }, 250);
+      }
+    }
+
+    // Run on startup
+    window.addEventListener('DOMContentLoaded', () => {
+      init();
+    });
+  </script>
+</body>
+</html>

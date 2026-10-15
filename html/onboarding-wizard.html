@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RakanSales — Onboarding Wizard</title>
+  
+  <!-- Inter Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          spacing: {
+            '4.5': '1.125rem',
+            '5.5': '1.375rem',
+            '6.5': '1.625rem',
+            '8.5': '2.125rem',
+          },
+          colors: {
+            brand: {
+              DEFAULT: '#23B750',
+              hover: '#1a943e',
+              light: '#f0fdf4',
+            }
+          },
+          boxShadow: {
+            '2xs': '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+            'xs': '0 1px 3px 0 rgba(0, 0, 0, 0.08), 0 1px 2px -1px rgba(0, 0, 0, 0.08)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- Canvas Confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+  <style>
+    @keyframes progress {
+      0% { width: 0%; }
+      60% { width: 75%; }
+      100% { width: 100%; }
+    }
+    .animate-progress {
+      animation: progress 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .step-content {
+      transition: opacity 180ms ease, transform 180ms ease;
+    }
+  </style>
+</head>
+<body class="h-full bg-[#f9fafb] text-slate-800 font-sans flex flex-col overflow-hidden selection:bg-[#23B750]/20 selection:text-emerald-900">
+
+  <!-- TOP STEPPER (Steps 1–4) -->
+  <nav id="top-stepper" aria-label="Onboarding Progress" class="w-full bg-transparent pt-6 sm:pt-8 pb-3 px-6 shrink-0">
+    <div class="max-w-xl mx-auto space-y-2">
+      <!-- Top Text Row -->
+      <div class="flex items-center justify-between text-xs">
+        <span id="step-counter" class="font-bold text-[#23B750] tracking-wider uppercase text-[11px]">
+          Step 1 of 4
+        </span>
+        <div class="flex items-center gap-2.5">
+          <span id="step-subtitle" class="text-gray-400 font-medium text-xs">
+            Company details & business type
+          </span>
+          <span class="text-gray-300 select-none">·</span>
+          <a href="#" onclick="alert('Exit onboarding clicked'); return false;" class="text-xs font-medium text-gray-400 hover:text-gray-700 transition-colors">
+            Exit
+          </a>
+        </div>
+      </div>
+
+      <!-- Segmented 4-Bar Progress Indicator -->
+      <div class="grid grid-cols-4 gap-2.5" role="progressbar">
+        <button type="button" onclick="goToStep(1)" id="bar-1" class="h-1.5 rounded-full transition-all duration-300 bg-[#23B750] cursor-pointer" title="Go to step 1"></button>
+        <button type="button" onclick="goToStep(2)" id="bar-2" class="h-1.5 rounded-full transition-all duration-300 bg-gray-200/80 cursor-default" title="Go to step 2"></button>
+        <button type="button" onclick="goToStep(3)" id="bar-3" class="h-1.5 rounded-full transition-all duration-300 bg-gray-200/80 cursor-default" title="Go to step 3"></button>
+        <button type="button" onclick="goToStep(4)" id="bar-4" class="h-1.5 rounded-full transition-all duration-300 bg-gray-200/80 cursor-default" title="Go to step 4"></button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN VIEWPORT CONTAINER -->
+  <main class="flex-1 overflow-y-auto flex flex-col justify-center">
+
+    <!-- ══════════════════════════════════════════
+         STEPS 1–3 CONTAINER (Max-w-xl Centered Stage)
+         ══════════════════════════════════════════ -->
+    <div id="stage-steps-1-3" class="w-full max-w-xl mx-auto px-6 py-4 sm:py-6 my-auto flex flex-col justify-center">
+      <div class="w-full min-h-[460px] sm:h-[480px] flex flex-col justify-between">
+        
+        <!-- INNER STEP WRAPPER -->
+        <div class="flex-1 flex flex-col justify-start">
+
+          <!-- STEP 1: COMPANY NAME & TYPE -->
+          <div id="step-1" class="step-content space-y-6">
+            <div class="min-h-[72px] shrink-0">
+              <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
+                What is your company name?
+              </h2>
+              <p class="text-xs sm:text-sm text-gray-500 mt-1 leading-relaxed">
+                We'll use this to set up your team's workspace.
+              </p>
+            </div>
+
+            <div class="space-y-5">
+              <!-- Company Name Input -->
+              <div class="space-y-1.5">
+                <label for="companyName" class="block text-xs font-semibold text-gray-700">Company Name</label>
+                <input
+                  id="companyName"
+                  type="text"
+                  placeholder="e.g. Acme Corporation"
+                  oninput="onInputChanged()"
+                  class="w-full h-11 px-3.5 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#23B750]/20 focus:border-[#23B750] transition-all shadow-2xs"
+                />
+              </div>
+
+              <!-- Company Type Cards -->
+              <div class="space-y-2">
+                <label class="block text-xs font-semibold text-gray-700">Company Type</label>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                  <!-- SME -->
+                  <button
+                    type="button"
+                    onclick="selectCompanyType('sme')"
+                    id="type-sme"
+                    class="company-type-card p-4 rounded-2xl border border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50/60 transition-all duration-150 cursor-pointer flex flex-col gap-2.5 text-left"
+                  >
+                    <div class="icon-box w-9 h-9 rounded-xl flex items-center justify-center bg-gray-100 text-gray-500 transition-colors">
+                      <i data-lucide="store" class="w-4.5 h-4.5"></i>
+                    </div>
+                    <div>
+                      <div class="text-xs font-semibold text-gray-900">SME / Agency</div>
+                      <p class="text-[11px] text-gray-500 mt-0.5 leading-snug">Growing business or consultancy</p>
+                    </div>
+                  </button>
+
+                  <!-- Enterprise -->
+                  <button
+                    type="button"
+                    onclick="selectCompanyType('enterprise')"
+                    id="type-enterprise"
+                    class="company-type-card p-4 rounded-2xl border border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50/60 transition-all duration-150 cursor-pointer flex flex-col gap-2.5 text-left"
+                  >
+                    <div class="icon-box w-9 h-9 rounded-xl flex items-center justify-center bg-gray-100 text-gray-500 transition-colors">
+                      <i data-lucide="building-2" class="w-4.5 h-4.5"></i>
+                    </div>
+                    <div>
+                      <div class="text-xs font-semibold text-gray-900">Enterprise</div>
+                      <p class="text-[11px] text-gray-500 mt-0.5 leading-snug">Large multi-team organisation</p>
+                    </div>
+                  </button>
+
+                  <!-- Government / Corporate -->
+                  <button
+                    type="button"
+                    onclick="selectCompanyType('government')"
+                    id="type-government"
+                    class="company-type-card p-4 rounded-2xl border border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50/60 transition-all duration-150 cursor-pointer flex flex-col gap-2.5 text-left"
+                  >
+                    <div class="icon-box w-9 h-9 rounded-xl flex items-center justify-center bg-gray-100 text-gray-500 transition-colors">
+                      <i data-lucide="landmark" class="w-4.5 h-4.5"></i>
+                    </div>
+                    <div>
+                      <div class="text-xs font-semibold text-gray-900">Gov / Corporate</div>
+                      <p class="text-[11px] text-gray-500 mt-0.5 leading-snug">Public sector or regulated</p>
+                    </div>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 2: COUNTRY & CURRENCY -->
+          <div id="step-2" class="step-content space-y-6 hidden">
+            <div class="min-h-[72px] shrink-0">
+              <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
+                Where is your business based?
+              </h2>
+              <p class="text-xs sm:text-sm text-gray-500 mt-1 leading-relaxed">
+                Choose your operating location and default currency for deals and reports.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <!-- Country Select -->
+              <div class="space-y-1.5">
+                <label for="countrySelect" class="block text-xs font-semibold text-gray-700">Country</label>
+                <div class="relative">
+                  <select
+                    id="countrySelect"
+                    onchange="onCountrySelected(this.value)"
+                    class="w-full h-11 pl-3.5 pr-9 bg-white border border-gray-200 hover:border-gray-300 rounded-xl text-sm font-medium text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#23B750]/30 focus:border-[#23B750] transition-all shadow-2xs appearance-none cursor-pointer"
+                  >
+                    <option value="" disabled selected>Select your country</option>
+                    <option value="Malaysia">🇲🇾 Malaysia</option>
+                    <option value="Singapore">🇸🇬 Singapore</option>
+                    <option value="Indonesia">🇮🇩 Indonesia</option>
+                    <option value="Thailand">🇹🇭 Thailand</option>
+                    <option value="Philippines">🇵🇭 Philippines</option>
+                    <option value="Vietnam">🇻🇳 Vietnam</option>
+                    <option value="United States">🇺🇸 United States</option>
+                    <option value="United Kingdom">🇬🇧 United Kingdom</option>
+                    <option value="Australia">🇦🇺 Australia</option>
+                  </select>
+                  <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400 pointer-events-none absolute right-3 top-1/2 -translate-y-1/2"></i>
+                </div>
+              </div>
+
+              <!-- Currency Select -->
+              <div class="space-y-1.5">
+                <label for="currencySelect" class="block text-xs font-semibold text-gray-700">Currency</label>
+                <div class="relative">
+                  <select
+                    id="currencySelect"
+                    onchange="onInputChanged()"
+                    class="w-full h-11 pl-3.5 pr-9 bg-white border border-gray-200 hover:border-gray-300 rounded-xl text-sm font-medium text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#23B750]/30 focus:border-[#23B750] transition-all shadow-2xs appearance-none cursor-pointer"
+                  >
+                    <option value="" disabled selected>Select your currency</option>
+                    <option value="MYR">MYR (RM) — Malaysian Ringgit</option>
+                    <option value="SGD">SGD (S$) — Singapore Dollar</option>
+                    <option value="USD">USD ($) — US Dollar</option>
+                    <option value="IDR">IDR (Rp) — Indonesian Rupiah</option>
+                    <option value="THB">THB (฿) — Thai Baht</option>
+                    <option value="EUR">EUR (€) — Euro</option>
+                    <option value="GBP">GBP (£) — British Pound</option>
+                    <option value="AUD">AUD (A$) — Australian Dollar</option>
+                  </select>
+                  <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400 pointer-events-none absolute right-3 top-1/2 -translate-y-1/2"></i>
+                </div>
+              </div>
+            </div>
+
+            <!-- Reassurance Note -->
+            <div class="pt-1 flex items-start gap-2 text-xs text-gray-500">
+              <i data-lucide="globe" class="w-4 h-4 text-gray-400 shrink-0 mt-0.5"></i>
+              <span class="leading-relaxed">
+                Currency defaults apply to your pipeline deals and invoices. You can customize exchange rates anytime in Settings.
+              </span>
+            </div>
+          </div>
+
+          <!-- STEP 3: TEAM SIZE & INDUSTRY -->
+          <div id="step-3" class="step-content space-y-6 hidden">
+            <div class="min-h-[72px] shrink-0">
+              <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
+                Tell us about your team and industry
+              </h2>
+              <p class="text-xs sm:text-sm text-gray-500 mt-1 leading-relaxed">
+                This helps us tailor your pipeline stages and templates.
+              </p>
+            </div>
+
+            <div class="space-y-5">
+              <!-- Team Size Options -->
+              <div class="space-y-2">
+                <label class="block text-xs font-semibold text-gray-700">Team Size</label>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                  <button type="button" onclick="selectTeamSize('1–5')" id="size-1" class="team-size-btn h-11 px-4 rounded-xl border border-gray-200 bg-white hover:border-gray-300 text-gray-700 text-xs font-semibold transition-all cursor-pointer flex items-center justify-center">1–5 people</button>
+                  <button type="button" onclick="selectTeamSize('6–20')" id="size-2" class="team-size-btn h-11 px-4 rounded-xl border border-gray-200 bg-white hover:border-gray-300 text-gray-700 text-xs font-semibold transition-all cursor-pointer flex items-center justify-center">6–20 people</button>
+                  <button type="button" onclick="selectTeamSize('21–50')" id="size-3" class="team-size-btn h-11 px-4 rounded-xl border border-gray-200 bg-white hover:border-gray-300 text-gray-700 text-xs font-semibold transition-all cursor-pointer flex items-center justify-center">21–50 people</button>
+                  <button type="button" onclick="selectTeamSize('50+')" id="size-4" class="team-size-btn h-11 px-4 rounded-xl border border-gray-200 bg-white hover:border-gray-300 text-gray-700 text-xs font-semibold transition-all cursor-pointer flex items-center justify-center">50+ people</button>
+                </div>
+              </div>
+
+              <!-- Industry Multi-Select Pills -->
+              <div class="space-y-2">
+                <div class="flex items-baseline justify-between">
+                  <label class="block text-xs font-semibold text-gray-700">Industry</label>
+                  <span class="text-[11px] text-gray-400">Select all that apply</span>
+                </div>
+                <div id="industry-container" class="flex flex-wrap gap-2">
+                  <!-- Injected via JS -->
+                </div>
+
+                <!-- Custom Other Industry Text Field -->
+                <div id="other-industry-wrapper" class="pt-2 space-y-1.5 hidden">
+                  <label for="otherIndustry" class="block text-xs font-semibold text-gray-700">Specify Other Industry</label>
+                  <input
+                    id="otherIndustry"
+                    type="text"
+                    placeholder="e.g. Agriculture, Renewable Energy, Legal Services"
+                    oninput="onInputChanged()"
+                    class="w-full h-11 px-3.5 bg-white border border-gray-200 hover:border-gray-300 rounded-xl text-sm font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#23B750]/30 focus:border-[#23B750] transition-all shadow-2xs"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- FOOTER NAVIGATION (Steps 1–3) -->
+        <footer class="pt-5 border-t border-gray-200/70 flex items-center justify-between shrink-0">
+          <button
+            type="button"
+            id="back-btn-1-3"
+            onclick="prevStep()"
+            class="text-xs font-semibold text-gray-500 hover:text-gray-900 transition-colors flex items-center gap-1 cursor-pointer opacity-0 pointer-events-none"
+          >
+            <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+            <span>Back</span>
+          </button>
+
+          <button
+            type="button"
+            id="continue-btn-1-3"
+            onclick="nextStep()"
+            disabled
+            class="h-11 px-6 text-white text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 shadow-xs bg-gray-200 text-gray-400 cursor-not-allowed"
+          >
+            <span id="continue-text-1-3">Continue to Location</span>
+            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          </button>
+        </footer>
+
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         STEP 4: CHOOSE PLAN (Max-w-6xl Grid)
+         ══════════════════════════════════════════ -->
+    <div id="stage-step-4" class="w-full max-w-6xl mx-auto px-4 sm:px-6 py-3 sm:py-5 my-auto flex flex-col justify-center hidden">
+      <div class="space-y-4">
+        
+        <!-- Header & Billing Switcher -->
+        <div class="text-center max-w-xl mx-auto space-y-1.5 shrink-0">
+          <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">Choose your plan</h2>
+          <p class="text-xs sm:text-sm text-gray-500 leading-relaxed">
+            Transparent pricing built to scale with your sales team. Switch or cancel anytime.
+          </p>
+
+          <!-- Monthly / Yearly Toggle -->
+          <div class="pt-1.5 inline-flex items-center">
+            <div class="inline-flex items-center p-1 bg-gray-100/90 rounded-xl border border-gray-200/80 text-xs shadow-2xs">
+              <button
+                type="button"
+                id="billing-monthly-btn"
+                onclick="setBillingCycle('monthly')"
+                class="px-3.5 py-1 rounded-lg font-medium transition-all cursor-pointer text-xs text-gray-500 hover:text-gray-900"
+              >
+                Monthly
+              </button>
+              <button
+                type="button"
+                id="billing-yearly-btn"
+                onclick="setBillingCycle('yearly')"
+                class="px-3.5 py-1 rounded-lg font-medium transition-all cursor-pointer flex items-center gap-1.5 text-xs bg-white text-gray-900 shadow-2xs font-semibold"
+              >
+                <span>Yearly</span>
+                <span class="text-[10px] px-2 py-0.5 rounded-full bg-red-600 text-white font-bold tracking-wide shadow-2xs">
+                  Save up to 25%
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 Plan Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3.5 items-stretch w-full">
+          
+          <!-- Basic Plan -->
+          <div
+            id="plan-card-basic"
+            onclick="selectPlan('basic')"
+            class="plan-card rounded-2xl border border-gray-200/90 hover:border-gray-400/80 hover:shadow-md hover:-translate-y-1 transition-all duration-200 cursor-pointer flex flex-col justify-between overflow-hidden bg-white select-none"
+          >
+            <div class="bg-gradient-to-b from-[#23B750] to-[#108F37] px-4 py-3.5 text-white shrink-0 flex flex-col justify-between relative min-h-[102px]">
+              <div class="flex items-center justify-between">
+                <h3 class="text-base sm:text-lg font-semibold tracking-tight text-white">Basic</h3>
+              </div>
+              <div class="mt-2">
+                <div class="flex items-baseline gap-1.5">
+                  <span class="plan-price text-2xl sm:text-3xl font-bold tracking-tight leading-none text-white tabular-nums">RM 150</span>
+                  <span class="text-xs text-white/85 font-medium">/Month</span>
+                </div>
+                <div class="plan-subtext text-[11px] text-white/90 font-medium mt-1 leading-snug">
+                  Billed annually: <span class="line-through opacity-75">RM 2,400</span> <span class="font-bold ml-1 text-white">RM 1,800</span>
+                </div>
+              </div>
+            </div>
+            <div class="p-4 flex-1 flex flex-col justify-between space-y-3.5">
+              <div class="space-y-2.5">
+                <div class="text-xs font-semibold text-gray-700 tracking-wide">For Startups</div>
+                <div class="space-y-2 text-xs text-gray-600">
+                  <div class="flex items-start gap-2 leading-relaxed"><i data-lucide="check" class="w-3.5 h-3.5 text-[#23B750] stroke-[3] shrink-0 mt-0.5"></i><span><strong class="font-semibold text-gray-900">2</strong> Team Members</span></div>
+                  <div class="flex items-start gap-2 leading-relaxed"><i data-lucide="check" class="w-3.5 h-3.5 text-[#23B750] stroke-[3] shrink-0 mt-0.5"></i><span><strong class="font-semibold text-gray-900">500</strong> Monthly Conversations</span></div>
+                  <div class="flex items-start gap-2 leading-relaxed"><i data-lucide="check" class="w-3.5 h-3.5 text-[#23B750] stroke-[3] shrink-0 mt-0.5"></i><span><strong class="font-semibold text-gray-900">3x</strong> Channels (1WA, FB, 1IG)</span></div>
+                  <div class="flex items-start gap-2 leading-relaxed"><i data-lucide="check" class="w-3.5 h-3.5 text-[#23B750] stroke-[3] shrink-0 mt-0.5"></i><span><strong class="font-semibold text-gray-900">2x</strong> Kanban Boards</span></div>
+                  <div class="flex items-start gap-2 leading-relaxed"><i data-lucide="check" class="w-3.5 h-3.5 text-[#23B750] stroke-[3] shrink-0 mt-0.5"></i><span>Email Support</span></div>
+                  <div class="flex items-start gap-2 leading-relaxed"><i data-lucide="check" class="w-3.5 h-3.5 text-[#23B750] stroke-[3] shrink-0 mt-0.5"></i><span>Lead Assignment</span></div>
+                </div>
+              </div>
+              <div class="pt-2.5 border-t border-gray-100 text-[11px] text-gray-400 italic py-0.5">
+                Standard automations included
+              </div>
+            </div>
+            <div class="px-4 pb-4 pt-0.5">
+              <button type="button" class="plan-btn w-full py-2 rounded-xl text-xs font-bold tracking-wide text-center transition-all bg-gray-100 text-gray-700">Select Plan</button>
+            </div>
+          </div>
+
+          <!-- Growth Plan (Most Popular) -->
+          <div
+            id="plan-card-growth"
+            onclick="selectPlan('growth')"
+            class="plan-card rounded-2xl border border-gray-200/90 hover:border-gray-400/80 hover:shadow-md hover:-translate-y-1 transition-all duration-200 cursor-pointer flex flex-col justify-between overflow-hidden bg-white select-none"
+          >
+            <div class="bg-gradient-to-b from-[#4DC7C7] to-[#059898] px-4 py-3.5 text-white shrink-0 flex flex-col justify-between relative min-h-[102px]">
+              <div class="flex items-center justify-between">
+                <h3 class="text-base sm:text-lg font-semibold tracking-tight text-white">Growth</h3>
+                <span class="text-[10px] font-semibold tracking-wide bg-white/20 text-white px-2 py-0.5 rounded-full">Most Popular</span>
+              </div>
+              <div class="mt-2">
+                <div class="flex items-baseline gap-1.5">
+                  <span class="plan-price text-2xl sm:text-3xl font-bold tracking-tight leading-none text-white tabular-nums">RM 350</span>
+                  <span class="text-xs text-white/85 font-medium">/Month</span>
+                </div>
+                <div class="plan-subtext text-[11px] text-white/90 font-medium mt-1 leading-snug">
+                  Billed annually: <span class="line-through opacity-75">RM 5,400</span> <span class="font-bold ml-1 text-white">RM 4,200</span>
+                </div>
+              </div>
+            </div>
+            <div class="p-4 flex-1 flex flex-col justify-between space-y-3.5">
+              <div class="space-y-2.5">
+                <div class="text-xs font-semibold text-gray-700 tracking-wide">For SMEs & Growing Teams</div>
+                <div class="space-y-2 text-xs text-gray-600">
+                  <div class="flex items-start gap-2 leading-relaxed"><i data-lucide="check" class="w-3.5 h-3.5 text-[#23B750] stroke-[3] shrink-0 mt-0.5"></i><span><strong class="font-semibold text-gray-900">5</strong> Team Members</span></div>
+                  <div class="flex items-start gap-2 leading-relaxed"><i data-lucide="check" class="w-3.5 h-3.5 text-[#23B750] stroke-[3] shrink-0 mt-0.5"></i><span><strong class="font-semibold text-gray-900">2,000</strong> Monthly Conversations</span></div>
+                  <div class="flex items-start gap-2 leading-relaxed"><i data-lucide="check" class="w-3.5 h-3.5 text-[#23B750] stroke-[3] shrink-0 mt-0.5"></i><span><strong class="font-semibold text-gray-900">5x</strong> Any Channels</span></div>
+                  <div class="flex items-start gap-2 leading-relaxed"><i data-lucide="check" class="w-3.5 h-3.5 text-[#23B750] stroke-[3] shrink-0 mt-0.5"></i><span><strong class="font-semibold text-gray-900">5x</strong> Kanban Boards</span></div>
+                  <div class="flex items-start gap-2 leading-relaxed"><i data-lucide="check" class="w-3.5 h-3.5 text-[#23B750] stroke-[3] shrink-0 mt-0.5"></i><span>Email and Chat Support</span></div>
+                  <div class="flex items-start gap-2 leading-relaxed"><i data-lucide="check" class="w-3.5 h-3.5 text-[#23B750] stroke-[3] shrink-0 mt-0.5"></i><span>Lead Assignment</span></div>
+                </div>
+              </div>
+              <div class="pt-2.5 border-t border-gray-100 flex flex-wrap gap-1.5">
+                <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-sky-50/90 border border-sky-200/60 text-[11px] font-semibold text-sky-700">
+                  <i data-lucide="bot" class="w-3 h-3 text-sky-600 shrink-0"></i>
+                  <span>AI Chatbot</span>
+                </div>
+                <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-sky-50/90 border border-sky-200/60 text-[11px] font-semibold text-sky-700">
+                  <i data-lucide="sparkles" class="w-3 h-3 text-sky-600 shrink-0"></i>
+                  <span>AI Sales Reply</span>
+                </div>
+              </div>
+            </div>
+            <div class="px-4 pb-4 pt-0.5">
+              <button type="button" class="plan-btn w-full py-2 rounded-xl text-xs font-bold tracking-wide text-center transition-all bg-gray-100 text-gray-700">Select Plan</button>
+            </div>
+          </div>
+
+          <!-- Pro Plan (High Growth) -->
+          <div
+            id="plan-card-pro"
+            onclick="selectPlan('pro')"
+            class="plan-card rounded-2xl border border-gray-200/90 hover:border-gray-400/80 hover:shadow-md hover:-translate-y-1 transition-all duration-200 cursor-pointer flex flex-col justify-between overflow-hidden bg-white select-none"
+          >
+            <div class="bg-gradient-to-b from-[#3A9EF2] to-[#225B8C] px-4 py-3.5 text-white shrink-0 flex flex-col justify-between relative min-h-[102px]">
+              <div class="flex items-center justify-between">
+                <h3 class="text-base sm:text-lg font-semibold tracking-tight text-white">Pro</h3>
+                <span class="text-[10px] font-semibold tracking-wide bg-white/20 text-white px-2 py-0.5 rounded-full">High Growth</span>
+              </div>
+              <div class="mt-2">
+                <div class="flex items-baseline gap-1.5">
+                  <span class="plan-price text-2xl sm:text-3xl font-bold tracking-tight leading-none text-white tabular-nums">RM 750</span>
+                  <span class="text-xs text-white/85 font-medium">/Month</span>
+                </div>
+                <div class="plan-subtext text-[11px] text-white/90 font-medium mt-1 leading-snug">
+                  Billed annually: <span class="line-through opacity-75">RM 11,400</span> <span class="font-bold ml-1 text-white">RM 9,000</span>
+                </div>
+              </div>
+            </div>
+            <div class="p-4 flex-1 flex flex-col justify-between space-y-3.5">
+              <div class="space-y-2.5">
+                <div class="text-xs font-semibold text-gray-700 tracking-wide">For Mid-size & High Growth</div>
+                <div class="space-y-2 text-xs text-gray-600">
+                  <div class="flex items-start gap-2 leading-relaxed"><i data-lucide="check" class="w-3.5 h-3.5 text-[#23B750] stroke-[3] shrink-0 mt-0.5"></i><span><strong class="font-semibold text-gray-900">10</strong> Team Members</span></div>
+                  <div class="flex items-start gap-2 leading-relaxed"><i data-lucide="check" class="w-3.5 h-3.5 text-[#23B750] stroke-[3] shrink-0 mt-0.5"></i><span><strong class="font-semibold text-gray-900">5,000</strong> Monthly Conversations</span></div>
+                  <div class="flex items-start gap-2 leading-relaxed"><i data-lucide="check" class="w-3.5 h-3.5 text-[#23B750] stroke-[3] shrink-0 mt-0.5"></i><span><strong class="font-semibold text-gray-900">10x</strong> Any Channels</span></div>
+                  <div class="flex items-start gap-2 leading-relaxed"><i data-lucide="check" class="w-3.5 h-3.5 text-[#23B750] stroke-[3] shrink-0 mt-0.5"></i><span><strong class="font-semibold text-gray-900">10x</strong> Kanban Boards</span></div>
+                  <div class="flex items-start gap-2 leading-relaxed"><i data-lucide="check" class="w-3.5 h-3.5 text-[#23B750] stroke-[3] shrink-0 mt-0.5"></i><span>Priority Support</span></div>
+                  <div class="flex items-start gap-2 leading-relaxed"><i data-lucide="check" class="w-3.5 h-3.5 text-[#23B750] stroke-[3] shrink-0 mt-0.5"></i><span>Lead Assignment</span></div>
+                </div>
+              </div>
+              <div class="pt-2.5 border-t border-gray-100 flex flex-wrap gap-1.5">
+                <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-sky-50/90 border border-sky-200/60 text-[11px] font-semibold text-sky-700">
+                  <i data-lucide="bot" class="w-3 h-3 text-sky-600 shrink-0"></i>
+                  <span>AI Chatbot</span>
+                </div>
+                <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-sky-50/90 border border-sky-200/60 text-[11px] font-semibold text-sky-700">
+                  <i data-lucide="sparkles" class="w-3 h-3 text-sky-600 shrink-0"></i>
+                  <span>AI Sales Reply</span>
+                </div>
+              </div>
+            </div>
+            <div class="px-4 pb-4 pt-0.5">
+              <button type="button" class="plan-btn w-full py-2 rounded-xl text-xs font-bold tracking-wide text-center transition-all bg-gray-100 text-gray-700">Select Plan</button>
+            </div>
+          </div>
+
+          <!-- Enterprise Plan -->
+          <div
+            id="plan-card-enterprise"
+            onclick="selectPlan('enterprise')"
+            class="plan-card rounded-2xl border border-gray-200/90 hover:border-gray-400/80 hover:shadow-md hover:-translate-y-1 transition-all duration-200 cursor-pointer flex flex-col justify-between overflow-hidden bg-white select-none"
+          >
+            <div class="bg-gradient-to-b from-[#115E2E] to-[#003916] px-4 py-3.5 text-white shrink-0 flex flex-col justify-between relative min-h-[102px]">
+              <div class="flex items-center justify-between">
+                <h3 class="text-base sm:text-lg font-semibold tracking-tight text-white">Enterprise</h3>
+              </div>
+              <div class="mt-2">
+                <div class="flex items-baseline gap-1.5">
+                  <span class="text-2xl sm:3xl font-bold tracking-tight leading-none text-white">Upon Request</span>
+                </div>
+                <div class="text-[11px] text-white/90 font-medium mt-1 leading-snug">
+                  Custom terms and scaling
+                </div>
+              </div>
+            </div>
+            <div class="p-4 flex-1 flex flex-col justify-between space-y-3.5">
+              <div class="space-y-2.5">
+                <div class="text-xs font-semibold text-gray-700 tracking-wide">For Large / Multiple Departments</div>
+                <div class="space-y-2 text-xs text-gray-600">
+                  <div class="flex items-start gap-2 leading-relaxed"><i data-lucide="check" class="w-3.5 h-3.5 text-[#23B750] stroke-[3] shrink-0 mt-0.5"></i><span><strong class="font-semibold text-gray-900">Custom</strong> Team Members</span></div>
+                  <div class="flex items-start gap-2 leading-relaxed"><i data-lucide="check" class="w-3.5 h-3.5 text-[#23B750] stroke-[3] shrink-0 mt-0.5"></i><span><strong class="font-semibold text-gray-900">Custom</strong> Monthly Conversations</span></div>
+                  <div class="flex items-start gap-2 leading-relaxed"><i data-lucide="check" class="w-3.5 h-3.5 text-[#23B750] stroke-[3] shrink-0 mt-0.5"></i><span>Channels — <strong class="font-semibold text-gray-900">Unlimited</strong></span></div>
+                  <div class="flex items-start gap-2 leading-relaxed"><i data-lucide="check" class="w-3.5 h-3.5 text-[#23B750] stroke-[3] shrink-0 mt-0.5"></i><span>Custom Kanban Boards</span></div>
+                  <div class="flex items-start gap-2 leading-relaxed"><i data-lucide="check" class="w-3.5 h-3.5 text-[#23B750] stroke-[3] shrink-0 mt-0.5"></i><span>Priority Support</span></div>
+                  <div class="flex items-start gap-2 leading-relaxed"><i data-lucide="check" class="w-3.5 h-3.5 text-[#23B750] stroke-[3] shrink-0 mt-0.5"></i><span>Lead Assignment</span></div>
+                </div>
+              </div>
+              <div class="pt-2.5 border-t border-gray-100 flex flex-wrap gap-1.5">
+                <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-sky-50/90 border border-sky-200/60 text-[11px] font-semibold text-sky-700">
+                  <i data-lucide="bot" class="w-3 h-3 text-sky-600 shrink-0"></i>
+                  <span>AI Chatbot</span>
+                </div>
+                <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-sky-50/90 border border-sky-200/60 text-[11px] font-semibold text-sky-700">
+                  <i data-lucide="sparkles" class="w-3 h-3 text-sky-600 shrink-0"></i>
+                  <span>AI Sales Reply</span>
+                </div>
+              </div>
+            </div>
+            <div class="px-4 pb-4 pt-0.5">
+              <button type="button" class="plan-btn w-full py-2 rounded-xl text-xs font-bold tracking-wide text-center transition-all bg-gray-100 text-gray-700">Select Plan</button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- FOOTER NAVIGATION (Step 4) -->
+        <footer class="pt-5 border-t border-gray-200/70 max-w-xl mx-auto w-full flex items-center justify-between shrink-0">
+          <button
+            type="button"
+            onclick="prevStep()"
+            class="text-xs font-semibold text-gray-500 hover:text-gray-900 transition-colors flex items-center gap-1 cursor-pointer"
+          >
+            <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+            <span>Back</span>
+          </button>
+
+          <button
+            type="button"
+            id="continue-btn-4"
+            onclick="nextStep()"
+            disabled
+            class="h-11 px-6 text-white text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 shadow-xs bg-gray-200 text-gray-400 cursor-not-allowed"
+          >
+            <span>Complete Setup & Launch</span>
+            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          </button>
+        </footer>
+
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         PROVISIONING LOADER (2 Seconds Transition)
+         ══════════════════════════════════════════ -->
+    <div id="stage-provisioning" class="w-full max-w-xl mx-auto px-6 py-16 my-auto flex flex-col items-center justify-center text-center hidden">
+      <div class="space-y-6 flex flex-col items-center">
+        <div class="w-14 h-14 rounded-2xl bg-emerald-50 border border-emerald-200/80 flex items-center justify-center text-[#23B750] shadow-sm">
+          <i data-lucide="loader-2" class="w-7 h-7 animate-spin text-[#23B750]"></i>
+        </div>
+
+        <div class="space-y-2">
+          <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
+            Setting up your workspace...
+          </h2>
+          <p class="text-xs sm:text-sm text-gray-500 max-w-sm mx-auto leading-relaxed">
+            Configuring pipeline stages, templates, and team settings for
+            <strong id="provisioning-company-name" class="text-gray-900 font-semibold">your team</strong>.
+          </p>
+        </div>
+
+        <!-- 2-second progress bar -->
+        <div class="w-48 h-1.5 bg-gray-200/80 rounded-full overflow-hidden">
+          <div class="h-full bg-[#23B750] rounded-full animate-progress"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         STEP 5: SUCCESS CELEBRATION
+         ══════════════════════════════════════════ -->
+    <div id="stage-success" class="w-full max-w-md mx-auto px-6 py-16 my-auto flex flex-col justify-center text-center hidden">
+      <div class="space-y-6">
+        <div class="w-16 h-16 rounded-2xl bg-emerald-50 border border-emerald-200/80 text-[#23B750] flex items-center justify-center mx-auto shadow-sm">
+          <i data-lucide="check" class="w-8 h-8 stroke-[3]"></i>
+        </div>
+
+        <div class="space-y-2">
+          <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
+            You're all set!
+          </h2>
+          <p class="text-xs sm:text-sm text-gray-500 max-w-sm mx-auto leading-relaxed">
+            Your RakanSales workspace has been created for
+            <strong id="success-company-name" class="text-gray-900 font-semibold">your company</strong>
+            on the
+            <strong id="success-plan-name" class="text-[#23B750] font-semibold">Pro</strong> plan.
+          </p>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4">
+          <button
+            type="button"
+            onclick="alert('Launch Dashboard clicked! (In Vue, this routes to /dashboard)');"
+            class="w-full sm:w-auto h-11 px-6 bg-white hover:bg-gray-50 active:scale-[0.99] text-gray-700 hover:text-gray-900 border border-gray-200 text-xs font-bold rounded-xl transition-all shadow-2xs inline-flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <i data-lucide="layout-dashboard" class="w-4 h-4 text-gray-500"></i>
+            <span>Launch Dashboard</span>
+          </button>
+
+          <button
+            type="button"
+            onclick="continueToSetupWizard();"
+            class="w-full sm:w-auto h-11 px-7 bg-[#23B750] hover:bg-[#1a943e] active:scale-[0.99] text-white text-xs font-bold rounded-xl transition-all shadow-xs inline-flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <span>Complete Setting Up</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- JAVASCRIPT STATE ENGINE -->
+  <script>
+    // State Model
+    const state = {
+      currentStep: 1,
+      completedSteps: [],
+      business: {
+        businessName: '',
+        companyType: '',
+        country: '',
+        currency: '',
+        agentSize: '',
+        industries: [],
+        otherIndustry: ''
+      },
+      plan: {
+        selectedPlan: '',
+        billingCycle: 'yearly' // 'monthly' | 'yearly'
+      }
+    };
+
+    const countryCurrencyMap = {
+      'Malaysia': 'MYR',
+      'Singapore': 'SGD',
+      'Indonesia': 'IDR',
+      'Thailand': 'THB',
+      'Philippines': 'PHP',
+      'Vietnam': 'VND',
+      'United States': 'USD',
+      'United Kingdom': 'GBP',
+      'Australia': 'AUD'
+    };
+
+    const industryList = [
+      'Real Estate', 'Automotive', 'Financial Services', 'Insurance',
+      'Education', 'Healthcare', 'Retail & E-commerce', 'Professional Services',
+      'Technology & SaaS', 'Home Services', 'Others'
+    ];
+
+    const planPrices = {
+      basic: {
+        monthly: 'RM 200',
+        yearly: 'RM 150',
+        subtextMonthly: 'Billed monthly',
+        subtextYearly: 'Billed annually: <span class="line-through opacity-75">RM 2,400</span> <span class="font-bold ml-1 text-white">RM 1,800</span>'
+      },
+      growth: {
+        monthly: 'RM 450',
+        yearly: 'RM 350',
+        subtextMonthly: 'Billed monthly',
+        subtextYearly: 'Billed annually: <span class="line-through opacity-75">RM 5,400</span> <span class="font-bold ml-1 text-white">RM 4,200</span>'
+      },
+      pro: {
+        monthly: 'RM 950',
+        yearly: 'RM 750',
+        subtextMonthly: 'Billed monthly',
+        subtextYearly: 'Billed annually: <span class="line-through opacity-75">RM 11,400</span> <span class="font-bold ml-1 text-white">RM 9,000</span>'
+      },
+      enterprise: {
+        monthly: 'Upon Request',
+        yearly: 'Upon Request',
+        subtextMonthly: 'Custom terms and scaling',
+        subtextYearly: 'Custom terms and scaling'
+      }
+    };
+
+    const subtitles = {
+      1: 'Company details & business type',
+      2: 'Country & operating currency',
+      3: 'Team size & primary industry',
+      4: 'Select subscription plan'
+    };
+
+    // Initialize Industry Pills
+    function initIndustryPills() {
+      const container = document.getElementById('industry-container');
+      container.innerHTML = '';
+      industryList.forEach(ind => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.id = `industry-${ind.replace(/[^a-zA-Z0-9]/g, '-')}`;
+        btn.className = 'industry-pill px-3.5 py-2 rounded-xl text-xs font-semibold border border-gray-200 bg-white text-gray-700 hover:border-gray-300 hover:bg-gray-50 transition-all cursor-pointer flex items-center gap-1.5';
+        btn.innerHTML = `<span class="check-icon hidden"><i data-lucide="check" class="w-3.5 h-3.5 stroke-[3]"></i></span><span>${ind}</span>`;
+        btn.onclick = () => toggleIndustry(ind);
+        container.appendChild(btn);
+      });
+      lucide.createIcons();
+    }
+
+    // Validation
+    function isStepValid() {
+      if (state.currentStep === 1) {
+        return state.business.businessName.trim().length > 0 && !!state.business.companyType;
+      }
+      if (state.currentStep === 2) {
+        return !!state.business.country && !!state.business.currency;
+      }
+      if (state.currentStep === 3) {
+        if (!state.business.agentSize || state.business.industries.length === 0) return false;
+        if (state.business.industries.includes('Others')) {
+          return state.business.otherIndustry.trim().length > 0;
+        }
+        return true;
+      }
+      if (state.currentStep === 4) {
+        return !!state.plan.selectedPlan;
+      }
+      return true;
+    }
+
+    function updateNavUI() {
+      const valid = isStepValid();
+      
+      // Update Stepper text & bars
+      const counterEl = document.getElementById('step-counter');
+      const subtitleEl = document.getElementById('step-subtitle');
+      if (counterEl) counterEl.textContent = `Step ${state.currentStep} of 4`;
+      if (subtitleEl) subtitleEl.textContent = subtitles[state.currentStep] || 'Workspace setup';
+
+      for (let s = 1; s <= 4; s++) {
+        const bar = document.getElementById(`bar-${s}`);
+        if (!bar) continue;
+        const isClickable = state.completedSteps.includes(s) || s <= state.currentStep;
+        if (state.currentStep >= s) {
+          bar.className = `h-1.5 rounded-full transition-all duration-300 bg-[#23B750] ${isClickable ? 'cursor-pointer hover:opacity-80' : 'cursor-default'}`;
+        } else {
+          bar.className = `h-1.5 rounded-full transition-all duration-300 bg-gray-200/80 ${isClickable ? 'cursor-pointer hover:opacity-80' : 'cursor-default'}`;
+        }
+      }
+
+      // Step 1–3 Continue button
+      const continueBtn13 = document.getElementById('continue-btn-1-3');
+      const continueText13 = document.getElementById('continue-text-1-3');
+      const backBtn13 = document.getElementById('back-btn-1-3');
+
+      if (state.currentStep === 1) {
+        continueText13.textContent = 'Continue to Location';
+        backBtn13.classList.add('opacity-0', 'pointer-events-none');
+      } else if (state.currentStep === 2) {
+        continueText13.textContent = 'Continue to Team';
+        backBtn13.classList.remove('opacity-0', 'pointer-events-none');
+      } else if (state.currentStep === 3) {
+        continueText13.textContent = 'Continue to Plan';
+        backBtn13.classList.remove('opacity-0', 'pointer-events-none');
+      }
+
+      if (valid) {
+        continueBtn13.disabled = false;
+        continueBtn13.className = 'h-11 px-6 text-white text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 shadow-xs cursor-pointer bg-[#23B750] hover:bg-[#1a943e] active:scale-[0.99]';
+      } else {
+        continueBtn13.disabled = true;
+        continueBtn13.className = 'h-11 px-6 text-white text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 shadow-xs bg-gray-200 text-gray-400 cursor-not-allowed';
+      }
+
+      // Step 4 Continue button
+      const continueBtn4 = document.getElementById('continue-btn-4');
+      if (continueBtn4) {
+        if (valid) {
+          continueBtn4.disabled = false;
+          continueBtn4.className = 'h-11 px-6 text-white text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 shadow-xs cursor-pointer bg-[#23B750] hover:bg-[#1a943e] active:scale-[0.99]';
+        } else {
+          continueBtn4.disabled = true;
+          continueBtn4.className = 'h-11 px-6 text-white text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 shadow-xs bg-gray-200 text-gray-400 cursor-not-allowed';
+        }
+      }
+    }
+
+    // Step 1 actions
+    function selectCompanyType(typeId) {
+      state.business.companyType = typeId;
+      document.querySelectorAll('.company-type-card').forEach(card => {
+        card.className = 'company-type-card p-4 rounded-2xl border border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50/60 transition-all duration-150 cursor-pointer flex flex-col gap-2.5 text-left';
+        card.querySelector('.icon-box').className = 'icon-box w-9 h-9 rounded-xl flex items-center justify-center bg-gray-100 text-gray-500 transition-colors';
+      });
+      const selected = document.getElementById(`type-${typeId}`);
+      if (selected) {
+        selected.className = 'company-type-card p-4 rounded-2xl border border-[#23B750] bg-emerald-50/50 ring-2 ring-[#23B750]/15 shadow-xs transition-all duration-150 cursor-pointer flex flex-col gap-2.5 text-left';
+        selected.querySelector('.icon-box').className = 'icon-box w-9 h-9 rounded-xl flex items-center justify-center bg-[#23B750]/10 text-[#23B750] transition-colors';
+      }
+      updateNavUI();
+    }
+
+    // Step 2 actions
+    function onCountrySelected(country) {
+      state.business.country = country;
+      const currency = countryCurrencyMap[country] || '';
+      if (currency) {
+        state.business.currency = currency;
+        document.getElementById('currencySelect').value = currency;
+      }
+      updateNavUI();
+    }
+
+    // Step 3 actions
+    function selectTeamSize(size) {
+      state.business.agentSize = size;
+      document.querySelectorAll('.team-size-btn').forEach(btn => {
+        btn.className = 'team-size-btn h-11 px-4 rounded-xl border border-gray-200 bg-white hover:border-gray-300 text-gray-700 text-xs font-semibold transition-all cursor-pointer flex items-center justify-center';
+      });
+      const sizeIndex = ['1–5', '6–20', '21–50', '50+'].indexOf(size) + 1;
+      const activeBtn = document.getElementById(`size-${sizeIndex}`);
+      if (activeBtn) {
+        activeBtn.className = 'team-size-btn h-11 px-4 rounded-xl border border-[#23B750] bg-emerald-50/50 text-emerald-900 ring-2 ring-[#23B750]/15 shadow-xs text-xs font-semibold transition-all cursor-pointer flex items-center justify-center';
+      }
+      updateNavUI();
+    }
+
+    function toggleIndustry(name) {
+      const idx = state.business.industries.indexOf(name);
+      if (idx >= 0) {
+        state.business.industries.splice(idx, 1);
+      } else {
+        state.business.industries.push(name);
+      }
+
+      const pill = document.getElementById(`industry-${name.replace(/[^a-zA-Z0-9]/g, '-')}`);
+      if (pill) {
+        const isSelected = state.business.industries.includes(name);
+        const checkIcon = pill.querySelector('.check-icon');
+        if (isSelected) {
+          pill.className = 'industry-pill px-3.5 py-2 rounded-xl text-xs font-semibold border border-[#23B750] bg-[#23B750] text-white shadow-2xs transition-all cursor-pointer flex items-center gap-1.5';
+          if (checkIcon) checkIcon.classList.remove('hidden');
+        } else {
+          pill.className = 'industry-pill px-3.5 py-2 rounded-xl text-xs font-semibold border border-gray-200 bg-white text-gray-700 hover:border-gray-300 hover:bg-gray-50 transition-all cursor-pointer flex items-center gap-1.5';
+          if (checkIcon) checkIcon.classList.add('hidden');
+        }
+      }
+
+      // Check "Others" custom input reveal
+      const otherWrapper = document.getElementById('other-industry-wrapper');
+      if (state.business.industries.includes('Others')) {
+        otherWrapper.classList.remove('hidden');
+        document.getElementById('otherIndustry').focus();
+      } else {
+        otherWrapper.classList.add('hidden');
+      }
+
+      updateNavUI();
+    }
+
+    // Step 4 actions
+    function setBillingCycle(cycle) {
+      state.plan.billingCycle = cycle;
+      const mBtn = document.getElementById('billing-monthly-btn');
+      const yBtn = document.getElementById('billing-yearly-btn');
+      if (cycle === 'monthly') {
+        mBtn.className = 'px-3.5 py-1 rounded-lg font-medium transition-all cursor-pointer text-xs bg-white text-gray-900 shadow-2xs font-semibold';
+        yBtn.className = 'px-3.5 py-1 rounded-lg font-medium transition-all cursor-pointer flex items-center gap-1.5 text-xs text-gray-500 hover:text-gray-900';
+      } else {
+        mBtn.className = 'px-3.5 py-1 rounded-lg font-medium transition-all cursor-pointer text-xs text-gray-500 hover:text-gray-900';
+        yBtn.className = 'px-3.5 py-1 rounded-lg font-medium transition-all cursor-pointer flex items-center gap-1.5 text-xs bg-white text-gray-900 shadow-2xs font-semibold';
+      }
+
+      // Update card prices
+      ['basic', 'growth', 'pro'].forEach(pId => {
+        const card = document.getElementById(`plan-card-${pId}`);
+        if (!card) return;
+        const priceEl = card.querySelector('.plan-price');
+        const subtextEl = card.querySelector('.plan-subtext');
+        if (priceEl) priceEl.textContent = planPrices[pId][cycle];
+        if (subtextEl) subtextEl.innerHTML = cycle === 'yearly' ? planPrices[pId].subtextYearly : planPrices[pId].subtextMonthly;
+      });
+
+      updateNavUI();
+    }
+
+    function selectPlan(planId) {
+      state.plan.selectedPlan = planId;
+      document.querySelectorAll('.plan-card').forEach(card => {
+        card.className = 'plan-card rounded-2xl border border-gray-200/90 hover:border-gray-400/80 hover:shadow-md hover:-translate-y-1 transition-all duration-200 cursor-pointer flex flex-col justify-between overflow-hidden bg-white select-none';
+        const btn = card.querySelector('.plan-btn');
+        if (btn) {
+          btn.className = 'plan-btn w-full py-2 rounded-xl text-xs font-bold tracking-wide text-center transition-all bg-gray-100 text-gray-700';
+          btn.textContent = 'Select Plan';
+        }
+      });
+      const selected = document.getElementById(`plan-card-${planId}`);
+      if (selected) {
+        selected.className = 'plan-card rounded-2xl border border-[#23B750] ring-2 ring-[#23B750]/20 shadow-md -translate-y-1 transition-all duration-200 cursor-pointer flex flex-col justify-between overflow-hidden bg-white select-none';
+        const btn = selected.querySelector('.plan-btn');
+        if (btn) {
+          btn.className = 'plan-btn w-full py-2 rounded-xl text-xs font-bold tracking-wide text-center transition-all bg-[#23B750] hover:bg-[#1a943e] text-white shadow-xs';
+          btn.textContent = '✓ Plan Selected';
+        }
+      }
+      updateNavUI();
+    }
+
+    // Input changes listener
+    function onInputChanged() {
+      state.business.businessName = document.getElementById('companyName').value;
+      state.business.currency = document.getElementById('currencySelect').value;
+      const otherEl = document.getElementById('otherIndustry');
+      if (otherEl) state.business.otherIndustry = otherEl.value;
+      updateNavUI();
+    }
+
+    // Navigation Step Transition
+    function goToStep(stepNum) {
+      if (stepNum > state.currentStep && !state.completedSteps.includes(stepNum)) return;
+      renderStep(stepNum);
+    }
+
+    function prevStep() {
+      if (state.currentStep > 1) {
+        renderStep(state.currentStep - 1);
+      }
+    }
+
+    function nextStep() {
+      if (!isStepValid()) return;
+      if (!state.completedSteps.includes(state.currentStep)) {
+        state.completedSteps.push(state.currentStep);
+      }
+
+      if (state.currentStep < 4) {
+        renderStep(state.currentStep + 1);
+      } else if (state.currentStep === 4) {
+        // Run 2-Second Provisioning Screen
+        document.getElementById('top-stepper').classList.add('hidden');
+        document.getElementById('stage-step-4').classList.add('hidden');
+        
+        const provStage = document.getElementById('stage-provisioning');
+        document.getElementById('provisioning-company-name').textContent = state.business.businessName || 'your team';
+        provStage.classList.remove('hidden');
+
+        setTimeout(() => {
+          provStage.classList.add('hidden');
+          showSuccessScreen();
+        }, 2000);
+      }
+    }
+
+    function renderStep(step) {
+      state.currentStep = step;
+
+      const stage13 = document.getElementById('stage-steps-1-3');
+      const stage4 = document.getElementById('stage-step-4');
+      const step1 = document.getElementById('step-1');
+      const step2 = document.getElementById('step-2');
+      const step3 = document.getElementById('step-3');
+
+      if (step <= 3) {
+        stage13.classList.remove('hidden');
+        stage4.classList.add('hidden');
+
+        step1.classList.toggle('hidden', step !== 1);
+        step2.classList.toggle('hidden', step !== 2);
+        step3.classList.toggle('hidden', step !== 3);
+      } else if (step === 4) {
+        stage13.classList.add('hidden');
+        stage4.classList.remove('hidden');
+      }
+
+      updateNavUI();
+      lucide.createIcons();
+    }
+
+    function showSuccessScreen() {
+      state.currentStep = 5;
+      document.getElementById('top-stepper').classList.add('hidden');
+      document.getElementById('stage-step-4').classList.add('hidden');
+      document.getElementById('stage-provisioning').classList.add('hidden');
+
+      const successStage = document.getElementById('stage-success');
+      document.getElementById('success-company-name').textContent = state.business.businessName || 'your company';
+      
+      const planNames = { basic: 'Basic', growth: 'Growth', pro: 'Pro', enterprise: 'Enterprise' };
+      document.getElementById('success-plan-name').textContent = planNames[state.plan.selectedPlan] || 'Pro';
+
+      successStage.classList.remove('hidden');
+      lucide.createIcons();
+      fireConfetti();
+    }
+
+    function continueToSetupWizard() {
+      try {
+        localStorage.setItem('rakansales_onboarding_data', JSON.stringify(state));
+        if (state.business.businessName) {
+          localStorage.setItem('rakansales_company_name', state.business.businessName);
+        }
+      } catch (e) {
+        console.error('Failed to store onboarding data', e);
+      }
+      window.location.href = 'setup-wizard.html';
+    }
+
+    function fireConfetti() {
+      if (typeof confetti === 'function') {
+        confetti({
+          particleCount: 90,
+          spread: 75,
+          origin: { y: 0.6 },
+          colors: ['#23B750', '#62D816', '#10B981', '#34D399', '#3B82F6', '#F59E0B']
+        });
+
+        setTimeout(() => {
+          confetti({
+            particleCount: 50,
+            angle: 60,
+            spread: 55,
+            origin: { x: 0, y: 0.65 },
+            colors: ['#23B750', '#10B981', '#3B82F6', '#F59E0B']
+          });
+          confetti({
+            particleCount: 50,
+            angle: 120,
+            spread: 55,
+            origin: { x: 1, y: 0.65 },
+            colors: ['#23B750', '#10B981', '#3B82F6', '#F59E0B']
+          });
+        }, 250);
+      }
+    }
+
+    // Startup Initialization
+    window.addEventListener('DOMContentLoaded', () => {
+      initIndustryPills();
+      updateNavUI();
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>

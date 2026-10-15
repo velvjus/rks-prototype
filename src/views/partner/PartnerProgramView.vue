@@ -16,13 +16,11 @@
         <div v-if="isFromOverview" class="h-4 w-px bg-gray-200 dark:bg-gray-800"></div>
 
         <div>
-          <div class="flex items-center gap-2">
-            <h1 class="text-base sm:text-lg font-bold text-gray-900 dark:text-white tracking-tight">
-              Partner Program
-            </h1>
-          </div>
+          <h1 class="text-base sm:text-lg font-bold text-gray-900 dark:text-white tracking-tight">
+            Partner Program
+          </h1>
           <p class="text-xs text-gray-500 dark:text-gray-400">
-            Compare partner pathways, payout tiers, and commission structures
+            Compare compensation models, reseller tiers, and client revenue share
           </p>
         </div>
       </div>
@@ -38,358 +36,511 @@
         </button>
 
         <button
-          @click="showUpgradeModal = true"
-          class="px-3.5 py-1.5 text-xs font-bold text-white bg-[#23B750] hover:bg-[#1fa848] rounded-xl shadow-sm shadow-[#23B750]/20 transition-all cursor-pointer inline-flex items-center gap-1.5"
+          v-if="partnerStore.activeTrack === 'referral'"
+          @click="openUpgradeModal"
+          class="px-3.5 py-1.5 text-xs font-bold text-white bg-[#23B750] hover:bg-[#1fa848] rounded-xl shadow-xs transition-all cursor-pointer inline-flex items-center gap-1.5 active:scale-98"
         >
           <Briefcase class="w-3.5 h-3.5" />
-          <span>Apply for Sales Track</span>
+          <span>Upgrade to Sales Track</span>
         </button>
+        <div
+          v-else
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800/60 rounded-xl text-xs font-semibold text-emerald-700 dark:text-emerald-300 shadow-2xs"
+        >
+          <ShieldCheck class="w-3.5 h-3.5 text-[#23B750]" />
+          <span>Accredited Reseller</span>
+        </div>
       </div>
     </header>
 
-    <!-- Main Content Body (Full width with stable scrollbar gutter) -->
+    <!-- Main Content Body -->
     <main class="flex-1 min-h-0 overflow-y-auto w-full [scrollbar-gutter:stable]">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6 w-full">
 
         <!-- ═════════════════════════════════════════════════════════
-             SECTION 1: SIMPLIFIED TITLE HERO BANNER
-             Distilled typography with clean visual placeholder on right
+             SECTION 1: HERO VALUE BANNER WITH RICH BRAND ARTWORK
+             High-contrast type, balanced measure, 3D growth illustration
              ═════════════════════════════════════════════════════════ -->
-        <div class="relative bg-[#02130a] border border-emerald-500/20 rounded-3xl p-6 sm:p-8 lg:p-10 text-white overflow-hidden shadow-xl partner-hero-banner">
-          <!-- Dark Ambient Glow -->
-          <div class="absolute -top-24 -right-24 w-96 h-96 bg-[#23B750]/15 rounded-full blur-3xl pointer-events-none"></div>
-          <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-emerald-700/15 rounded-full blur-3xl pointer-events-none"></div>
-          <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-emerald-400/30 to-transparent"></div>
+        <div class="relative bg-gray-950 dark:bg-[#0B0F19] border border-gray-800 rounded-2xl p-6 sm:p-8 text-white overflow-hidden shadow-xs">
+          <!-- Subtle top accent line -->
+          <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#23B750]/50 to-transparent"></div>
 
-          <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <!-- Left Side: Clean Value Messaging -->
-            <div class="lg:col-span-7 space-y-4">
-              <p class="text-xs font-bold tracking-wider text-[#23B750] uppercase">
-                Official Partner Program
-              </p>
+          <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+            <!-- Left Side: Core Value Proposition -->
+            <div class="lg:col-span-6 space-y-4">
+              <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[#23B750] text-xs font-semibold">
+                <Sparkles class="w-3.5 h-3.5" />
+                <span>RakanSales Official Commercial Partnership</span>
+              </div>
 
               <div>
-                <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white leading-tight">
-                  Grow with RakanSales.<br />
-                  Turn your network into <span class="text-[#23B750]">compounding revenue</span>.
+                <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-white leading-tight">
+                  Two partner pathways.<br />
+                  Built for <span class="text-[#23B750]">compounding revenue</span>.
                 </h2>
-                <p class="text-xs sm:text-sm text-gray-300 mt-2.5 max-w-xl leading-relaxed">
-                  Choose your track: earn a flat cash bounty per signup, or close deals to unlock recurring monthly software commission.
+                <p class="text-xs sm:text-sm text-gray-300 leading-relaxed mt-2 max-w-lg">
+                  Choose between hands-off referral bounties or recurring MRR as an accredited software reseller. Both tracks include client exclusivity and real-time commission tracking.
                 </p>
               </div>
 
               <!-- Quick Sharing Action Row -->
-              <div class="pt-1 flex flex-wrap items-center gap-3">
-                <div class="relative flex-1 max-w-md">
+              <div class="pt-1 flex flex-wrap items-center gap-2.5">
+                <div class="relative flex-1 max-w-xs sm:max-w-sm">
                   <input
                     type="text"
                     readonly
                     :value="referralLink"
-                    class="w-full pl-3 pr-24 py-2 text-xs bg-black/50 border border-emerald-500/30 rounded-xl text-emerald-200 font-mono focus:outline-none select-all"
+                    aria-label="Direct referral tracking link"
+                    class="w-full pl-3 pr-20 py-2 text-xs bg-black/40 border border-gray-800 rounded-xl text-gray-200 font-mono focus:outline-none focus:border-[#23B750] select-all shadow-inner"
                   />
                   <button
                     @click="copyReferralLink"
-                    class="absolute right-1 top-1/2 -translate-y-1/2 px-3 py-1 bg-[#23B750] hover:bg-[#1fa848] active:scale-95 text-white rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1"
+                    class="absolute right-1 top-1/2 -translate-y-1/2 px-2.5 py-1 bg-[#23B750] hover:bg-[#1fa848] active:scale-95 text-white rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1 shadow-xs"
                   >
-                    <Copy class="w-3 h-3" />
+                    <component :is="isLinkCopied ? Check : Copy" class="w-3 h-3" />
                     <span>{{ isLinkCopied ? 'Copied' : 'Copy' }}</span>
                   </button>
                 </div>
 
                 <button
                   @click="showShareModal = true"
-                  class="px-3.5 py-2 text-xs font-semibold text-emerald-300 hover:text-white bg-emerald-950/50 hover:bg-emerald-900/50 border border-emerald-500/30 rounded-xl transition-colors cursor-pointer"
+                  class="px-3.5 py-2 text-xs font-semibold text-gray-300 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-colors cursor-pointer inline-flex items-center gap-1.5"
                 >
-                  Share Options &rarr;
+                  <Share2 class="w-3.5 h-3.5" />
+                  <span>Share Options</span>
                 </button>
               </div>
+
+              <!-- Key Assurance Tags -->
+              <div class="pt-1 flex flex-wrap items-center gap-4 text-[11px] font-mono text-gray-400">
+                <span class="inline-flex items-center gap-1">
+                  <ShieldCheck class="w-3.5 h-3.5 text-[#23B750]" />
+                  90–120 Day Client Protection
+                </span>
+                <span class="inline-flex items-center gap-1">
+                  <Award class="w-3.5 h-3.5 text-[#23B750]" />
+                  Direct Bank MYR Wire
+                </span>
+              </div>
             </div>
 
-            <!-- Right Side: Graphic Placeholder Area (Simple & Ready for artwork) -->
-            <div class="lg:col-span-5 flex items-center justify-center">
-              <div class="w-full max-w-md bg-emerald-950/30 border border-emerald-500/20 rounded-2xl p-6 sm:p-7 backdrop-blur-xs flex flex-col items-center justify-center text-center space-y-3 relative overflow-hidden group">
-                <div class="w-14 h-14 rounded-2xl bg-[#23B750]/20 border border-[#23B750]/40 flex items-center justify-center text-[#23B750] shadow-lg shadow-[#23B750]/20">
-                  <Award class="w-7 h-7" />
-                </div>
-                <div>
-                  <h3 class="font-bold text-white text-base">Verified Channel Partner</h3>
-                  <p class="text-xs text-gray-400 mt-1 max-w-xs">
-                    Malaysia's fastest-growing WhatsApp CRM network. Two clear pathways built for your workflow.
+            <!-- Right Side: 3D Enterprise Partnership Hero Visual -->
+            <div class="lg:col-span-6 relative flex items-center justify-center">
+              <!-- Radiant Ambient Glow -->
+              <div class="absolute -inset-2 bg-radial from-emerald-500/25 via-emerald-500/5 to-transparent rounded-full blur-2xl pointer-events-none"></div>
+
+              <div class="relative w-full rounded-2xl overflow-hidden border border-emerald-500/25 dark:border-emerald-500/30 shadow-2xl bg-[#0B0F19] group">
+                <img
+                  src="/brand-assets/partner/partner-program-hero.jpg"
+                  alt="RakanSales B2B Partner Revenue & Commercial Accreditation"
+                  class="w-full h-auto object-cover transform transition-transform duration-500 group-hover:scale-102"
+                  loading="eager"
+                />
+                <!-- Subtle vignette accents -->
+                <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none"></div>
+                <div class="absolute inset-0 ring-1 ring-inset ring-white/10 rounded-2xl pointer-events-none"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═════════════════════════════════════════════════════════
+             SECTION 2: LIVE TRACK STATUS & MILESTONE PROGRESS
+             Compact, high-hierarchy 2-column console:
+             Left: Active Tier & Entitlements
+             Right: Appetizing Green Gradient Milestone Box
+             ═════════════════════════════════════════════════════════ -->
+        <div class="bg-white dark:bg-[#0E131F] border border-gray-200/80 dark:border-gray-800/80 rounded-2xl p-5 shadow-xs grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+          
+          <!-- Left 7 Cols: Active Tier & Entitlements -->
+          <div class="lg:col-span-7 flex flex-col justify-between space-y-3.5">
+            <div class="space-y-3">
+              <!-- Tier Title & Rate Header -->
+              <div class="flex items-start justify-between gap-3 border-b border-gray-100 dark:border-gray-800/80 pb-3">
+                <div class="space-y-1 min-w-0">
+                  <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-[#23B750] animate-pulse"></span>
+                    <h3 class="text-sm font-bold text-gray-900 dark:text-white truncate">
+                      {{ partnerStore.activeTrack === 'sales' ? 'Active Track: Certified Solutions Partner' : 'Active Track: Referral Partner' }}
+                    </h3>
+                  </div>
+                  <p class="text-xs text-gray-500 dark:text-gray-400">
+                    {{ partnerStore.activeTrack === 'sales'
+                      ? 'Accredited B2B software reseller with recurring MRR and 120-day exclusive client lock.'
+                      : 'Affiliate referral model with guaranteed flat bounty on every paid subscription.'
+                    }}
                   </p>
                 </div>
-                <div class="flex items-center gap-4 pt-1 text-[11px] text-emerald-300/80 font-medium">
-                  <span class="flex items-center gap-1">
-                    <CheckCircle2 class="w-3.5 h-3.5 text-[#23B750]" /> Flat Bounties
-                  </span>
-                  <span class="flex items-center gap-1">
-                    <CheckCircle2 class="w-3.5 h-3.5 text-[#23B750]" /> Recurring MRR
-                  </span>
-                  <span class="flex items-center gap-1">
-                    <CheckCircle2 class="w-3.5 h-3.5 text-[#23B750]" /> 90-Day Cookie
-                  </span>
+
+                <span class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60 shrink-0">
+                  {{ partnerStore.activeTrack === 'sales' ? '20% Recurring MRR' : 'Fixed RM 300' }}
+                </span>
+              </div>
+
+              <!-- Structured Active Benefits List -->
+              <div class="space-y-1.5">
+                <p class="text-[11px] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Active Entitlements</p>
+
+                <!-- Sales Track Active Entitlements -->
+                <div v-if="partnerStore.activeTrack === 'sales'" class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  <div class="p-2.5 rounded-xl bg-gray-50/70 dark:bg-gray-900/40 border border-gray-100 dark:border-gray-800/60 text-xs flex items-start gap-2">
+                    <Check class="w-3.5 h-3.5 text-[#23B750] shrink-0 mt-0.5" />
+                    <div>
+                      <p class="font-bold text-gray-800 dark:text-gray-200">20% Monthly MRR</p>
+                      <p class="text-[10.5px] text-gray-400 leading-tight">12 months per client</p>
+                    </div>
+                  </div>
+                  <div class="p-2.5 rounded-xl bg-gray-50/70 dark:bg-gray-900/40 border border-gray-100 dark:border-gray-800/60 text-xs flex items-start gap-2">
+                    <Check class="w-3.5 h-3.5 text-[#23B750] shrink-0 mt-0.5" />
+                    <div>
+                      <p class="font-bold text-gray-800 dark:text-gray-200">120-Day Lock</p>
+                      <p class="text-[10.5px] text-gray-400 leading-tight">Exclusive domain rights</p>
+                    </div>
+                  </div>
+                  <div class="p-2.5 rounded-xl bg-gray-50/70 dark:bg-gray-900/40 border border-gray-100 dark:border-gray-800/60 text-xs flex items-start gap-2">
+                    <Check class="w-3.5 h-3.5 text-[#23B750] shrink-0 mt-0.5" />
+                    <div>
+                      <p class="font-bold text-gray-800 dark:text-gray-200">Dedicated PAM</p>
+                      <p class="text-[10.5px] text-gray-400 leading-tight">Co-selling &amp; RFP reviews</p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Referral Track Active Entitlements -->
+                <div v-else class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  <div class="p-2.5 rounded-xl bg-gray-50/70 dark:bg-gray-900/40 border border-gray-100 dark:border-gray-800/60 text-xs flex items-start gap-2">
+                    <Check class="w-3.5 h-3.5 text-[#23B750] shrink-0 mt-0.5" />
+                    <div>
+                      <p class="font-bold text-gray-800 dark:text-gray-200">RM 300 Flat Bounty</p>
+                      <p class="text-[10.5px] text-gray-400 leading-tight">Per verified subscription</p>
+                    </div>
+                  </div>
+                  <div class="p-2.5 rounded-xl bg-gray-50/70 dark:bg-gray-900/40 border border-gray-100 dark:border-gray-800/60 text-xs flex items-start gap-2">
+                    <Check class="w-3.5 h-3.5 text-[#23B750] shrink-0 mt-0.5" />
+                    <div>
+                      <p class="font-bold text-gray-800 dark:text-gray-200">90-Day Cookies</p>
+                      <p class="text-[10.5px] text-gray-400 leading-tight">Extended tracking window</p>
+                    </div>
+                  </div>
+                  <div class="p-2.5 rounded-xl bg-gray-50/70 dark:bg-gray-900/40 border border-gray-100 dark:border-gray-800/60 text-xs flex items-start gap-2">
+                    <Check class="w-3.5 h-3.5 text-[#23B750] shrink-0 mt-0.5" />
+                    <div>
+                      <p class="font-bold text-gray-800 dark:text-gray-200">Zero Quotas</p>
+                      <p class="text-[10.5px] text-gray-400 leading-tight">No minimum volume needed</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <!-- ═════════════════════════════════════════════════════════
-             SECTION 2: CURRENT TRACK LIVE STATUS (STANDOUT WITH SHADOW)
-             Prominent card with elevated bottom shadow
-             ═════════════════════════════════════════════════════════ -->
-        <div class="bg-white dark:bg-[#0E131F] border border-gray-200/90 dark:border-gray-800/90 rounded-2xl p-5 sm:p-6 shadow-md shadow-gray-200/70 dark:shadow-black/50 space-y-4">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-gray-100 dark:border-gray-800 pb-4">
-            <div class="space-y-1">
-              <div class="flex items-center gap-2">
-                <span class="w-2.5 h-2.5 rounded-full bg-[#23B750] animate-pulse"></span>
-                <h3 class="text-sm font-bold text-gray-900 dark:text-white">Your Active Track: Referral Partner</h3>
-                <span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-[#23B750] text-white">Starter Tier</span>
+          <!-- Right 5 Cols: Appetizing Green Gradient Milestone Box -->
+          <div class="lg:col-span-5 relative overflow-hidden p-4 rounded-xl bg-gradient-to-br from-emerald-500/10 via-emerald-500/5 to-teal-500/10 dark:from-emerald-950/40 dark:via-[#092215]/60 dark:to-[#0B1520] border border-emerald-500/25 dark:border-emerald-500/30 shadow-xs flex flex-col justify-center space-y-2.5">
+            <template v-if="partnerStore.activeTrack === 'sales'">
+              <div class="space-y-2">
+                <div class="flex items-start justify-between gap-2 text-xs">
+                  <div>
+                    <div class="flex items-center gap-1.5 font-bold text-gray-900 dark:text-white">
+                      <Sparkles class="w-3.5 h-3.5 text-[#23B750]" />
+                      <span>Next Upgrade: Premier Reseller</span>
+                    </div>
+                    <p class="text-[11px] text-gray-600 dark:text-gray-300 mt-0.5">
+                      Unlocks <strong class="text-emerald-700 dark:text-emerald-400 font-bold">25% MRR (+5%)</strong> + <strong class="text-gray-800 dark:text-white font-semibold">RM 10,000 Co-Op MDF</strong>
+                    </p>
+                  </div>
+                  <span class="font-mono font-bold text-xs text-[#23B750] bg-emerald-500/10 dark:bg-emerald-950/60 px-2 py-0.5 rounded-md border border-emerald-500/20 shrink-0">
+                    62.4%
+                  </span>
+                </div>
+
+                <!-- Progress Bar: Appetizing Green Gradient Fill -->
+                <div class="w-full h-2 bg-emerald-950/10 dark:bg-emerald-950/60 rounded-full overflow-hidden p-0.5 border border-emerald-500/15">
+                  <div
+                    class="h-full bg-gradient-to-r from-emerald-500 via-[#23B750] to-teal-400 rounded-full shadow-xs transition-all duration-500"
+                    style="width: 62.4%;"
+                  ></div>
+                </div>
+
+                <!-- Progress Status Line -->
+                <div class="flex items-center justify-between text-[11px] font-mono text-gray-600 dark:text-gray-400">
+                  <span>RM 124,800 of RM 200,000 ARR</span>
+                  <span class="font-bold text-emerald-700 dark:text-emerald-300">RM 75,200 to upgrade</span>
+                </div>
               </div>
-              <p class="text-xs text-gray-500 dark:text-gray-400">
-                You earn <strong class="text-emerald-600 dark:text-emerald-400 font-mono">RM 300</strong> for every closed referral. 3 more closed deals unlock the Silver Tier milestone (+RM 50 bonus per deal).
-              </p>
-            </div>
+            </template>
 
-            <div class="flex items-center gap-2 self-start sm:self-auto">
-              <button
-                @click="showUpgradeModal = true"
-                class="px-3.5 py-1.5 text-xs font-semibold text-gray-700 dark:text-gray-300 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-750 rounded-xl transition-colors cursor-pointer inline-flex items-center gap-1.5"
-              >
-                <span>Upgrade to Sales Partner</span>
-                <ArrowUpRight class="w-3.5 h-3.5" />
-              </button>
-            </div>
+            <template v-else>
+              <div class="space-y-2">
+                <div class="flex items-start justify-between gap-2 text-xs">
+                  <div>
+                    <div class="flex items-center gap-1.5 font-bold text-gray-900 dark:text-white">
+                      <Sparkles class="w-3.5 h-3.5 text-[#23B750]" />
+                      <span>Next Upgrade: Reseller Track</span>
+                    </div>
+                    <p class="text-[11px] text-gray-600 dark:text-gray-300 mt-0.5">
+                      Graduate to <strong class="text-emerald-700 dark:text-emerald-400 font-bold">15% – 25% recurring MRR</strong> on closed deals
+                    </p>
+                  </div>
+                  <span class="font-mono font-bold text-xs text-[#23B750] bg-emerald-500/10 dark:bg-emerald-950/60 px-2 py-0.5 rounded-md border border-emerald-500/20 shrink-0">
+                    4 / 5
+                  </span>
+                </div>
+
+                <!-- Progress Bar: Appetizing Green Gradient Fill -->
+                <div class="w-full h-2 bg-emerald-950/10 dark:bg-emerald-950/60 rounded-full overflow-hidden p-0.5 border border-emerald-500/15">
+                  <div
+                    class="h-full bg-gradient-to-r from-emerald-500 via-[#23B750] to-teal-400 rounded-full shadow-xs transition-all duration-500"
+                    style="width: 80%;"
+                  ></div>
+                </div>
+
+                <!-- Progress Status Line -->
+                <div class="flex items-center justify-between text-[11px] font-mono text-gray-600 dark:text-gray-400">
+                  <span>4 conversions completed</span>
+                  <span class="font-bold text-emerald-700 dark:text-emerald-300">1 more to fast-track</span>
+                </div>
+              </div>
+            </template>
           </div>
 
-          <!-- Progress Track -->
-          <div class="space-y-2">
-            <div class="flex items-center justify-between text-xs">
-              <span class="font-semibold text-gray-700 dark:text-gray-300">
-                Tier Progression: <strong class="text-gray-900 dark:text-white font-mono">2 of 5 deals closed</strong>
-              </span>
-              <span class="font-mono font-bold text-[#23B750]">40% Completed</span>
-            </div>
-
-            <div class="w-full h-2.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
-              <div class="h-full bg-gradient-to-r from-[#23B750] to-[#62D816] rounded-full transition-all duration-700" style="width: 40%"></div>
-            </div>
-
-            <div class="flex justify-between items-center text-[11px] text-gray-400 dark:text-gray-500 font-mono">
-              <span>Starter (RM 300 / deal)</span>
-              <span class="text-[#23B750] font-semibold">3 deals left to Silver</span>
-              <span>Silver (RM 350 / deal)</span>
-            </div>
-          </div>
         </div>
 
         <!-- ═════════════════════════════════════════════════════════
-             SECTION 3: PARTNER TRACKS (SIDE-BY-SIDE CARDS MATCHING DESIGN)
-             Distilled 2-column cards comparing Referral vs Sales Partner
+             SECTION 3: SIDE-BY-SIDE TRACK COMPARISON
+             Clear visual hierarchy:
+             Card 1: Referral Track (Affiliate Mascot Team)
+             Card 2: Sales Reseller (Featured Flagship with Laptop Mascot)
              ═════════════════════════════════════════════════════════ -->
         <div id="partner-tracks" class="space-y-4">
-          <div>
-            <h3 class="text-lg font-bold text-gray-900 dark:text-white tracking-tight">
-              Partner Tracks &amp; Tiers
-            </h3>
-            <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-              Choose the model that fits your business: flat referral payouts or recurring monthly software revenue.
-            </p>
+          <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
+            <div>
+              <h3 class="text-base sm:text-lg font-bold text-gray-900 dark:text-white tracking-tight">
+                Compare Partner Tracks
+              </h3>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                Choose between hands-off affiliate link referrals or managed enterprise B2B sales pipelines.
+              </p>
+            </div>
+            <span class="text-xs font-medium text-gray-400 font-mono">
+              Accreditation-based progression
+            </span>
           </div>
 
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
 
-            <!-- ─── CARD 1: REFERRAL PARTNER (ACTIVE TRACK) ─── -->
-            <div class="border-2 border-[#23B750] rounded-3xl p-6 sm:p-8 bg-white dark:bg-[#0E131F] flex flex-col justify-between shadow-xs hover:shadow-md transition-all relative">
-              <div class="space-y-5">
-                <!-- Header -->
-                <div>
+            <!-- ─── CARD 1: REFERRAL TRACK ─── -->
+            <div 
+              class="rounded-2xl p-6 bg-white dark:bg-[#0E131F] flex flex-col justify-between shadow-xs transition-all border border-gray-200/80 dark:border-gray-800"
+              :class="partnerStore.activeTrack === 'referral' ? 'ring-2 ring-[#23B750]/40 border-[#23B750]' : ''"
+            >
+              <div class="space-y-4">
+                <!-- Artwork Header -->
+                <div class="h-24 w-full flex items-center justify-center bg-gray-50/70 dark:bg-gray-900/40 rounded-xl p-2 border border-gray-100 dark:border-gray-800">
+                  <img
+                    src="/brand-assets/partner/sales-partner-illustration.png"
+                    alt="Referral Partner Graphic"
+                    class="h-20 w-auto object-contain drop-shadow-sm"
+                    loading="lazy"
+                  />
+                </div>
+
+                <!-- Header Info -->
+                <div class="space-y-1.5">
                   <div class="flex items-center justify-between">
-                    <h4 class="text-xl font-bold text-gray-900 dark:text-white">Referral Partner</h4>
-                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 dark:bg-emerald-950/80 text-[#23B750] border border-emerald-300 dark:border-emerald-800">
+                    <h4 class="text-lg font-bold text-gray-900 dark:text-white">Referral Partner</h4>
+                    <span 
+                      v-if="partnerStore.activeTrack === 'referral'"
+                      class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 dark:bg-emerald-950/80 text-[#23B750] border border-emerald-300 dark:border-emerald-800"
+                    >
                       Active Track
                     </span>
+                    <span 
+                      v-else
+                      class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-gray-100 dark:bg-gray-800 text-gray-500"
+                    >
+                      Affiliate
+                    </span>
                   </div>
-                  <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">
-                    Share your link. Our team closes the deal. You earn a flat fee per signup &mdash; no experience needed.
+                  <div class="flex items-baseline gap-1.5">
+                    <span class="text-2xl font-bold font-mono text-[#23B750]">RM 300</span>
+                    <span class="text-xs text-gray-400">/ closed deal (Fixed Flat Bounty)</span>
+                  </div>
+                  <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+                    Share your tracking link. RakanSales sales reps handle demos, proposals, and customer closing.
                   </p>
                 </div>
 
-                <!-- Tier Table -->
-                <div class="overflow-x-auto">
-                  <table class="w-full text-left border-collapse">
-                    <thead>
-                      <tr class="border-b border-gray-100 dark:border-gray-800 text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
-                        <th class="py-2 pr-3">Tier</th>
-                        <th class="py-2 px-3 text-center">Signups</th>
-                        <th class="py-2 pl-3 text-right">Fee Per Signup</th>
-                      </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-100 dark:divide-gray-800 text-xs">
-                      <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-800/30 transition-colors">
-                        <td class="py-2.5 pr-3 font-semibold text-gray-900 dark:text-white flex items-center gap-1.5">
-                          <span>Starter</span>
-                          <span class="w-1.5 h-1.5 rounded-full bg-[#23B750]"></span>
-                        </td>
-                        <td class="py-2.5 px-3 text-center text-gray-600 dark:text-gray-300 font-mono">1&ndash;5</td>
-                        <td class="py-2.5 pl-3 text-right font-mono font-bold text-[#23B750]">RM300</td>
-                      </tr>
-                      <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-800/30 transition-colors">
-                        <td class="py-2.5 pr-3 font-semibold text-gray-900 dark:text-white">Silver</td>
-                        <td class="py-2.5 px-3 text-center text-gray-600 dark:text-gray-300 font-mono">6&ndash;19</td>
-                        <td class="py-2.5 pl-3 text-right font-mono font-bold text-[#23B750]">RM350</td>
-                      </tr>
-                      <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-800/30 transition-colors">
-                        <td class="py-2.5 pr-3 font-semibold text-gray-900 dark:text-white">Gold</td>
-                        <td class="py-2.5 px-3 text-center text-gray-600 dark:text-gray-300 font-mono">20&ndash;49</td>
-                        <td class="py-2.5 pl-3 text-right font-mono font-bold text-[#23B750]">RM400</td>
-                      </tr>
-                      <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-800/30 transition-colors">
-                        <td class="py-2.5 pr-3 font-semibold text-gray-900 dark:text-white">Elite</td>
-                        <td class="py-2.5 px-3 text-center text-gray-600 dark:text-gray-300 font-mono">50+</td>
-                        <td class="py-2.5 pl-3 text-right font-mono font-bold text-[#23B750]">RM500</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                <!-- Fixed Bounty Structure Card -->
+                <div class="rounded-xl border border-gray-100 dark:border-gray-800 p-3 bg-gray-50/70 dark:bg-gray-850/50 space-y-2 text-xs">
+                  <div class="flex items-center justify-between">
+                    <span class="text-gray-500">Reward Per Paid Deal</span>
+                    <span class="font-mono font-bold text-[#23B750]">RM 300 Flat Cash</span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="text-gray-500">Tier Thresholds</span>
+                    <span class="font-medium text-gray-900 dark:text-white">None (Fixed rate for all)</span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="text-gray-500">Volume Minimums</span>
+                    <span class="font-medium text-gray-900 dark:text-white">Zero quota required</span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="text-gray-500">Settlement Cycle</span>
+                    <span class="font-mono text-gray-900 dark:text-white">30-day clearance</span>
+                  </div>
                 </div>
 
-                <!-- Example Note Callout -->
-                <p class="text-xs text-gray-600 dark:text-gray-400">
-                  Silver Partner example: 10 signups = <strong class="text-[#23B750] font-mono">RM3,500</strong>
-                </p>
-
-                <!-- What's included checklist -->
-                <div class="pt-2 border-t border-gray-100 dark:border-gray-800 space-y-2.5">
-                  <h5 class="text-xs font-bold text-gray-900 dark:text-white">What's included</h5>
-                  <ul class="space-y-2 text-xs text-gray-600 dark:text-gray-300">
-                    <li class="flex items-center gap-2.5">
-                      <CheckCircle2 class="w-4 h-4 text-[#23B750] shrink-0" />
-                      <span>Unique referral link + tracking code</span>
-                    </li>
-                    <li class="flex items-center gap-2.5">
-                      <CheckCircle2 class="w-4 h-4 text-[#23B750] shrink-0" />
-                      <span>WhatsApp and email templates</span>
-                    </li>
-                    <li class="flex items-center gap-2.5">
-                      <CheckCircle2 class="w-4 h-4 text-[#23B750] shrink-0" />
-                      <span>Our team closes for you</span>
-                    </li>
-                    <li class="flex items-center gap-2.5">
-                      <CheckCircle2 class="w-4 h-4 text-[#23B750] shrink-0" />
-                      <span>90-day lead lock protection</span>
-                    </li>
-                    <li class="flex items-center gap-2.5">
-                      <CheckCircle2 class="w-4 h-4 text-[#23B750] shrink-0" />
-                      <span>Monthly bank payout</span>
-                    </li>
-                  </ul>
+                <!-- Structured Specifications -->
+                <div class="space-y-2 pt-1 border-t border-gray-100 dark:border-gray-800 text-xs">
+                  <div class="flex items-center justify-between text-gray-600 dark:text-gray-300">
+                    <span class="text-gray-400">Deal Handling</span>
+                    <span class="font-medium text-gray-900 dark:text-white">100% closed by RakanSales</span>
+                  </div>
+                  <div class="flex items-center justify-between text-gray-600 dark:text-gray-300">
+                    <span class="text-gray-400">Attribution</span>
+                    <span class="font-medium text-gray-900 dark:text-white">90-day browser cookie</span>
+                  </div>
+                  <div class="flex items-center justify-between text-gray-600 dark:text-gray-300">
+                    <span class="text-gray-400">Payout Method</span>
+                    <span class="font-medium text-gray-900 dark:text-white">Instant bank credit</span>
+                  </div>
                 </div>
               </div>
 
-              <!-- Bottom CTA Button -->
-              <div class="pt-6">
+              <!-- Bottom CTA / Status -->
+              <div class="pt-4 mt-4 border-t border-gray-100 dark:border-gray-800">
                 <button
+                  v-if="partnerStore.activeTrack === 'referral'"
                   type="button"
-                  class="w-full py-3 px-4 bg-gray-950 hover:bg-black dark:bg-white dark:hover:bg-gray-100 text-white dark:text-gray-950 font-bold text-xs rounded-xl transition-all cursor-default text-center shadow-xs"
+                  class="w-full py-2.5 px-4 bg-gray-950 dark:bg-gray-800 text-white font-bold text-xs rounded-xl cursor-default text-center"
                 >
-                  Current track
+                  Active Track
                 </button>
-                <p class="text-[11px] text-gray-400 dark:text-gray-500 text-center mt-2">
-                  No requirements &bull; Open to everyone
-                </p>
+                <div
+                  v-else
+                  class="w-full py-2.5 px-3 rounded-xl bg-gray-50 dark:bg-gray-850/80 border border-gray-200 dark:border-gray-800 text-center flex items-center justify-center gap-2 text-xs text-gray-500 dark:text-gray-400 select-none"
+                >
+                  <Lock class="w-3.5 h-3.5 text-gray-400 shrink-0" />
+                  <span>Track downgrade managed via Partner Admin</span>
+                </div>
               </div>
             </div>
 
             <!-- ─── CARD 2: SALES PARTNER ─── -->
-            <div class="border border-gray-200/90 dark:border-gray-800/90 rounded-3xl p-6 sm:p-8 bg-white dark:bg-[#0E131F] flex flex-col justify-between shadow-xs hover:shadow-md transition-all relative">
-              <div class="space-y-5">
-                <!-- Header -->
-                <div>
+            <div 
+              class="rounded-2xl p-6 bg-white dark:bg-[#0E131F] flex flex-col justify-between shadow-xs transition-all border border-gray-200/80 dark:border-gray-800"
+              :class="partnerStore.activeTrack === 'sales' ? 'ring-2 ring-[#23B750]/40 border-[#23B750]' : ''"
+            >
+              <div class="space-y-4">
+                <!-- Artwork Header -->
+                <div 
+                  class="h-24 w-full flex items-center justify-center rounded-xl p-2 border transition-colors"
+                  :class="partnerStore.activeTrack === 'sales'
+                    ? 'bg-emerald-500/10 dark:bg-emerald-950/40 border-emerald-500/20'
+                    : 'bg-gray-50/70 dark:bg-gray-900/40 border-gray-100 dark:border-gray-800'
+                  "
+                >
+                  <img
+                    src="/brand-assets/partner/referral-partner-illustration.png"
+                    alt="Sales Partner Graphic"
+                    class="h-20 w-auto object-contain drop-shadow-sm"
+                    loading="lazy"
+                  />
+                </div>
+
+                <!-- Header Info -->
+                <div class="space-y-1.5">
                   <div class="flex items-center justify-between">
-                    <h4 class="text-xl font-bold text-gray-900 dark:text-white">Sales Partner</h4>
-                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 dark:bg-emerald-950/60 text-[#23B750] border border-emerald-200/60 dark:border-emerald-800/60">
-                      Recurring RevShare
+                    <h4 class="text-lg font-bold text-gray-900 dark:text-white">Sales Reseller</h4>
+                    <span 
+                      v-if="partnerStore.activeTrack === 'sales'"
+                      class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 dark:bg-emerald-950/80 text-[#23B750] border border-emerald-300 dark:border-emerald-800"
+                    >
+                      Active Track
+                    </span>
+                    <span 
+                      v-else
+                      class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-gray-100 dark:bg-gray-800 text-gray-500"
+                    >
+                      Enterprise RevShare
                     </span>
                   </div>
-                  <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">
-                    You pitch and close. Earn a recurring % of monthly revenue for every customer you bring in.
+                  <div class="flex items-baseline gap-1.5">
+                    <span class="text-2xl font-bold font-mono text-[#23B750]">15% – 25%</span>
+                    <span class="text-xs text-gray-400">recurring MRR &times; 12 months</span>
+                  </div>
+                  <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+                    Pitch and close deals directly. Earn monthly recurring payouts for 12 months per client with guaranteed domain protection.
                   </p>
                 </div>
 
-                <!-- Tier Table -->
-                <div class="overflow-x-auto">
-                  <table class="w-full text-left border-collapse">
+                <!-- Upgraded Tier Table -->
+                <div class="rounded-xl border border-gray-100 dark:border-gray-800 overflow-hidden shadow-2xs">
+                  <table class="w-full text-left text-xs border-collapse">
                     <thead>
-                      <tr class="border-b border-gray-100 dark:border-gray-800 text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
-                        <th class="py-2 pr-3">Tier</th>
+                      <tr class="bg-gray-50/80 dark:bg-gray-850/60 border-b border-gray-100 dark:border-gray-800 text-[10px] font-bold text-gray-400 uppercase tracking-wider">
+                        <th class="py-2 px-3">Tier</th>
                         <th class="py-2 px-3 text-center">Deals Closed</th>
-                        <th class="py-2 pl-3 text-right">% of MRR &times; 12Mo</th>
+                        <th class="py-2 px-3 text-right">RevShare</th>
                       </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100 dark:divide-gray-800 text-xs">
-                      <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-800/30 transition-colors">
-                        <td class="py-2.5 pr-3 font-semibold text-gray-900 dark:text-white">Silver</td>
-                        <td class="py-2.5 px-3 text-center text-gray-600 dark:text-gray-300 font-mono">6&ndash;19</td>
-                        <td class="py-2.5 pl-3 text-right font-mono font-bold text-[#23B750]">10% MRR</td>
+                      <tr>
+                        <td class="py-2 px-3 font-semibold text-gray-900 dark:text-white">Registered</td>
+                        <td class="py-2 px-3 text-center text-gray-600 dark:text-gray-400 font-mono">1–5</td>
+                        <td class="py-2 px-3 text-right font-mono font-bold text-[#23B750]">15% MRR</td>
                       </tr>
-                      <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-800/30 transition-colors">
-                        <td class="py-2.5 pr-3 font-semibold text-gray-900 dark:text-white">Gold</td>
-                        <td class="py-2.5 px-3 text-center text-gray-600 dark:text-gray-300 font-mono">20&ndash;49</td>
-                        <td class="py-2.5 pl-3 text-right font-mono font-bold text-[#23B750]">20% MRR</td>
+                      <tr :class="partnerStore.activeTrack === 'sales' ? 'bg-emerald-50/40 dark:bg-emerald-950/20' : ''">
+                        <td class="py-2 px-3 font-semibold text-gray-900 dark:text-white flex items-center gap-1.5">
+                          <span>Certified</span>
+                          <span v-if="partnerStore.activeTrack === 'sales'" class="px-1.5 py-0.2 rounded text-[9px] font-bold bg-[#23B750] text-white">Current</span>
+                        </td>
+                        <td class="py-2 px-3 text-center text-gray-600 dark:text-gray-400 font-mono font-bold">6–19</td>
+                        <td class="py-2 px-3 text-right font-mono font-bold text-[#23B750]">20% MRR</td>
                       </tr>
-                      <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-800/30 transition-colors">
-                        <td class="py-2.5 pr-3 font-semibold text-gray-900 dark:text-white">Elite</td>
-                        <td class="py-2.5 px-3 text-center text-gray-600 dark:text-gray-300 font-mono">50+</td>
-                        <td class="py-2.5 pl-3 text-right font-mono font-bold text-[#23B750]">25% MRR</td>
+                      <tr>
+                        <td class="py-2 px-3 font-semibold text-gray-900 dark:text-white">Premier</td>
+                        <td class="py-2 px-3 text-center text-gray-600 dark:text-gray-400 font-mono">20+</td>
+                        <td class="py-2 px-3 text-right font-mono font-bold text-[#23B750]">25% + MDF</td>
                       </tr>
                     </tbody>
                   </table>
                 </div>
 
-                <!-- Example Note Callout -->
-                <p class="text-xs text-gray-600 dark:text-gray-400">
-                  Gold Partner example (20%): 1 Pro customer = <strong class="text-[#23B750] font-mono">RM1,800 commission in 1 Year</strong>
-                </p>
-
-                <!-- What's included checklist -->
-                <div class="pt-2 border-t border-gray-100 dark:border-gray-800 space-y-2.5">
-                  <h5 class="text-xs font-bold text-gray-900 dark:text-white">Everything in Referrals, plus</h5>
-                  <ul class="space-y-2 text-xs text-gray-600 dark:text-gray-300">
-                    <li class="flex items-center gap-2.5">
-                      <CheckCircle2 class="w-4 h-4 text-[#23B750] shrink-0" />
-                      <span>Full deal pipeline access</span>
-                    </li>
-                    <li class="flex items-center gap-2.5">
-                      <CheckCircle2 class="w-4 h-4 text-[#23B750] shrink-0" />
-                      <span>Demo materials and sales deck</span>
-                    </li>
-                    <li class="flex items-center gap-2.5">
-                      <CheckCircle2 class="w-4 h-4 text-[#23B750] shrink-0" />
-                      <span>Co-sell support on big deals</span>
-                    </li>
-                    <li class="flex items-center gap-2.5">
-                      <CheckCircle2 class="w-4 h-4 text-[#23B750] shrink-0" />
-                      <span>120-day lead lock protection</span>
-                    </li>
-                    <li class="flex items-center gap-2.5">
-                      <CheckCircle2 class="w-4 h-4 text-[#23B750] shrink-0" />
-                      <span>Dedicated partner manager</span>
-                    </li>
-                  </ul>
+                <!-- Structured Specifications -->
+                <div class="space-y-2 pt-1 border-t border-gray-100 dark:border-gray-800 text-xs">
+                  <div class="flex items-center justify-between text-gray-600 dark:text-gray-300">
+                    <span class="text-gray-400">Deal Handling</span>
+                    <span class="font-medium text-gray-900 dark:text-white">Partner-Led Closing</span>
+                  </div>
+                  <div class="flex items-center justify-between text-gray-600 dark:text-gray-300">
+                    <span class="text-gray-400">Payout Model</span>
+                    <span class="font-medium text-gray-900 dark:text-white">12 monthly wire disbursements</span>
+                  </div>
+                  <div class="flex items-center justify-between text-gray-600 dark:text-gray-300">
+                    <span class="text-gray-400">Attribution</span>
+                    <span class="font-medium text-gray-900 dark:text-white">120-day exclusive domain lock</span>
+                  </div>
                 </div>
               </div>
 
-              <!-- Bottom CTA Button -->
-              <div class="pt-6">
+              <!-- Bottom CTA -->
+              <div class="pt-4 mt-4 border-t border-gray-100 dark:border-gray-800">
                 <button
+                  v-if="partnerStore.activeTrack === 'sales'"
                   type="button"
-                  @click="showUpgradeModal = true"
-                  class="w-full py-3 px-4 bg-emerald-100 hover:bg-emerald-200/90 dark:bg-emerald-950/60 dark:hover:bg-emerald-900/80 text-emerald-900 dark:text-emerald-200 font-bold text-xs rounded-xl transition-all cursor-pointer text-center shadow-xs"
+                  class="w-full py-2.5 px-4 bg-[#23B750] text-white font-bold text-xs rounded-xl cursor-default text-center shadow-xs"
                 >
-                  Close 3 more deals to unlock
+                  Active Track (Certified Solutions)
                 </button>
-                <p class="text-[11px] text-gray-400 dark:text-gray-500 text-center mt-2">
-                  Unlocks at 5 closed deals &bull; Or apply directly
-                </p>
+                <button
+                  v-else
+                  @click="openUpgradeModal"
+                  type="button"
+                  class="w-full py-2.5 px-4 bg-[#23B750] hover:bg-[#1fa848] text-white font-bold text-xs rounded-xl transition-all cursor-pointer text-center shadow-xs"
+                >
+                  Upgrade to Sales Reseller Track
+                </button>
               </div>
             </div>
 
@@ -397,119 +548,108 @@
         </div>
 
         <!-- ═════════════════════════════════════════════════════════
-             SECTION 4: REDESIGNED EARNINGS CALCULATOR (2-COLUMNS)
-             Left: Options & Volume Slider | Right: Estimated Results
+             SECTION 4: COMMISSION SIMULATOR (CALCULATOR)
+             2-Column Layout: Controls on Left, Projections on Right
              ═════════════════════════════════════════════════════════ -->
-        <div class="bg-white dark:bg-[#0E131F] border border-gray-200/90 dark:border-gray-800/90 rounded-3xl p-6 sm:p-8 lg:p-9 shadow-xs space-y-6">
-          <div class="border-b border-gray-100 dark:border-gray-800 pb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="bg-white dark:bg-[#0E131F] border border-gray-200/80 dark:border-gray-800/80 rounded-2xl p-6 shadow-xs space-y-5">
+          <div class="border-b border-gray-100 dark:border-gray-800 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h3 class="text-lg font-bold text-gray-900 dark:text-white tracking-tight">
-                Interactive Commission Calculator
+              <h3 class="text-base sm:text-lg font-bold text-gray-900 dark:text-white tracking-tight">
+                Commission Simulator
               </h3>
-              <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                Select the client plans you target and adjust estimated deal volume to simulate your cashflow.
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                Simulate monthly and annual returns across targeted client plan tiers.
               </p>
             </div>
 
-            <!-- Track Selector for Calculator -->
-            <div class="inline-flex p-1 bg-gray-100 dark:bg-gray-800 rounded-xl border border-gray-200/80 dark:border-gray-700/80 self-start sm:self-auto">
+            <!-- Track Toggle -->
+            <div class="inline-flex p-1 bg-gray-100 dark:bg-gray-800 rounded-xl border border-gray-200/80 dark:border-gray-700 text-xs self-start sm:self-auto">
               <button
                 @click="simTrack = 'referral'"
                 :class="[
-                  'px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer',
+                  'px-3 py-1 rounded-lg font-semibold transition-all cursor-pointer',
                   simTrack === 'referral'
-                    ? 'bg-white dark:bg-gray-900 text-[#23B750] shadow-xs'
+                    ? 'bg-white dark:bg-gray-900 text-[#23B750] shadow-2xs'
                     : 'text-gray-500 hover:text-gray-900 dark:hover:text-white'
                 ]"
               >
-                Referral Track (Flat Fee)
+                Referral (Flat Bounty)
               </button>
               <button
                 @click="simTrack = 'sales'"
                 :class="[
-                  'px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer',
+                  'px-3 py-1 rounded-lg font-semibold transition-all cursor-pointer',
                   simTrack === 'sales'
-                    ? 'bg-white dark:bg-gray-900 text-[#23B750] shadow-xs'
+                    ? 'bg-white dark:bg-gray-900 text-[#23B750] shadow-2xs'
                     : 'text-gray-500 hover:text-gray-900 dark:hover:text-white'
                 ]"
               >
-                Sales Track (% MRR)
+                Sales (% MRR)
               </button>
             </div>
           </div>
 
-          <!-- Two Columns Grid: Left = Selection Options, Right = Estimated Results -->
-          <div class="grid grid-cols-1 lg:grid-cols-12 gap-7 items-stretch">
+          <!-- 2-Column Grid -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
 
-            <!-- Left Column: Plans Checkboxes & Deal Volume Slider -->
-            <div class="lg:col-span-7 space-y-6">
-
-              <!-- Step 1: Select Plans Checkboxes -->
-              <div class="space-y-3">
-                <div class="flex items-center justify-between">
-                  <label class="text-xs font-bold uppercase tracking-wider text-gray-600 dark:text-gray-400">
-                    1. Select Plans You Sell or Refer
-                  </label>
-                  <span class="text-[11px] text-gray-400">
-                    {{ selectedPlans.length }} plan{{ selectedPlans.length === 1 ? '' : 's' }} selected
-                  </span>
+            <!-- Left 7 Cols: Plans Checkboxes & Slider -->
+            <div class="lg:col-span-7 space-y-5">
+              
+              <!-- Plan Selection -->
+              <div class="space-y-2">
+                <div class="flex items-center justify-between text-xs">
+                  <span class="font-bold uppercase tracking-wider text-gray-500">1. Select Target Plans</span>
+                  <span class="text-gray-400 font-mono">{{ selectedPlans.length }} of 4 selected</span>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <label
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  <button
                     v-for="plan in availablePlans"
                     :key="plan.id"
+                    type="button"
+                    @click="togglePlan(plan.id)"
+                    :aria-pressed="selectedPlans.includes(plan.id)"
                     :class="[
-                      'p-3.5 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between space-y-2 select-none',
+                      'p-3 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between space-y-1.5',
                       selectedPlans.includes(plan.id)
-                        ? 'border-[#23B750] bg-emerald-50/40 dark:bg-emerald-950/20 shadow-2xs ring-1 ring-[#23B750]'
-                        : 'border-gray-200 dark:border-gray-800 bg-gray-50/40 dark:bg-gray-900/40 hover:border-gray-300 dark:hover:border-gray-700'
+                        ? 'border-[#23B750] bg-emerald-50/30 dark:bg-emerald-950/20 shadow-2xs ring-1 ring-[#23B750]'
+                        : 'border-gray-200/80 dark:border-gray-800 bg-transparent hover:border-gray-300 dark:hover:border-gray-700'
                     ]"
                   >
-                    <div class="flex items-start justify-between">
-                      <div>
-                        <h5 class="font-bold text-xs text-gray-900 dark:text-white">{{ plan.name }}</h5>
-                        <p class="text-[11px] text-gray-500 dark:text-gray-400 font-mono">{{ plan.priceLabel }}</p>
-                      </div>
-                      <input
-                        type="checkbox"
-                        :value="plan.id"
-                        v-model="selectedPlans"
-                        class="w-4 h-4 text-[#23B750] rounded border-gray-300 focus:ring-[#23B750] cursor-pointer accent-[#23B750] mt-0.5"
-                      />
+                    <div class="flex items-center justify-between w-full">
+                      <span class="font-bold text-xs text-gray-900 dark:text-white">{{ plan.name }}</span>
+                      <span class="text-[11px] font-mono font-semibold text-gray-500">{{ plan.priceLabel }}</span>
                     </div>
-
-                    <div class="pt-2 border-t border-gray-200/50 dark:border-gray-800/60 text-[11px]">
-                      <span class="text-gray-500 dark:text-gray-400">Expected payout:</span>
-                      <p class="font-semibold text-[#23B750] font-mono">
-                        {{ simTrack === 'referral' ? plan.referralPayout : plan.salesPayout }}
-                      </p>
+                    <div class="text-[11px] font-mono text-[#23B750] font-semibold">
+                      {{ getPlanPayoutLabel(plan) }}
                     </div>
-                  </label>
+                  </button>
                 </div>
               </div>
 
-              <!-- Step 2: Volume Slider -->
-              <div class="space-y-3 pt-1">
-                <div class="flex items-center justify-between">
-                  <label class="text-xs font-bold uppercase tracking-wider text-gray-600 dark:text-gray-400">
-                    2. Estimated Closed Deals Per Month
-                  </label>
-                  <div class="flex items-center gap-1.5 px-3 py-1 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200/60 dark:border-emerald-800/60 rounded-xl">
-                    <span class="text-sm font-extrabold font-mono text-[#23B750]">{{ simDealsPerMonth }}</span>
-                    <span class="text-xs font-semibold text-emerald-800 dark:text-emerald-300">deals/mo</span>
+              <!-- Deal Volume Slider -->
+              <div class="space-y-2.5 pt-1">
+                <div class="flex items-center justify-between text-xs">
+                  <span class="font-bold uppercase tracking-wider text-gray-500">2. Estimated Closed Deals / Month</span>
+                  <div class="px-2.5 py-0.5 bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 rounded-lg">
+                    <span class="font-mono font-bold text-[#23B750]">{{ simDealsPerMonth }}</span>
+                    <span class="text-[11px] text-gray-500 ml-1">deals/mo</span>
                   </div>
                 </div>
 
-                <div class="space-y-2">
+                <div class="space-y-1.5">
                   <input
                     type="range"
                     min="1"
                     max="50"
+                    aria-label="Target Closed Deals per Month"
+                    aria-valuemin="1"
+                    aria-valuemax="50"
+                    :aria-valuenow="simDealsPerMonth"
                     v-model.number="simDealsPerMonth"
-                    class="w-full h-2.5 bg-gray-200 dark:bg-gray-800 rounded-lg appearance-none cursor-pointer accent-[#23B750]"
+                    class="w-full h-2 bg-gray-200 dark:bg-gray-800 rounded-lg appearance-none cursor-pointer accent-[#23B750]"
                   />
-                  <div class="flex justify-between text-[11px] font-mono text-gray-400 dark:text-gray-500">
+                  <div class="flex justify-between text-[10px] font-mono text-gray-400">
                     <span>1 deal</span>
                     <span>10 deals</span>
                     <span>25 deals</span>
@@ -520,55 +660,59 @@
 
             </div>
 
-            <!-- Right Column: Estimated Results Card -->
-            <div class="lg:col-span-5 bg-[#02130a] text-white rounded-2xl p-6 sm:p-7 border border-emerald-500/20 shadow-xl relative overflow-hidden flex flex-col justify-between space-y-6">
-              <div class="absolute -top-16 -right-16 w-64 h-64 bg-[#23B750]/20 rounded-full blur-3xl pointer-events-none"></div>
-
-              <div class="relative z-10 space-y-6">
-                <!-- Card Header -->
-                <div class="flex items-center justify-between border-b border-emerald-500/20 pb-3">
-                  <span class="text-xs font-bold uppercase tracking-wider text-emerald-300">Estimated Returns</span>
-                  <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-950/80 text-[#23B750] border border-emerald-500/30">
-                    {{ simTrack === 'referral' ? 'Flat Referral Payout' : 'Recurring % MRR' }}
+            <!-- Right 5 Cols: Projected Results Card (Quiet Executive Card) -->
+            <div class="lg:col-span-5 bg-gray-950 dark:bg-[#0B0F19] text-white rounded-xl p-5 border border-gray-800 flex flex-col justify-between space-y-4 shadow-xs">
+              <div class="space-y-4">
+                <div class="flex items-center justify-between border-b border-gray-800 pb-2.5">
+                  <span class="text-xs font-bold text-gray-300">Projected Cashflow</span>
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-mono text-emerald-400 bg-emerald-950/60 border border-emerald-800/60">
+                    {{ simTrack === 'referral' ? 'Flat Bounty' : 'Recurring MRR' }}
                   </span>
                 </div>
 
-                <!-- Monthly Payout Metric -->
+                <!-- Monthly Projection -->
                 <div class="space-y-1">
-                  <span class="text-xs text-gray-400 font-medium">Estimated Monthly Payout</span>
-                  <p class="text-3xl sm:text-4xl font-extrabold font-mono text-[#23B750] tracking-tight">
+                  <span class="text-xs text-gray-400">Estimated Monthly Return</span>
+                  <p class="text-3xl font-bold font-mono text-[#23B750] tracking-tight">
                     {{ simMonthlyEarningsFormatted }}
                   </p>
-                  <p class="text-[11px] text-gray-400">
-                    Automated bank clearance into your account
+                  <p class="text-[11px] text-gray-400 font-mono">
+                    <span v-if="simTrack === 'referral'">
+                      {{ simDealsPerMonth }} deals &times; RM {{ currentReferralBounty }} flat bounty
+                    </span>
+                    <span v-else>
+                      {{ simDealsPerMonth }} deals &times; ~RM {{ selectedAvgMrr }} MRR &times; {{ Math.round(currentSalesPercent * 100) }}%
+                    </span>
                   </p>
                 </div>
 
-                <!-- Annualized Revenue Metric -->
-                <div class="space-y-1 pt-2 border-t border-emerald-500/15">
-                  <span class="text-xs text-gray-400 font-medium">Annualized Earnings</span>
-                  <p class="text-2xl font-bold font-mono text-white">
+                <!-- Annualized Projection -->
+                <div class="space-y-1 pt-2.5 border-t border-gray-800">
+                  <span class="text-xs text-gray-400">Annualized Run-Rate</span>
+                  <p class="text-xl font-bold font-mono text-white">
                     {{ simAnnualEarningsFormatted }}
                   </p>
                   <p class="text-[11px] text-gray-400">
-                    12-month projected pipeline revenue
+                    12-month cumulative portfolio earnings
                   </p>
                 </div>
 
-                <!-- Milestone Tier Box -->
-                <div class="p-3.5 bg-emerald-950/40 rounded-xl border border-emerald-500/20 space-y-1">
-                  <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-400">Unlocked Milestone</span>
-                  <p class="text-sm font-bold text-white">{{ simQualifiedTier.name }}</p>
-                  <div class="flex items-center justify-between text-[11px] text-gray-300 font-mono pt-0.5">
+                <!-- Milestone / Program Rate Block -->
+                <div class="p-3 bg-black/40 rounded-lg border border-gray-800 space-y-1">
+                  <span class="text-[10px] uppercase font-bold text-emerald-400">
+                    {{ simTrack === 'referral' ? 'Program Compensation' : 'Milestone Unlocked' }}
+                  </span>
+                  <p class="text-xs font-bold text-white">{{ simQualifiedTier.name }}</p>
+                  <div class="flex items-center justify-between text-[11px] text-gray-400 font-mono">
                     <span>{{ simQualifiedTier.rateSummary }}</span>
-                    <span class="text-[#23B750] font-semibold">{{ simQualifiedTier.clearanceDays }}</span>
+                    <span class="text-gray-300">{{ simQualifiedTier.clearanceDays }}</span>
                   </div>
                 </div>
               </div>
 
-              <div class="relative z-10 pt-2 border-t border-emerald-500/15 flex items-center gap-2 text-[11px] text-gray-400">
-                <span class="w-1.5 h-1.5 rounded-full bg-[#23B750]"></span>
-                <span>Payouts distributed in Ringgit Malaysia (MYR)</span>
+              <div class="pt-2 border-t border-gray-800 flex items-center justify-between text-[11px] text-gray-400 font-mono">
+                <span>Distributed in MYR</span>
+                <span>Direct Bank Wire</span>
               </div>
             </div>
 
@@ -576,27 +720,26 @@
         </div>
 
         <!-- ═════════════════════════════════════════════════════════
-             SECTION 5: PARTNER KIT TEASER (COMPACT BANNER)
-             Points cleanly to dedicated /partner/kit page
+             SECTION 5: PARTNER KIT CALLOUT (Tight horizontal bar)
              ═════════════════════════════════════════════════════════ -->
-        <div class="bg-white dark:bg-[#0E131F] border border-gray-200/90 dark:border-gray-800/90 rounded-2xl p-5 sm:p-6 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div class="flex items-center gap-3.5">
-            <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-[#23B750] flex items-center justify-center shrink-0">
-              <Package class="w-5 h-5" />
+        <div class="bg-white dark:bg-[#0E131F] border border-gray-200/80 dark:border-gray-800/80 rounded-2xl p-4 sm:p-5 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-[#23B750] flex items-center justify-center shrink-0">
+              <Package class="w-4 h-4" />
             </div>
             <div>
-              <h4 class="text-sm font-bold text-gray-900 dark:text-white">Looking for marketing assets &amp; presentation decks?</h4>
+              <h4 class="text-xs sm:text-sm font-bold text-gray-900 dark:text-white">Need sales decks and WhatsApp outreach templates?</h4>
               <p class="text-xs text-gray-500 dark:text-gray-400">
-                Explore the official Partner Enablement Kit with ready-to-use pitch decks, WhatsApp outreach templates, and battlecards.
+                Download ready-to-use pitch materials, product one-pagers, and competitive battlecards.
               </p>
             </div>
           </div>
 
           <router-link
             to="/partner/kit"
-            class="px-4 py-2 text-xs font-bold text-white bg-[#23B750] hover:bg-[#1fa848] rounded-xl shadow-xs transition-all inline-flex items-center gap-1.5 shrink-0 self-start sm:self-auto"
+            class="px-3.5 py-1.5 text-xs font-bold text-white bg-[#23B750] hover:bg-[#1fa848] rounded-xl shadow-xs transition-all inline-flex items-center gap-1.5 shrink-0 self-start sm:self-auto"
           >
-            <span>Open Partner Kit</span>
+            <span>Partner Kit</span>
             <ArrowRight class="w-3.5 h-3.5" />
           </router-link>
         </div>
@@ -647,8 +790,8 @@
 
           <div class="p-3 bg-emerald-50/60 dark:bg-emerald-950/30 rounded-xl border border-emerald-200 dark:border-emerald-800 text-[11px] text-emerald-950 dark:text-emerald-200 space-y-1">
             <p class="font-semibold text-emerald-800 dark:text-emerald-300">Attribution Rules:</p>
-            <p>&bull; 90-day cookie window preserves your referral even if the client decides later.</p>
-            <p>&bull; Earn RM 300 immediately upon paid subscription activation.</p>
+            <p>· 90-day cookie window preserves your referral even if the client decides later.</p>
+            <p>· Earn RM 300 immediately upon paid subscription activation.</p>
           </div>
         </div>
 
@@ -664,105 +807,147 @@
     </div>
 
     <!-- ═════════════════════════════════════════════════════════
-         MODAL 2: APPLY FOR SALES PARTNER TRACK UPGRADE
+         MODAL 2: UPGRADE TO SALES RESELLER (TERMS & AGREEMENT)
          ═════════════════════════════════════════════════════════ -->
     <div
       v-if="showUpgradeModal"
       class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-950/70 backdrop-blur-xs animate-in fade-in duration-150"
       @click.self="showUpgradeModal = false"
     >
-      <div class="bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 rounded-2xl shadow-2xl max-w-lg w-full p-6 space-y-4 animate-in zoom-in-95 duration-150">
-        <div class="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 pb-3">
-          <div class="flex items-center gap-2.5">
-            <div class="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-[#23B750] flex items-center justify-center">
-              <Briefcase class="w-4 h-4" />
+      <div class="bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 rounded-2xl shadow-2xl max-w-xl w-full p-6 space-y-4 animate-in zoom-in-95 duration-150 max-h-[90vh] flex flex-col">
+        
+        <!-- Modal Header -->
+        <div class="flex items-start justify-between border-b border-gray-100 dark:border-gray-800 pb-3 shrink-0">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-[#23B750] border border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-center shrink-0">
+              <Sparkles class="w-5 h-5 text-[#23B750]" />
             </div>
             <div>
-              <h3 class="text-base font-bold text-gray-900 dark:text-white">Apply for Sales Partner Track</h3>
-              <p class="text-xs text-gray-500 dark:text-gray-400">Unlock 10% to 25% recurring monthly revenue share</p>
+              <div class="flex items-center gap-2">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-[#23B750] bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-md border border-emerald-200 dark:border-emerald-800">
+                  Track Accreditation Upgrade
+                </span>
+              </div>
+              <h3 class="text-base font-bold text-gray-900 dark:text-white mt-0.5">
+                Upgrade to Accredited Sales Reseller
+              </h3>
             </div>
           </div>
-          <button @click="showUpgradeModal = false" class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 cursor-pointer">✕</button>
+          <button 
+            @click="showUpgradeModal = false" 
+            class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 cursor-pointer p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+            aria-label="Close modal"
+          >
+            ✕
+          </button>
         </div>
 
-        <form @submit.prevent="submitUpgrade" class="space-y-3.5 text-xs">
-          <div class="space-y-1">
-            <label class="font-semibold text-gray-700 dark:text-gray-300">Company / Agency Name</label>
-            <input
-              type="text"
-              required
-              v-model="upgradeForm.company"
-              placeholder="e.g. Apex Digital Solutions Sdn Bhd"
-              class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-gray-100 focus:outline-none focus:border-[#23B750] text-xs"
-            />
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div class="space-y-1">
-              <label class="font-semibold text-gray-700 dark:text-gray-300">Primary Consulting Focus</label>
-              <select
-                v-model="upgradeForm.focus"
-                class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-gray-100 focus:outline-none focus:border-[#23B750] text-xs"
-              >
-                <option>IT Consulting &amp; Systems</option>
-                <option>Digital Marketing Agency</option>
-                <option>Accounting &amp; ERP Advisory</option>
-                <option>Business Management Consulting</option>
-                <option>Freelance Consultant</option>
-              </select>
+        <!-- Scrollable Modal Content -->
+        <div class="overflow-y-auto pr-1 space-y-4 flex-1 text-xs text-gray-600 dark:text-gray-300">
+          
+          <!-- Section 1: What is Happening & Key Enhancements -->
+          <div class="p-3.5 rounded-xl bg-emerald-500/[0.04] dark:bg-emerald-950/20 border border-emerald-500/20 space-y-2.5">
+            <h4 class="font-bold text-gray-900 dark:text-white flex items-center gap-1.5 text-xs">
+              <ShieldCheck class="w-4 h-4 text-[#23B750]" />
+              <span>What is happening with this upgrade?</span>
+            </h4>
+            <p class="text-[11.5px] text-gray-600 dark:text-gray-400 leading-relaxed">
+              You are migrating from the hands-off fixed referral bounty model (<span class="font-semibold text-gray-800 dark:text-gray-200">RM 300 / deal</span>) to the Accredited Sales Reseller track. Here is what activates immediately:
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+              <div class="p-2.5 rounded-lg bg-white dark:bg-gray-900/60 border border-emerald-500/15 space-y-0.5">
+                <p class="font-bold text-gray-900 dark:text-white flex items-center gap-1">
+                  <Check class="w-3.5 h-3.5 text-[#23B750]" />
+                  <span>15% – 25% Recurring MRR</span>
+                </p>
+                <p class="text-[10.5px] text-gray-500 dark:text-gray-400">Monthly wire distributions for 12 continuous months per client.</p>
+              </div>
+              <div class="p-2.5 rounded-lg bg-white dark:bg-gray-900/60 border border-emerald-500/15 space-y-0.5">
+                <p class="font-bold text-gray-900 dark:text-white flex items-center gap-1">
+                  <Check class="w-3.5 h-3.5 text-[#23B750]" />
+                  <span>120-Day Exclusive Domain Lock</span>
+                </p>
+                <p class="text-[10.5px] text-gray-500 dark:text-gray-400">Registered prospect domains are shielded against conflicting channels.</p>
+              </div>
+              <div class="p-2.5 rounded-lg bg-white dark:bg-gray-900/60 border border-emerald-500/15 space-y-0.5">
+                <p class="font-bold text-gray-900 dark:text-white flex items-center gap-1">
+                  <Check class="w-3.5 h-3.5 text-[#23B750]" />
+                  <span>Dedicated Partner Manager</span>
+                </p>
+                <p class="text-[10.5px] text-gray-500 dark:text-gray-400">Direct co-selling assistance, RFP reviews, and marketing collateral.</p>
+              </div>
+              <div class="p-2.5 rounded-lg bg-white dark:bg-gray-900/60 border border-emerald-500/15 space-y-0.5">
+                <p class="font-bold text-gray-900 dark:text-white flex items-center gap-1">
+                  <Check class="w-3.5 h-3.5 text-[#23B750]" />
+                  <span>Partner-Led Deal Closing</span>
+                </p>
+                <p class="text-[10.5px] text-gray-500 dark:text-gray-400">You run sales demos and negotiations directly with your clients.</p>
+              </div>
             </div>
+          </div>
 
-            <div class="space-y-1">
-              <label class="font-semibold text-gray-700 dark:text-gray-300">Estimated Deals / Month</label>
-              <select
-                v-model="upgradeForm.pipeline"
-                class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-gray-100 focus:outline-none focus:border-[#23B750] text-xs"
-              >
-                <option>3&ndash;5 deals / mo</option>
-                <option>6&ndash;10 deals / mo</option>
-                <option>11&ndash;20 deals / mo</option>
-                <option>20+ deals / mo</option>
-              </select>
+          <!-- Section 2: Reseller Agreement & Policy Terms -->
+          <div class="space-y-2">
+            <h4 class="font-bold text-gray-900 dark:text-white flex items-center gap-1.5 text-xs">
+              <FileText class="w-3.5 h-3.5 text-gray-500" />
+              <span>Reseller Agreement &amp; Operating Terms</span>
+            </h4>
+            <div class="p-3 rounded-xl bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800 space-y-2 text-[11px] leading-relaxed max-h-36 overflow-y-auto">
+              <p>
+                <strong>1. Ethical Representation:</strong> As an Accredited Reseller, you agree to represent RakanSales features, capabilities, and subscription commitments accurately and ethically.
+              </p>
+              <p>
+                <strong>2. Exclusive 120-Day Lock Policy:</strong> Prospect domains registered in your Deals Pipeline are reserved exclusively for you for 120 days. Deal locks require verified client interaction to remain active.
+              </p>
+              <p>
+                <strong>3. Recurring Disbursements:</strong> RevShare commissions are calculated on active, cleared customer subscription charges and disbursed on the 5th business day of each calendar month.
+              </p>
+              <p>
+                <strong>4. Admin-Only Downgrade Policy:</strong> To protect ongoing 12-month recurring revenue contracts and assigned domain allocations, switching back from the Sales Reseller track to the Referral track cannot be done via self-service and must be requested through Partner Administration.
+              </p>
             </div>
           </div>
 
-          <div class="space-y-1">
-            <label class="font-semibold text-gray-700 dark:text-gray-300">Direct Contact Number (WhatsApp)</label>
-            <input
-              type="text"
-              required
-              v-model="upgradeForm.phone"
-              placeholder="+6012-345 6789"
-              class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-gray-100 focus:outline-none focus:border-[#23B750] text-xs"
-            />
+          <!-- Section 3: Acceptance Checkbox -->
+          <div class="p-3 rounded-xl bg-gray-50 dark:bg-gray-850 border border-gray-200 dark:border-gray-700/80">
+            <label class="flex items-start gap-2.5 cursor-pointer">
+              <input
+                type="checkbox"
+                v-model="hasAcceptedTerms"
+                class="mt-0.5 rounded border-gray-300 text-[#23B750] focus:ring-[#23B750] w-4 h-4 cursor-pointer accent-[#23B750]"
+              />
+              <span class="text-xs text-gray-700 dark:text-gray-300 leading-normal select-none">
+                I understand the requirements of the Sales Reseller track and agree to the <strong>Partner Operating Terms</strong>. I acknowledge that track downgrades are managed via Partner Admin.
+              </span>
+            </label>
           </div>
 
-          <div class="space-y-1">
-            <label class="font-semibold text-gray-700 dark:text-gray-300">Brief Notes on Your Client Base</label>
-            <textarea
-              v-model="upgradeForm.notes"
-              rows="2"
-              placeholder="Tell us about the types of businesses you work with (e.g. retail, logistics, manufacturing)..."
-              class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-gray-100 focus:outline-none focus:border-[#23B750] text-xs resize-none"
-            ></textarea>
-          </div>
+        </div>
 
-          <div class="flex items-center justify-end gap-2 pt-3 border-t border-gray-100 dark:border-gray-800">
-            <button
-              type="button"
-              @click="showUpgradeModal = false"
-              class="px-4 py-2 text-xs font-semibold text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl cursor-pointer"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              class="px-5 py-2 bg-[#23B750] hover:bg-[#1fa848] text-white text-xs font-bold rounded-xl shadow-md shadow-[#23B750]/20 cursor-pointer"
-            >
-              Submit Upgrade Application
-            </button>
-          </div>
-        </form>
+        <!-- Modal Footer Actions -->
+        <div class="flex items-center justify-between pt-3 border-t border-gray-100 dark:border-gray-800 shrink-0">
+          <button
+            type="button"
+            @click="showUpgradeModal = false"
+            class="px-4 py-2 text-xs font-semibold text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl cursor-pointer transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            :disabled="!hasAcceptedTerms"
+            @click="confirmUpgrade"
+            class="px-5 py-2 text-xs font-bold rounded-xl transition-all inline-flex items-center gap-1.5 shadow-xs"
+            :class="hasAcceptedTerms
+              ? 'bg-[#23B750] hover:bg-[#1fa848] text-white cursor-pointer active:scale-98'
+              : 'bg-gray-200 dark:bg-gray-800 text-gray-400 dark:text-gray-500 cursor-not-allowed'
+            "
+          >
+            <span>Accept Terms &amp; Activate Track</span>
+            <ArrowRight class="w-3.5 h-3.5" />
+          </button>
+        </div>
+
       </div>
     </div>
 
@@ -791,19 +976,24 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useRoute } from 'vue-router';
+import { usePartnerStore } from '@/stores/partner';
 import {
   ArrowLeft,
   ArrowRight,
   ArrowUpRight,
   Share2,
   Copy,
-  CheckCircle2,
   Briefcase,
-  Award,
-  Calculator,
   Package,
+  Check,
+  Sparkles,
+  Award,
+  ShieldCheck,
+  Lock,
+  FileText,
 } from 'lucide-vue-next';
 
+const partnerStore = usePartnerStore();
 const route = useRoute();
 
 // Navigation source check
@@ -818,9 +1008,22 @@ const isFromOverview = computed(() => {
 // Modals and Link Sharing
 const showShareModal = ref(false);
 const showUpgradeModal = ref(false);
+const hasAcceptedTerms = ref(false);
 const isLinkCopied = ref(false);
 const referralCode = 'O45HKSYS';
 const referralLink = `https://app.rakansales.com/ref/${referralCode}`;
+
+function openUpgradeModal() {
+  hasAcceptedTerms.value = false;
+  showUpgradeModal.value = true;
+}
+
+function confirmUpgrade() {
+  if (!hasAcceptedTerms.value) return;
+  partnerStore.setTrack('sales');
+  showUpgradeModal.value = false;
+  showToast('Congratulations! You are now an Accredited Sales Reseller.');
+}
 
 const toastMessage = ref('');
 let toastTimer: number | null = null;
@@ -841,29 +1044,8 @@ function copyReferralLink() {
   }, 2500);
 }
 
-// Upgrade Form State
-const upgradeForm = ref({
-  company: '',
-  focus: 'IT Consulting & Systems',
-  pipeline: '6–10 deals / mo',
-  phone: '',
-  notes: '',
-});
-
-function submitUpgrade() {
-  showUpgradeModal.value = false;
-  showToast('Sales Partner Track application submitted! Our team will contact you.');
-  upgradeForm.value = {
-    company: '',
-    focus: 'IT Consulting & Systems',
-    pipeline: '6–10 deals / mo',
-    phone: '',
-    notes: '',
-  };
-}
-
 // ═════════════════════════════════════════════════════════
-// SIMULATOR REACTIVE LOGIC WITH PLAN CHECKBOXES
+// SIMULATOR REACTIVE LOGIC
 // ═════════════════════════════════════════════════════════
 const simTrack = ref<'referral' | 'sales'>('referral');
 const simDealsPerMonth = ref(6);
@@ -873,119 +1055,128 @@ interface PlanItem {
   name: string;
   priceLabel: string;
   mrr: number;
-  referralPayout: string;
-  salesPayout: string;
 }
 
 const availablePlans: PlanItem[] = [
   {
     id: 'basic',
     name: 'Basic Plan',
-    priceLabel: 'RM 150 / mo MRR',
+    priceLabel: 'RM 150/mo',
     mrr: 150,
-    referralPayout: 'RM 300 / signup',
-    salesPayout: '10% – 25% MRR (~RM15 – RM38/mo)',
   },
   {
     id: 'pro',
     name: 'Pro Plan',
-    priceLabel: 'RM 750 / mo MRR',
+    priceLabel: 'RM 750/mo',
     mrr: 750,
-    referralPayout: 'RM 300 – RM 500 / signup',
-    salesPayout: '10% – 25% MRR (~RM75 – RM188/mo)',
   },
   {
     id: 'growth',
     name: 'Growth Plan',
-    priceLabel: 'RM 1,500 / mo MRR',
+    priceLabel: 'RM 1,500/mo',
     mrr: 1500,
-    referralPayout: 'RM 300 – RM 500 / signup',
-    salesPayout: '10% – 25% MRR (~RM150 – RM375/mo)',
   },
   {
     id: 'enterprise',
     name: 'Enterprise Plan',
-    priceLabel: 'RM 3,500 / mo MRR',
+    priceLabel: 'RM 3,500/mo',
     mrr: 3500,
-    referralPayout: 'RM 300 – RM 500 / signup',
-    salesPayout: '10% – 25% MRR (~RM350 – RM875/mo)',
   },
 ];
 
 const selectedPlans = ref<string[]>(['pro', 'growth']);
 
+function togglePlan(planId: string) {
+  if (selectedPlans.value.includes(planId)) {
+    if (selectedPlans.value.length > 1) {
+      selectedPlans.value = selectedPlans.value.filter(id => id !== planId);
+    }
+  } else {
+    selectedPlans.value.push(planId);
+  }
+}
+
 const activePlans = computed(() => {
   if (selectedPlans.value.length === 0) {
-    return [availablePlans[1]]; // fallback to Pro if user unchecks all
+    return [availablePlans[1]];
   }
   return availablePlans.filter(p => selectedPlans.value.includes(p.id));
 });
 
+// Current Rate based on Track and Deals Volume (Fixed RM 300 for Referral)
+const currentReferralBounty = computed(() => {
+  return 300;
+});
+
+const currentSalesPercent = computed(() => {
+  const d = simDealsPerMonth.value;
+  if (d >= 50) return 0.25;
+  if (d >= 20) return 0.20;
+  return 0.15;
+});
+
+// Dynamic Expected Payout per plan displayed on the plan cards
+function getPlanPayoutLabel(plan: PlanItem) {
+  if (simTrack.value === 'referral') {
+    return `RM ${currentReferralBounty.value} / signup`;
+  } else {
+    const monthlyAmt = Math.round(plan.mrr * currentSalesPercent.value);
+    const annualAmt = monthlyAmt * 12;
+    const pct = Math.round(currentSalesPercent.value * 100);
+    return `${pct}% MRR (RM ${monthlyAmt}/mo • RM ${annualAmt.toLocaleString()}/yr)`;
+  }
+}
+
 const simQualifiedTier = computed(() => {
   const d = simDealsPerMonth.value;
   if (simTrack.value === 'referral') {
-    if (d >= 50) {
-      return {
-        name: 'Elite Tier (RM 500 / deal)',
-        rateSummary: 'RM 500 / signup (+RM 200 bonus)',
-        clearanceDays: 'Instant Payout Cycle',
-      };
-    }
+    return {
+      name: 'Fixed Referral Bounty (RM 300 / deal)',
+      rateSummary: 'RM 300 / signup · Zero quotas',
+      clearanceDays: '30-Day Cycle',
+    };
+  } else {
     if (d >= 20) {
       return {
-        name: 'Gold Tier (RM 400 / deal)',
-        rateSummary: 'RM 400 / signup (+RM 100 bonus)',
-        clearanceDays: '14 Days Payout Cycle',
+        name: 'Premier Reseller (25% MRR + MDF)',
+        rateSummary: '25% of MRR &times; 12 Months',
+        clearanceDays: 'Monthly Wire',
       };
     }
     if (d >= 6) {
       return {
-        name: 'Silver Tier (RM 350 / deal)',
-        rateSummary: 'RM 350 / signup (+RM 50 bonus)',
-        clearanceDays: '14 Days Payout Cycle',
+        name: 'Certified Solutions Partner (20% MRR)',
+        rateSummary: '20% of MRR &times; 12 Months',
+        clearanceDays: 'Monthly Wire',
       };
     }
     return {
-      name: 'Starter Tier (RM 300 / deal)',
-      rateSummary: 'RM 300 / signup (Base Rate)',
-      clearanceDays: '30 Days Payout Cycle',
-    };
-  } else {
-    if (d >= 50) {
-      return {
-        name: 'Elite Partner (25% MRR)',
-        rateSummary: '25% of MRR × 12 Months',
-        clearanceDays: 'Monthly Automatic Wire',
-      };
-    }
-    if (d >= 20) {
-      return {
-        name: 'Gold Partner (20% MRR)',
-        rateSummary: '20% of MRR × 12 Months',
-        clearanceDays: 'Monthly Automatic Wire',
-      };
-    }
-    return {
-      name: 'Silver Partner (10% MRR)',
-      rateSummary: '10% of MRR × 12 Months',
-      clearanceDays: 'Monthly Automatic Wire',
+      name: 'Registered Reseller (15% MRR)',
+      rateSummary: '15% of MRR &times; 12 Months',
+      clearanceDays: 'Monthly Wire',
     };
   }
 });
 
+// Average MRR across selected plans
+const selectedAvgMrr = computed(() => {
+  const plans = activePlans.value;
+  return Math.round(plans.reduce((acc, p) => acc + p.mrr, 0) / plans.length);
+});
+
+// Monthly earnings
 const simMonthlyEarnings = computed(() => {
   const d = simDealsPerMonth.value;
-  const plans = activePlans.value;
-  const avgMrr = plans.reduce((acc, p) => acc + p.mrr, 0) / plans.length;
-
   if (simTrack.value === 'referral') {
-    const rate = d >= 50 ? 500 : d >= 20 ? 400 : d >= 6 ? 350 : 300;
-    return d * rate;
+    return d * currentReferralBounty.value;
   } else {
-    const percent = d >= 50 ? 0.25 : d >= 20 ? 0.20 : 0.10;
-    // Monthly recurring commission across active accounts
-    return Math.round(d * avgMrr * percent);
+    return Math.round(d * selectedAvgMrr.value * currentSalesPercent.value);
   }
+});
+
+// Annual earnings
+const simAnnualEarnings = computed(() => {
+  return simMonthlyEarnings.value * 12;
 });
 
 const simMonthlyEarningsFormatted = computed(() => {
@@ -993,14 +1184,6 @@ const simMonthlyEarningsFormatted = computed(() => {
 });
 
 const simAnnualEarningsFormatted = computed(() => {
-  const annual = simMonthlyEarnings.value * 12;
-  return `RM ${annual.toLocaleString()}`;
+  return `RM ${simAnnualEarnings.value.toLocaleString()}`;
 });
 </script>
-
-<style scoped>
-.partner-hero-banner {
-  background-image: radial-gradient(circle at 10% 20%, rgba(35, 183, 80, 0.12) 0%, transparent 40%),
-                    radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.08) 0%, transparent 40%);
-}
-</style>
