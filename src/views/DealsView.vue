@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import {
   Flame,
   Paperclip,
@@ -33,6 +33,8 @@ import {
   Send,
   Trophy,
   XCircle,
+  Archive,
+  RotateCcw,
   UserX,
   Shuffle,
   Settings2,
@@ -66,6 +68,7 @@ const newDeal = ref({
   clientName: '',
   owner: '',
   value: 0,
+  expectedCloseDate: '',
   description: '',
   hotLead: '1h',
   stage: 'New'
@@ -508,7 +511,9 @@ const parseAgeInDays = (ageStr: string) => {
 
 const sortedFilteredDeals = computed(() => {
   let list = filteredDeals.value
-  if (listStageFilter.value !== 'All') {
+  if (listStageFilter.value === 'All') {
+    list = list.filter(d => d.stage !== 'Archived')
+  } else {
     list = list.filter(d => d.stage === listStageFilter.value)
   }
   
@@ -541,16 +546,16 @@ const stageConfidence = ref<Record<string, number>>({
 })
 
 const forecastStats = computed(() => {
-  const list = filteredDeals.value
+  const list = filteredDeals.value.filter(d => !['Lost', 'Archived'].includes(d.stage))
   const total = list.reduce((sum, d) => sum + d.value, 0)
   const weightedTotal = list.reduce((sum, d) => {
-    const confidence = stageConfidence.value[d.stage] ?? 0
+    const confidence = d.stage === 'Won' ? 100 : (stageConfidence.value[d.stage] ?? 0)
     return sum + d.value * (confidence / 100)
   }, 0)
   const avg = list.length ? Math.round(total / list.length) : 0
   
   // Simulated overall project health win rate
-  const lateStageCount = list.filter(d => ['Proposal / Quotation', 'Follow Up'].includes(d.stage)).length
+  const lateStageCount = list.filter(d => ['Proposal / Quotation', 'Follow Up', 'Won'].includes(d.stage)).length
   const winRate = list.length ? Math.round((lateStageCount / list.length) * 45 + 35) : 0
   
   return { total, weightedTotal, avg, winRate }
@@ -558,7 +563,7 @@ const forecastStats = computed(() => {
 
 // --- Expanded Forecast Dashboard Computations ---
 const activeDealsForForecast = computed(() => {
-  return filteredDeals.value.filter(d => d.stage !== 'Lost')
+  return filteredDeals.value.filter(d => !['Won', 'Lost', 'Archived'].includes(d.stage))
 })
 
 const activeDealsCount = computed(() => activeDealsForForecast.value.length)
@@ -568,11 +573,11 @@ const pipelineValueSum = computed(() => {
 })
 
 const wonDealsCount = computed(() => {
-  return filteredDeals.value.filter(d => d.stage === 'Follow Up').length
+  return filteredDeals.value.filter(d => d.stage === 'Won' || d.stage === 'Follow Up').length
 })
 
 const wonDealsValueSum = computed(() => {
-  return filteredDeals.value.filter(d => d.stage === 'Follow Up').reduce((sum, d) => sum + d.value, 0)
+  return filteredDeals.value.filter(d => d.stage === 'Won' || d.stage === 'Follow Up').reduce((sum, d) => sum + d.value, 0)
 })
 
 const lostDealsCount = computed(() => {
@@ -603,14 +608,14 @@ const agentPerformanceStats = computed(() => {
     const agentDeals = deals.value.filter(d => d.owner === agentName)
     if (agentDeals.length === 0) return
     
-    const activeDeals = agentDeals.filter(d => d.stage !== 'Lost')
+    const activeDeals = agentDeals.filter(d => !['Won', 'Lost', 'Archived'].includes(d.stage))
     const activeCount = activeDeals.length
     
     const breakdown: Record<string, number> = {}
     stages.forEach(stg => {
       breakdown[stg] = activeDeals.filter(d => d.stage === stg).length
     })
-    breakdown['Won'] = agentDeals.filter(d => d.stage === 'Follow Up').length
+    breakdown['Won'] = agentDeals.filter(d => d.stage === 'Won' || d.stage === 'Follow Up').length
     breakdown['Lost'] = agentDeals.filter(d => d.stage === 'Lost').length
     
     statsList.push({
@@ -623,12 +628,12 @@ const agentPerformanceStats = computed(() => {
   
   const unassignedDeals = deals.value.filter(d => !d.owner)
   if (unassignedDeals.length > 0) {
-    const activeDeals = unassignedDeals.filter(d => d.stage !== 'Lost')
+    const activeDeals = unassignedDeals.filter(d => !['Won', 'Lost', 'Archived'].includes(d.stage))
     const breakdown: Record<string, number> = {}
     stages.forEach(stg => {
       breakdown[stg] = activeDeals.filter(d => d.stage === stg).length
     })
-    breakdown['Won'] = unassignedDeals.filter(d => d.stage === 'Follow Up').length
+    breakdown['Won'] = unassignedDeals.filter(d => d.stage === 'Won' || d.stage === 'Follow Up').length
     breakdown['Lost'] = unassignedDeals.filter(d => d.stage === 'Lost').length
     statsList.push({
       name: 'Unassigned',
@@ -867,7 +872,10 @@ const stageColors: Record<string, { border: string; bg: string; text: string; he
   Acknowledged: { border: 'border-t-[#00D2C4]', bg: 'bg-[#00D2C4]/10', text: 'text-[#00D2C4]', headerBar: 'bg-[#00D2C4]' },
   Qualifying: { border: 'border-t-[#FFCC00]', bg: 'bg-[#FFCC00]/10', text: 'text-[#FFCC00]', headerBar: 'bg-[#FFCC00]' },
   'Proposal / Quotation': { border: 'border-t-[#FF8800]', bg: 'bg-[#FF8800]/10', text: 'text-[#FF8800]', headerBar: 'bg-[#FF8800]' },
-  'Follow Up': { border: 'border-t-[#10B981]', bg: 'bg-[#10B981]/10', text: 'text-[#10B981]', headerBar: 'bg-[#10B981]' }
+  'Follow Up': { border: 'border-t-[#10B981]', bg: 'bg-[#10B981]/10', text: 'text-[#10B981]', headerBar: 'bg-[#10B981]' },
+  Won: { border: 'border-t-[#23B750]', bg: 'bg-[#23B750]/10', text: 'text-[#168638]', headerBar: 'bg-[#23B750]' },
+  Lost: { border: 'border-t-red-500', bg: 'bg-red-50', text: 'text-red-600', headerBar: 'bg-red-500' },
+  Archived: { border: 'border-t-slate-400', bg: 'bg-slate-100', text: 'text-slate-600', headerBar: 'bg-slate-400' }
 }
 
 const getHeaderBarColor = (stage: string) => {
@@ -881,11 +889,56 @@ const getHeaderBarColor = (stage: string) => {
   return colors[stage] || '#3b82f6'
 }
 
-// --- Drag & Drop ---
-const draggedDealId = ref<number | null>(null)
+// --- Drag & Drop + Bottom Quick-Drop Toolbar ---
+type QuickDropAction = 'won' | 'lost' | 'archive'
 
-function handleDragStart(dealId: number) {
+interface QuickActionFeedback {
+  dealId: number
+  dealTitle: string
+  dealValue: number
+  action: QuickDropAction
+  previousStage: string
+}
+
+const draggedDealId = ref<number | null>(null)
+const isDragActive = ref(false)
+const draggedOverAction = ref<QuickDropAction | null>(null)
+const quickActionToast = ref<QuickActionFeedback | null>(null)
+let dragStartRaf: number | null = null
+let toastTimeout: ReturnType<typeof setTimeout> | null = null
+
+const draggedDeal = computed(() => {
+  if (draggedDealId.value === null) return null
+  return deals.value.find((d) => d.id === draggedDealId.value) ?? null
+})
+
+function handleDragStart(dealId: number, event?: DragEvent) {
   draggedDealId.value = dealId
+  draggedOverAction.value = null
+  if (event?.dataTransfer) {
+    event.dataTransfer.effectAllowed = 'move'
+    event.dataTransfer.setData('text/plain', String(dealId))
+  }
+  if (dragStartRaf !== null) {
+    cancelAnimationFrame(dragStartRaf)
+  }
+  dragStartRaf = requestAnimationFrame(() => {
+    if (draggedDealId.value !== null) {
+      isDragActive.value = true
+    }
+    dragStartRaf = null
+  })
+}
+
+function resetDragState() {
+  if (dragStartRaf !== null) {
+    cancelAnimationFrame(dragStartRaf)
+    dragStartRaf = null
+  }
+  draggedDealId.value = null
+  isDragActive.value = false
+  draggedOverStage.value = null
+  draggedOverAction.value = null
 }
 
 function handleDrop(stage: string) {
@@ -894,9 +947,106 @@ function handleDrop(stage: string) {
     if (deal) {
       deal.stage = stage
     }
-    draggedDealId.value = null
+  }
+  resetDragState()
+}
+
+function handleColumnDragLeave(stage: string, event: DragEvent) {
+  const currentTarget = event.currentTarget as HTMLElement | null
+  const relatedTarget = event.relatedTarget as Node | null
+  if (currentTarget && relatedTarget && currentTarget.contains(relatedTarget)) {
+    return
+  }
+  if (draggedOverStage.value === stage) {
+    draggedOverStage.value = null
   }
 }
+
+function handleActionDragEnter(action: QuickDropAction) {
+  draggedOverStage.value = null
+  draggedOverAction.value = action
+}
+
+function handleActionDragOver(action: QuickDropAction, event: DragEvent) {
+  if (event.dataTransfer) {
+    event.dataTransfer.dropEffect = 'move'
+  }
+  if (draggedOverStage.value !== null) {
+    draggedOverStage.value = null
+  }
+  if (draggedOverAction.value !== action) {
+    draggedOverAction.value = action
+  }
+}
+
+function handleActionDragLeave(action: QuickDropAction, event: DragEvent) {
+  const currentTarget = event.currentTarget as HTMLElement | null
+  const relatedTarget = event.relatedTarget as Node | null
+  if (currentTarget && relatedTarget && currentTarget.contains(relatedTarget)) {
+    return
+  }
+  if (draggedOverAction.value === action) {
+    draggedOverAction.value = null
+  }
+}
+
+function triggerQuickActionToast(payload: QuickActionFeedback) {
+  if (toastTimeout) {
+    clearTimeout(toastTimeout)
+  }
+  quickActionToast.value = payload
+  toastTimeout = setTimeout(() => {
+    quickActionToast.value = null
+    toastTimeout = null
+  }, 5000)
+}
+
+function dismissQuickActionToast() {
+  if (toastTimeout) {
+    clearTimeout(toastTimeout)
+    toastTimeout = null
+  }
+  quickActionToast.value = null
+}
+
+function undoQuickAction() {
+  if (!quickActionToast.value) return
+  const { dealId, previousStage } = quickActionToast.value
+  const deal = deals.value.find((d) => d.id === dealId)
+  if (deal) {
+    deal.stage = previousStage
+  }
+  dismissQuickActionToast()
+}
+
+function handleActionDrop(action: QuickDropAction) {
+  if (draggedDealId.value !== null) {
+    const deal = deals.value.find((d) => d.id === draggedDealId.value)
+    if (deal) {
+      const previousStage = deal.stage
+      const nextStage = action === 'won' ? 'Won' : action === 'lost' ? 'Lost' : 'Archived'
+      deal.stage = nextStage
+      triggerQuickActionToast({
+        dealId: deal.id,
+        dealTitle: deal.title,
+        dealValue: deal.value,
+        action,
+        previousStage
+      })
+    }
+  }
+  resetDragState()
+}
+
+onMounted(() => {
+  window.addEventListener('dragend', resetDragState)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('dragend', resetDragState)
+  if (dragStartRaf !== null) cancelAnimationFrame(dragStartRaf)
+  if (toastTimeout) clearTimeout(toastTimeout)
+})
 
 // --- Selection & Actions State ---
 const selectedDealIds = ref<number[]>([])
@@ -1036,9 +1186,9 @@ const getStageWeightedValueSum = (stage: string) => {
 
 // Statistics count
 const dealStats = computed(() => {
-  const total = deals.value.length
-  const won = deals.value.filter((d) => d.stage === 'Follow Up').length
-  const lost = 3 // static mock number for realistic dashboard experience
+  const total = deals.value.filter((d) => d.stage !== 'Archived').length
+  const won = deals.value.filter((d) => d.stage === 'Won' || d.stage === 'Follow Up').length
+  const lost = 3 + deals.value.filter((d) => d.stage === 'Lost').length
   return { total, won, lost }
 })
 
@@ -1046,8 +1196,14 @@ const dealStats = computed(() => {
 function submitNewDeal() {
   if (!newDeal.value.title || !newDeal.value.clientName || !newDeal.value.owner) return
 
+  let formattedCloseDate = ''
+  if (newDeal.value.expectedCloseDate) {
+    const parts = newDeal.value.expectedCloseDate.split('-')
+    formattedCloseDate = parts.length === 3 ? `${parts[2]}/${parts[1]}/${parts[0]}` : newDeal.value.expectedCloseDate
+  }
+
   const nextId = Math.max(...deals.value.map((d) => d.id)) + 1
-  deals.value.push({
+  const createdDealEntry: any = {
     id: nextId,
     title: newDeal.value.title,
     clientName: newDeal.value.clientName,
@@ -1061,15 +1217,18 @@ function submitNewDeal() {
     hotLead: newDeal.value.hotLead || '2h',
     stage: newDeal.value.stage,
     email: `${newDeal.value.clientName.toLowerCase().replace(/\s+/g, '')}@example.com`,
-    phone: `+6012 ${Math.floor(1000000 + Math.random() * 9000000)}`
-  })
+    phone: `+6012 ${Math.floor(1000000 + Math.random() * 9000000)}`,
+    ...(formattedCloseDate ? { closeDate: formattedCloseDate } : {})
+  }
+  deals.value.push(createdDealEntry)
 
   // Reset form
   newDeal.value = {
     title: '',
     clientName: '',
     owner: '',
-    value: 0,
+  value: 0,
+    expectedCloseDate: '',
     description: '',
     hotLead: '1h',
     stage: 'New'
@@ -1128,7 +1287,7 @@ const currentStageIndex = computed(() => {
   if (stage === 'Acknowledged') return 1;
   if (stage === 'Qualifying') return 2;
   if (stage === 'Proposal / Quotation') return 3;
-  if (stage === 'Follow Up') return 4;
+  if (stage === 'Follow Up' || stage === 'Won') return 4;
   if (stage === 'Lost') return 4;
   return -1;
 });
@@ -1163,7 +1322,7 @@ function handleOwnerChange(event: Event) {
 </script>
 
 <template>
-  <div class="h-[calc(100vh-52px)] flex flex-col bg-[#F3F4F6] text-gray-800 font-sans overflow-hidden">
+  <div class="h-[calc(100vh-52px)] flex flex-col bg-[#F3F4F6] text-gray-800 font-sans overflow-hidden relative">
     <!-- Selection Action Bar (Shown when isBulkEditMode is true) -->
     <header
       v-if="isBulkEditMode"
@@ -1459,10 +1618,10 @@ function handleOwnerChange(event: Event) {
         <div
           v-for="stage in stages"
           :key="stage"
-          class="flex-1 min-w-[250px] max-w-[320px] h-full flex flex-col bg-transparent"
-          @dragover.prevent
-          @dragenter="draggedOverStage = stage"
-          @dragleave="draggedOverStage = null"
+          class="flex-1 min-w-[250px] max-w-[320px] h-full flex flex-col bg-transparent transition-colors duration-150"
+          @dragover.prevent="draggedOverStage = stage; draggedOverAction = null"
+          @dragenter="draggedOverStage = stage; draggedOverAction = null"
+          @dragleave="handleColumnDragLeave(stage, $event)"
           @drop="handleDrop(stage); draggedOverStage = null"
           :style="draggedOverStage === stage ? { border: '2px dashed ' + getHeaderBarColor(stage), borderRadius: '16px', backgroundColor: getHeaderBarColor(stage) + '0d' } : {}"
         >
@@ -1505,10 +1664,16 @@ function handleOwnerChange(event: Event) {
             <div
               v-for="deal in getStageDeals(stage)"
               :key="deal.id"
-              draggable="true"
-              @dragstart="handleDragStart(deal.id)"
+              :draggable="!isBulkEditMode"
+              @dragstart="handleDragStart(deal.id, $event)"
+              @dragend="resetDragState"
               @click="isBulkEditMode ? toggleCardSelection(deal.id) : (selectedDealForPreview = deal)"
-              class="w-full bg-white rounded-xl border border-gray-200 hover:border-emerald-300 hover:shadow-[0_8px_20px_rgba(35,183,80,0.08)] hover:-translate-y-0.5 p-2.5 shadow-sm transition-all duration-200 cursor-pointer active:cursor-grabbing group relative flex flex-col gap-1.5 flex-shrink-0"
+              :class="[
+                'w-full bg-white rounded-xl border p-2.5 shadow-sm transition-all duration-200 cursor-pointer active:cursor-grabbing group relative flex flex-col gap-1.5 flex-shrink-0',
+                isDragActive && draggedDealId === deal.id
+                  ? 'opacity-45 border-dashed border-[#23B750] ring-2 ring-[#23B750]/20'
+                  : 'border-gray-200 hover:border-emerald-300 hover:shadow-[0_8px_20px_rgba(35,183,80,0.08)] hover:-translate-y-0.5'
+              ]"
             >
               <!-- Card top line: Title, hot tag, menu -->
               <div class="flex items-center justify-between gap-1.5 w-full min-w-0">
@@ -1602,6 +1767,9 @@ function handleOwnerChange(event: Event) {
             >
               <option value="All">All Stages</option>
               <option v-for="stg in stages" :key="stg" :value="stg">{{ stg }}</option>
+              <option value="Won">Won</option>
+              <option value="Lost">Lost</option>
+              <option value="Archived">Archived</option>
             </select>
           </div>
           <div class="text-xs font-bold text-gray-500">
@@ -1959,6 +2127,149 @@ function handleOwnerChange(event: Event) {
       </div>
     </div>
 
+    <!-- ──────────────────────────────────────────────────────────────────
+         BOTTOM DRAG-AND-DROP QUICK ACTION TOOLBAR
+         Appears while dragging a deal card to quickly drop as Won / Lost / Archive
+         ────────────────────────────────────────────────────────────────── -->
+    <Transition name="drag-dock">
+      <div
+        v-if="isDragActive && draggedDeal"
+        class="absolute inset-x-0 bottom-5 z-50 flex justify-center px-4 pointer-events-none select-none"
+        role="region"
+        aria-label="Quick deal drop actions"
+      >
+        <div
+          class="w-full max-w-[640px] pointer-events-auto rounded-2xl bg-white/95 backdrop-blur-md border border-slate-200/90 ring-1 ring-slate-900/5 p-2 shadow-[0_18px_42px_-8px_rgba(15,23,42,0.16),0_4px_12px_-2px_rgba(15,23,42,0.06)]"
+          @dragover.prevent.stop="draggedOverStage = null"
+        >
+          <!-- Dragged deal context bar -->
+          <div class="flex items-center justify-between gap-3 px-2.5 pb-1.5 mb-1.5 border-b border-slate-100 text-xs pointer-events-none">
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="h-2 w-2 rounded-full bg-[#23B750] shrink-0"></span>
+              <span class="font-bold text-slate-900 truncate">{{ draggedDeal.title }}</span>
+              <span class="text-slate-400 shrink-0">•</span>
+              <span class="text-slate-600 font-medium truncate">{{ draggedDeal.clientName }}</span>
+            </div>
+            <span class="font-mono tabular-nums font-bold text-[#168638] shrink-0">
+              RM {{ draggedDeal.value.toLocaleString() }}
+            </span>
+          </div>
+
+          <!-- Three Quick-Drop Targets: Mark as Won | Mark as Lost | Archive -->
+          <div class="grid grid-cols-3 gap-2">
+            <!-- Drop Zone 1: Mark as Won -->
+            <div
+              @dragenter.prevent.stop="handleActionDragEnter('won')"
+              @dragover.prevent.stop="handleActionDragOver('won', $event)"
+              @dragleave.stop="handleActionDragLeave('won', $event)"
+              @drop.prevent.stop="handleActionDrop('won')"
+              :class="[
+                'flex items-center justify-center gap-2 rounded-xl px-4 py-3.5 border text-xs font-extrabold transition-all duration-150',
+                draggedOverAction === 'won'
+                  ? 'bg-[#168638] border-[#168638] text-white scale-[1.02] -translate-y-0.5 shadow-[0_10px_22px_-4px_rgba(22,134,56,0.35)]'
+                  : 'bg-emerald-50/85 border-dashed border-emerald-400 text-[#146c2e]'
+              ]"
+            >
+              <Trophy class="h-4 w-4 shrink-0 pointer-events-none" />
+              <span class="truncate pointer-events-none">Mark as Won</span>
+            </div>
+
+            <!-- Drop Zone 2: Mark as Lost -->
+            <div
+              @dragenter.prevent.stop="handleActionDragEnter('lost')"
+              @dragover.prevent.stop="handleActionDragOver('lost', $event)"
+              @dragleave.stop="handleActionDragLeave('lost', $event)"
+              @drop.prevent.stop="handleActionDrop('lost')"
+              :class="[
+                'flex items-center justify-center gap-2 rounded-xl px-4 py-3.5 border text-xs font-extrabold transition-all duration-150',
+                draggedOverAction === 'lost'
+                  ? 'bg-red-600 border-red-600 text-white scale-[1.02] -translate-y-0.5 shadow-[0_10px_22px_-4px_rgba(220,38,38,0.35)]'
+                  : 'bg-rose-50/85 border-dashed border-rose-400 text-rose-800'
+              ]"
+            >
+              <XCircle class="h-4 w-4 shrink-0 pointer-events-none" />
+              <span class="truncate pointer-events-none">Mark as Lost</span>
+            </div>
+
+            <!-- Drop Zone 3: Archive -->
+            <div
+              @dragenter.prevent.stop="handleActionDragEnter('archive')"
+              @dragover.prevent.stop="handleActionDragOver('archive', $event)"
+              @dragleave.stop="handleActionDragLeave('archive', $event)"
+              @drop.prevent.stop="handleActionDrop('archive')"
+              :class="[
+                'flex items-center justify-center gap-2 rounded-xl px-4 py-3.5 border text-xs font-extrabold transition-all duration-150',
+                draggedOverAction === 'archive'
+                  ? 'bg-slate-800 border-slate-800 text-white scale-[1.02] -translate-y-0.5 shadow-[0_10px_22px_-4px_rgba(30,41,59,0.28)]'
+                  : 'bg-slate-50 border-dashed border-slate-300 text-slate-700'
+              ]"
+            >
+              <Archive class="h-4 w-4 shrink-0 pointer-events-none" />
+              <span class="truncate pointer-events-none">Archive</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Transition>
+
+    <!-- Quick Action Confirmation Toast with Undo -->
+    <Transition name="toast-slide">
+      <div
+        v-if="quickActionToast"
+        :class="[
+          'absolute right-6 z-40 flex items-center gap-3 rounded-xl bg-white border border-slate-200 px-3.5 py-2.5 text-xs text-slate-800 shadow-[0_14px_32px_-6px_rgba(15,23,42,0.14),0_4px_10px_-2px_rgba(15,23,42,0.06)] transition-all duration-200 max-w-md',
+          isDragActive ? 'bottom-28' : 'bottom-5'
+        ]"
+        role="status"
+        aria-live="polite"
+      >
+        <span
+          :class="[
+            'flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border',
+            quickActionToast.action === 'won'
+              ? 'bg-emerald-50 border-emerald-200 text-[#146c2e]'
+              : quickActionToast.action === 'lost'
+                ? 'bg-rose-50 border-rose-200 text-rose-700'
+                : 'bg-slate-100 border-slate-200 text-slate-700'
+          ]"
+        >
+          <Trophy v-if="quickActionToast.action === 'won'" class="h-3.5 w-3.5" />
+          <XCircle v-else-if="quickActionToast.action === 'lost'" class="h-3.5 w-3.5" />
+          <Archive v-else class="h-3.5 w-3.5" />
+        </span>
+
+        <div class="min-w-0 flex-1">
+          <div class="font-bold text-slate-900 truncate">
+            {{ quickActionToast.action === 'won' ? 'Marked as Won' : quickActionToast.action === 'lost' ? 'Marked as Lost' : 'Deal Archived' }}
+          </div>
+          <div class="text-slate-600 truncate">
+            {{ quickActionToast.dealTitle }}
+            <span v-if="quickActionToast.action === 'won'" class="font-mono tabular-nums font-semibold text-[#168638]">
+              • RM {{ quickActionToast.dealValue.toLocaleString() }}
+            </span>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          @click="undoQuickAction"
+          class="inline-flex items-center gap-1 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 px-2.5 py-1.5 text-xs font-bold text-slate-700 hover:text-slate-900 transition-colors cursor-pointer shrink-0"
+        >
+          <RotateCcw class="h-3 w-3" />
+          Undo
+        </button>
+
+        <button
+          type="button"
+          @click="dismissQuickActionToast"
+          class="p-1 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-md transition-colors cursor-pointer shrink-0"
+          aria-label="Dismiss notification"
+        >
+          <X class="h-3.5 w-3.5" />
+        </button>
+      </div>
+    </Transition>
+
   <!-- ──────────────────────────────────────────────────────────────────
          MODALS
          ────────────────────────────────────────────────────────────────── -->
@@ -2035,6 +2346,16 @@ function handleOwnerChange(event: Event) {
                 <option v-for="stg in stages" :key="stg" :value="stg">{{ stg }}</option>
               </select>
             </div>
+          </div>
+
+          <div class="space-y-1">
+            <label class="block text-gray-700">Expected Close Date</label>
+            <input
+              v-model="newDeal.expectedCloseDate"
+              type="date"
+              @click="($event.target as HTMLInputElement).showPicker?.()"
+              class="w-full p-2 border border-gray-250 rounded-lg text-xs font-normal focus:outline-none focus:ring-2 focus:ring-[#23B750]/20 focus:border-[#23B750] cursor-pointer"
+            />
           </div>
 
           <div class="space-y-1">
@@ -2324,14 +2645,14 @@ function handleOwnerChange(event: Event) {
                   @click="markPreviewDealWon"
                   :class="[
                     'inline-flex items-center gap-1.5 text-xs font-bold px-3.5 py-1.5 rounded-lg border transition-all duration-150 cursor-pointer shadow-sm',
-                    selectedDealForPreview.stage === 'Follow Up'
+                    (selectedDealForPreview.stage === 'Follow Up' || selectedDealForPreview.stage === 'Won')
                       ? 'bg-[#23B750] text-white border-[#23B750] opacity-80 cursor-not-allowed'
                       : 'bg-[#23B750] text-white border-[#23B750] hover:bg-[#1a8c3d] hover:border-[#1a8c3d]'
                   ]"
-                  :disabled="selectedDealForPreview.stage === 'Follow Up'"
+                  :disabled="selectedDealForPreview.stage === 'Follow Up' || selectedDealForPreview.stage === 'Won'"
                 >
                   <Trophy class="w-3.5 h-3.5" />
-                  {{ selectedDealForPreview.stage === 'Follow Up' ? 'Won' : 'Mark as Won' }}
+                  {{ (selectedDealForPreview.stage === 'Follow Up' || selectedDealForPreview.stage === 'Won') ? 'Won' : 'Mark as Won' }}
                 </button>
                 <button
                   @click="markPreviewDealLost"
@@ -2420,6 +2741,9 @@ function handleOwnerChange(event: Event) {
                     <span class="flex shrink-0 items-center gap-2 text-xs font-semibold text-slate-400"><FolderKanban class="h-3.5 w-3.5 text-slate-400" /> Stage</span>
                     <select v-model="selectedDealForPreview.stage" class="max-w-[180px] cursor-pointer rounded-lg border border-slate-200 bg-slate-50 px-2 py-1 text-xs font-bold text-slate-800 outline-none focus:border-[#23B750]">
                       <option v-for="stg in stages" :key="stg" :value="stg">{{ stg }}</option>
+                      <option value="Won">Won</option>
+                      <option value="Lost">Lost</option>
+                      <option value="Archived">Archived</option>
                     </select>
                   </div>
                   <div class="flex items-center justify-between gap-2">
@@ -2431,7 +2755,7 @@ function handleOwnerChange(event: Event) {
                   </div>
                   <div class="flex items-center justify-between gap-2">
                     <span class="flex items-center gap-2 text-xs font-semibold text-slate-400"><CalendarDays class="h-3.5 w-3.5 text-slate-400" /> Est. Close Date</span>
-                    <span class="text-xs font-bold text-slate-700">22/05/2026</span>
+                    <span class="text-xs font-bold text-slate-700">{{ selectedDealForPreview.closeDate || '22/05/2026' }}</span>
                   </div>
                   <div class="flex items-center justify-between gap-2">
                     <span class="flex items-center gap-2 text-xs font-semibold text-slate-400"><FileText class="h-3.5 w-3.5 text-slate-400" /> Service Type</span>
@@ -3116,6 +3440,31 @@ function handleOwnerChange(event: Event) {
 .modal-enter-from .modal-card,
 .modal-leave-to .modal-card {
   transform: scale(0.96) translateY(8px);
+  opacity: 0;
+}
+
+/* Bottom drag-and-drop toolbar & feedback toast transitions */
+.drag-dock-enter-active {
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.drag-dock-leave-active {
+  transition: transform 0.15s ease-in, opacity 0.15s ease-in;
+}
+.drag-dock-enter-from,
+.drag-dock-leave-to {
+  transform: translateY(18px) scale(0.97);
+  opacity: 0;
+}
+
+.toast-slide-enter-active {
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.18s ease-out;
+}
+.toast-slide-leave-active {
+  transition: transform 0.16s ease-in, opacity 0.15s ease-in;
+}
+.toast-slide-enter-from,
+.toast-slide-leave-to {
+  transform: translateY(12px);
   opacity: 0;
 }
 </style>

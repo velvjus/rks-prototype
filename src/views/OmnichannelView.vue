@@ -620,12 +620,34 @@ const selectComposerTemplate = (text: string) => {
   addToast('Template inserted into composer draft!', 'success')
 }
 
-// AI Assistant Contextual Draft Generator
+// AI Assistant Contextual Draft Generator with Typewriter Animation & Completion Glow
 const isGeneratingAiDraft = ref(false)
+const isAiTypingAnimation = ref(false)
+const isAiDraftCompleteGlow = ref(false)
+let aiTypingInterval: ReturnType<typeof setInterval> | null = null
+let aiGlowTimeout: ReturnType<typeof setTimeout> | null = null
+
+const stopAiTypingAnimation = () => {
+  if (aiTypingInterval) {
+    clearInterval(aiTypingInterval)
+    aiTypingInterval = null
+  }
+  isGeneratingAiDraft.value = false
+  isAiTypingAnimation.value = false
+}
 
 const generateAiDraft = () => {
-  if (isGeneratingAiDraft.value) return
+  if (isGeneratingAiDraft.value || isAiTypingAnimation.value) {
+    stopAiTypingAnimation()
+  }
+  if (aiGlowTimeout) {
+    clearTimeout(aiGlowTimeout)
+    aiGlowTimeout = null
+  }
+  
   isGeneratingAiDraft.value = true
+  isAiDraftCompleteGlow.value = false
+  slashMenuOpen.value = false
   
   const id = selectedConversationId.value
   const activeName = activeConversation.value?.sender || 'Customer'
@@ -647,11 +669,44 @@ const generateAiDraft = () => {
     }
   }
 
-  setTimeout(() => {
-    newMessage.value = suggestedText
-    isGeneratingAiDraft.value = false
-    addToast('✨ AI assistant generated reply draft from conversation context!', 'success')
-  }, 400)
+  newMessage.value = ''
+  isAiTypingAnimation.value = true
+
+  // Focus the textarea so the user sees the draft streaming in real time
+  nextTick(() => {
+    composerTextareaRef.value?.focus()
+  })
+
+  let currentIndex = 0
+  const totalLen = suggestedText.length
+  // Calculate chunk size so the typing animation takes ~1.1s regardless of length
+  const chunkSize = Math.max(2, Math.ceil(totalLen / 42))
+
+  aiTypingInterval = setInterval(() => {
+    currentIndex += chunkSize
+    if (currentIndex >= totalLen) {
+      newMessage.value = suggestedText
+      stopAiTypingAnimation()
+      isAiDraftCompleteGlow.value = true
+      addToast('✨ AI assistant generated reply draft!', 'success')
+
+      nextTick(() => {
+        if (composerTextareaRef.value) {
+          composerTextareaRef.value.scrollTop = composerTextareaRef.value.scrollHeight
+          composerTextareaRef.value.setSelectionRange(suggestedText.length, suggestedText.length)
+        }
+      })
+
+      aiGlowTimeout = setTimeout(() => {
+        isAiDraftCompleteGlow.value = false
+      }, 1100)
+    } else {
+      newMessage.value = suggestedText.slice(0, currentIndex)
+      if (composerTextareaRef.value) {
+        composerTextareaRef.value.scrollTop = composerTextareaRef.value.scrollHeight
+      }
+    }
+  }, 24)
 }
 
 // Trigger AI auto-summarizer
@@ -3298,8 +3353,16 @@ nextTick(() => {
 
           <!-- Tan/Yellow background wrapper for Private Note mode vs Plain White for Reply -->
           <div 
-            class="flex flex-col border border-gray-250/80 rounded-xl mt-3.5 transition-colors duration-300 relative"
-            :class="composerMode === 'note' ? 'bg-[#FEF9C3]/20 border-[#FEF08A]' : 'bg-white'"
+            class="flex flex-col border rounded-xl mt-3.5 transition-all duration-300 relative"
+            :class="[
+              isAiDraftCompleteGlow
+                ? 'border-[#23B750] ring-3 ring-[#23B750]/25 bg-[#23B750]/[0.04] shadow-[0_0_24px_rgba(35,183,80,0.28)]'
+                : isAiTypingAnimation
+                  ? 'border-[#2563EB]/50 ring-2 ring-[#2563EB]/10 bg-white'
+                  : composerMode === 'note'
+                    ? 'bg-[#FEF9C3]/20 border-[#FEF08A]'
+                    : 'bg-white border-gray-250/80'
+            ]"
           >
             <!-- SENDER IDENTITIES / EMAIL HEADERS -->
             <template v-if="composerMode === 'reply'">
@@ -3420,7 +3483,10 @@ nextTick(() => {
             </div>
 
             <!-- TEXTAREA INPUT WINDOW WITH FLOATING /SLASH TEMPLATES POPOVER -->
-            <div class="p-2 select-none flex flex-col gap-1 relative">
+            <div 
+              class="p-2 select-none flex flex-col gap-1 relative transition-colors duration-300"
+              :class="isAiDraftCompleteGlow ? 'bg-[#23B750]/[0.06]' : ''"
+            >
               <!-- FLOATING /SLASH COMMAND TEMPLATE SELECTION MENU POPOVER -->
               <transition
                 enter-active-class="transition ease-out duration-150"
@@ -3505,6 +3571,31 @@ nextTick(() => {
                     <span>↑↓ Navigate • ↵ / Tab Select • Esc Dismiss</span>
                     <span>{{ filteredSlashTemplates.length }} templates</span>
                   </div>
+                </div>
+              </transition>
+
+              <!-- AI Typing / Completion Status Pill -->
+              <transition
+                enter-active-class="transition ease-out duration-150"
+                enter-from-class="opacity-0 -translate-y-1 scale-95"
+                enter-to-class="opacity-100 translate-y-0 scale-100"
+                leave-active-class="transition ease-in duration-150"
+                leave-from-class="opacity-100 translate-y-0 scale-100"
+                leave-to-class="opacity-0 -translate-y-1 scale-95"
+              >
+                <div
+                  v-if="isAiTypingAnimation || isAiDraftCompleteGlow"
+                  class="absolute top-1.5 right-8 z-20 inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold pointer-events-none select-none transition-colors duration-200"
+                  :class="isAiDraftCompleteGlow ? 'bg-[#23B750]/15 text-[#15803D] border border-[#23B750]/30' : 'bg-blue-50 text-[#2563EB] border border-blue-200'"
+                >
+                  <template v-if="isAiTypingAnimation">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#2563EB] animate-ping"></span>
+                    <span>AI drafting...</span>
+                  </template>
+                  <template v-else>
+                    <svg class="w-3 h-3 text-[#23B750]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span>AI draft ready</span>
+                  </template>
                 </div>
               </transition>
 
