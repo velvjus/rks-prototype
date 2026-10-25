@@ -19,7 +19,7 @@
             @click="showGuideModal = true"
             class="inline-flex items-center gap-2 px-3.5 py-2 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 font-semibold text-xs rounded-xl cursor-pointer shadow-2xs transition-colors"
           >
-            <HelpCircle class="w-4 h-4 text-gray-400" />
+            <HelpCircle class="w-4 h-4 text-gray-500" />
             Guide & Playbook
           </button>
           <button
@@ -32,65 +32,41 @@
         </div>
       </div>
 
-      <!-- Actionable Sales CRM KPI Cards Row -->
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <!-- Card 1: Active Assistants & Deployment -->
-        <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-2xs flex items-center justify-between">
-          <div class="space-y-1">
-            <div class="text-xs text-gray-500 font-medium">Active Assistants</div>
-            <div class="flex items-baseline gap-2">
-              <span class="text-2xl font-bold text-gray-900 leading-none">{{ liveCount }}</span>
-              <span class="text-[11px] font-semibold text-gray-400">of {{ assistants.length }} deployed</span>
-            </div>
-            <div class="text-[10px] font-semibold text-emerald-600 flex items-center gap-1 pt-0.5">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-              2 Channels connected
-            </div>
+      <!-- Summary strip -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 bg-white border border-gray-200 rounded-2xl shadow-2xs divide-y sm:divide-y-0 sm:divide-x divide-gray-100 overflow-hidden">
+        <div class="px-6 py-4">
+          <div class="text-xs font-medium text-gray-600">Live assistants</div>
+          <div class="mt-1 flex items-baseline gap-2">
+            <span class="text-2xl font-bold text-gray-900 leading-none tabular-nums">{{ liveCount }}</span>
+            <span class="text-xs text-gray-500">of {{ assistants.length }}</span>
           </div>
-          <div class="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600 shrink-0">
-            <Bot class="w-5 h-5" />
+          <div class="mt-1.5 inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+            2 channels connected
           </div>
         </div>
-
-        <!-- Card 2: Leads Qualified & Funnel -->
-        <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-2xs flex items-center justify-between">
-          <div class="space-y-1">
-            <div class="text-xs text-gray-500 font-medium">Qualified Leads Captured</div>
-            <div class="flex items-baseline gap-2">
-              <span class="text-2xl font-bold text-gray-900 leading-none">142</span>
-              <span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.2 rounded-md">+18.4%</span>
-            </div>
-            <div class="text-[10px] text-gray-400 pt-0.5">
-              Synced to CRM Deals pipeline
-            </div>
+        <div class="px-6 py-4">
+          <div class="text-xs font-medium text-gray-600">Qualified leads</div>
+          <div class="mt-1 flex items-baseline gap-2">
+            <span class="text-2xl font-bold text-gray-900 leading-none tabular-nums">142</span>
+            <span class="text-xs font-bold text-emerald-700 bg-emerald-100 px-1.5 py-0.5 rounded-md">+18.4%</span>
           </div>
-          <div class="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shrink-0">
-            <Flame class="w-5 h-5" />
-          </div>
+          <div class="mt-1.5 text-xs text-gray-500">Synced to Deals pipeline</div>
         </div>
-
-        <!-- Card 3: Inquiries Handled & Auto-Resolution -->
-        <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-2xs flex items-center justify-between">
-          <div class="space-y-1">
-            <div class="text-xs text-gray-500 font-medium">WhatsApp Resolution Rate</div>
-            <div class="flex items-baseline gap-2">
-              <span class="text-2xl font-bold text-gray-900 leading-none">86.4%</span>
-              <span class="text-[11px] font-semibold text-gray-400">1,280 chats</span>
-            </div>
-            <div class="text-[10px] text-gray-400 pt-0.5">
-              13.6% escalated to Human Reps
-            </div>
+        <div class="px-6 py-4">
+          <div class="text-xs font-medium text-gray-600">Auto-resolution</div>
+          <div class="mt-1 flex items-baseline gap-2">
+            <span class="text-2xl font-bold text-gray-900 leading-none tabular-nums">86.4%</span>
+            <span class="text-xs text-gray-500">1,280 chats</span>
           </div>
-          <div class="w-12 h-12 rounded-xl bg-gray-50 border border-gray-150 flex items-center justify-center text-gray-600 shrink-0">
-            <MessageSquare class="w-5 h-5" />
-          </div>
+          <div class="mt-1.5 text-xs text-gray-500">13.6% escalated to reps</div>
         </div>
       </div>
 
       <!-- Search & Status Filter Row -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
         <div class="relative w-full sm:w-80">
-          <Search class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
+          <Search class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500" />
           <input
             v-model="searchQuery"
             type="text"
@@ -100,7 +76,7 @@
           <button
             v-if="searchQuery"
             @click="searchQuery = ''"
-            class="absolute right-3 top-1/2 -translate-y-1/2 p-0.5 text-gray-400 hover:text-gray-600 rounded-full cursor-pointer"
+            class="absolute right-3 top-1/2 -translate-y-1/2 p-0.5 text-gray-500 hover:text-gray-600 rounded-full cursor-pointer"
             title="Clear search"
           >
             <X class="w-3.5 h-3.5" />
@@ -147,12 +123,11 @@
           v-for="ast in filteredAssistants"
           :key="ast.id"
           @click="openAssistantDetail(ast)"
-          class="bg-white border border-gray-200 hover:border-primary/50 rounded-2xl p-5 shadow-2xs hover:shadow-xs transition-all cursor-pointer group flex flex-col md:flex-row md:items-center justify-between gap-4"
+          class="bg-white border border-gray-200 hover:border-primary/60 rounded-2xl p-5 shadow-2xs hover:shadow-md transition-all cursor-pointer group flex flex-col md:flex-row md:items-center justify-between gap-4"
         >
-          <!-- Left: Bot Avatar & Name & Tags -->
-          <div class="flex items-start sm:items-center gap-4 min-w-0">
-            <div class="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-100/80 flex items-center justify-center text-emerald-600 shrink-0 group-hover:bg-emerald-100/70 transition-colors shadow-2xs">
-              <Bot class="w-6 h-6" />
+          <div class="flex items-center gap-4 min-w-0">
+            <div class="w-11 h-11 rounded-xl bg-primary flex items-center justify-center text-white shrink-0 shadow-sm">
+              <Bot class="w-5 h-5" />
             </div>
 
             <div class="min-w-0 space-y-1">
@@ -161,62 +136,51 @@
                   {{ ast.name }}
                 </span>
                 <span
-                  class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold"
+                  class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-semibold"
                   :class="getStatusBadgeClass(ast.status)"
                 >
                   <span class="w-1.5 h-1.5 rounded-full" :class="ast.status === 'live' ? 'bg-emerald-500' : 'bg-slate-400'"></span>
-                  {{ ast.status === 'live' ? 'Live on WhatsApp' : 'Draft Mode' }}
-                </span>
-                <span class="text-[10px] font-medium bg-gray-100 text-gray-600 px-2 py-0.5 rounded-md">
-                  {{ ast.productName }}
+                  {{ ast.status === 'live' ? 'Live' : 'Draft' }}
                 </span>
               </div>
 
-              <!-- Metadata & Channel pills -->
-              <div class="flex flex-wrap items-center gap-3 text-xs text-gray-500 pt-0.5">
-                <span class="inline-flex items-center gap-1 text-[11px] text-gray-600">
+              <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-600">
+                <span class="inline-flex items-center gap-1.5">
                   <Phone class="w-3.5 h-3.5 text-emerald-600" />
                   {{ ast.connectedPhone }}
                 </span>
-                <span class="inline-flex items-center gap-1 text-[11px] text-gray-600">
-                  <BookOpen class="w-3.5 h-3.5 text-gray-400" />
-                  {{ ast.docsCount }} Knowledge Docs
-                </span>
-                <span class="inline-flex items-center gap-1 text-[11px] text-gray-600">
-                  <UserCheck class="w-3.5 h-3.5 text-gray-400" />
-                  Fallback: {{ ast.fallbackRep }}
+                <span class="inline-flex items-center gap-1.5">
+                  <BookOpen class="w-3.5 h-3.5 text-sky-600" />
+                  {{ ast.docsCount }} knowledge docs
                 </span>
               </div>
             </div>
           </div>
 
-          <!-- Right: Edited info & menu -->
-          <div class="flex items-center gap-3 text-xs text-gray-400 self-end md:self-auto shrink-0" @click.stop>
+          <div class="flex items-center gap-3 self-end md:self-auto shrink-0" @click.stop>
             <div class="text-right hidden sm:block">
-              <div class="text-[11px] font-medium text-gray-500">Edited {{ ast.lastEdited }}</div>
-              <div class="text-[10px] text-emerald-600 font-semibold">{{ ast.resolutionRate }} auto-resolution</div>
+              <div class="text-sm font-bold text-gray-900 tabular-nums">{{ ast.resolutionRate }}</div>
+              <div class="text-[11px] text-gray-500">auto-resolved</div>
             </div>
 
-            <!-- Test Simulator CTA Button -->
             <button
               @click.stop="openTestDrawer(ast)"
-              class="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-semibold text-xs rounded-xl cursor-pointer border border-emerald-200/60 transition-colors inline-flex items-center gap-1.5"
+              class="px-3 py-1.5 bg-primary hover:bg-[#1ea446] text-white font-semibold text-xs rounded-xl cursor-pointer shadow-xs transition-colors inline-flex items-center gap-1.5 whitespace-nowrap"
             >
               <Play class="w-3.5 h-3.5 fill-current" />
-              Test Chat
+              Test chat
             </button>
 
             <!-- Three-dots Menu -->
             <div class="relative">
               <button
                 @click.stop="toggleMenu(ast.id)"
-                class="p-2 hover:bg-gray-100 text-gray-400 hover:text-gray-700 rounded-xl cursor-pointer transition-colors"
+                class="p-2 hover:bg-gray-100 text-gray-500 hover:text-gray-800 rounded-xl cursor-pointer transition-colors"
                 title="Options"
               >
                 <MoreVertical class="w-4 h-4" />
               </button>
 
-              <!-- Dropdown menu -->
               <div
                 v-if="openMenuId === ast.id"
                 class="absolute right-0 top-full mt-1 w-48 bg-white border border-gray-200 rounded-xl shadow-lg py-1 z-30 animate-fade-in"
@@ -225,54 +189,43 @@
                   @click="openAssistantDetail(ast); openMenuId = null"
                   class="w-full text-left px-3.5 py-2 text-xs text-gray-700 hover:bg-gray-50 flex items-center gap-2 cursor-pointer font-medium"
                 >
-                  <Pencil class="w-3.5 h-3.5 text-gray-400" /> Edit Configuration
+                  <Pencil class="w-3.5 h-3.5 text-gray-500" /> Edit configuration
                 </button>
                 <button
                   @click="openTestDrawer(ast); openMenuId = null"
                   class="w-full text-left px-3.5 py-2 text-xs text-gray-700 hover:bg-gray-50 flex items-center gap-2 cursor-pointer font-medium"
                 >
-                  <MessageSquare class="w-3.5 h-3.5 text-emerald-600" /> Test Conversations
+                  <MessageSquare class="w-3.5 h-3.5 text-emerald-600" /> Test conversations
                 </button>
                 <button
                   @click="requestStatusToggle(ast); openMenuId = null"
                   class="w-full text-left px-3.5 py-2 text-xs text-gray-700 hover:bg-gray-50 flex items-center gap-2 cursor-pointer font-medium"
                 >
-                  <CheckCircle2 class="w-3.5 h-3.5 text-gray-400" />
-                  {{ ast.status === 'live' ? 'Switch to Draft' : 'Pre-flight & Publish Live' }}
+                  <CheckCircle2 class="w-3.5 h-3.5 text-gray-500" />
+                  {{ ast.status === 'live' ? 'Switch to draft' : 'Pre-flight & publish' }}
                 </button>
                 <button
                   @click="duplicateAssistant(ast); openMenuId = null"
                   class="w-full text-left px-3.5 py-2 text-xs text-gray-700 hover:bg-gray-50 flex items-center gap-2 cursor-pointer font-medium"
                 >
-                  <Copy class="w-3.5 h-3.5 text-gray-400" /> Duplicate
+                  <Copy class="w-3.5 h-3.5 text-gray-500" /> Duplicate
                 </button>
                 <div class="border-t border-gray-100 my-1"></div>
                 <button
                   @click="promptDeleteAssistant(ast); openMenuId = null"
                   class="w-full text-left px-3.5 py-2 text-xs text-red-600 hover:bg-red-50 flex items-center gap-2 cursor-pointer font-medium"
                 >
-                  <Trash2 class="w-3.5 h-3.5 text-red-500" /> Delete Assistant
+                  <Trash2 class="w-3.5 h-3.5 text-red-500" /> Delete assistant
                 </button>
               </div>
             </div>
           </div>
         </div>
-
-        <!-- Create Assistant dashed trigger card -->
-        <button
-          @click="openCreateModal"
-          class="w-full border-2 border-dashed border-gray-200 hover:border-primary/50 hover:bg-primary/5 rounded-2xl p-4 transition-all flex items-center justify-center gap-2 text-xs font-semibold text-gray-700 hover:text-primary cursor-pointer group shadow-2xs"
-        >
-          <div class="w-6 h-6 rounded-lg bg-gray-100 group-hover:bg-primary/10 flex items-center justify-center text-gray-500 group-hover:text-primary transition-colors">
-            <Plus class="w-4 h-4" />
-          </div>
-          <span>Create Another Specialized Assistant</span>
-        </button>
       </div>
 
       <!-- Zero Search Results Empty State -->
       <div v-else class="bg-white border border-gray-200 rounded-2xl p-12 text-center space-y-3 shadow-2xs">
-        <div class="w-12 h-12 rounded-2xl bg-gray-100 flex items-center justify-center text-gray-400 mx-auto">
+        <div class="w-12 h-12 rounded-2xl bg-gray-100 flex items-center justify-center text-gray-500 mx-auto">
           <Search class="w-6 h-6" />
         </div>
         <h3 class="text-sm font-bold text-gray-900">No assistants match "{{ searchQuery }}"</h3>
@@ -302,7 +255,7 @@
           >
             <ArrowLeft class="w-4 h-4" />
           </button>
-          <div class="w-10 h-10 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600 shrink-0 shadow-2xs">
+          <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white shrink-0 shadow-sm">
             <Bot class="w-5 h-5" />
           </div>
           <div class="min-w-0">
@@ -317,7 +270,7 @@
           <!-- In-Situ Test Simulator CTA -->
           <button
             @click="openTestDrawer(currentAssistant)"
-            class="px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-semibold rounded-xl cursor-pointer border border-emerald-200/60 shadow-2xs transition-colors inline-flex items-center gap-1.5 whitespace-nowrap shrink-0"
+            class="px-3.5 py-2 bg-primary hover:bg-[#1ea446] text-white text-xs font-semibold rounded-xl cursor-pointer shadow-xs transition-colors inline-flex items-center gap-1.5 whitespace-nowrap shrink-0"
           >
             <MessageSquare class="w-3.5 h-3.5 shrink-0" />
             <span>Test Live Conversations</span>
@@ -346,7 +299,7 @@
             :class="getSetupTabClass('identity')"
           >
             <div class="flex items-center gap-2.5">
-              <User class="w-4 h-4" :class="activeDetailTab === 'identity' ? 'text-emerald-700' : 'text-slate-400'" />
+              <User class="w-4 h-4" :class="activeDetailTab === 'identity' ? 'text-white' : 'text-violet-500'" />
               <span>Identity</span>
             </div>
           </button>
@@ -358,10 +311,10 @@
             :class="getSetupTabClass('knowledge')"
           >
             <div class="flex items-center gap-2.5">
-              <BookOpen class="w-4 h-4" :class="activeDetailTab === 'knowledge' ? 'text-emerald-700' : 'text-slate-400'" />
+              <BookOpen class="w-4 h-4" :class="activeDetailTab === 'knowledge' ? 'text-white' : 'text-sky-500'" />
               <span>Knowledge</span>
             </div>
-            <span class="text-[10px] bg-emerald-100/80 text-emerald-900 font-bold px-1.5 py-0.2 rounded-full">
+            <span class="text-[10px] bg-gray-100 text-gray-700 font-bold px-1.5 py-0.5 rounded-full tabular-nums">
               {{ knowledgeDocs.length }}
             </span>
           </button>
@@ -373,10 +326,10 @@
             :class="getSetupTabClass('behavior')"
           >
             <div class="flex items-center gap-2.5">
-              <Shield class="w-4 h-4" :class="activeDetailTab === 'behavior' ? 'text-emerald-700' : 'text-slate-400'" />
+              <Shield class="w-4 h-4" :class="activeDetailTab === 'behavior' ? 'text-white' : 'text-rose-500'" />
               <span>Behavior</span>
             </div>
-            <span class="text-[10px] bg-emerald-100/80 text-emerald-900 font-bold px-1.5 py-0.2 rounded-full">
+            <span class="text-[10px] bg-gray-100 text-gray-700 font-bold px-1.5 py-0.5 rounded-full tabular-nums">
               {{ guardrailRules.length + scenarioRules.length }}
             </span>
           </button>
@@ -388,10 +341,10 @@
             :class="getSetupTabClass('tools')"
           >
             <div class="flex items-center gap-2.5">
-              <Wrench class="w-4 h-4" :class="activeDetailTab === 'tools' ? 'text-emerald-700' : 'text-slate-400'" />
+              <Wrench class="w-4 h-4" :class="activeDetailTab === 'tools' ? 'text-white' : 'text-amber-500'" />
               <span>Tools</span>
             </div>
-            <span class="text-[10px] bg-emerald-100/80 text-emerald-900 font-bold px-1.5 py-0.2 rounded-full">
+            <span class="text-[10px] bg-gray-100 text-gray-700 font-bold px-1.5 py-0.5 rounded-full tabular-nums">
               {{ customTools.length }}
             </span>
           </button>
@@ -403,10 +356,10 @@
             :class="getSetupTabClass('connect')"
           >
             <div class="flex items-center gap-2.5">
-              <Zap class="w-4 h-4" :class="activeDetailTab === 'connect' || activeDetailTab === 'channels' ? 'text-emerald-700' : 'text-slate-400'" />
+              <Zap class="w-4 h-4" :class="activeDetailTab === 'connect' || activeDetailTab === 'channels' ? 'text-white' : 'text-emerald-500'" />
               <span>Connect</span>
             </div>
-            <span class="text-[10px] bg-emerald-100/80 text-emerald-900 font-bold px-1.5 py-0.2 rounded-full">
+            <span class="text-[10px] bg-gray-100 text-gray-700 font-bold px-1.5 py-0.5 rounded-full tabular-nums">
               {{ connectedInboxes.length }}
             </span>
           </button>
@@ -422,7 +375,7 @@
             :class="getSetupTabClass('playground')"
           >
             <div class="flex items-center gap-2.5">
-              <Play class="w-4 h-4" :class="activeDetailTab === 'playground' ? 'text-emerald-700' : 'text-slate-400'" />
+              <Play class="w-4 h-4" :class="activeDetailTab === 'playground' ? 'text-white' : 'text-indigo-500'" />
               <span>Playground</span>
             </div>
           </button>
@@ -434,7 +387,7 @@
             :class="getSetupTabClass('report')"
           >
             <div class="flex items-center gap-2.5">
-              <BarChart2 class="w-4 h-4" :class="activeDetailTab === 'report' ? 'text-emerald-700' : 'text-slate-400'" />
+              <BarChart2 class="w-4 h-4" :class="activeDetailTab === 'report' ? 'text-white' : 'text-teal-500'" />
               <span>Report</span>
             </div>
           </button>
@@ -510,7 +463,7 @@
                       maxlength="300"
                       class="w-full px-3.5 py-2.5 pb-6 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-800 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary shadow-2xs resize-none transition-all"
                     ></textarea>
-                    <span class="absolute right-3 bottom-2 text-[10px] text-gray-400 font-mono">
+                    <span class="absolute right-3 bottom-2 text-[10px] text-gray-500 font-mono">
                       {{ editForm.description.length }} / 300
                     </span>
                   </div>
@@ -532,7 +485,7 @@
               </div>
 
               <!-- Card Actions -->
-              <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-gray-150">
+              <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-gray-100">
                 <button
                   @click="resetIdentityForm"
                   class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold text-xs rounded-xl cursor-pointer transition-colors"
@@ -747,11 +700,11 @@
                         <div class="text-xs font-medium text-gray-800">
                           Block queries that share or request sensitive personal information (phone numbers, passwords, bank OTPs).
                         </div>
-                        <div class="text-[10px] text-gray-400 mt-0.5">Category: Safety & PII • Action: Block & Deflect</div>
+                        <div class="text-[10px] text-gray-500 mt-0.5">Category: Safety & PII • Action: Block & Deflect</div>
                       </div>
                       <button
                         @click="adoptExampleGuardrail({ name: 'Block queries that request sensitive financial credentials', category: 'Safety & PII', action: 'Block & Deflect', description: 'Block queries that share or request passwords, bank accounts, or OTPs.' })"
-                        class="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 hover:text-emerald-950 text-xs font-semibold rounded-lg border border-emerald-200 cursor-pointer shrink-0 transition-colors"
+                        class="px-2.5 py-1 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 hover:text-emerald-900 text-xs font-semibold rounded-lg cursor-pointer shrink-0 transition-colors"
                       >
                         Adopt this
                       </button>
@@ -762,11 +715,11 @@
                         <div class="text-xs font-medium text-gray-800">
                           Reject queries that include offensive, discriminatory, or competitor-disparaging language.
                         </div>
-                        <div class="text-[10px] text-gray-400 mt-0.5">Category: Scope & Conduct • Action: Block & Deflect</div>
+                        <div class="text-[10px] text-gray-500 mt-0.5">Category: Scope & Conduct • Action: Block & Deflect</div>
                       </div>
                       <button
                         @click="adoptExampleGuardrail({ name: 'Reject abusive, discriminatory or threatening language', category: 'Scope & Conduct', action: 'Block & Deflect', description: 'Reject queries that include offensive or aggressive language.' })"
-                        class="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 hover:text-emerald-950 text-xs font-semibold rounded-lg border border-emerald-200 cursor-pointer shrink-0 transition-colors"
+                        class="px-2.5 py-1 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 hover:text-emerald-900 text-xs font-semibold rounded-lg cursor-pointer shrink-0 transition-colors"
                       >
                         Adopt this
                       </button>
@@ -777,11 +730,11 @@
                         <div class="text-xs font-medium text-gray-800">
                           Deflect when the assistant is asked for legal guarantees or medical/dietary health diagnoses.
                         </div>
-                        <div class="text-[10px] text-gray-400 mt-0.5">Category: Compliance & Halal • Action: Block & Deflect</div>
+                        <div class="text-[10px] text-gray-500 mt-0.5">Category: Compliance & Halal • Action: Block & Deflect</div>
                       </div>
                       <button
                         @click="adoptExampleGuardrail({ name: 'Deflect legal claims or medical diagnosis queries', category: 'Compliance & Halal', action: 'Block & Deflect', description: 'Deflect when the assistant is asked for formal legal claims or medical diagnosis.' })"
-                        class="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 hover:text-emerald-950 text-xs font-semibold rounded-lg border border-emerald-200 cursor-pointer shrink-0 transition-colors"
+                        class="px-2.5 py-1 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 hover:text-emerald-900 text-xs font-semibold rounded-lg cursor-pointer shrink-0 transition-colors"
                       >
                         Adopt this
                       </button>
@@ -791,16 +744,16 @@
 
                 <!-- Active Guardrails Table Card -->
                 <div class="pt-2">
-                  <div class="flex items-center justify-between gap-3 pb-3 border-b border-gray-150">
+                  <div class="flex items-center justify-between gap-3 pb-3 border-b border-gray-100">
                     <div class="flex items-center gap-2">
                       <h4 class="text-xs font-bold text-gray-900">Enforced Rules</h4>
-                      <span class="text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">
+                      <span class="text-[10px] font-bold bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full">
                         {{ filteredGuardrails.length }} Active
                       </span>
                     </div>
 
                     <div class="relative w-48 sm:w-64">
-                      <Search class="w-3.5 h-3.5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                      <Search class="w-3.5 h-3.5 text-gray-500 absolute left-3 top-1/2 -translate-y-1/2" />
                       <input
                         v-model="guardrailSearchQuery"
                         type="text"
@@ -836,7 +789,7 @@
                           <p class="text-xs text-gray-600 leading-relaxed">
                             {{ rule.description }}
                           </p>
-                          <div class="text-[10px] text-gray-400 flex items-center gap-1.5 font-mono">
+                          <div class="text-[10px] text-gray-500 flex items-center gap-1.5 font-mono">
                             <CheckCircle2 class="w-3 h-3 text-emerald-500" />
                             <span>{{ rule.triggersCount }} triggers handled</span>
                           </div>
@@ -875,7 +828,7 @@
                 </div>
 
                 <!-- Quick Inline Guardrail Input -->
-                <div class="pt-4 border-t border-gray-150 flex items-center gap-2">
+                <div class="pt-4 border-t border-gray-100 flex items-center gap-2">
                   <input
                     v-model="quickGuardrailText"
                     type="text"
@@ -936,17 +889,17 @@
                     <div class="flex flex-wrap items-center gap-2 pt-1">
                       <span class="text-[10px] font-semibold text-gray-500">Bound CRM Tools:</span>
                       <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-50 text-amber-800 border border-amber-200/60">@add_private_note</span>
-                      <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-50 text-emerald-800 border border-emerald-200/60">@add_label</span>
+                      <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-50 text-emerald-800">@add_label</span>
                       <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-sky-50 text-sky-800 border border-sky-200/60">@handoff</span>
                     </div>
                   </div>
                 </div>
 
                 <!-- Scenarios Search & Filter Toolbar -->
-                <div class="pt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-gray-150 pb-3">
+                <div class="pt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-gray-100 pb-3">
                   <div class="flex items-center gap-2 flex-wrap">
                     <div class="relative w-48 sm:w-64">
-                      <Search class="w-3.5 h-3.5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                      <Search class="w-3.5 h-3.5 text-gray-500 absolute left-3 top-1/2 -translate-y-1/2" />
                       <input
                         v-model="scenarioSearchQuery"
                         type="text"
@@ -967,7 +920,7 @@
 
                   <button
                     @click="showAddScenarioModal = true"
-                    class="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-semibold text-xs rounded-xl border border-emerald-200 cursor-pointer inline-flex items-center gap-1.5"
+                    class="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-semibold text-xs rounded-xl cursor-pointer inline-flex items-center gap-1.5"
                   >
                     <Plus class="w-3.5 h-3.5" />
                     New Playbook
@@ -1022,7 +975,7 @@
                     </div>
 
                     <!-- Trigger condition box -->
-                    <div class="p-3 bg-gray-50/70 rounded-xl border border-gray-150 space-y-1">
+                    <div class="p-3 bg-gray-50 rounded-xl border border-gray-100 space-y-1">
                       <div class="text-[11px] font-semibold text-gray-500">Trigger Condition</div>
                       <div class="text-xs text-gray-800 font-medium leading-relaxed">
                         {{ sc.triggerPrompt }}
@@ -1040,7 +993,7 @@
                     </div>
 
                     <!-- Tool Chips & Footer -->
-                    <div class="pt-3 border-t border-gray-150 flex flex-wrap items-center justify-between gap-3 text-xs">
+                    <div class="pt-3 border-t border-gray-100 flex flex-wrap items-center justify-between gap-3 text-xs">
                       <div class="flex flex-wrap items-center gap-1.5">
                         <span class="text-[11px] font-medium text-gray-500 mr-1">Tools:</span>
                         <span
@@ -1052,7 +1005,7 @@
                           {{ tool }}
                         </span>
                       </div>
-                      <div class="text-[11px] text-gray-400 font-mono flex items-center gap-1.5">
+                      <div class="text-[11px] text-gray-500 font-mono flex items-center gap-1.5">
                         <CheckCircle2 class="w-3.5 h-3.5 text-emerald-500" />
                         <span>Executed {{ sc.executionsCount }} times • 98% resolution</span>
                       </div>
@@ -1096,25 +1049,25 @@
                   <div class="flex flex-wrap gap-2">
                     <button
                       @click="adoptExampleGuideline('Keep replies under 3 sentences unless customer asks for more detail.', 'Length & Format')"
-                      class="px-2.5 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 hover:text-emerald-950 rounded-lg border border-emerald-200 text-xs font-semibold cursor-pointer transition-colors"
+                      class="px-2.5 py-1.5 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 hover:text-emerald-900 rounded-lg text-xs font-semibold cursor-pointer transition-colors"
                     >
                       + Keep under 3 sentences
                     </button>
                     <button
                       @click="adoptExampleGuideline('Always reply in the exact language the customer used to write in (EN/MY).', 'Language & Locale')"
-                      class="px-2.5 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 hover:text-emerald-950 rounded-lg border border-emerald-200 text-xs font-semibold cursor-pointer transition-colors"
+                      class="px-2.5 py-1.5 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 hover:text-emerald-900 rounded-lg text-xs font-semibold cursor-pointer transition-colors"
                     >
                       + Match language (EN/MY)
                     </button>
                     <button
                       @click="adoptExampleGuideline('Use a warm, consultative B2B wholesale tone — never overly casual, never robotic.', 'Tone & Voice')"
-                      class="px-2.5 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 hover:text-emerald-950 rounded-lg border border-emerald-200 text-xs font-semibold cursor-pointer transition-colors"
+                      class="px-2.5 py-1.5 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 hover:text-emerald-900 rounded-lg text-xs font-semibold cursor-pointer transition-colors"
                     >
                       + Warm consultative tone
                     </button>
                     <button
                       @click="adoptExampleGuideline('Always quote wholesale prices with standard SST disclosures and state minimum order quantities clearly.', 'Pricing Policy')"
-                      class="px-2.5 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 hover:text-emerald-950 rounded-lg border border-emerald-200 text-xs font-semibold cursor-pointer transition-colors"
+                      class="px-2.5 py-1.5 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 hover:text-emerald-900 rounded-lg text-xs font-semibold cursor-pointer transition-colors"
                     >
                       + SST & MOQ disclosures
                     </button>
@@ -1170,7 +1123,7 @@
                 </div>
 
                 <!-- Quick Add Guideline Input -->
-                <div class="pt-4 border-t border-gray-150 flex items-center gap-2">
+                <div class="pt-4 border-t border-gray-100 flex items-center gap-2">
                   <input
                     v-model="quickGuidelineText"
                     type="text"
@@ -1214,25 +1167,25 @@
                     <span class="text-[11px] font-medium text-gray-500 mr-1">Variables:</span>
                     <button
                       @click="insertHandoffVariable('{rep_name}')"
-                      class="px-2 py-0.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 hover:text-emerald-950 text-[10px] font-mono font-semibold rounded-md border border-emerald-200 cursor-pointer transition-colors"
+                      class="px-2 py-0.5 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 hover:text-emerald-900 text-[10px] font-mono font-semibold rounded-md cursor-pointer transition-colors"
                     >
                       {rep_name}
                     </button>
                     <button
                       @click="insertHandoffVariable('{team_name}')"
-                      class="px-2 py-0.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 hover:text-emerald-950 text-[10px] font-mono font-semibold rounded-md border border-emerald-200 cursor-pointer transition-colors"
+                      class="px-2 py-0.5 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 hover:text-emerald-900 text-[10px] font-mono font-semibold rounded-md cursor-pointer transition-colors"
                     >
                       {team_name}
                     </button>
                     <button
                       @click="insertHandoffVariable('{wait_time}')"
-                      class="px-2 py-0.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 hover:text-emerald-950 text-[10px] font-mono font-semibold rounded-md border border-emerald-200 cursor-pointer transition-colors"
+                      class="px-2 py-0.5 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 hover:text-emerald-900 text-[10px] font-mono font-semibold rounded-md cursor-pointer transition-colors"
                     >
                       {wait_time}
                     </button>
                     <button
                       @click="insertHandoffVariable('{customer_name}')"
-                      class="px-2 py-0.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 hover:text-emerald-950 text-[10px] font-mono font-semibold rounded-md border border-emerald-200 cursor-pointer transition-colors"
+                      class="px-2 py-0.5 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 hover:text-emerald-900 text-[10px] font-mono font-semibold rounded-md cursor-pointer transition-colors"
                     >
                       {customer_name}
                     </button>
@@ -1274,13 +1227,13 @@
                     <span class="text-[11px] font-medium text-gray-500 mr-1">Variables:</span>
                     <button
                       @click="insertResolutionVariable('{customer_name}')"
-                      class="px-2 py-0.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 hover:text-emerald-950 text-[10px] font-mono font-semibold rounded-md border border-emerald-200 cursor-pointer transition-colors"
+                      class="px-2 py-0.5 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 hover:text-emerald-900 text-[10px] font-mono font-semibold rounded-md cursor-pointer transition-colors"
                     >
                       {customer_name}
                     </button>
                     <button
                       @click="insertResolutionVariable('{company_name}')"
-                      class="px-2 py-0.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 hover:text-emerald-950 text-[10px] font-mono font-semibold rounded-md border border-emerald-200 cursor-pointer transition-colors"
+                      class="px-2 py-0.5 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 hover:text-emerald-900 text-[10px] font-mono font-semibold rounded-md cursor-pointer transition-colors"
                     >
                       {company_name}
                     </button>
@@ -1316,7 +1269,7 @@
                     >
                       <div class="text-xs font-bold text-gray-900 flex items-center justify-between">
                         <span>Strict & Factual</span>
-                        <span class="text-[10px] font-mono text-gray-400">0.2</span>
+                        <span class="text-[10px] font-mono text-gray-500">0.2</span>
                       </div>
                       <p class="text-[11px] text-gray-500 mt-1 leading-relaxed">
                         Deterministic. Strictly follows price matrices and product specs.
@@ -1331,7 +1284,7 @@
                     >
                       <div class="text-xs font-bold text-gray-900 flex items-center justify-between">
                         <span>Balanced B2B (Recommended)</span>
-                        <span class="text-[10px] font-mono text-gray-400">0.35</span>
+                        <span class="text-[10px] font-mono text-gray-500">0.35</span>
                       </div>
                       <p class="text-[11px] text-gray-500 mt-1 leading-relaxed">
                         Natural sales dialogue grounded in verified knowledge base files.
@@ -1346,7 +1299,7 @@
                     >
                       <div class="text-xs font-bold text-gray-900 flex items-center justify-between">
                         <span>Dynamic / Marketing</span>
-                        <span class="text-[10px] font-mono text-gray-400">0.65</span>
+                        <span class="text-[10px] font-mono text-gray-500">0.65</span>
                       </div>
                       <p class="text-[11px] text-gray-500 mt-1 leading-relaxed">
                         More phrasing variety. Best for open-ended marketing conversations.
@@ -1367,7 +1320,7 @@
                     >
                       <div class="text-xs font-bold text-gray-900 flex items-center justify-between">
                         <span>High Precision (85%+)</span>
-                        <span class="text-[10px] font-mono text-gray-400">Strict</span>
+                        <span class="text-[10px] font-mono text-gray-500">Strict</span>
                       </div>
                       <p class="text-[11px] text-gray-500 mt-1 leading-relaxed">
                         Escalates to human rep if match confidence is below 85%. Lowest hallucination risk.
@@ -1382,7 +1335,7 @@
                     >
                       <div class="text-xs font-bold text-gray-900 flex items-center justify-between">
                         <span>Standard Matching (70%)</span>
-                        <span class="text-[10px] font-mono text-gray-400">Balanced</span>
+                        <span class="text-[10px] font-mono text-gray-500">Balanced</span>
                       </div>
                       <p class="text-[11px] text-gray-500 mt-1 leading-relaxed">
                         Balanced semantic retrieval across all 8 indexed wholesale documents.
@@ -1397,7 +1350,7 @@
                     >
                       <div class="text-xs font-bold text-gray-900 flex items-center justify-between">
                         <span>Broad Semantic (55%)</span>
-                        <span class="text-[10px] font-mono text-gray-400">Broad</span>
+                        <span class="text-[10px] font-mono text-gray-500">Broad</span>
                       </div>
                       <p class="text-[11px] text-gray-500 mt-1 leading-relaxed">
                         Matches looser phrasing and informal restaurant abbreviations.
@@ -1430,7 +1383,7 @@
                       <span class="text-xs text-gray-500">seconds before replying on WhatsApp.</span>
                     </div>
                   </div>
-                  <p class="text-[11px] text-gray-400 pt-0.5">
+                  <p class="text-[11px] text-gray-500 pt-0.5">
                     Simulates natural reading and typing cadence. Prevents the "robotic instant response" drop-off on WhatsApp. Set both to 0 for instant responses.
                   </p>
                 </div>
@@ -1459,7 +1412,7 @@
             <!-- Knowledge Hub Card -->
             <div class="bg-white border border-gray-200 rounded-2xl shadow-2xs overflow-hidden">
               <!-- Distilled Header -->
-              <div class="p-5 border-b border-gray-150 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div class="p-5 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
                   <div class="flex items-center gap-2.5">
                     <h3 class="text-sm font-bold text-gray-900">Knowledge Base</h3>
@@ -1491,7 +1444,7 @@
               </div>
 
               <!-- Distilled Filter & Search Bar (Replaces redundant upload banner) -->
-              <div class="px-5 py-3 bg-gray-50/60 border-b border-gray-150 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div class="px-5 py-3 bg-gray-50/60 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div class="flex items-center gap-1.5 flex-wrap">
                   <button
                     v-for="filter in [
@@ -1511,7 +1464,7 @@
                 </div>
 
                 <div class="relative w-full sm:w-64">
-                  <Search class="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  <Search class="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
                   <input
                     v-model="knowledgeSearch"
                     type="text"
@@ -1596,11 +1549,11 @@
           <div v-else-if="activeDetailTab === 'tools'" class="space-y-6 animate-fade-in">
             <!-- Tools Hub Card (matching media_1790915514472.png) -->
             <div class="bg-white border border-gray-200 rounded-2xl shadow-2xs overflow-hidden">
-              <div class="p-5 border-b border-gray-150 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div class="p-5 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
                   <div class="flex items-center gap-2">
                     <h3 class="text-sm font-bold text-gray-900">API Tools</h3>
-                    <span class="text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">
+                    <span class="text-[10px] font-bold bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full">
                       {{ customTools.length }} Active
                     </span>
                   </div>
@@ -1638,12 +1591,12 @@
                         </span>
                         <span
                           class="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold"
-                          :class="tool.method === 'GET' ? 'bg-sky-50 text-sky-800 border border-sky-200/60' : 'bg-emerald-50 text-emerald-900 border border-emerald-200/60'"
+                          :class="tool.method === 'GET' ? 'bg-sky-50 text-sky-800 border border-sky-200/60' : 'bg-emerald-50 text-emerald-900'"
                         >
                           {{ tool.method }}
                         </span>
                         <span class="text-[10px] text-gray-500 flex items-center gap-1 font-mono">
-                          <Lock class="w-3 h-3 text-gray-400" />
+                          <Lock class="w-3 h-3 text-gray-500" />
                           {{ tool.authType }}
                         </span>
                       </div>
@@ -1659,7 +1612,7 @@
                   <div class="flex items-center gap-2.5 shrink-0 self-end sm:self-center">
                     <button
                       @click="testToolConnection(tool)"
-                      class="px-2.5 py-1 text-[11px] font-medium text-emerald-800 bg-emerald-50 hover:bg-emerald-100 rounded-lg border border-emerald-200/60 cursor-pointer transition-colors inline-flex items-center gap-1 shadow-2xs"
+                      class="px-2.5 py-1 text-[11px] font-medium text-emerald-800 bg-emerald-50 hover:bg-emerald-100 rounded-lg cursor-pointer transition-colors inline-flex items-center gap-1 shadow-2xs"
                       title="Test live API endpoint connection"
                     >
                       <Zap class="w-3 h-3 text-emerald-600" />
@@ -1698,33 +1651,33 @@
                 <div class="absolute inset-0 p-6 space-y-3 opacity-25 filter blur-[0.5px] select-none pointer-events-none">
                   <div class="p-4 bg-gray-50 rounded-xl border border-gray-200 flex items-center justify-between">
                     <div class="flex items-center gap-3">
-                      <div class="w-8 h-8 rounded-lg bg-gray-200 flex items-center justify-center text-gray-400"><Wrench class="w-4 h-4" /></div>
+                      <div class="w-8 h-8 rounded-lg bg-gray-200 flex items-center justify-center text-gray-500"><Wrench class="w-4 h-4" /></div>
                       <div>
                         <div class="text-xs font-bold text-gray-800">Order Lookup</div>
                         <div class="text-[10px] font-mono text-gray-500">GET https://api.goldenharvest.com.my/v1/orders/{order_id}</div>
                       </div>
                     </div>
-                    <div class="text-[10px] text-gray-400 font-mono">Bearer Token</div>
+                    <div class="text-[10px] text-gray-500 font-mono">Bearer Token</div>
                   </div>
                   <div class="p-4 bg-gray-50 rounded-xl border border-gray-200 flex items-center justify-between">
                     <div class="flex items-center gap-3">
-                      <div class="w-8 h-8 rounded-lg bg-gray-200 flex items-center justify-center text-gray-400"><Wrench class="w-4 h-4" /></div>
+                      <div class="w-8 h-8 rounded-lg bg-gray-200 flex items-center justify-center text-gray-500"><Wrench class="w-4 h-4" /></div>
                       <div>
                         <div class="text-xs font-bold text-gray-800">Account Status</div>
                         <div class="text-[10px] font-mono text-gray-500">GET https://api.goldenharvest.com.my/v1/accounts/{account_id}/status</div>
                       </div>
                     </div>
-                    <div class="text-[10px] text-gray-400 font-mono">API Key</div>
+                    <div class="text-[10px] text-gray-500 font-mono">API Key</div>
                   </div>
                   <div class="p-4 bg-gray-50 rounded-xl border border-gray-200 flex items-center justify-between">
                     <div class="flex items-center gap-3">
-                      <div class="w-8 h-8 rounded-lg bg-gray-200 flex items-center justify-center text-gray-400"><Wrench class="w-4 h-4" /></div>
+                      <div class="w-8 h-8 rounded-lg bg-gray-200 flex items-center justify-center text-gray-500"><Wrench class="w-4 h-4" /></div>
                       <div>
                         <div class="text-xs font-bold text-gray-800">Shipment Tracker</div>
                         <div class="text-[10px] font-mono text-gray-500">GET https://api.goldenharvest.com.my/v1/shipments/{tracking_id}</div>
                       </div>
                     </div>
-                    <div class="text-[10px] text-gray-400 font-mono">Bearer Token</div>
+                    <div class="text-[10px] text-gray-500 font-mono">Bearer Token</div>
                   </div>
                 </div>
 
@@ -1753,7 +1706,7 @@
               </div>
 
               <div class="space-y-3">
-                <div class="p-4 bg-gray-50/70 border border-gray-200/80 rounded-xl flex items-center justify-between gap-4">
+                <div class="p-4 bg-gray-50 border border-gray-200/80 rounded-xl flex items-center justify-between gap-4">
                   <div>
                     <div class="text-xs font-bold text-gray-900">Order Lookup</div>
                     <div class="text-[11px] text-gray-500 mt-0.5">Looks up live delivery status and item packing details by order ID.</div>
@@ -1766,7 +1719,7 @@
                   </button>
                 </div>
 
-                <div class="p-4 bg-gray-50/70 border border-gray-200/80 rounded-xl flex items-center justify-between gap-4">
+                <div class="p-4 bg-gray-50 border border-gray-200/80 rounded-xl flex items-center justify-between gap-4">
                   <div>
                     <div class="text-xs font-bold text-gray-900">Account Status & Net Credit Limit</div>
                     <div class="text-[11px] text-gray-500 mt-0.5">Checks customer 30-day net credit facility balance and invoice status.</div>
@@ -1779,7 +1732,7 @@
                   </button>
                 </div>
 
-                <div class="p-4 bg-gray-50/70 border border-gray-200/80 rounded-xl flex items-center justify-between gap-4">
+                <div class="p-4 bg-gray-50 border border-gray-200/80 rounded-xl flex items-center justify-between gap-4">
                   <div>
                     <div class="text-xs font-bold text-gray-900">Cold-Chain Reefer Route ETA</div>
                     <div class="text-[11px] text-gray-500 mt-0.5">Checks daily morning reefer truck ETA (-18°C / +4°C) by postal code.</div>
@@ -1801,11 +1754,11 @@
               <!-- Left Column: Interactive Chat Canvas (8 cols, matching media_1790915520373.png) -->
               <div class="lg:col-span-8 bg-white border border-gray-200 rounded-2xl shadow-2xs overflow-hidden flex flex-col h-[620px]">
                 <!-- Header -->
-                <div class="p-5 border-b border-gray-150 flex items-center justify-between gap-4">
+                <div class="p-5 border-b border-gray-100 flex items-center justify-between gap-4">
                   <div>
                     <div class="flex items-center gap-2">
                       <h3 class="text-sm font-bold text-gray-900">Playground</h3>
-                      <span class="text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">
+                      <span class="text-[10px] font-bold bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full">
                         Live Model
                       </span>
                     </div>
@@ -1816,7 +1769,7 @@
 
                   <button
                     @click="resetPlayground"
-                    class="p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-xl cursor-pointer transition-colors"
+                    class="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-xl cursor-pointer transition-colors"
                     title="Reset conversation"
                   >
                     <RefreshCw class="w-4 h-4" />
@@ -1824,7 +1777,7 @@
                 </div>
 
                 <!-- Messages stream -->
-                <div class="flex-1 p-5 overflow-y-auto space-y-3.5 bg-gray-50/40">
+                <div class="flex-1 p-5 overflow-y-auto space-y-3.5 bg-gray-50">
                   <div
                     v-for="(msg, idx) in playgroundMessages"
                     :key="idx"
@@ -1841,12 +1794,12 @@
                       </div>
                       {{ msg.text }}
                     </div>
-                    <span class="text-[9px] text-gray-400 px-1 pt-1">{{ msg.time }}</span>
+                    <span class="text-[9px] text-gray-500 px-1 pt-1">{{ msg.time }}</span>
                   </div>
                 </div>
 
                 <!-- Quick Test Prompts -->
-                <div class="px-4 py-2 border-t border-gray-150 bg-white flex items-center gap-1.5 overflow-x-auto">
+                <div class="px-4 py-2 border-t border-gray-100 bg-white flex items-center gap-1.5 overflow-x-auto">
                   <button
                     v-for="chip in quickTestPrompts"
                     :key="chip"
@@ -1874,7 +1827,7 @@
                       <Send class="w-4 h-4" />
                     </button>
                   </div>
-                  <p class="text-[10px] text-gray-400 text-center">
+                  <p class="text-[10px] text-gray-500 text-center">
                     Messages sent here will count toward your AI Assistant credits.
                   </p>
                 </div>
@@ -1894,7 +1847,7 @@
                     </div>
                     <div>
                       <div class="text-xs font-semibold text-gray-900">Assistant named</div>
-                      <div class="text-[11px] text-gray-400">Golden Harvest F&B AI</div>
+                      <div class="text-[11px] text-gray-500">Golden Harvest F&B AI</div>
                     </div>
                   </div>
 
@@ -1904,7 +1857,7 @@
                     </div>
                     <div>
                       <div class="text-xs font-semibold text-gray-900">Knowledge added</div>
-                      <div class="text-[11px] text-gray-400">{{ knowledgeDocs.length }} documents indexed</div>
+                      <div class="text-[11px] text-gray-500">{{ knowledgeDocs.length }} documents indexed</div>
                     </div>
                   </div>
 
@@ -1914,7 +1867,7 @@
                     </div>
                     <div>
                       <div class="text-xs font-semibold text-gray-900">At least 1 guardrail set</div>
-                      <div class="text-[11px] text-gray-400">{{ guardrailRules.length }} guardrails active</div>
+                      <div class="text-[11px] text-gray-500">{{ guardrailRules.length }} guardrails active</div>
                     </div>
                   </div>
 
@@ -1924,7 +1877,7 @@
                     </div>
                     <div>
                       <div class="text-xs font-semibold text-gray-900">Response guidelines set</div>
-                      <div class="text-[11px] text-gray-400">{{ guidelineRules.length }} rules active</div>
+                      <div class="text-[11px] text-gray-500">{{ guidelineRules.length }} rules active</div>
                     </div>
                   </div>
 
@@ -1937,14 +1890,14 @@
                     </div>
                     <div>
                       <div class="text-xs font-semibold text-gray-900">Tested in Playground</div>
-                      <div class="text-[11px] text-gray-400">
+                      <div class="text-[11px] text-gray-500">
                         {{ hasTestedInPlayground ? 'Verified conversational flow' : 'Send a test message to complete' }}
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <div class="pt-4 border-t border-gray-150 space-y-3">
+                <div class="pt-4 border-t border-gray-100 space-y-3">
                   <div class="p-3 bg-emerald-50/70 border border-emerald-100 rounded-xl space-y-1">
                     <div class="text-xs font-bold text-emerald-800 flex items-center gap-1.5">
                       <Sparkles class="w-3.5 h-3.5" />
@@ -1971,7 +1924,7 @@
           <div v-else-if="activeDetailTab === 'connect' || activeDetailTab === 'channels'" class="space-y-6 animate-fade-in">
             <!-- Connected inboxes Card (matching media_1790915526728.png) -->
             <div class="bg-white border border-gray-200 rounded-2xl shadow-2xs overflow-hidden">
-              <div class="p-5 border-b border-gray-150 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div class="p-5 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
                   <h3 class="text-sm font-bold text-gray-900">Connected Inboxes</h3>
                   <p class="text-xs text-gray-500 mt-0.5">Manage active communication channels and WhatsApp accounts.</p>
@@ -2005,14 +1958,14 @@
                         <span>{{ inbox.name }}</span>
                         <span class="text-[11px] font-mono text-gray-500">({{ inbox.identifier }})</span>
                       </div>
-                      <div class="text-[10px] text-gray-400 mt-0.5">
+                      <div class="text-[10px] text-gray-500 mt-0.5">
                         {{ inbox.connectedAt }} • {{ inbox.todayChats }} conversations today
                       </div>
                     </div>
                   </div>
 
                   <div class="flex items-center gap-3 shrink-0">
-                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200/60">
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800">
                       <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                       Active
                     </span>
@@ -2050,7 +2003,7 @@
                 <div class="space-y-1.5">
                   <div class="flex items-center justify-between">
                     <label class="block text-xs font-semibold text-gray-700">High-Priority Keyword Triggers</label>
-                    <span class="text-[10px] text-gray-400 font-medium">{{ escalationKeywords.length }} triggers</span>
+                    <span class="text-[10px] text-gray-500 font-medium">{{ escalationKeywords.length }} triggers</span>
                   </div>
                   <div class="p-2 bg-gray-50 border border-gray-200 rounded-xl min-h-[44px] flex items-center gap-1.5 flex-wrap">
                     <span
@@ -2062,7 +2015,7 @@
                       <button
                         @click="removeKeyword(idx)"
                         type="button"
-                        class="text-gray-400 hover:text-red-500 cursor-pointer transition-colors"
+                        class="text-gray-500 hover:text-red-500 cursor-pointer transition-colors"
                         title="Remove trigger"
                       >
                         <X class="w-3 h-3" />
@@ -2143,7 +2096,7 @@
               class="py-24 text-center bg-white border border-gray-200 rounded-2xl shadow-2xs space-y-2"
             >
               <BarChart2 class="w-8 h-8 text-gray-300 mx-auto" />
-              <div class="text-xs font-medium text-gray-400">
+              <div class="text-xs font-medium text-gray-500">
                 Not enough data yet for this period. Connect an inbox to start receiving conversations.
               </div>
             </div>
@@ -2157,7 +2110,7 @@
                   <div class="text-xl font-bold text-gray-900 tracking-tight">1,428</div>
                   <div class="text-[10px] text-emerald-600 font-semibold flex items-center gap-1">
                     <span>↑ +18.4%</span>
-                    <span class="text-gray-400 font-normal">vs prev 7 days</span>
+                    <span class="text-gray-500 font-normal">vs prev 7 days</span>
                   </div>
                 </div>
 
@@ -2166,7 +2119,7 @@
                   <div class="text-xl font-bold text-emerald-600 tracking-tight">91.8%</div>
                   <div class="text-[10px] text-emerald-600 font-semibold flex items-center gap-1">
                     <span>↑ +3.2%</span>
-                    <span class="text-gray-400 font-normal">contained by AI</span>
+                    <span class="text-gray-500 font-normal">contained by AI</span>
                   </div>
                 </div>
 
@@ -2203,7 +2156,7 @@
                   </div>
 
                   <!-- SVG Bar Chart -->
-                  <div class="pt-4 h-48 flex items-end justify-between gap-3 px-2 border-b border-gray-150 pb-2">
+                  <div class="pt-4 h-48 flex items-end justify-between gap-3 px-2 border-b border-gray-100 pb-2">
                     <div
                       v-for="(day, dIdx) in [
                         { day: 'Sat (26)', total: 180, res: 165, esc: 15 },
@@ -2217,7 +2170,7 @@
                       :key="dIdx"
                       class="flex-1 flex flex-col items-center gap-1.5 group cursor-pointer"
                     >
-                      <div class="text-[10px] font-mono text-gray-400 group-hover:text-gray-700 transition-colors">
+                      <div class="text-[10px] font-mono text-gray-500 group-hover:text-gray-700 transition-colors">
                         {{ day.total }}
                       </div>
                       <div class="w-full max-w-[28px] flex flex-col rounded-t-md overflow-hidden bg-gray-100" style="height: 120px; justify-content: flex-end;">
@@ -2298,7 +2251,7 @@
     >
       <div class="bg-white w-full max-w-md h-full shadow-2xl flex flex-col justify-between border-l border-gray-200 animate-slide-left">
         <!-- Drawer Header -->
-        <div class="p-4 border-b border-gray-200 flex items-center justify-between bg-gray-50/70">
+        <div class="p-4 border-b border-gray-200 flex items-center justify-between bg-gray-50">
           <div class="flex items-center gap-2.5">
             <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
               <Bot class="w-4 h-4" />
@@ -2313,7 +2266,7 @@
           </div>
           <button
             @click="showTestDrawer = false"
-            class="p-1 text-gray-400 hover:text-gray-700 rounded-lg cursor-pointer"
+            class="p-1 text-gray-500 hover:text-gray-700 rounded-lg cursor-pointer"
           >
             <X class="w-4 h-4" />
           </button>
@@ -2333,12 +2286,12 @@
             >
               {{ msg.text }}
             </div>
-            <span class="text-[9px] text-gray-400 px-1 pt-1">{{ msg.time }}</span>
+            <span class="text-[9px] text-gray-500 px-1 pt-1">{{ msg.time }}</span>
           </div>
         </div>
 
         <!-- Pre-built Quick Prompt Chips -->
-        <div class="px-4 py-2 border-t border-gray-150 bg-white flex items-center gap-1.5 overflow-x-auto">
+        <div class="px-4 py-2 border-t border-gray-100 bg-white flex items-center gap-1.5 overflow-x-auto">
           <button
             v-for="chip in quickTestPrompts"
             :key="chip"
@@ -2417,14 +2370,14 @@
                 placeholder="Describe this assistant's primary goal..."
                 class="w-full px-3.5 py-2.5 pb-6 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary shadow-2xs resize-none"
               ></textarea>
-              <span class="absolute right-3 bottom-2 text-[10px] text-gray-400 font-mono">
+              <span class="absolute right-3 bottom-2 text-[10px] text-gray-500 font-mono">
                 {{ createForm.description.length }} / 200
               </span>
             </div>
           </div>
         </div>
 
-        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-gray-150">
+        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-gray-100">
           <button
             @click="showCreateModal = false"
             class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold text-xs rounded-xl cursor-pointer transition-colors"
@@ -2522,7 +2475,7 @@
           </div>
         </div>
 
-        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-gray-150">
+        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-gray-100">
           <button
             @click="showPreflightModal = false"
             class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold text-xs rounded-xl cursor-pointer"
@@ -2604,7 +2557,7 @@
           </div>
         </div>
 
-        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-gray-150">
+        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-gray-100">
           <button
             @click="showAddGuardrailModal = false"
             class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold text-xs rounded-xl cursor-pointer"
@@ -2697,13 +2650,13 @@
             <label class="block text-xs font-semibold text-gray-700">Bind CRM Automated Tools</label>
             <div class="flex flex-wrap gap-2 pt-1">
               <span class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-amber-50 text-amber-800 border border-amber-200/60">@add_private_note</span>
-              <span class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-emerald-50 text-emerald-800 border border-emerald-200/60">@add_label</span>
+              <span class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-emerald-50 text-emerald-800">@add_label</span>
               <span class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-sky-50 text-sky-800 border border-sky-200/60">@handoff</span>
             </div>
           </div>
         </div>
 
-        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-gray-150">
+        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-gray-100">
           <button
             @click="showAddScenarioModal = false"
             class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold text-xs rounded-xl cursor-pointer"
@@ -2761,7 +2714,7 @@
           </div>
         </div>
 
-        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-gray-150">
+        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-gray-100">
           <button
             @click="showAddGuidelineModal = false"
             class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold text-xs rounded-xl cursor-pointer"
@@ -2831,7 +2784,7 @@
           </div>
         </div>
 
-        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-gray-150">
+        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-gray-100">
           <button
             @click="showAddDocModal = false"
             class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold text-xs rounded-xl cursor-pointer"
@@ -2880,7 +2833,7 @@
           </p>
         </div>
 
-        <div class="flex justify-end pt-3 border-t border-gray-150">
+        <div class="flex justify-end pt-3 border-t border-gray-100">
           <button
             @click="showGuideModal = false"
             class="px-4 py-2 bg-primary hover:bg-[#1ea446] text-white font-semibold text-xs rounded-xl cursor-pointer shadow-xs transition-colors"
@@ -2963,7 +2916,7 @@
           </div>
         </div>
 
-        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-gray-150">
+        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-gray-100">
           <button
             @click="showCreateToolModal = false"
             class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold text-xs rounded-xl cursor-pointer"
@@ -3030,7 +2983,7 @@
           </div>
         </div>
 
-        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-gray-150">
+        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-gray-100">
           <button
             @click="showConnectInboxModal = false"
             class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold text-xs rounded-xl cursor-pointer"
@@ -3081,8 +3034,8 @@ const activeBehaviorSubTab = ref<'guardrails' | 'scenarios' | 'guidelines' | 'ha
 
 function getStatusBadgeClass(status: 'live' | 'draft') {
   return status === 'live'
-    ? 'bg-emerald-50 text-emerald-800 border border-emerald-200/60'
-    : 'bg-slate-100 text-slate-700';
+    ? 'bg-emerald-100 text-emerald-700'
+    : 'bg-slate-100 text-slate-600';
 }
 
 function getDocBadgeBg(type: 'pdf' | 'url' | 'csv' | 'docx') {
@@ -3133,27 +3086,27 @@ function getDocPlaceholder(type: 'pdf' | 'url' | 'csv' | 'docx') {
 function getSetupTabClass(tab: 'identity' | 'knowledge' | 'behavior' | 'tools' | 'playground' | 'connect' | 'channels' | 'report') {
   const isMatch = activeDetailTab.value === tab || (tab === 'connect' && activeDetailTab.value === 'channels');
   return isMatch
-    ? 'bg-emerald-50 text-emerald-800 font-bold'
-    : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900';
+    ? 'bg-primary text-white font-bold shadow-xs'
+    : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900';
 }
 
 function getBehaviorSubTabClass(subTab: 'guardrails' | 'scenarios' | 'guidelines' | 'handoff') {
   return activeBehaviorSubTab.value === subTab
-    ? 'bg-emerald-50 text-emerald-800 font-bold shadow-2xs'
-    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/70';
+    ? 'bg-primary text-white font-bold shadow-xs'
+    : 'text-gray-700 hover:text-gray-900 hover:bg-gray-100';
 }
 
 function getBehaviorBadgeClass(subTab: 'guardrails' | 'scenarios' | 'guidelines' | 'handoff') {
   return activeBehaviorSubTab.value === subTab
-    ? 'bg-emerald-200 text-emerald-900'
-    : 'bg-gray-100 text-gray-600';
+    ? 'bg-white text-primary'
+    : 'bg-gray-100 text-gray-700';
 }
 
 function getPlaygroundCheckmarkClass() {
   if (hasTestedInPlayground.value) {
     return 'bg-emerald-100 text-emerald-800';
   }
-  return 'bg-gray-100 text-gray-400';
+  return 'bg-gray-100 text-gray-500';
 }
 
 // ═══════════════════ STATE: ASSISTANTS DATA ═══════════════════
@@ -3511,39 +3464,39 @@ const handoffSettings = ref<HandoffSettings>({
 
 function getGuardrailCategoryBadge(cat: GuardrailItem['category']) {
   switch (cat) {
-    case 'Safety & PII': return 'bg-rose-50 text-rose-700 border border-rose-200/60';
-    case 'Compliance & Halal': return 'bg-emerald-50 text-emerald-800 border border-emerald-200/60';
-    case 'Commercial & Pricing': return 'bg-amber-50 text-amber-800 border border-amber-200/60';
-    case 'Scope & Conduct': return 'bg-indigo-50 text-indigo-700 border border-indigo-200/60';
-    default: return 'bg-slate-100 text-slate-700 border border-slate-200';
+    case 'Safety & PII': return 'bg-rose-100 text-rose-700';
+    case 'Compliance & Halal': return 'bg-emerald-100 text-emerald-700';
+    case 'Commercial & Pricing': return 'bg-amber-100 text-amber-800';
+    case 'Scope & Conduct': return 'bg-violet-100 text-violet-700';
+    default: return 'bg-slate-100 text-slate-700';
   }
 }
 
 function getScenarioCategoryBadge(cat: ScenarioItem['category']) {
   switch (cat) {
-    case 'Lead Qualification': return 'bg-emerald-50 text-emerald-800 border border-emerald-200/60';
-    case 'Billing & Payment': return 'bg-purple-50 text-purple-700 border border-purple-200/60';
-    case 'Cold-Chain Delivery': return 'bg-sky-50 text-sky-700 border border-sky-200/60';
-    case 'Damaged Goods & Return': return 'bg-amber-50 text-amber-800 border border-amber-200/60';
-    default: return 'bg-slate-100 text-slate-700 border border-slate-200';
+    case 'Lead Qualification': return 'bg-emerald-100 text-emerald-700';
+    case 'Billing & Payment': return 'bg-violet-100 text-violet-700';
+    case 'Cold-Chain Delivery': return 'bg-sky-100 text-sky-700';
+    case 'Damaged Goods & Return': return 'bg-amber-100 text-amber-800';
+    default: return 'bg-slate-100 text-slate-700';
   }
 }
 
 function getGuidelineCategoryBadge(cat: ResponseGuidelineItem['category']) {
   switch (cat) {
-    case 'Tone & Voice': return 'bg-indigo-50 text-indigo-700 border border-indigo-200/60';
-    case 'Length & Format': return 'bg-sky-50 text-sky-700 border border-sky-200/60';
-    case 'Language & Locale': return 'bg-emerald-50 text-emerald-800 border border-emerald-200/60';
-    case 'Pricing Policy': return 'bg-amber-50 text-amber-800 border border-amber-200/60';
-    default: return 'bg-slate-100 text-slate-700 border border-slate-200';
+    case 'Tone & Voice': return 'bg-violet-100 text-violet-700';
+    case 'Length & Format': return 'bg-sky-100 text-sky-700';
+    case 'Language & Locale': return 'bg-emerald-100 text-emerald-700';
+    case 'Pricing Policy': return 'bg-amber-100 text-amber-800';
+    default: return 'bg-slate-100 text-slate-700';
   }
 }
 
 function getToolBadgeClass(tool: string) {
-  if (tool.includes('note')) return 'bg-amber-50 text-amber-800 border border-amber-200/60';
-  if (tool.includes('label')) return 'bg-emerald-50 text-emerald-800 border border-emerald-200/60';
-  if (tool.includes('handoff')) return 'bg-sky-50 text-sky-800 border border-sky-200/60';
-  return 'bg-purple-50 text-purple-800 border border-purple-200/60';
+  if (tool.includes('note')) return 'bg-amber-100 text-amber-800';
+  if (tool.includes('label')) return 'bg-emerald-100 text-emerald-700';
+  if (tool.includes('handoff')) return 'bg-sky-100 text-sky-700';
+  return 'bg-violet-100 text-violet-700';
 }
 
 const filteredGuardrails = computed(() => {
