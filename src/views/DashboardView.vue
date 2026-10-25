@@ -1089,6 +1089,348 @@
 
         </div>
 
+        <!-- ═════════════════════════════════════════════════════════
+             TAB 4: SUPPORT
+             ═════════════════════════════════════════════════════════ -->
+        <div v-if="activeTab === 'support'" class="space-y-6 animate-in fade-in duration-200">
+          
+          <!-- Section Title & Context -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                Support <span class="font-normal text-gray-400 dark:text-gray-500">overview</span>
+              </h1>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                Support performance for {{ selectedDateRangeLabel }} compared with the previous period.
+              </p>
+            </div>
+          </div>
+
+          <!-- Top KPI Strip (4 Focused Support Metrics) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            
+            <!-- 1. AI Deflection Rate -->
+            <div class="bg-gradient-to-br from-[#23B750] via-[#1fa848] to-[#178537] text-white p-5 rounded-2xl shadow-md shadow-[#23B750]/15 relative overflow-hidden flex flex-col justify-between h-[154px]">
+              <div>
+                <div class="flex items-center justify-between">
+                  <span class="text-[11px] font-bold tracking-wider uppercase opacity-95">AI Deflection Rate</span>
+                </div>
+                <div class="text-3xl font-extrabold tracking-tight tabular-nums mt-1">0%</div>
+              </div>
+              <div>
+                <div class="flex items-center justify-between text-[11px] font-semibold opacity-95">
+                  <span class="tabular-nums">{{ hasSampleData ? '↓ 16.7 pts vs last period' : '0.0 pts vs last period' }}</span>
+                  <span class="tabular-nums">{{ hasSampleData ? '0 of 5 conversations' : '0 of 0 conversations' }}</span>
+                </div>
+                <div class="text-[10px] opacity-80 pt-1.5 mt-1.5 border-t border-white/20">
+                  Closed RES-BOT · no human hand-off
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. Total Conversations -->
+            <div class="bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-xs flex flex-col justify-between h-[154px] hover:border-gray-300 dark:hover:border-gray-700 transition-colors">
+              <div>
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-1.5 group relative">
+                    <span class="text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Total Conversations</span>
+                    <Info class="w-3 h-3 text-gray-400 cursor-help" />
+                    <div class="absolute left-0 top-5 hidden group-hover:block bg-gray-900 text-white text-[10px] p-2 rounded-lg shadow-xl w-52 z-30 font-normal border border-gray-700 leading-normal">
+                      Total customer support conversations opened across all connected inboxes.
+                    </div>
+                  </div>
+                </div>
+                <div class="flex items-baseline gap-2 mt-1">
+                  <span class="text-2xl font-bold text-gray-900 dark:text-white tabular-nums">{{ hasSampleData ? '5' : '0' }}</span>
+                  <span class="text-[10px] font-bold text-red-500 tabular-nums">{{ hasSampleData ? '↓ 16.7% vs last period' : '0.0%' }}</span>
+                </div>
+              </div>
+              <div class="h-9 w-full">
+                <apexchart type="line" height="36" :options="supportConversationsSparklineOptions" :series="supportConversationsSparklineSeries" />
+              </div>
+              <div class="text-[10px] text-gray-400">All channels combined</div>
+            </div>
+
+            <!-- 3. Resolved Without Human -->
+            <div class="bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-xs flex flex-col justify-between h-[154px] hover:border-gray-300 dark:hover:border-gray-700 transition-colors">
+              <div>
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-1.5 group relative">
+                    <span class="text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Resolved Without Human</span>
+                    <Info class="w-3 h-3 text-gray-400 cursor-help" />
+                    <div class="absolute left-0 top-5 hidden group-hover:block bg-gray-900 text-white text-[10px] p-2 rounded-lg shadow-xl w-52 z-30 font-normal border border-gray-700 leading-normal">
+                      Percentage of conversations fully resolved by AI Assistant without human agent transfer.
+                    </div>
+                  </div>
+                </div>
+                <div class="flex items-baseline gap-2 mt-1">
+                  <span class="text-2xl font-bold text-gray-900 dark:text-white tabular-nums">{{ hasSampleData ? '0%' : '0%' }}</span>
+                  <span class="text-[10px] font-bold text-red-500 tabular-nums">{{ hasSampleData ? '↓ 50 pts vs last period' : '0.0 pts' }}</span>
+                </div>
+              </div>
+              <div class="h-9 w-full">
+                <apexchart type="line" height="36" :options="supportResolvedSparklineOptions" :series="supportResolvedSparklineSeries" />
+              </div>
+              <div class="text-[10px] text-gray-400">{{ hasSampleData ? '0 of 1 closed conversations' : '0 of 0 closed conversations' }}</div>
+            </div>
+
+            <!-- 4. Avg First Response — Human -->
+            <div class="bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-xs flex flex-col justify-between h-[154px] hover:border-gray-300 dark:hover:border-gray-700 transition-colors">
+              <div>
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-1.5 group relative">
+                    <span class="text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Avg First Response — Human</span>
+                    <Info class="w-3 h-3 text-gray-400 cursor-help" />
+                    <div class="absolute left-0 top-5 hidden group-hover:block bg-gray-900 text-white text-[10px] p-2 rounded-lg shadow-xl w-52 z-30 font-normal border border-gray-700 leading-normal">
+                      Average time taken for a human support agent to send the initial reply.
+                    </div>
+                  </div>
+                </div>
+                <div class="text-2xl font-bold text-gray-900 dark:text-white tabular-nums mt-1">
+                  {{ hasSampleData ? '0.0 sec' : '--' }}
+                </div>
+              </div>
+              <div class="h-9 w-full">
+                <apexchart type="line" height="36" :options="supportAvgResponseSparklineOptions" :series="supportAvgResponseSparklineSeries" />
+              </div>
+              <div class="text-[10px] text-gray-400">AI Assistant ack: {{ hasSampleData ? '3.9 min' : '--' }}</div>
+            </div>
+
+          </div>
+
+          <!-- Support Health Pulse -->
+          <div class="space-y-3">
+            <div class="flex items-center gap-2">
+              <h2 class="text-sm font-bold text-gray-900 dark:text-white">Support Health Pulse</h2>
+              <span class="text-xs text-gray-400 dark:text-gray-500">Is my support team keeping up with demand?</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <!-- SLA Compliance -->
+              <div class="bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 rounded-2xl p-5 shadow-xs flex flex-col justify-between h-36">
+                <div class="flex justify-between items-center">
+                  <span class="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">SLA Compliance</span>
+                  <span class="text-[10px] font-semibold bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 px-2 py-0.5 rounded-full">No data</span>
+                </div>
+                <div class="text-2xl font-bold text-gray-400 my-1">—</div>
+                <p class="text-xs text-gray-400">No SLA policies applied in this period.</p>
+              </div>
+
+              <!-- Awaiting-Customer Ageing -->
+              <div class="bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 rounded-2xl p-5 shadow-xs flex flex-col justify-between">
+                <div>
+                  <div class="flex justify-between items-center">
+                    <span class="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Awaiting-Customer Ageing</span>
+                    <span class="text-[10px] font-bold bg-red-50 text-red-600 dark:bg-red-950/40 dark:text-red-400 px-2 py-0.5 rounded-full border border-red-200 dark:border-red-900/50">Critical</span>
+                  </div>
+                  <div class="text-2xl font-bold text-[#F97316] tabular-nums mt-1">
+                    {{ hasSampleData ? '100% aged' : '0% aged' }}
+                  </div>
+                  <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                    {{ hasSampleData ? '2 conversations awaiting reply · 2 beyond 48h' : '0 conversations awaiting reply' }}
+                  </p>
+                </div>
+
+                <div class="my-2.5">
+                  <div class="w-full h-2 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden flex">
+                    <div class="bg-[#23B750] h-full transition-all duration-300" :style="{ width: '0%' }"></div>
+                    <div class="bg-[#F97316] h-full transition-all duration-300" :style="{ width: hasSampleData ? '100%' : '0%' }"></div>
+                  </div>
+                  <div class="flex items-center gap-3 mt-1.5 text-[10px] font-medium text-gray-500">
+                    <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-[#23B750]"></span> 0% within 48h</span>
+                    <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-[#F97316]"></span> {{ hasSampleData ? '100%' : '0%' }} aged</span>
+                  </div>
+                </div>
+
+                <div class="text-[10px] text-gray-400 pt-2 border-t border-gray-100 dark:border-gray-800">
+                  Latest reply came from an agent · aged after 48h
+                </div>
+              </div>
+
+              <!-- Reopen Rate -->
+              <div class="bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 rounded-2xl p-5 shadow-xs flex flex-col justify-between h-36">
+                <div class="flex justify-between items-center">
+                  <span class="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Reopen Rate</span>
+                  <span class="text-[10px] font-semibold bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 px-2 py-0.5 rounded-full">No data</span>
+                </div>
+                <div class="text-2xl font-bold text-gray-400 my-1">—</div>
+                <p class="text-xs text-gray-400">No conversations reopened in this period.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Agent Hours Recovered Derived Banner -->
+          <div class="bg-[#FFF9F5] dark:bg-[#1E1712] border border-orange-200/80 dark:border-orange-900/40 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-2xs">
+            <div class="flex items-center gap-4 shrink-0">
+              <div>
+                <div class="text-2xl font-extrabold text-[#F97316] tabular-nums">{{ hasSampleData ? '0 hrs' : '0 hrs' }}</div>
+                <div class="text-[11px] font-medium text-gray-500 dark:text-gray-400">Agent hours recovered</div>
+              </div>
+            </div>
+            <div class="text-xs text-orange-950/80 dark:text-orange-200/80 max-w-2xl leading-relaxed">
+              0 AI-resolved conversations × 7.2 min avg handling time — an account-supplied constant, not a RakanSales measurement. Configurable in Support Settings; never hardcoded.
+            </div>
+            <div class="shrink-0">
+              <span class="text-[10px] font-bold tracking-wider text-[#F97316] bg-orange-100 dark:bg-orange-950/60 px-2.5 py-1 rounded-md border border-orange-200 dark:border-orange-800">
+                DERIVED
+              </span>
+            </div>
+          </div>
+
+          <!-- Where Enquiries Come From -->
+          <div class="space-y-3">
+            <div class="flex items-center gap-2">
+              <h2 class="text-sm font-bold text-gray-900 dark:text-white">Where enquiries come from</h2>
+              <span class="text-xs text-gray-400 dark:text-gray-500">Category mix and channel entry points</span>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+              
+              <!-- Enquiry Mix by Category -->
+              <div class="lg:col-span-7 bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-xs flex flex-col justify-between">
+                <div>
+                  <div class="flex justify-between items-center pb-2">
+                    <div>
+                      <h3 class="text-sm font-bold text-gray-900 dark:text-white">Enquiry mix by category</h3>
+                      <p class="text-xs text-gray-400 mt-0.5">Placeholder data — pending the enquiry category attribute</p>
+                    </div>
+                    <span class="text-[10px] font-bold bg-orange-100 text-orange-700 dark:bg-orange-950/50 dark:text-orange-300 px-2.5 py-0.5 rounded-full">
+                      31.8% Billing
+                    </span>
+                  </div>
+
+                  <div class="space-y-2.5 mt-4">
+                    <div v-for="cat in activeSupportCategories" :key="cat.code" class="flex items-center gap-3 text-xs">
+                      <div class="w-36 shrink-0 flex items-center gap-1.5">
+                        <span class="font-medium text-gray-700 dark:text-gray-300 truncate">{{ cat.name }}</span>
+                        <span class="text-[9px] font-semibold text-gray-400 uppercase">{{ cat.code }}</span>
+                      </div>
+                      <div class="flex-1 h-3 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+                        <div
+                          class="h-full rounded-full transition-all duration-300"
+                          :style="{ width: `${cat.pct}%`, backgroundColor: cat.color }"
+                        ></div>
+                      </div>
+                      <div class="w-20 text-right text-gray-900 dark:text-white font-bold tabular-nums text-xs">
+                        {{ cat.count }} · {{ cat.pct }}%
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="text-[11px] text-gray-400 pt-3 mt-4 border-t border-gray-100 dark:border-gray-800">
+                  Billing-related 327 — of which 281 answered without an agent
+                </div>
+              </div>
+
+              <!-- Conversations by Channel -->
+              <div class="lg:col-span-5 bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-xs flex flex-col justify-between">
+                <div>
+                  <div class="pb-2">
+                    <h3 class="text-sm font-bold text-gray-900 dark:text-white">Conversations by channel</h3>
+                    <p class="text-xs text-gray-400 mt-0.5">Volume and deflection rate per entry point</p>
+                  </div>
+
+                  <div class="grid grid-cols-1 sm:grid-cols-12 gap-4 items-center mt-4">
+                    <div class="sm:col-span-6 flex justify-center">
+                      <apexchart type="donut" width="180" height="180" :options="supportChannelDonutOptions" :series="supportChannelDonutSeries" />
+                    </div>
+
+                    <div class="sm:col-span-6 space-y-3">
+                      <div class="flex justify-between items-center text-xs pb-1.5 border-b border-gray-100 dark:border-gray-800/50">
+                        <div class="flex items-center gap-2">
+                          <span class="w-2.5 h-2.5 rounded-full bg-[#2E91E5]"></span>
+                          <span class="font-medium text-gray-700 dark:text-gray-300">Website</span>
+                        </div>
+                        <div class="flex items-center gap-3 tabular-nums">
+                          <span class="font-bold text-gray-900 dark:text-white">{{ hasSampleData ? '3' : '0' }}</span>
+                          <span class="font-bold text-[#23B750]">{{ hasSampleData ? '33.3%' : '0%' }}</span>
+                        </div>
+                      </div>
+
+                      <div class="flex justify-between items-center text-xs pb-1.5 border-b border-gray-100 dark:border-gray-800/50">
+                        <div class="flex items-center gap-2">
+                          <span class="w-2.5 h-2.5 rounded-full bg-[#EF4444]"></span>
+                          <span class="font-medium text-gray-700 dark:text-gray-300">Email</span>
+                        </div>
+                        <div class="flex items-center gap-3 tabular-nums">
+                          <span class="font-bold text-gray-900 dark:text-white">{{ hasSampleData ? '1' : '0' }}</span>
+                          <span class="font-bold text-gray-400">{{ hasSampleData ? '0%' : '0%' }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="flex justify-between items-center text-[10px] text-gray-400 pt-3 mt-4 border-t border-gray-100 dark:border-gray-800">
+                  <span>Website share 75%</span>
+                  <span>Percentages show deflection, not volume share</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Handling Load Section -->
+          <div class="space-y-3">
+            <div class="flex items-center gap-2">
+              <h2 class="text-sm font-bold text-gray-900 dark:text-white">Handling load</h2>
+              <span class="text-xs text-gray-400 dark:text-gray-500">Distribution across the AI Assistant and support agents — not a ranking</span>
+            </div>
+
+            <div class="bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-xs">
+              <div class="overflow-x-auto">
+                <table class="w-full text-xs text-left whitespace-nowrap">
+                  <thead>
+                    <tr class="text-[10px] text-gray-400 uppercase tracking-wider border-b border-gray-150 dark:border-gray-800 pb-2">
+                      <th class="py-2.5 font-bold">HANDLED BY</th>
+                      <th class="py-2.5 text-right font-bold">CONVERSATIONS</th>
+                      <th class="py-2.5 text-right font-bold">AVG FIRST RESPONSE</th>
+                      <th class="py-2.5 text-right font-bold">REOPEN</th>
+                      <th class="py-2.5 text-right font-bold">SLA</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-gray-100 dark:divide-gray-800/60">
+                    <tr v-for="agent in activeSupportAgents" :key="agent.name" class="hover:bg-gray-50/60 dark:hover:bg-gray-800/40 transition-colors">
+                      <td class="py-3 flex items-center gap-3">
+                        <div v-if="agent.isBot" class="w-8 h-8 rounded-full bg-pink-100 dark:bg-pink-950/50 text-pink-600 dark:text-pink-400 flex items-center justify-center">
+                          <Bot class="w-4 h-4" />
+                        </div>
+                        <div v-else :class="['w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold', agent.avatarBg]">
+                          {{ agent.initials }}
+                        </div>
+                        <div>
+                          <div class="font-bold text-gray-900 dark:text-white">{{ agent.name }}</div>
+                          <div class="text-[11px] text-gray-400">{{ agent.role }}</div>
+                        </div>
+                      </td>
+                      <td class="py-3 text-right font-bold text-gray-900 dark:text-white tabular-nums">
+                        {{ agent.conversations }}
+                      </td>
+                      <td class="py-3 text-right text-gray-600 dark:text-gray-300 tabular-nums">
+                        {{ agent.firstResponse }}
+                      </td>
+                      <td class="py-3 text-right text-gray-400 tabular-nums">
+                        {{ agent.reopen }}
+                      </td>
+                      <td class="py-3 text-right">
+                        <span class="text-[10px] font-semibold bg-gray-100 dark:bg-gray-800 text-gray-400 px-2 py-0.5 rounded-full">
+                          {{ agent.sla }}
+                        </span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="text-xs text-gray-400 pt-3 mt-2 border-t border-gray-100 dark:border-gray-800">
+                No CSAT responses in this period
+              </div>
+            </div>
+          </div>
+
+        </div>
+
       </div>
     </main>
 
@@ -1185,13 +1527,15 @@ import {
   Printer,
   SlidersHorizontal,
   BarChart3,
-  ArrowRight
+  ArrowRight,
+  Bot
 } from 'lucide-vue-next'
 
 const tabs = [
-  { id: 'overview', label: 'Commercial Overview' },
-  { id: 'pipeline', label: 'Pipeline Velocity' },
-  { id: 'marketing', label: 'Marketing & Attribution' }
+  { id: 'overview', label: 'Sale' },
+  { id: 'pipeline', label: 'Pipeline' },
+  { id: 'marketing', label: 'Marketing' },
+  { id: 'support', label: 'Support' }
 ]
 
 const activeTab = ref<string>('overview')
@@ -1257,6 +1601,7 @@ const selectedPresetId = ref('last30')
 const selectedDateRangeLabel = ref('22 Jul 2026 — 20 Aug 2026')
 
 const datePresets = [
+  { id: 'sep2026', label: '1 Sep 2026 — 30 Sep 2026' },
   { id: 'last7', label: 'Last 7 Days (14 Aug — 20 Aug)' },
   { id: 'last30', label: 'Last 30 Days (22 Jul — 20 Aug)' },
   { id: 'thisMonth', label: 'This Month (1 Aug — 20 Aug)' },
@@ -1828,6 +2173,152 @@ const topUtmCampaigns = [
   { campaign: 'linkedin_b2b_enterprise', source: 'LinkedIn', sessions: 1200, leads: 62, convRate: 5.1 }
 ]
 const activeTopUtmCampaigns = computed(() => hasSampleData.value ? topUtmCampaigns : [])
+
+// ═════════════════════════════════════════════════════════
+// TAB 4: SUPPORT STATE & APEXCHARTS
+// ═════════════════════════════════════════════════════════
+const supportConversationsSparklineOptions = {
+  chart: { type: 'line', sparkline: { enabled: true } },
+  stroke: { curve: 'straight', width: 2 },
+  colors: ['#2E91E5'],
+  tooltip: { fixed: { enabled: false }, x: { show: false } }
+}
+const supportConversationsSparklineSeries = computed(() => [
+  { name: 'Conversations', data: hasSampleData.value ? [0, 4, 0, 5, 0, 4, 0, 4, 0] : [0, 0, 0, 0, 0, 0, 0, 0, 0] }
+])
+
+const supportResolvedSparklineOptions = {
+  chart: { type: 'line', sparkline: { enabled: true } },
+  stroke: { curve: 'straight', width: 2 },
+  colors: ['#7C3AED'],
+  tooltip: { fixed: { enabled: false }, x: { show: false } }
+}
+const supportResolvedSparklineSeries = computed(() => [
+  { name: 'Resolved', data: [0, 0, 0, 0, 0, 0, 0, 0] }
+])
+
+const supportAvgResponseSparklineOptions = {
+  chart: { type: 'line', sparkline: { enabled: true } },
+  stroke: { curve: 'straight', width: 2 },
+  colors: ['#F97316'],
+  tooltip: { fixed: { enabled: false }, x: { show: false } }
+}
+const supportAvgResponseSparklineSeries = computed(() => [
+  { name: 'Response', data: [0, 0, 0, 0, 0, 0, 0, 0] }
+])
+
+const supportChannelDonutOptions = computed(() => ({
+  chart: { type: 'donut', fontFamily: 'Inter, sans-serif' },
+  labels: ['Website', 'Email'],
+  colors: ['#2E91E5', '#EF4444'],
+  legend: { show: false },
+  dataLabels: { enabled: false },
+  plotOptions: {
+    pie: {
+      donut: {
+        size: '72%',
+        labels: {
+          show: true,
+          total: {
+            show: true,
+            label: 'TOTAL',
+            fontSize: '9px',
+            fontWeight: 700,
+            formatter: () => hasSampleData.value ? '4' : '0'
+          }
+        }
+      }
+    }
+  },
+  tooltip: { theme: 'dark' }
+}))
+
+const supportChannelDonutSeries = computed(() => hasSampleData.value ? [3, 1] : [0, 0])
+
+const defaultSupportCategories = [
+  { name: 'Order status', code: 'ORDER-STATUS', color: '#23B750', count: 296, pct: 22.6 },
+  { name: 'Payment / billing', code: 'BILLING', color: '#F97316', count: 210, pct: 16.1 },
+  { name: 'Delivery / shipping', code: 'SHIPPING', color: '#10B981', count: 174, pct: 13.3 },
+  { name: 'Product enquiry', code: 'PRODUCT-INFO', color: '#059669', count: 153, pct: 11.7 },
+  { name: 'Returns & refunds', code: 'RETURNS', color: '#FB923C', count: 129, pct: 9.9 },
+  { name: 'Technical support', code: 'TECH-SUPPORT', color: '#2E91E5', count: 95, pct: 7.3 },
+  { name: 'Unclassified', code: 'OTHER', color: '#94A3B8', count: 34, pct: 2.6 }
+]
+
+const activeSupportCategories = computed(() => {
+  if (!hasSampleData.value) {
+    return defaultSupportCategories.map(c => ({ ...c, count: 0, pct: 0 }))
+  }
+  return defaultSupportCategories
+})
+
+interface SupportAgentItem {
+  name: string
+  role: string
+  isBot: boolean
+  initials?: string
+  avatarBg?: string
+  conversations: number
+  firstResponse: string
+  reopen: string
+  sla: string
+}
+
+const defaultSupportAgents: SupportAgentItem[] = [
+  {
+    name: 'AI Assistant',
+    role: 'AI Assistant',
+    isBot: true,
+    conversations: 0,
+    firstResponse: '3.9 min',
+    reopen: '—',
+    sla: 'n/a'
+  },
+  {
+    name: 'Unassigned',
+    role: 'Support agent',
+    isBot: false,
+    initials: 'U',
+    avatarBg: 'bg-purple-100 text-purple-600 dark:bg-purple-950/50 dark:text-purple-400',
+    conversations: 3,
+    firstResponse: '—',
+    reopen: '—',
+    sla: 'n/a'
+  },
+  {
+    name: 'Azhar',
+    role: 'Support agent',
+    isBot: false,
+    initials: 'A',
+    avatarBg: 'bg-blue-100 text-blue-600 dark:bg-blue-950/50 dark:text-blue-400',
+    conversations: 1,
+    firstResponse: '—',
+    reopen: '—',
+    sla: 'n/a'
+  },
+  {
+    name: 'Bryan Lee',
+    role: 'Support agent',
+    isBot: false,
+    initials: 'BL',
+    avatarBg: 'bg-teal-100 text-teal-600 dark:bg-teal-950/50 dark:text-teal-400',
+    conversations: 1,
+    firstResponse: '—',
+    reopen: '—',
+    sla: 'n/a'
+  }
+]
+
+const activeSupportAgents = computed(() => {
+  if (!hasSampleData.value) {
+    return defaultSupportAgents.map(a => ({
+      ...a,
+      conversations: 0,
+      firstResponse: a.isBot ? '--' : '—'
+    }))
+  }
+  return defaultSupportAgents
+})
 </script>
 
 <style scoped>
