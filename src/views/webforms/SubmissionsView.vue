@@ -94,13 +94,13 @@ function exportCSV() {
 function getStatusBadgeClass(status: Submission['status']) {
   switch (status) {
     case 'Completed':
-      return 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20'
+      return 'bg-success/10 text-success border border-success/20'
     case 'Duplicate Flagged':
-      return 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20'
+      return 'bg-warning/10 text-warning border border-warning/20'
     case 'Processing Failed':
-      return 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20'
+      return 'bg-destructive/10 text-destructive border border-destructive/20'
     default:
-      return 'bg-gray-500/10 text-gray-600'
+      return 'bg-muted text-muted-foreground'
   }
 }
 
@@ -127,7 +127,7 @@ function formatAnswerValue(val: any): string {
           @click="handleBackNavigation"
           class="gap-1.5 font-bold text-xs cursor-pointer hover:bg-muted shrink-0"
         >
-          <ArrowLeft class="w-4 h-4 text-emerald-600" />
+          <ArrowLeft class="w-4 h-4 text-primary" />
           {{ currentForm ? `Back to ${currentForm.name}` : 'Back to Forms' }}
         </Button>
 

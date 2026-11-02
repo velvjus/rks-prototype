@@ -38,25 +38,9 @@ const railWidth = computed(() => isRailExpanded.value ? 'w-56' : 'w-16')
 const isInnerSidebarOpen = ref(true)
 const hasInnerSidebar = computed(() => route.path !== '/omnichannel')
 
-// --- Global dark mode (class-based, persisted to localStorage) ---
-const isDark = ref(localStorage.getItem('rks-dark') === 'true')
-
-const applyDark = (val: boolean) => {
-  if (val) {
-    document.documentElement.classList.add('dark')
-  } else {
-    document.documentElement.classList.remove('dark')
-  }
-  localStorage.setItem('rks-dark', String(val))
-}
-
-// Apply on mount
-applyDark(isDark.value)
-
-const toggleDark = () => {
-  isDark.value = !isDark.value
-  applyDark(isDark.value)
-}
+// --- Global theme state via centralized useTheme ---
+import { useTheme } from '@/composables/useTheme'
+const { isDark, toggleTheme: toggleDark } = useTheme()
 
 // --- Dynamic breadcrumb from route ---
 const routeLabels: Record<string, string> = {
@@ -121,14 +105,14 @@ const navItems = [
 </script>
 
 <template>
-  <div class="flex h-screen w-full bg-gray-50 dark:bg-background overflow-hidden text-sm">
+  <div class="flex h-screen w-full bg-background overflow-hidden text-sm">
 
     <!-- ═══════════════════════════════════════════════
          OUTER RAIL (Dark, expandable)
     ════════════════════════════════════════════════ -->
     <aside
       :class="[
-        'h-full bg-gray-900 flex flex-col items-center py-4 flex-shrink-0 z-20 transition-all duration-250 ease-in-out',
+        'h-full bg-rail flex flex-col items-center py-4 flex-shrink-0 z-20 transition-all duration-250 ease-in-out',
         railWidth
       ]"
     >
@@ -137,7 +121,7 @@ const navItems = [
         <img :src="logomarkColoredUrl" class="w-8 h-8 flex-shrink-0" alt="RakanSales Logomark" />
         <span
           v-if="isRailExpanded"
-          class="text-white font-bold text-sm tracking-tight leading-none whitespace-nowrap overflow-hidden transition-all duration-200"
+          class="text-rail-foreground font-bold text-sm tracking-tight leading-none whitespace-nowrap overflow-hidden transition-all duration-200"
         >
           RakanSales
         </span>
@@ -152,10 +136,10 @@ const navItems = [
               :to="item.to"
               :title="isRailExpanded ? undefined : item.label"
               :class="[
-                'rounded-md text-gray-400 hover:text-white hover:bg-gray-800 transition-all duration-150 flex items-center gap-3 overflow-hidden',
+                'rounded-md text-rail-muted-foreground hover:text-rail-foreground hover:bg-rail-active transition-all duration-150 flex items-center gap-3 overflow-hidden',
                 isRailExpanded ? 'px-3 py-2.5' : 'p-2.5 justify-center',
               ]"
-              active-class="!text-primary bg-gray-800"
+              active-class="!text-primary bg-rail-active"
             >
               <component :is="item.icon" class="w-5 h-5 flex-shrink-0" />
               <span
@@ -175,7 +159,7 @@ const navItems = [
               :class="[
                 'rounded-md transition-all duration-150 flex items-center justify-between overflow-hidden w-full cursor-pointer',
                 isRailExpanded ? 'px-3 py-2.5' : 'p-2.5 justify-center',
-                route.path.startsWith('/contacts') ? '!text-primary bg-gray-800 font-semibold' : 'text-gray-400 hover:text-white hover:bg-gray-800'
+                route.path.startsWith('/contacts') ? '!text-primary bg-rail-active font-semibold' : 'text-rail-muted-foreground hover:text-rail-foreground hover:bg-rail-active'
               ]"
               :title="isRailExpanded ? undefined : item.label"
             >
@@ -192,16 +176,16 @@ const navItems = [
               <!-- Chevron indicator -->
               <ChevronRight
                 v-if="isRailExpanded"
-                :class="['w-4 h-4 transition-transform duration-200 ml-1 text-gray-400', isContactsExpanded ? 'rotate-90 text-white' : '']"
+                :class="['w-4 h-4 transition-transform duration-200 ml-1 text-rail-muted-foreground', isContactsExpanded ? 'rotate-90 text-rail-foreground' : '']"
               />
             </button>
 
             <!-- Collapsed Rail Hover Flyout Menu -->
             <div
               v-if="!isRailExpanded"
-              class="absolute left-full top-0 ml-2 w-48 bg-gray-900 border border-gray-800 rounded-lg p-2 shadow-xl opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-150 z-50 flex flex-col gap-1"
+              class="absolute left-full top-0 ml-2 w-48 bg-rail border border-rail-border rounded-lg p-2 shadow-xl opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-150 z-50 flex flex-col gap-1"
             >
-              <div class="px-2 py-1 text-[10px] font-bold text-gray-500 uppercase tracking-wider">
+              <div class="px-2 py-1 text-[10px] font-bold text-rail-muted-foreground uppercase tracking-wider">
                 Contacts
               </div>
               <RouterLink
@@ -210,7 +194,7 @@ const navItems = [
                 :to="sub.to"
                 :class="[
                   'flex items-center gap-2 px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors',
-                  route.path === sub.to ? 'text-primary bg-gray-800 font-semibold' : 'text-gray-400 hover:text-white hover:bg-gray-800/50'
+                  route.path === sub.to ? 'text-primary bg-rail-active font-semibold' : 'text-rail-muted-foreground hover:text-rail-foreground hover:bg-rail-active/50'
                 ]"
               >
                 <component :is="sub.icon" class="w-3.5 h-3.5 flex-shrink-0" />
@@ -219,14 +203,14 @@ const navItems = [
             </div>
 
             <!-- Expanded Rail Accordion Sub-items -->
-            <div v-if="isRailExpanded && isContactsExpanded" class="ml-4 pl-3 border-l border-gray-800 mt-1 flex flex-col gap-1">
+            <div v-if="isRailExpanded && isContactsExpanded" class="ml-4 pl-3 border-l border-rail-border mt-1 flex flex-col gap-1">
               <RouterLink
                 v-for="sub in item.subItems"
                 :key="sub.to"
                 :to="sub.to"
                 :class="[
                   'flex items-center gap-2 px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors',
-                  route.path === sub.to ? 'text-primary bg-gray-800/80 font-semibold' : 'text-gray-400 hover:text-white hover:bg-gray-800/50'
+                  route.path === sub.to ? 'text-primary bg-rail-active/80 font-semibold' : 'text-rail-muted-foreground hover:text-rail-foreground hover:bg-rail-active/50'
                 ]"
               >
                 <component :is="sub.icon" class="w-3.5 h-3.5 flex-shrink-0" />
@@ -246,7 +230,7 @@ const navItems = [
           @click="isInnerSidebarOpen = !isInnerSidebarOpen"
           :title="isInnerSidebarOpen ? 'Close side panel' : 'Open side panel'"
           :class="[
-            'rounded-md text-gray-400 hover:text-white hover:bg-gray-800 transition-all duration-150 flex items-center gap-3 overflow-hidden w-full',
+            'rounded-md text-rail-muted-foreground hover:text-rail-foreground hover:bg-rail-active transition-all duration-150 flex items-center gap-3 overflow-hidden w-full',
             isRailExpanded ? 'px-3 py-2.5' : 'p-2.5 justify-center',
           ]"
         >
@@ -264,7 +248,7 @@ const navItems = [
           @click="toggleDark"
           :title="isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
           :class="[
-            'rounded-md text-gray-400 hover:text-white hover:bg-gray-800 transition-all duration-150 flex items-center gap-3 overflow-hidden w-full',
+            'rounded-md text-rail-muted-foreground hover:text-rail-foreground hover:bg-rail-active transition-all duration-150 flex items-center gap-3 overflow-hidden w-full',
             isRailExpanded ? 'px-3 py-2.5' : 'p-2.5 justify-center',
           ]"
         >
@@ -277,7 +261,7 @@ const navItems = [
         <!-- Settings -->
         <button
           :class="[
-            'rounded-md text-gray-400 hover:text-white hover:bg-gray-800 transition-all duration-150 flex items-center gap-3 overflow-hidden w-full',
+            'rounded-md text-rail-muted-foreground hover:text-rail-foreground hover:bg-rail-active transition-all duration-150 flex items-center gap-3 overflow-hidden w-full',
             isRailExpanded ? 'px-3 py-2.5' : 'p-2.5 justify-center',
           ]"
           title="Settings"
@@ -293,10 +277,10 @@ const navItems = [
           to="/design-system"
           :title="isRailExpanded ? undefined : 'Design System'"
           :class="[
-            'rounded-md text-gray-400 hover:text-white hover:bg-gray-800 transition-all duration-150 flex items-center gap-3 overflow-hidden w-full opacity-0 hover:opacity-100',
+            'rounded-md text-rail-muted-foreground hover:text-rail-foreground hover:bg-rail-active transition-all duration-150 flex items-center gap-3 overflow-hidden w-full opacity-0 hover:opacity-100',
             isRailExpanded ? 'px-3 py-2.5' : 'p-2.5 justify-center',
           ]"
-          active-class="!text-primary bg-gray-800 opacity-100"
+          active-class="!text-primary bg-rail-active opacity-100"
         >
           <LayoutDashboard class="w-5 h-5 flex-shrink-0" />
           <span
@@ -312,7 +296,7 @@ const navItems = [
           @click="isRailExpanded = !isRailExpanded"
           :title="isRailExpanded ? 'Collapse rail' : 'Expand rail'"
           :class="[
-            'rounded-md text-gray-500 hover:text-white hover:bg-gray-800 transition-all duration-150 flex items-center gap-3 overflow-hidden w-full mt-1 border-t border-gray-800 pt-3',
+            'rounded-md text-rail-muted-foreground hover:text-rail-foreground hover:bg-rail-active transition-all duration-150 flex items-center gap-3 overflow-hidden w-full mt-1 border-t border-rail-border pt-3',
             isRailExpanded ? 'px-3 py-2' : 'p-2 justify-center',
           ]"
         >
@@ -320,7 +304,7 @@ const navItems = [
             :is="isRailExpanded ? ChevronLeft : ChevronRight"
             class="w-4 h-4 flex-shrink-0"
           />
-          <span v-if="isRailExpanded" class="text-xs font-medium whitespace-nowrap overflow-hidden text-gray-500">
+          <span v-if="isRailExpanded" class="text-xs font-medium whitespace-nowrap overflow-hidden text-rail-muted-foreground">
             Collapse
           </span>
         </button>
@@ -340,15 +324,15 @@ const navItems = [
     >
       <aside
         v-if="hasInnerSidebar && isInnerSidebarOpen"
-        class="w-60 h-full bg-white dark:bg-card border-r border-gray-200 dark:border-border flex flex-col flex-shrink-0 z-10"
+        class="w-60 h-full bg-sidebar border-r border-sidebar-border flex flex-col flex-shrink-0 z-10"
       >
         <!-- Sidebar Header -->
-        <div class="h-16 flex items-center justify-between px-4 border-b border-gray-200 dark:border-border">
-          <h2 class="font-semibold text-gray-800 dark:text-foreground text-sm">{{ pageTitle }}</h2>
+        <div class="h-16 flex items-center justify-between px-4 border-b border-sidebar-border">
+          <h2 class="font-semibold text-sidebar-foreground text-sm">{{ pageTitle }}</h2>
           <button
             @click="isInnerSidebarOpen = false"
             title="Close side panel"
-            class="p-1.5 rounded-md text-gray-400 hover:text-gray-700 hover:bg-gray-100 dark:hover:bg-muted transition-colors cursor-pointer"
+            class="p-1.5 rounded-md text-rail-muted-foreground hover:text-sidebar-foreground hover:bg-sidebar-accent transition-colors cursor-pointer"
           >
             <ChevronLeft class="w-4 h-4" />
           </button>
@@ -357,18 +341,18 @@ const navItems = [
         <div class="p-3">
           <!-- Search -->
           <div class="relative mb-4">
-            <Search class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <Search class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-rail-muted-foreground" />
             <input
               type="text"
               placeholder="Search..."
-              class="w-full pl-9 pr-3 py-1.5 bg-gray-50 dark:bg-muted border border-gray-200 dark:border-border rounded-md text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all"
+              class="w-full pl-9 pr-3 py-1.5 bg-sidebar-accent/50 border border-sidebar-border rounded-md text-xs text-sidebar-foreground placeholder:text-rail-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all"
             />
           </div>
 
           <nav v-if="route.path.startsWith('/contacts')" class="space-y-1 text-sm font-medium">
             <button
               @click="isContactsExpanded = !isContactsExpanded"
-              class="w-full flex items-center justify-between px-3 py-1.5 text-[10px] font-bold text-muted-foreground uppercase tracking-wider hover:text-foreground transition-colors cursor-pointer"
+              class="w-full flex items-center justify-between px-3 py-1.5 text-[10px] font-bold text-rail-muted-foreground uppercase tracking-wider hover:text-sidebar-foreground transition-colors cursor-pointer"
             >
               <span>Contacts Menu</span>
               <ChevronDown :class="['w-3.5 h-3.5 transition-transform duration-200', isContactsExpanded ? 'rotate-180' : '']" />
@@ -379,7 +363,7 @@ const navItems = [
                 to="/contacts"
                 :class="[
                   'flex items-center gap-3 px-3 py-2 rounded-lg transition-colors',
-                  route.path === '/contacts' ? 'bg-primary/10 text-primary font-semibold' : 'text-gray-600 dark:text-muted-foreground hover:bg-gray-100 dark:hover:bg-muted'
+                  route.path === '/contacts' ? 'bg-sidebar-accent text-sidebar-foreground font-semibold' : 'text-rail-muted-foreground hover:text-sidebar-foreground hover:bg-sidebar-accent'
                 ]"
               >
                 <UserCheck class="w-4 h-4 flex-shrink-0" />
@@ -389,7 +373,7 @@ const navItems = [
                 to="/contacts/scan-namecard"
                 :class="[
                   'flex items-center gap-3 px-3 py-2 rounded-lg transition-colors',
-                  route.path === '/contacts/scan-namecard' ? 'bg-primary/10 text-primary font-semibold' : 'text-gray-600 dark:text-muted-foreground hover:bg-gray-100 dark:hover:bg-muted'
+                  route.path === '/contacts/scan-namecard' ? 'bg-sidebar-accent text-sidebar-foreground font-semibold' : 'text-rail-muted-foreground hover:text-sidebar-foreground hover:bg-sidebar-accent'
                 ]"
               >
                 <Scan class="w-4 h-4 flex-shrink-0" />
@@ -401,7 +385,7 @@ const navItems = [
           <nav v-else-if="route.path.startsWith('/web-forms')" class="space-y-1 text-sm font-medium">
             <button
               @click="isWebFormsExpanded = !isWebFormsExpanded"
-              class="w-full flex items-center justify-between px-3 py-1.5 text-[10px] font-bold text-muted-foreground uppercase tracking-wider hover:text-foreground transition-colors cursor-pointer"
+              class="w-full flex items-center justify-between px-3 py-1.5 text-[10px] font-bold text-rail-muted-foreground uppercase tracking-wider hover:text-sidebar-foreground transition-colors cursor-pointer"
             >
               <span>Web Forms Menu</span>
               <ChevronDown :class="['w-3.5 h-3.5 transition-transform duration-200', isWebFormsExpanded ? 'rotate-180' : '']" />
@@ -412,7 +396,7 @@ const navItems = [
                 to="/web-forms"
                 :class="[
                   'flex items-center gap-3 px-3 py-2 rounded-lg transition-colors',
-                  route.path === '/web-forms' ? 'bg-primary/10 text-primary font-semibold' : 'text-gray-600 dark:text-muted-foreground hover:bg-gray-100 dark:hover:bg-muted'
+                  route.path === '/web-forms' ? 'bg-sidebar-accent text-sidebar-foreground font-semibold' : 'text-rail-muted-foreground hover:text-sidebar-foreground hover:bg-sidebar-accent'
                 ]"
               >
                 <FileText class="w-4 h-4 flex-shrink-0" />
@@ -422,7 +406,7 @@ const navItems = [
                 to="/web-forms/templates"
                 :class="[
                   'flex items-center gap-3 px-3 py-2 rounded-lg transition-colors',
-                  route.path === '/web-forms/templates' ? 'bg-primary/10 text-primary font-semibold' : 'text-gray-600 dark:text-muted-foreground hover:bg-gray-100 dark:hover:bg-muted'
+                  route.path === '/web-forms/templates' ? 'bg-sidebar-accent text-sidebar-foreground font-semibold' : 'text-rail-muted-foreground hover:text-sidebar-foreground hover:bg-sidebar-accent'
                 ]"
               >
                 <Layers class="w-4 h-4 flex-shrink-0" />
@@ -432,7 +416,7 @@ const navItems = [
                 to="/web-forms/submissions"
                 :class="[
                   'flex items-center gap-3 px-3 py-2 rounded-lg transition-colors',
-                  route.path === '/web-forms/submissions' ? 'bg-primary/10 text-primary font-semibold' : 'text-gray-600 dark:text-muted-foreground hover:bg-gray-100 dark:hover:bg-muted'
+                  route.path === '/web-forms/submissions' ? 'bg-sidebar-accent text-sidebar-foreground font-semibold' : 'text-rail-muted-foreground hover:text-sidebar-foreground hover:bg-sidebar-accent'
                 ]"
               >
                 <Inbox class="w-4 h-4 flex-shrink-0" />
@@ -442,16 +426,16 @@ const navItems = [
           </nav>
 
           <nav v-else class="space-y-1 text-sm font-medium">
-            <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-md bg-gray-100 dark:bg-muted text-primary">
+            <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-md bg-sidebar-accent text-primary">
               <span class="w-2 h-2 rounded-full bg-primary flex-shrink-0"></span>
               All Records
             </a>
-            <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-md text-gray-600 dark:text-muted-foreground hover:bg-gray-50 dark:hover:bg-muted/50 transition-colors">
-              <span class="w-2 h-2 rounded-full bg-gray-300 flex-shrink-0"></span>
+            <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-md text-rail-muted-foreground hover:text-sidebar-foreground hover:bg-sidebar-accent/50 transition-colors">
+              <span class="w-2 h-2 rounded-full bg-rail-muted-foreground/30 flex-shrink-0"></span>
               Recently Viewed
             </a>
-            <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-md text-gray-600 dark:text-muted-foreground hover:bg-gray-50 dark:hover:bg-muted/50 transition-colors">
-              <span class="w-2 h-2 rounded-full bg-gray-300 flex-shrink-0"></span>
+            <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-md text-rail-muted-foreground hover:text-sidebar-foreground hover:bg-sidebar-accent/50 transition-colors">
+              <span class="w-2 h-2 rounded-full bg-rail-muted-foreground/30 flex-shrink-0"></span>
               Favorites
             </a>
           </nav>
@@ -465,26 +449,26 @@ const navItems = [
     <main class="flex-1 h-full flex flex-col min-w-0">
 
       <!-- Top Header -->
-      <header class="h-16 bg-white dark:bg-card border-b border-gray-200 dark:border-border flex items-center justify-between px-6 flex-shrink-0">
-        <div class="font-medium text-gray-800 dark:text-foreground flex items-center gap-2">
+      <header class="h-16 bg-rail border-b border-rail-border flex items-center justify-between px-6 flex-shrink-0">
+        <div class="font-medium text-rail-foreground flex items-center gap-2">
           <!-- Re-open inner sidebar (shown when closed on routes that have one) -->
           <button
             v-if="hasInnerSidebar && !isInnerSidebarOpen"
             @click="isInnerSidebarOpen = true"
             title="Open side panel"
-            class="p-1.5 rounded-md text-gray-400 hover:text-gray-700 hover:bg-gray-100 dark:hover:bg-muted transition-colors cursor-pointer mr-1"
+            class="p-1.5 rounded-md text-rail-muted-foreground hover:text-rail-foreground hover:bg-rail-active transition-colors cursor-pointer mr-1"
           >
             <PanelLeftOpen class="w-4 h-4" />
           </button>
           <!-- Dynamic breadcrumb -->
-          <span class="text-xs text-muted-foreground font-normal hidden sm:inline">RakanSales</span>
-          <span class="text-xs text-muted-foreground font-normal hidden sm:inline">/</span>
-          <span class="text-sm font-semibold text-gray-800 dark:text-foreground">{{ pageTitle }}</span>
+          <span class="text-xs text-rail-muted-foreground font-normal hidden sm:inline">RakanSales</span>
+          <span class="text-xs text-rail-muted-foreground font-normal hidden sm:inline">/</span>
+          <span class="text-sm font-semibold text-rail-foreground">{{ pageTitle }}</span>
         </div>
         <div class="flex items-center gap-4">
-          <button class="relative text-gray-500 dark:text-muted-foreground hover:text-gray-700 dark:hover:text-foreground transition-colors">
+          <button class="relative text-rail-muted-foreground hover:text-rail-foreground transition-colors">
             <Bell class="w-5 h-5" />
-            <span class="absolute top-0 right-0 w-2 h-2 bg-destructive rounded-full border border-white dark:border-card"></span>
+            <span class="absolute top-0 right-0 w-2 h-2 bg-destructive rounded-full border border-rail"></span>
           </button>
           <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-xs border border-primary/30">
             JS
@@ -495,7 +479,7 @@ const navItems = [
       <!-- Scrollable Canvas -->
       <div :class="[
         'flex-1 min-w-0 min-h-0',
-        route.path === '/omnichannel' ? 'overflow-hidden p-0 bg-white dark:bg-background' : 'overflow-auto bg-gray-50 dark:bg-background p-4 lg:p-6'
+        route.path === '/omnichannel' ? 'overflow-hidden p-0 bg-background' : 'overflow-auto bg-background p-4 lg:p-6'
       ]">
         <RouterView />
       </div>

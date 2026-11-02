@@ -1,7 +1,7 @@
 <template>
   <div class="absolute bottom-5 left-5 z-40 select-none">
     <div
-      class="inline-flex items-center p-1 bg-white/95 dark:bg-[#0E131F]/95 backdrop-blur-md border border-gray-200/90 dark:border-gray-800 rounded-xl shadow-lg shadow-black/5 dark:shadow-black/20 text-xs"
+      class="inline-flex items-center p-1 bg-card/95 backdrop-blur-md border border-border rounded-xl shadow-lg text-xs"
       role="tablist"
       aria-label="Partner track switcher"
     >
@@ -11,10 +11,10 @@
         :aria-selected="partnerStore.activeTrack === 'referral'"
         @click="partnerStore.setTrack('referral')"
         :class="[
-          'px-2.5 py-1 rounded-lg font-semibold text-xs transition-all duration-150 cursor-pointer flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500',
+          'px-2.5 py-1 rounded-lg font-semibold text-xs transition-all duration-150 cursor-pointer flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-info',
           partnerStore.activeTrack === 'referral'
-            ? 'bg-blue-600 text-white shadow-2xs'
-            : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
+            ? 'bg-info text-info-foreground shadow-2xs'
+            : 'text-muted-foreground hover:text-foreground'
         ]"
         title="Switch to Referral Partner Track (Affiliate)"
       >
@@ -28,10 +28,10 @@
         :aria-selected="partnerStore.activeTrack === 'sales'"
         @click="partnerStore.setTrack('sales')"
         :class="[
-          'px-2.5 py-1 rounded-lg font-semibold text-xs transition-all duration-150 cursor-pointer flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#23B750]',
+          'px-2.5 py-1 rounded-lg font-semibold text-xs transition-all duration-150 cursor-pointer flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand',
           partnerStore.activeTrack === 'sales'
-            ? 'bg-[#23B750] text-white shadow-2xs'
-            : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
+            ? 'bg-brand text-brand-foreground shadow-2xs'
+            : 'text-muted-foreground hover:text-foreground'
         ]"
         title="Switch to Sales Partner Track (B2B Reseller)"
       >
@@ -52,20 +52,20 @@
       >
         <div
           v-if="partnerStore.toastMessage"
-          class="fixed bottom-6 right-6 z-[100] max-w-sm bg-gray-950/95 text-white border border-gray-800 rounded-2xl px-4 py-3 shadow-xl flex items-center gap-3 backdrop-blur-xl animate-in fade-in"
+          class="fixed bottom-6 right-6 z-[100] max-w-sm bg-popover/95 text-popover-foreground border border-border rounded-2xl px-4 py-3 shadow-xl flex items-center gap-3 backdrop-blur-xl animate-in fade-in"
         >
           <div
             class="w-7 h-7 rounded-lg flex items-center justify-center shrink-0"
-            :class="partnerStore.activeTrack === 'sales' ? 'bg-[#23B750]/20 text-[#23B750]' : 'bg-blue-500/20 text-blue-400'"
+            :class="partnerStore.activeTrack === 'sales' ? 'bg-brand/20 text-brand' : 'bg-info/20 text-info'"
           >
             <component :is="partnerStore.activeTrack === 'sales' ? Briefcase : Link2" class="w-3.5 h-3.5" />
           </div>
           <div class="flex-1 min-w-0">
-            <p class="text-xs font-semibold text-gray-100">{{ partnerStore.toastMessage }}</p>
+            <p class="text-xs font-semibold text-foreground">{{ partnerStore.toastMessage }}</p>
           </div>
           <button
             @click="partnerStore.toastMessage = null"
-            class="text-gray-400 hover:text-white text-xs p-1 cursor-pointer"
+            class="text-muted-foreground hover:text-foreground text-xs p-1 cursor-pointer"
             aria-label="Dismiss toast"
           >
             ✕

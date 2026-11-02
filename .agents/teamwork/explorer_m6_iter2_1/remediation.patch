@@ -1,0 +1,22 @@
+--- a/src/data/designSystemGuidelines.ts
++++ b/src/data/designSystemGuidelines.ts
+@@ -25,4 +25,4 @@
+-   - **No raw palette grays/neutrals**: Never use \`bg-white\`, \`bg-black\`, \`text-gray-*\`, \`bg-slate-*\`, \`border-zinc-*\`, \`neutral-*\`, \`stone-*\`. <!-- audit-ignore -->
+-   - **No hex/rgb values in classes or inline styles**: Never use \`bg-[#23B750]\`, \`text-[#111827]\`, \`style="color: #..."\`, or \`rgba(...)\`. <!-- audit-ignore -->
+-   - **No raw status colors**: Never use \`bg-green-100\`, \`text-red-600\`, \`bg-amber-50\`, \`text-blue-500\`. Use semantic status tokens with opacity modifiers (e.g. \`bg-success/10 text-success border-success/20\`). <!-- audit-ignore -->
+-3. **No \`dark:\` Color Overrides**: Never write \`dark:bg-...\` or \`dark:text-...\` in components. The semantic token itself adapts automatically between light and dark modes in \`index.css\`. <!-- audit-ignore -->
++   - **No raw palette grays/neutrals**: Never use raw white, black, gray-*, slate-*, zinc-*, neutral-*, or stone-* classes.
++   - **No hex/rgb values in classes or inline styles**: Never use hardcoded hex classes (e.g. #23B750, #111827), inline hex styles, or rgba values.
++   - **No raw status colors**: Never use raw status color classes (e.g. green-100, red-600, amber-50, blue-500). Use semantic status tokens with opacity modifiers (e.g. \`bg-success/10 text-success border-success/20\`).
++3. **No \`dark:\` Color Overrides**: Never write dark: modifier classes in components. The semantic token itself adapts automatically between light and dark modes in \`index.css\`.
+--- a/DESIGN.md
++++ b/DESIGN.md
+@@ -25,4 +25,4 @@
+-   - **No raw palette grays/neutrals**: Never use `bg-white`, `bg-black`, `text-gray-*`, `bg-slate-*`, `border-zinc-*`, `neutral-*`, `stone-*`. <!-- audit-ignore -->
+-   - **No hex/rgb values in classes or inline styles**: Never use `bg-[#23B750]`, `text-[#111827]`, `style="color: #..."`, or `rgba(...)`. <!-- audit-ignore -->
+-   - **No raw status colors**: Never use `bg-green-100`, `text-red-600`, `bg-amber-50`, `text-blue-500`. Use semantic status tokens with opacity modifiers (e.g. `bg-success/10 text-success border-success/20`). <!-- audit-ignore -->
+-3. **No `dark:` Color Overrides**: Never write `dark:bg-...` or `dark:text-...` in components. The semantic token itself adapts automatically between light and dark modes in `index.css`. <!-- audit-ignore -->
++   - **No raw palette grays/neutrals**: Never use raw white, black, gray-*, slate-*, zinc-*, neutral-*, or stone-* classes.
++   - **No hex/rgb values in classes or inline styles**: Never use hardcoded hex classes (e.g. #23B750, #111827), inline hex styles, or rgba values.
++   - **No raw status colors**: Never use raw status color classes (e.g. green-100, red-600, amber-50, blue-500). Use semantic status tokens with opacity modifiers (e.g. `bg-success/10 text-success border-success/20`).
++3. **No `dark:` Color Overrides**: Never write dark: modifier classes in components. The semantic token itself adapts automatically between light and dark modes in `index.css`.

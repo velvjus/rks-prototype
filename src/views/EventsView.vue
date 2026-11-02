@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full flex flex-col bg-gray-50 dark:bg-background overflow-hidden text-sm relative">
+  <div class="h-full flex flex-col bg-background overflow-hidden text-sm relative">
     
     <!-- Toast Notification Banner -->
     <transition
@@ -12,19 +12,19 @@
     >
       <div
         v-if="toast.show"
-        class="fixed bottom-5 right-5 z-[100] flex items-center gap-3 bg-white dark:bg-slate-900 border border-gray-255 dark:border-slate-800 px-4 py-3 rounded-xl shadow-lg"
-        :class="toast.type === 'success' ? 'shadow-emerald-500/10' : 'shadow-red-500/10'"
+        class="fixed bottom-5 right-5 z-[100] flex items-center gap-3 bg-card border border-border px-4 py-3 rounded-xl shadow-lg"
+        :class="toast.type === 'success' ? 'shadow-success/10' : 'shadow-destructive/10'"
       >
         <component
           :is="toast.type === 'success' ? CheckCircle2 : AlertTriangle"
           class="w-5 h-5 shrink-0"
-          :class="toast.type === 'success' ? 'text-emerald-500' : 'text-red-500'"
+          :class="toast.type === 'success' ? 'text-success' : 'text-destructive'"
         />
         <div class="flex flex-col">
-          <span class="font-bold text-gray-950 dark:text-foreground text-xs">{{ toast.title }}</span>
-          <span class="text-gray-500 dark:text-muted-foreground text-[11px] mt-0.5">{{ toast.message }}</span>
+          <span class="font-bold text-foreground text-xs">{{ toast.title }}</span>
+          <span class="text-muted-foreground text-[11px] mt-0.5">{{ toast.message }}</span>
         </div>
-        <button @click="toast.show = false" class="p-1 hover:bg-gray-150 dark:hover:bg-slate-850 rounded text-gray-400 cursor-pointer">
+        <button @click="toast.show = false" class="p-1 hover:bg-muted rounded text-muted-foreground cursor-pointer">
           <X class="w-3.5 h-3.5" />
         </button>
       </div>
@@ -33,13 +33,13 @@
     <!-- ═══════════════════════════════════════════════
          VIEW 1: EVENTS LIST DASHBOARD
          ═══════════════════════════════════════════════ -->
-    <main v-if="!selectedEvent" class="flex-1 overflow-y-auto bg-gray-50 dark:bg-background">
+    <main v-if="!selectedEvent" class="flex-1 overflow-y-auto bg-background">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
         
         <!-- Header -->
         <div class="flex justify-between items-center">
           <div>
-            <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-foreground">Events</h1>
+            <h1 class="text-2xl font-bold tracking-tight text-foreground">Events</h1>
             <p class="text-xs text-muted-foreground mt-0.5">All events and leads in one place</p>
           </div>
           <Button
@@ -55,15 +55,15 @@
         <!-- KPI Cards Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <!-- Card 1: TOTAL LEAD (Green Gradient) -->
-          <div class="bg-gradient-to-br from-emerald-600 to-emerald-500 dark:from-emerald-700 dark:to-emerald-600 text-white p-5 rounded-2xl shadow-sm relative overflow-hidden flex flex-col justify-between h-[135px]">
+          <div class="bg-gradient-to-br from-primary to-primary/80 text-primary-foreground p-5 rounded-2xl shadow-sm relative overflow-hidden flex flex-col justify-between h-[135px]">
             <div class="flex items-center justify-between">
               <span class="text-[10px] font-semibold uppercase tracking-wider opacity-90">Total Lead</span>
               <div class="flex items-center gap-1">
-                <button class="w-5 h-5 rounded-full bg-white/20 hover:bg-white/30 transition-colors flex items-center justify-center cursor-pointer" title="Info">
-                  <Info class="w-3 h-3 text-white" />
+                <button class="w-5 h-5 rounded-full bg-primary-foreground/20 hover:bg-primary-foreground/30 transition-colors flex items-center justify-center cursor-pointer" title="Info">
+                  <Info class="w-3 h-3 text-primary-foreground" />
                 </button>
-                <button class="w-5 h-5 rounded-full bg-white/20 hover:bg-white/30 transition-colors flex items-center justify-center cursor-pointer" title="Analytics">
-                  <TrendingUp class="w-3 h-3 text-white" />
+                <button class="w-5 h-5 rounded-full bg-primary-foreground/20 hover:bg-primary-foreground/30 transition-colors flex items-center justify-center cursor-pointer" title="Analytics">
+                  <TrendingUp class="w-3 h-3 text-primary-foreground" />
                 </button>
               </div>
             </div>
@@ -74,80 +74,80 @@
           </div>
 
           <!-- Card 2: WON REVENUE (White Card) -->
-          <div class="bg-white dark:bg-card border border-gray-250 dark:border-border p-5 rounded-2xl shadow-sm relative overflow-hidden flex flex-col justify-between h-[135px] group hover:shadow-md transition-shadow">
+          <div class="bg-card border border-border border-border p-5 rounded-2xl shadow-sm relative overflow-hidden flex flex-col justify-between h-[135px] group hover:shadow-md transition-shadow">
             <div class="flex items-center justify-between">
-              <span class="text-[10px] font-semibold text-gray-500 dark:text-muted-foreground uppercase tracking-wider">Won Revenue</span>
+              <span class="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Won Revenue</span>
               <div class="flex items-center gap-1">
-                <button class="w-5 h-5 rounded-full bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 transition-colors flex items-center justify-center cursor-pointer text-emerald-600 dark:text-emerald-400" title="Info">
+                <button class="w-5 h-5 rounded-full bg-primary/10 hover:bg-primary/20 transition-colors flex items-center justify-center cursor-pointer text-primary" title="Info">
                   <Info class="w-3 h-3" />
                 </button>
-                <button class="w-5 h-5 rounded-full bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 transition-colors flex items-center justify-center cursor-pointer text-emerald-600 dark:text-emerald-400" title="Analytics">
+                <button class="w-5 h-5 rounded-full bg-primary/10 hover:bg-primary/20 transition-colors flex items-center justify-center cursor-pointer text-primary" title="Analytics">
                   <TrendingUp class="w-3 h-3" />
                 </button>
               </div>
             </div>
             <div>
-              <h3 class="text-3xl font-semibold tracking-tight leading-none text-gray-900 dark:text-foreground">RM{{ formatRevenue(totalWonRevenue) }}</h3>
+              <h3 class="text-3xl font-semibold tracking-tight leading-none text-foreground">RM{{ formatRevenue(totalWonRevenue) }}</h3>
               <p class="text-[11px] text-muted-foreground mt-1.5">{{ totalDealsClosed }} deals closed</p>
             </div>
           </div>
 
           <!-- Card 3: TOTAL CONVERTED (White Card) -->
-          <div class="bg-white dark:bg-card border border-gray-250 dark:border-border p-5 rounded-2xl shadow-sm relative overflow-hidden flex flex-col justify-between h-[135px] group hover:shadow-md transition-shadow">
+          <div class="bg-card border border-border border-border p-5 rounded-2xl shadow-sm relative overflow-hidden flex flex-col justify-between h-[135px] group hover:shadow-md transition-shadow">
             <div class="flex items-center justify-between">
-              <span class="text-[10px] font-semibold text-gray-500 dark:text-muted-foreground uppercase tracking-wider">Total Converted</span>
+              <span class="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Total Converted</span>
               <div class="flex items-center gap-1">
-                <button class="w-5 h-5 rounded-full bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 transition-colors flex items-center justify-center cursor-pointer text-emerald-600 dark:text-emerald-400" title="Info">
+                <button class="w-5 h-5 rounded-full bg-primary/10 hover:bg-primary/20 transition-colors flex items-center justify-center cursor-pointer text-primary" title="Info">
                   <Info class="w-3 h-3" />
                 </button>
-                <button class="w-5 h-5 rounded-full bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 transition-colors flex items-center justify-center cursor-pointer text-emerald-600 dark:text-emerald-400" title="Analytics">
+                <button class="w-5 h-5 rounded-full bg-primary/10 hover:bg-primary/20 transition-colors flex items-center justify-center cursor-pointer text-primary" title="Analytics">
                   <TrendingUp class="w-3 h-3" />
                 </button>
               </div>
             </div>
             <div>
-              <h3 class="text-3xl font-semibold tracking-tight leading-none text-gray-900 dark:text-foreground">
-                {{ totalConverted }}<span class="text-lg font-medium text-gray-400">/{{ totalLeads }}</span>
+              <h3 class="text-3xl font-semibold tracking-tight leading-none text-foreground">
+                {{ totalConverted }}<span class="text-lg font-medium text-muted-foreground">/{{ totalLeads }}</span>
               </h3>
               <p class="text-[11px] text-muted-foreground mt-1.5">Across all events</p>
             </div>
           </div>
 
           <!-- Card 4: AVG CONVERSION (White Card) -->
-          <div class="bg-white dark:bg-card border border-gray-250 dark:border-border p-5 rounded-2xl shadow-sm relative overflow-hidden flex flex-col justify-between h-[135px] group hover:shadow-md transition-shadow">
+          <div class="bg-card border border-border border-border p-5 rounded-2xl shadow-sm relative overflow-hidden flex flex-col justify-between h-[135px] group hover:shadow-md transition-shadow">
             <div class="flex items-center justify-between">
-              <span class="text-[10px] font-semibold text-gray-500 dark:text-muted-foreground uppercase tracking-wider">Avg Conversion</span>
+              <span class="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Avg Conversion</span>
               <div class="flex items-center gap-1">
-                <button class="w-5 h-5 rounded-full bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 transition-colors flex items-center justify-center cursor-pointer text-emerald-600 dark:text-emerald-400" title="Info">
+                <button class="w-5 h-5 rounded-full bg-primary/10 hover:bg-primary/20 transition-colors flex items-center justify-center cursor-pointer text-primary" title="Info">
                   <Info class="w-3 h-3" />
                 </button>
-                <button class="w-5 h-5 rounded-full bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 transition-colors flex items-center justify-center cursor-pointer text-emerald-600 dark:text-emerald-400" title="Analytics">
+                <button class="w-5 h-5 rounded-full bg-primary/10 hover:bg-primary/20 transition-colors flex items-center justify-center cursor-pointer text-primary" title="Analytics">
                   <TrendingUp class="w-3 h-3" />
                 </button>
               </div>
             </div>
             <div>
-              <h3 class="text-3xl font-semibold tracking-tight leading-none text-gray-900 dark:text-foreground">{{ avgConversion }}%</h3>
+              <h3 class="text-3xl font-semibold tracking-tight leading-none text-foreground">{{ avgConversion }}%</h3>
               <p class="text-[11px] text-muted-foreground mt-1.5">Across all events</p>
             </div>
           </div>
         </div>
 
         <!-- Filters Section -->
-        <div class="bg-white dark:bg-card border border-gray-200 dark:border-border p-4 rounded-2xl shadow-sm">
+        <div class="bg-card border border-border p-4 rounded-2xl shadow-sm">
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3.5 items-end">
             <!-- Search -->
             <div class="lg:col-span-4 space-y-1.5">
-              <label class="text-[10px] font-bold text-gray-500 dark:text-muted-foreground uppercase tracking-wider">Search</label>
+              <label class="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Search</label>
               <div class="relative">
-                <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <input
                   v-model="filters.search"
                   type="text"
                   placeholder="Search by Event"
-                  class="w-full pl-9 pr-12 py-1.5 bg-gray-50 dark:bg-muted border border-gray-250 dark:border-border rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all text-gray-800 dark:text-foreground"
+                  class="w-full pl-9 pr-12 py-1.5 bg-muted border border-border border-border rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all text-foreground"
                 />
-                <span class="absolute right-2.5 top-1/2 -translate-y-1/2 text-[9px] bg-white dark:bg-card border border-gray-200 dark:border-border px-1.5 py-0.5 rounded text-gray-400 font-mono select-none">
+                <span class="absolute right-2.5 top-1/2 -translate-y-1/2 text-[9px] bg-card border border-border px-1.5 py-0.5 rounded text-muted-foreground font-mono select-none">
                   ⌘K
                 </span>
               </div>
@@ -155,10 +155,10 @@
 
             <!-- Time select -->
             <div class="lg:col-span-2 space-y-1.5">
-              <label class="text-[10px] font-bold text-gray-500 dark:text-muted-foreground uppercase tracking-wider">Time</label>
+              <label class="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Time</label>
               <select
                 v-model="filters.time"
-                class="w-full py-1.5 bg-gray-50 dark:bg-muted border border-gray-255 dark:border-border rounded-lg text-xs text-gray-700 dark:text-foreground focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary px-3 cursor-pointer"
+                class="w-full py-1.5 bg-muted border border-border border-border rounded-lg text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary px-3 cursor-pointer"
               >
                 <option value="all">All time</option>
                 <option value="this-month">This month</option>
@@ -168,10 +168,10 @@
 
             <!-- Status select -->
             <div class="lg:col-span-2 space-y-1.5">
-              <label class="text-[10px] font-bold text-gray-500 dark:text-muted-foreground uppercase tracking-wider">Status</label>
+              <label class="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Status</label>
               <select
                 v-model="filters.status"
-                class="w-full py-1.5 bg-gray-50 dark:bg-muted border border-gray-250 dark:border-border rounded-lg text-xs text-gray-700 dark:text-foreground focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary px-3 cursor-pointer"
+                class="w-full py-1.5 bg-muted border border-border border-border rounded-lg text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary px-3 cursor-pointer"
               >
                 <option value="all">All</option>
                 <option value="Active">Active</option>
@@ -182,11 +182,11 @@
 
             <!-- Tags -->
             <div class="lg:col-span-2.5 space-y-1.5">
-              <label class="text-[10px] font-bold text-gray-500 dark:text-muted-foreground uppercase tracking-wider">Tags</label>
-              <div class="relative flex items-center min-h-[30px] px-2 py-1 bg-gray-50 dark:bg-muted border border-gray-255 dark:border-border rounded-lg text-xs">
-                <span class="flex items-center gap-1.5 px-2 py-0.5 bg-white dark:bg-card border border-gray-200 dark:border-border rounded-md text-[10px] font-semibold text-gray-600 dark:text-muted-foreground">
+              <label class="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Tags</label>
+              <div class="relative flex items-center min-h-[30px] px-2 py-1 bg-muted border border-border border-border rounded-lg text-xs">
+                <span class="flex items-center gap-1.5 px-2 py-0.5 bg-card border border-border rounded-md text-[10px] font-semibold text-muted-foreground">
                   All
-                  <button @click="clearTags" class="text-gray-400 hover:text-gray-600 dark:hover:text-foreground">
+                  <button @click="clearTags" class="text-muted-foreground hover:text-muted-foreground hover:text-foreground">
                     <X class="w-3 h-3" />
                   </button>
                 </span>
@@ -195,14 +195,14 @@
 
             <!-- Buttons -->
             <div class="lg:col-span-1.5 flex gap-2">
-              <button class="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 border border-gray-200 dark:border-border rounded-lg text-xs font-semibold text-gray-600 dark:text-muted-foreground bg-gray-50 dark:bg-muted hover:bg-gray-100 dark:hover:bg-card transition-colors cursor-pointer">
+              <button class="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 border border-border rounded-lg text-xs font-semibold text-muted-foreground bg-muted hover:bg-muted/80 transition-colors cursor-pointer">
                 <Filter class="w-3.5 h-3.5" />
                 Filters
               </button>
               <button
                 @click="resetFilters"
                 title="Reset Filters"
-                class="flex items-center justify-center p-2 border border-gray-200 dark:border-border rounded-lg text-gray-500 dark:text-muted-foreground bg-gray-50 dark:bg-muted hover:bg-gray-100 dark:hover:bg-card hover:text-gray-700 dark:hover:text-foreground transition-colors cursor-pointer"
+                class="flex items-center justify-center p-2 border border-border rounded-lg text-muted-foreground bg-muted hover:bg-muted/80 hover:text-foreground hover:text-foreground transition-colors cursor-pointer"
               >
                 <RotateCcw class="w-3.5 h-3.5" />
               </button>
@@ -211,12 +211,12 @@
         </div>
 
         <!-- Tab & Table Card Section -->
-        <div class="bg-white dark:bg-card border border-gray-200 dark:border-border rounded-2xl shadow-sm overflow-hidden">
+        <div class="bg-card border border-border rounded-2xl shadow-sm overflow-hidden">
           
           <!-- Table Toolbar -->
-          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center px-6 py-4 border-b border-gray-200 dark:border-border gap-4 bg-white dark:bg-card">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center px-6 py-4 border-b border-border gap-4 bg-card">
             <!-- Tabs -->
-            <div class="flex items-center gap-1 p-0.5 bg-gray-100 dark:bg-muted rounded-lg border border-gray-200 dark:border-border">
+            <div class="flex items-center gap-1 p-0.5 bg-muted rounded-lg border border-border">
               <button
                 v-for="tab in ['all', 'mine', 'archived']"
                 :key="tab"
@@ -224,8 +224,8 @@
                 :class="[
                   'px-4 py-1 text-xs font-semibold rounded-md transition-all cursor-pointer',
                   activeTab === tab
-                    ? 'bg-white dark:bg-card border border-gray-200 dark:border-border text-gray-900 dark:text-foreground shadow-sm'
-                    : 'text-gray-500 hover:text-gray-700 dark:text-muted-foreground dark:hover:text-foreground'
+                    ? 'bg-card border border-border text-foreground shadow-sm'
+                    : 'text-muted-foreground hover:text-muted-foreground hover:text-foreground'
                 ]"
               >
                 {{ tab === 'all' ? 'All events' : tab === 'mine' ? 'My event' : 'Archived' }}
@@ -234,15 +234,15 @@
 
             <!-- Bulk actions on right -->
             <div class="flex items-center gap-1.5">
-              <div class="text-[11px] text-gray-500 dark:text-muted-foreground mr-1.5" v-if="selectedEventIds.length > 0">
+              <div class="text-[11px] text-muted-foreground mr-1.5" v-if="selectedEventIds.length > 0">
                 {{ selectedEventIds.length }} selected
               </div>
-              <div class="border border-gray-200 dark:border-border rounded-lg p-0.5 flex items-center gap-0.5 bg-gray-50 dark:bg-muted">
+              <div class="border border-border rounded-lg p-0.5 flex items-center gap-0.5 bg-muted">
                 <button
                   :disabled="selectedEventIds.length === 0"
                   @click="triggerBulkAction('send')"
                   title="Send campaigns"
-                  class="p-1.5 text-gray-400 hover:text-gray-700 dark:hover:text-foreground hover:bg-white dark:hover:bg-card rounded-md transition-all disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-gray-400 cursor-pointer"
+                  class="p-1.5 text-muted-foreground hover:text-foreground hover:text-foreground hover:bg-card hover:bg-card rounded-md transition-all disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-muted-foreground cursor-pointer"
                 >
                   <Send class="w-3.5 h-3.5" />
                 </button>
@@ -250,7 +250,7 @@
                   :disabled="selectedEventIds.length === 0"
                   @click="triggerBulkAction('pause')"
                   title="Pause / Hold"
-                  class="p-1.5 text-gray-400 hover:text-gray-700 dark:hover:text-foreground hover:bg-white dark:hover:bg-card rounded-md transition-all disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-gray-400 cursor-pointer"
+                  class="p-1.5 text-muted-foreground hover:text-foreground hover:text-foreground hover:bg-card hover:bg-card rounded-md transition-all disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-muted-foreground cursor-pointer"
                 >
                   <Pause class="w-3.5 h-3.5" />
                 </button>
@@ -258,7 +258,7 @@
                   :disabled="selectedEventIds.length === 0"
                   @click="triggerBulkAction('archive')"
                   title="Archive selected"
-                  class="p-1.5 text-gray-400 hover:text-gray-700 dark:hover:text-foreground hover:bg-white dark:hover:bg-card rounded-md transition-all disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-gray-400 cursor-pointer"
+                  class="p-1.5 text-muted-foreground hover:text-foreground hover:text-foreground hover:bg-card hover:bg-card rounded-md transition-all disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-muted-foreground cursor-pointer"
                 >
                   <Archive class="w-3.5 h-3.5" />
                 </button>
@@ -266,7 +266,7 @@
                   :disabled="selectedEventIds.length === 0"
                   @click="triggerBulkAction('delete')"
                   title="Delete selected"
-                  class="p-1.5 text-gray-400 hover:text-red-500 dark:hover:text-red-400 hover:bg-white dark:hover:bg-card rounded-md transition-all disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-gray-400 cursor-pointer"
+                  class="p-1.5 text-muted-foreground hover:text-destructive hover:bg-card rounded-md transition-all disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-muted-foreground cursor-pointer"
                 >
                   <Trash2 class="w-3.5 h-3.5" />
                 </button>
@@ -278,16 +278,16 @@
           <div class="overflow-x-auto min-h-[300px]">
             <table class="w-full text-left border-collapse">
               <thead>
-                <tr class="border-b border-gray-200 dark:border-border text-[11px] font-bold text-gray-500 dark:text-muted-foreground uppercase tracking-wider bg-gray-50/50 dark:bg-muted/10">
+                <tr class="border-b border-border text-[11px] font-bold text-muted-foreground uppercase tracking-wider bg-muted/30">
                   <th class="py-3 px-5 w-12 text-center">
                     <input
                       type="checkbox"
                       :checked="isAllSelected"
                       @change="toggleSelectAll"
-                      class="rounded border-gray-300 dark:border-slate-800 text-primary w-4 h-4 cursor-pointer"
+                      class="rounded border-border border-border text-primary w-4 h-4 cursor-pointer"
                     />
                   </th>
-                  <th class="py-3 px-4 font-bold cursor-pointer hover:text-gray-700 dark:hover:text-foreground" @click="toggleSort">
+                  <th class="py-3 px-4 font-bold cursor-pointer hover:text-foreground hover:text-foreground" @click="toggleSort">
                     <div class="flex items-center gap-1.5">
                       Events
                       <ChevronDown class="w-3.5 h-3.5 transition-transform duration-200" :class="sortDesc ? 'rotate-180' : ''" />
@@ -302,11 +302,11 @@
                   <th class="py-3 px-4 w-12"></th>
                 </tr>
               </thead>
-              <tbody class="divide-y divide-gray-100 dark:divide-border/50 bg-white dark:bg-card">
+              <tbody class="divide-y divide-border bg-card">
                 <tr
                   v-for="event in paginatedEvents"
                   :key="event.id"
-                  class="hover:bg-gray-50/40 dark:hover:bg-muted/10 transition-colors group"
+                  class="hover:hover:bg-muted/30 transition-colors group"
                 >
                   <!-- Checkbox -->
                   <td class="py-4 px-5 text-center">
@@ -314,24 +314,24 @@
                       type="checkbox"
                       :checked="selectedEventIds.includes(event.id)"
                       @change="toggleSelectEvent(event.id)"
-                      class="rounded border-gray-300 dark:border-slate-800 text-primary w-4 h-4 cursor-pointer"
+                      class="rounded border-border border-border text-primary w-4 h-4 cursor-pointer"
                     />
                   </td>
 
                   <!-- Events Info -->
                   <td class="py-4 px-4" @click="viewEventDetail(event)">
                     <div class="flex flex-col cursor-pointer">
-                      <span class="font-bold text-gray-900 dark:text-foreground text-[13px] hover:text-primary transition-colors">
+                      <span class="font-bold text-foreground text-[13px] hover:text-primary transition-colors">
                         {{ event.name }}
                       </span>
-                      <span class="text-xs text-gray-400 dark:text-muted-foreground mt-0.5">
+                      <span class="text-xs text-muted-foreground mt-0.5">
                         {{ event.location }} <span class="mx-1">|</span> {{ event.date }}
                       </span>
                     </div>
                   </td>
 
                   <!-- Leads -->
-                  <td class="py-4 px-4 text-center font-medium text-gray-700 dark:text-muted-foreground">
+                  <td class="py-4 px-4 text-center font-medium text-muted-foreground">
                     {{ event.leads !== null && event.leads !== undefined ? event.leads : '-' }}
                   </td>
 
@@ -339,32 +339,32 @@
                   <td class="py-4 px-4 text-center">
                     <span v-if="typeof event.notContacted === 'number'">
                       <span v-if="event.notContacted > 0" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold"
-                            :class="event.notContacted >= 5 ? 'bg-amber-50 dark:bg-amber-950/20 text-amber-600 dark:text-amber-400 border border-amber-200 dark:border-amber-900/40' : 'bg-red-50 dark:bg-red-950/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900/40'">
+                            :class="event.notContacted >= 5 ? 'bg-warning/10 text-warning border border-warning/30' : 'bg-destructive/10 text-destructive border border-destructive/30'">
                         <AlertTriangle class="w-3.5 h-3.5 shrink-0" />
                         {{ event.notContacted }}
                       </span>
-                      <span v-else class="text-xs text-gray-500 dark:text-muted-foreground font-medium">All contacted</span>
+                      <span v-else class="text-xs text-muted-foreground font-medium">All contacted</span>
                     </span>
-                    <span v-else class="text-xs text-gray-500 dark:text-muted-foreground font-medium">
+                    <span v-else class="text-xs text-muted-foreground font-medium">
                       {{ event.notContacted }}
                     </span>
                   </td>
 
                   <!-- Won Revenue -->
-                  <td class="py-4 px-4 text-right font-medium text-gray-700 dark:text-muted-foreground">
+                  <td class="py-4 px-4 text-right font-medium text-muted-foreground">
                     {{ event.wonRevenue !== null && event.wonRevenue !== undefined ? 'RM' + formatRevenue(event.wonRevenue) : '-' }}
                   </td>
 
                   <!-- Converted -->
-                  <td class="py-4 px-4 text-center text-xs text-gray-400">
+                  <td class="py-4 px-4 text-center text-xs text-muted-foreground">
                     <span v-if="event.convertedCount !== null && event.convertedCount !== undefined">
-                      <strong class="text-gray-900 dark:text-foreground font-bold">{{ formatTwoDigits(event.convertedCount) }}</strong>/{{ event.leads }}
+                      <strong class="text-foreground font-bold">{{ formatTwoDigits(event.convertedCount) }}</strong>/{{ event.leads }}
                     </span>
                     <span v-else>-</span>
                   </td>
 
                   <!-- Conversion Rate -->
-                  <td class="py-4 px-4 text-center font-semibold text-gray-800 dark:text-muted-foreground">
+                  <td class="py-4 px-4 text-center font-semibold text-foreground">
                     {{ event.leads ? calculateConversionRate(event.convertedCount, event.leads) + '%' : '-' }}
                   </td>
 
@@ -373,17 +373,17 @@
                     <span
                       class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-semibold"
                       :class="[
-                        event.status === 'Active' ? 'bg-emerald-50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-900/40' : '',
-                        event.status === 'Ended' ? 'bg-gray-50 dark:bg-slate-800 text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-slate-700' : '',
-                        event.status === 'Upcoming' ? 'bg-blue-50 dark:bg-blue-950/20 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-900/40' : '',
+                        event.status === 'Active' ? 'bg-success/10 text-success border border-success/30' : '',
+                        event.status === 'Ended' ? 'bg-muted text-muted-foreground border border-border' : '',
+                        event.status === 'Upcoming' ? 'bg-info/10 text-info border border-info/30' : '',
                       ]"
                     >
                       <span
                         class="w-1.5 h-1.5 rounded-full shrink-0"
                         :class="[
-                          event.status === 'Active' ? 'bg-emerald-500' : '',
-                          event.status === 'Ended' ? 'bg-gray-400 dark:bg-gray-500' : '',
-                          event.status === 'Upcoming' ? 'bg-blue-500' : '',
+                          event.status === 'Active' ? 'bg-success' : '',
+                          event.status === 'Ended' ? 'bg-muted-foreground' : '',
+                          event.status === 'Upcoming' ? 'bg-info' : '',
                         ]"
                       ></span>
                       {{ event.status }}
@@ -392,7 +392,7 @@
 
                   <!-- Dropdown Actions -->
                   <td class="py-4 px-4 text-right">
-                    <button class="p-1 rounded hover:bg-gray-150 dark:hover:bg-muted text-gray-400 hover:text-gray-700 dark:hover:text-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer">
+                    <button class="p-1 rounded hover:bg-muted text-muted-foreground hover:text-foreground hover:text-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer">
                       <MoreVertical class="w-4 h-4" />
                     </button>
                   </td>
@@ -400,7 +400,7 @@
 
                 <!-- No Results State -->
                 <tr v-if="filteredEvents.length === 0">
-                  <td colspan="9" class="py-12 px-4 text-center text-gray-400 dark:text-muted-foreground italic">
+                  <td colspan="9" class="py-12 px-4 text-center text-muted-foreground italic">
                     No events found matching current criteria.
                   </td>
                 </tr>
@@ -409,13 +409,13 @@
           </div>
 
           <!-- Pagination Footer -->
-          <div class="flex justify-between items-center px-6 py-4 border-t border-gray-100 dark:border-border bg-white dark:bg-card">
+          <div class="flex justify-between items-center px-6 py-4 border-t border-border border-border bg-card">
             <!-- Buttons -->
             <div class="flex items-center gap-1">
               <button
                 @click="currentPage = Math.max(1, currentPage - 1)"
                 :disabled="currentPage === 1"
-                class="p-1.5 rounded-lg border border-gray-200 dark:border-border hover:bg-gray-50 dark:hover:bg-muted text-gray-500 dark:text-muted-foreground disabled:opacity-40 cursor-pointer"
+                class="p-1.5 rounded-lg border border-border hover:bg-muted hover:bg-muted text-muted-foreground disabled:opacity-40 cursor-pointer"
               >
                 <ChevronLeft class="w-4 h-4" />
               </button>
@@ -426,8 +426,8 @@
                 :class="[
                   'px-3 py-1 rounded-lg text-xs font-semibold transition-all border cursor-pointer',
                   currentPage === page
-                    ? 'bg-white dark:bg-card border-gray-300 dark:border-border text-gray-900 dark:text-foreground shadow-sm'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-muted-foreground dark:hover:text-foreground hover:bg-gray-50 dark:hover:bg-muted'
+                    ? 'bg-card border-border border-border text-foreground shadow-sm'
+                    : 'border-transparent text-muted-foreground hover:text-muted-foreground hover:text-foreground hover:bg-muted hover:bg-muted'
                 ]"
               >
                 {{ page }}
@@ -435,14 +435,14 @@
               <button
                 @click="currentPage = Math.min(totalPages, currentPage + 1)"
                 :disabled="currentPage === totalPages || totalPages === 0"
-                class="p-1.5 rounded-lg border border-gray-200 dark:border-border hover:bg-gray-50 dark:hover:bg-muted text-gray-500 dark:text-muted-foreground disabled:opacity-40 cursor-pointer"
+                class="p-1.5 rounded-lg border border-border hover:bg-muted hover:bg-muted text-muted-foreground disabled:opacity-40 cursor-pointer"
               >
                 <ChevronRight class="w-4 h-4" />
               </button>
             </div>
 
             <!-- Page indicator -->
-            <div class="text-xs text-gray-500 dark:text-muted-foreground">
+            <div class="text-xs text-muted-foreground">
               Page {{ currentPage }} of {{ totalPages || 1 }}
             </div>
           </div>
@@ -455,21 +455,21 @@
     <!-- ═══════════════════════════════════════════════
          VIEW 2: EVENT DETAILS (INNER PAGE)
          ═══════════════════════════════════════════════ -->
-    <main v-else class="flex-1 overflow-y-auto bg-gray-50 dark:bg-background">
+    <main v-else class="flex-1 overflow-y-auto bg-background">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
         
         <!-- Top Toolbar Header -->
-        <div class="flex justify-between items-center bg-gray-50 dark:bg-background py-1">
+        <div class="flex justify-between items-center bg-background py-1">
           <div class="flex items-center gap-3">
             <button
               @click="backToList"
-              class="p-1.5 rounded-lg bg-white dark:bg-card border border-gray-200 dark:border-border hover:bg-gray-100 dark:hover:bg-muted transition-colors cursor-pointer text-gray-700 dark:text-foreground"
+              class="p-1.5 rounded-lg bg-card border border-border hover:bg-muted hover:bg-muted transition-colors cursor-pointer text-foreground"
               title="Back to all events"
             >
               <ArrowLeft class="w-4 h-4" />
             </button>
             <div>
-              <h1 class="text-xl font-bold tracking-tight text-gray-900 dark:text-foreground flex items-center gap-2">
+              <h1 class="text-xl font-bold tracking-tight text-foreground flex items-center gap-2">
                 Events
               </h1>
               <p class="text-xs text-muted-foreground mt-0.5">All events and leads in one place</p>
@@ -477,38 +477,38 @@
           </div>
           
           <div class="flex items-center gap-3">
-            <div class="flex items-center gap-2 bg-white dark:bg-card border border-gray-200 dark:border-border rounded-lg px-3 py-1.5 text-xs font-semibold text-gray-600 dark:text-muted-foreground">
+            <div class="flex items-center gap-2 bg-card border border-border rounded-lg px-3 py-1.5 text-xs font-semibold text-muted-foreground">
               <input
                 type="checkbox"
                 v-model="detailViewArchiveState"
-                class="rounded border-gray-300 dark:border-slate-800 text-primary w-4 h-4 cursor-pointer"
+                class="rounded border-border border-border text-primary w-4 h-4 cursor-pointer"
               />
               <span>Archive</span>
             </div>
             
-            <button class="px-4 py-1.5 bg-white dark:bg-card hover:bg-gray-100 dark:hover:bg-muted border border-gray-200 dark:border-border rounded-lg text-xs font-semibold text-gray-700 dark:text-foreground cursor-pointer">
+            <button class="px-4 py-1.5 bg-card hover:bg-muted hover:bg-muted border border-border rounded-lg text-xs font-semibold text-foreground cursor-pointer">
               Edit Events
             </button>
             
             <!-- Three dots dropdown containing AI tool modal triggers -->
             <DropdownMenu>
               <DropdownMenuTrigger as-child>
-                <button class="p-1.5 rounded-lg bg-white dark:bg-card border border-gray-200 dark:border-border text-gray-400 hover:text-gray-700 dark:hover:text-foreground cursor-pointer transition-colors">
+                <button class="p-1.5 rounded-lg bg-card border border-border text-muted-foreground hover:text-foreground hover:text-foreground cursor-pointer transition-colors">
                   <MoreVertical class="w-4 h-4" />
                 </button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" class="w-56 bg-white dark:bg-card border border-gray-200 dark:border-border p-1 shadow-lg z-[99]">
-                <DropdownMenuLabel class="text-[9px] font-bold text-gray-400 dark:text-muted-foreground uppercase tracking-wider px-2 py-1 select-none">AI Co-Pilot Tools</DropdownMenuLabel>
-                <DropdownMenuItem @click="openAIModal('scanner')" class="cursor-pointer flex items-center gap-2 text-xs font-semibold py-2 px-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded">
-                  <Sparkles class="w-3.5 h-3.5 text-indigo-500" />
+              <DropdownMenuContent align="end" class="w-56 bg-card border border-border p-1 shadow-lg z-[99]">
+                <DropdownMenuLabel class="text-[9px] font-bold text-muted-foreground uppercase tracking-wider px-2 py-1 select-none">AI Co-Pilot Tools</DropdownMenuLabel>
+                <DropdownMenuItem @click="openAIModal('scanner')" class="cursor-pointer flex items-center gap-2 text-xs font-semibold py-2 px-2 hover:bg-muted hover:bg-muted rounded">
+                  <Sparkles class="w-3.5 h-3.5 text-tag-4-foreground" />
                   AI Name Card Scanner
                 </DropdownMenuItem>
-                <DropdownMenuItem @click="openAIModal('automation')" class="cursor-pointer flex items-center gap-2 text-xs font-semibold py-2 px-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded">
-                  <Bot class="w-3.5 h-3.5 text-emerald-500" />
+                <DropdownMenuItem @click="openAIModal('automation')" class="cursor-pointer flex items-center gap-2 text-xs font-semibold py-2 px-2 hover:bg-muted hover:bg-muted rounded">
+                  <Bot class="w-3.5 h-3.5 text-success" />
                   AI Auto Message
                 </DropdownMenuItem>
-                <DropdownMenuItem @click="openAIModal('analytics')" class="cursor-pointer flex items-center gap-2 text-xs font-semibold py-2 px-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded">
-                  <TrendingUp class="w-3.5 h-3.5 text-blue-500" />
+                <DropdownMenuItem @click="openAIModal('analytics')" class="cursor-pointer flex items-center gap-2 text-xs font-semibold py-2 px-2 hover:bg-muted hover:bg-muted rounded">
+                  <TrendingUp class="w-3.5 h-3.5 text-info" />
                   Event Analytics
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -517,42 +517,42 @@
         </div>
 
         <!-- Event Details Poster Banner Card -->
-        <div class="bg-white dark:bg-card border border-gray-200 dark:border-border p-4 rounded-2xl shadow-sm flex flex-col md:flex-row gap-5 items-start">
+        <div class="bg-card border border-border p-4 rounded-2xl shadow-sm flex flex-col md:flex-row gap-5 items-start">
           <!-- CSS Styled Poster Thumbnail -->
-          <div class="w-20 h-20 md:w-24 md:h-24 rounded-xl overflow-hidden shrink-0 bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-950 flex flex-col justify-between p-2.5 border border-slate-700/50 text-white relative select-none">
+          <div class="w-20 h-20 md:w-24 md:h-24 rounded-xl overflow-hidden shrink-0 bg-muted flex flex-col justify-between p-2.5 border border-border/50 text-foreground relative select-none">
             <div class="text-[7px] tracking-widest font-black uppercase opacity-75">SAMENTA</div>
             <div class="text-[9px] font-black leading-none tracking-tight">AI FEST 2026</div>
             <div class="text-[7px] text-right opacity-80 font-semibold mt-auto">May 02, 2026</div>
-            <div class="absolute -right-3 -top-3 w-8 h-8 rounded-full bg-emerald-500/20 blur-sm"></div>
+            <div class="absolute -right-3 -top-3 w-8 h-8 rounded-full bg-success/20 blur-sm"></div>
           </div>
           
           <!-- Event metadata -->
           <div class="flex-1">
             <div class="flex flex-wrap items-center gap-2">
-              <h2 class="text-lg font-bold text-gray-900 dark:text-foreground">SAMENTA AI Fest 2026</h2>
-              <span class="inline-flex items-center gap-1 px-2.5 py-0.5 bg-emerald-50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-400 border border-emerald-250 dark:border-emerald-900/40 rounded-full text-[10px] font-bold">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Active
+              <h2 class="text-lg font-bold text-foreground">SAMENTA AI Fest 2026</h2>
+              <span class="inline-flex items-center gap-1 px-2.5 py-0.5 bg-success/10 text-success border border-success/30 rounded-full text-[10px] font-bold">
+                <span class="w-1.5 h-1.5 rounded-full bg-success"></span> Active
               </span>
-              <span class="text-xs text-gray-400 dark:text-muted-foreground font-semibold px-2 py-0.5 bg-gray-50 dark:bg-muted border border-gray-200 dark:border-border rounded-md">
+              <span class="text-xs text-muted-foreground font-semibold px-2 py-0.5 bg-muted border border-border rounded-md">
                 May 02, 2026
               </span>
             </div>
             
-            <div class="flex flex-wrap gap-x-6 gap-y-2 mt-3.5 text-xs text-gray-500 dark:text-muted-foreground">
+            <div class="flex flex-wrap gap-x-6 gap-y-2 mt-3.5 text-xs text-muted-foreground">
               <span class="flex items-center gap-1.5">
-                <MapPin class="w-4 h-4 text-gray-400" />
+                <MapPin class="w-4 h-4 text-muted-foreground" />
                 Penang Convention Centre
               </span>
               <span class="flex items-center gap-1.5">
-                <Building2 class="w-4 h-4 text-gray-400" />
+                <Building2 class="w-4 h-4 text-muted-foreground" />
                 SAMENTA
               </span>
               <span class="flex items-center gap-1.5">
-                <CreditCard class="w-4 h-4 text-gray-400" />
+                <CreditCard class="w-4 h-4 text-muted-foreground" />
                 Cost : RM 2,200
               </span>
               <span class="flex items-center gap-1.5">
-                <Layers class="w-4 h-4 text-gray-400" />
+                <Layers class="w-4 h-4 text-muted-foreground" />
                 Exhibition
               </span>
             </div>
@@ -561,32 +561,32 @@
 
         <!-- Metrics Summary row -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div class="bg-white dark:bg-card border border-gray-200 dark:border-border p-4.5 rounded-2xl shadow-sm flex flex-col justify-between h-[105px]">
-            <span class="text-[10px] font-semibold text-gray-500 dark:text-muted-foreground uppercase tracking-wider">Total Leads</span>
+          <div class="bg-card border border-border p-4.5 rounded-2xl shadow-sm flex flex-col justify-between h-[105px]">
+            <span class="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Total Leads</span>
             <div class="mt-2 flex items-baseline justify-between">
-              <span class="text-2xl font-semibold text-gray-900 dark:text-foreground leading-none">{{ samentaLeads.length }}</span>
-              <span class="text-[10px] text-gray-400 font-semibold">{{ samentaLeads.length - 3 }} new · 3 existing</span>
+              <span class="text-2xl font-semibold text-foreground leading-none">{{ samentaLeads.length }}</span>
+              <span class="text-[10px] text-muted-foreground font-semibold">{{ samentaLeads.length - 3 }} new · 3 existing</span>
             </div>
           </div>
-          <div class="bg-white dark:bg-card border border-gray-200 dark:border-border p-4.5 rounded-2xl shadow-sm flex flex-col justify-between h-[105px]">
-            <span class="text-[10px] font-semibold text-gray-500 dark:text-muted-foreground uppercase tracking-wider">Won Revenue</span>
+          <div class="bg-card border border-border p-4.5 rounded-2xl shadow-sm flex flex-col justify-between h-[105px]">
+            <span class="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Won Revenue</span>
             <div class="mt-2 flex items-baseline justify-between">
-              <span class="text-2xl font-semibold text-gray-900 dark:text-foreground leading-none">RM2.1K</span>
-              <span class="text-[10px] text-gray-400 font-semibold">2 deals closed</span>
+              <span class="text-2xl font-semibold text-foreground leading-none">RM2.1K</span>
+              <span class="text-[10px] text-muted-foreground font-semibold">2 deals closed</span>
             </div>
           </div>
-          <div class="bg-white dark:bg-card border border-gray-200 dark:border-border p-4.5 rounded-2xl shadow-sm flex flex-col justify-between h-[105px]">
-            <span class="text-[10px] font-semibold text-gray-500 dark:text-muted-foreground uppercase tracking-wider">Active Pipeline</span>
+          <div class="bg-card border border-border p-4.5 rounded-2xl shadow-sm flex flex-col justify-between h-[105px]">
+            <span class="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Active Pipeline</span>
             <div class="mt-2 flex items-baseline justify-between">
-              <span class="text-2xl font-semibold text-gray-900 dark:text-foreground leading-none">RM9.4K</span>
-              <span class="text-[10px] text-gray-400 font-semibold">7 deals in progress</span>
+              <span class="text-2xl font-semibold text-foreground leading-none">RM9.4K</span>
+              <span class="text-[10px] text-muted-foreground font-semibold">7 deals in progress</span>
             </div>
           </div>
-          <div class="bg-white dark:bg-card border border-gray-200 dark:border-border p-4.5 rounded-2xl shadow-sm flex flex-col justify-between h-[105px]">
-            <span class="text-[10px] font-semibold text-gray-500 dark:text-muted-foreground uppercase tracking-wider">Event ROI (%)</span>
+          <div class="bg-card border border-border p-4.5 rounded-2xl shadow-sm flex flex-col justify-between h-[105px]">
+            <span class="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Event ROI (%)</span>
             <div class="mt-2 flex items-baseline justify-between">
-              <span class="text-2xl font-semibold text-emerald-600 dark:text-emerald-455 leading-none">0.95</span>
-              <span class="text-[10px] text-emerald-500/80 font-bold">Still active - growing</span>
+              <span class="text-2xl font-semibold text-primary leading-none">0.95</span>
+              <span class="text-[10px] text-primary/80 font-bold">Still active - growing</span>
             </div>
           </div>
         </div>
@@ -595,19 +595,19 @@
         <div class="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
           
           <!-- Left Column (Leads List Table - Always Default) -->
-          <div class="xl:col-span-8 bg-white dark:bg-card border border-gray-200 dark:border-border rounded-2xl shadow-sm overflow-hidden flex flex-col min-h-[480px]">
-            <div class="flex justify-between items-center px-6 py-4 border-b border-gray-150 dark:border-border bg-white dark:bg-card">
+          <div class="xl:col-span-8 bg-card border border-border rounded-2xl shadow-sm overflow-hidden flex flex-col min-h-[480px]">
+            <div class="flex justify-between items-center px-6 py-4 border-b border-border border-border bg-card">
               <div>
-                <h3 class="font-bold text-gray-950 dark:text-foreground text-[13px]">Leads</h3>
-                <p class="text-[11px] text-muted-foreground mt-0.5">{{ samentaLeads.length }} captured · <span class="text-red-500 font-bold">3 not yet contacted</span></p>
+                <h3 class="font-bold text-foreground text-[13px]">Leads</h3>
+                <p class="text-[11px] text-muted-foreground mt-0.5">{{ samentaLeads.length }} captured · <span class="text-destructive font-bold">3 not yet contacted</span></p>
               </div>
               <div class="flex gap-2">
-                <button class="flex items-center gap-1 px-3 py-1.5 border border-gray-200 dark:border-border rounded-lg text-xs font-semibold text-gray-600 dark:text-muted-foreground bg-gray-50 dark:bg-muted hover:bg-gray-100 cursor-pointer">
-                  <Filter class="w-3.5 h-3.5 text-gray-400" />
+                <button class="flex items-center gap-1 px-3 py-1.5 border border-border rounded-lg text-xs font-semibold text-muted-foreground bg-muted hover:bg-muted cursor-pointer">
+                  <Filter class="w-3.5 h-3.5 text-muted-foreground" />
                   Filters
                 </button>
-                <button class="flex items-center gap-1 px-3 py-1.5 border border-gray-200 dark:border-border rounded-lg text-xs font-semibold text-gray-600 dark:text-muted-foreground bg-gray-50 dark:bg-muted hover:bg-gray-100 cursor-pointer">
-                  <ArrowDownUp class="w-3.5 h-3.5 text-gray-400" />
+                <button class="flex items-center gap-1 px-3 py-1.5 border border-border rounded-lg text-xs font-semibold text-muted-foreground bg-muted hover:bg-muted cursor-pointer">
+                  <ArrowDownUp class="w-3.5 h-3.5 text-muted-foreground" />
                   Sort
                 </button>
               </div>
@@ -617,9 +617,9 @@
             <div class="overflow-x-auto">
               <table class="w-full text-left border-collapse">
                 <thead>
-                  <tr class="border-b border-gray-200 dark:border-border text-[11px] font-bold text-gray-500 dark:text-muted-foreground uppercase tracking-wider bg-gray-50/50 dark:bg-muted/10">
+                  <tr class="border-b border-border text-[11px] font-bold text-muted-foreground uppercase tracking-wider bg-muted/30">
                     <th class="py-3 px-5 w-12 text-center">
-                      <input type="checkbox" class="rounded border-gray-300 w-4 h-4 cursor-pointer" />
+                      <input type="checkbox" class="rounded border-border w-4 h-4 cursor-pointer" />
                     </th>
                     <th class="py-3 px-4 font-bold">Name & Company</th>
                     <th class="py-3 px-4 font-bold text-center">Source</th>
@@ -629,28 +629,28 @@
                     <th class="py-3 px-4 text-center">Actions</th>
                   </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-100 dark:divide-border/50 bg-white dark:bg-card">
+                <tbody class="divide-y divide-border bg-card">
                   <tr
                     v-for="lead in samentaLeads"
                     :key="lead.id"
-                    class="hover:bg-gray-50/40 dark:hover:bg-muted/10 transition-colors"
+                    class="hover:hover:bg-muted/30 transition-colors"
                   >
                     <!-- checkbox -->
                     <td class="py-3.5 px-5 text-center">
-                      <input type="checkbox" :checked="lead.checked" class="rounded border-gray-300 w-4 h-4 cursor-pointer" />
+                      <input type="checkbox" :checked="lead.checked" class="rounded border-border w-4 h-4 cursor-pointer" />
                     </td>
 
                     <!-- Name & company -->
                     <td class="py-3.5 px-4">
                       <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-full overflow-hidden shrink-0 border border-gray-100 bg-emerald-50 dark:bg-emerald-950/20 flex items-center justify-center text-primary font-bold text-xs">
+                        <div class="w-8 h-8 rounded-full overflow-hidden shrink-0 border border-border bg-primary/10 flex items-center justify-center text-primary font-bold text-xs">
                           {{ lead.name.split(' ').map(n => n[0]).join('') }}
                         </div>
                         <div class="flex flex-col min-w-0">
                           <div class="flex items-center gap-1.5 min-w-0">
-                            <span class="font-bold text-gray-900 dark:text-foreground text-xs truncate">{{ lead.name }}</span>
+                            <span class="font-bold text-foreground text-xs truncate">{{ lead.name }}</span>
                             <!-- VIP Badge -->
-                            <span v-if="lead.vip" class="inline-flex items-center px-1 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950/20 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-900/40 text-[7px] font-extrabold uppercase scale-90 shrink-0">
+                            <span v-if="lead.vip" class="inline-flex items-center px-1 py-0.5 rounded bg-tag-4/10 text-tag-4-foreground border border-tag-4/30 text-[7px] font-extrabold uppercase scale-90 shrink-0">
                               VIP
                             </span>
                             <!-- Temperature dot indicator -->
@@ -658,22 +658,22 @@
                               v-if="lead.temperature"
                               class="w-1.5 h-1.5 rounded-full shrink-0"
                               :class="[
-                                lead.temperature === 'Hot' ? 'bg-red-500 shadow-sm shadow-red-500/50' : '',
-                                lead.temperature === 'Warm' ? 'bg-amber-500 shadow-sm shadow-amber-500/50' : '',
-                                lead.temperature === 'Cold' ? 'bg-blue-500 shadow-sm shadow-blue-500/50' : '',
+                                lead.temperature === 'Hot' ? 'bg-destructive shadow-sm shadow-destructive/50' : '',
+                                lead.temperature === 'Warm' ? 'bg-warning shadow-sm shadow-warning/50' : '',
+                                lead.temperature === 'Cold' ? 'bg-info shadow-sm shadow-info/50' : '',
                               ]"
                               :title="'Temperature: ' + lead.temperature"
                             ></span>
                           </div>
-                          <span class="text-[10px] text-gray-400 dark:text-muted-foreground truncate mt-0.5">
-                            {{ lead.role }}, <span class="font-medium text-gray-600 dark:text-gray-400">{{ lead.company }}</span>
+                          <span class="text-[10px] text-muted-foreground truncate mt-0.5">
+                            {{ lead.role }}, <span class="font-medium text-muted-foreground">{{ lead.company }}</span>
                           </span>
                         </div>
                       </div>
                     </td>
 
                     <!-- Source -->
-                    <td class="py-3.5 px-4 text-center text-xs text-gray-600 dark:text-muted-foreground font-medium">
+                    <td class="py-3.5 px-4 text-center text-xs text-muted-foreground font-medium">
                       {{ lead.source }}
                     </td>
 
@@ -682,10 +682,10 @@
                       <span
                         class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold"
                         :class="[
-                          lead.stage === 'Won' ? 'bg-emerald-50 dark:bg-emerald-950/20 text-emerald-600 dark:text-emerald-450 border border-emerald-200 dark:border-emerald-900/40' : '',
-                          lead.stage === 'Proposal Sent' ? 'bg-purple-50 dark:bg-purple-950/20 text-purple-600 dark:text-purple-400 border border-purple-200 dark:border-purple-900/40' : '',
-                          lead.stage === 'Demo Booked' ? 'bg-blue-50 dark:bg-blue-950/20 text-blue-600 dark:text-blue-450 border border-blue-200 dark:border-blue-900/40' : '',
-                          lead.stage === 'Not Contacted' ? 'bg-red-50 dark:bg-red-950/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900/40' : '',
+                          lead.stage === 'Won' ? 'bg-success/10 text-success border border-success/30' : '',
+                          lead.stage === 'Proposal Sent' ? 'bg-tag-4/10 text-tag-4-foreground border border-tag-4/30' : '',
+                          lead.stage === 'Demo Booked' ? 'bg-info/10 text-info border border-info/30' : '',
+                          lead.stage === 'Not Contacted' ? 'bg-destructive/10 text-destructive border border-destructive/30' : '',
                         ]"
                       >
                         <Check v-if="lead.stage === 'Won'" class="w-2.5 h-2.5 shrink-0" />
@@ -697,12 +697,12 @@
                     </td>
 
                     <!-- Assigned To -->
-                    <td class="py-3.5 px-4 text-center text-xs text-gray-700 dark:text-muted-foreground font-medium">
+                    <td class="py-3.5 px-4 text-center text-xs text-muted-foreground font-medium">
                       {{ lead.assignedTo }}
                     </td>
 
                     <!-- Captured -->
-                    <td class="py-3.5 px-4 text-center text-xs text-gray-505 dark:text-muted-foreground">
+                    <td class="py-3.5 px-4 text-center text-xs text-muted-foreground">
                       {{ lead.capturedTime }}
                     </td>
 
@@ -710,20 +710,20 @@
                     <td class="py-3.5 px-4 text-center relative">
                       <DropdownMenu>
                         <DropdownMenuTrigger as-child>
-                          <button class="p-1 rounded hover:bg-gray-100 dark:hover:bg-muted text-gray-400 hover:text-gray-700 dark:hover:text-foreground cursor-pointer transition-colors">
+                          <button class="p-1 rounded hover:bg-muted hover:bg-muted text-muted-foreground hover:text-foreground hover:text-foreground cursor-pointer transition-colors">
                             <MoreVertical class="w-4 h-4" />
                           </button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" class="w-40 bg-white dark:bg-card border border-gray-250 dark:border-border p-1 shadow-md z-[90]">
-                          <DropdownMenuItem @click="triggerLeadAction(lead, 'assign_view')" class="cursor-pointer flex items-center gap-2 text-xs font-semibold py-1.5 px-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded">
-                            <UserCheck class="w-3.5 h-3.5 text-slate-500" />
+                        <DropdownMenuContent align="end" class="w-40 bg-card border border-border border-border p-1 shadow-md z-[90]">
+                          <DropdownMenuItem @click="triggerLeadAction(lead, 'assign_view')" class="cursor-pointer flex items-center gap-2 text-xs font-semibold py-1.5 px-2 hover:bg-muted hover:bg-muted rounded">
+                            <UserCheck class="w-3.5 h-3.5 text-muted-foreground" />
                             {{ lead.stage === 'Not Contacted' ? 'Assign Lead' : 'View Details' }}
                           </DropdownMenuItem>
-                          <DropdownMenuItem @click="triggerLeadAction(lead, 'auto_message')" class="cursor-pointer flex items-center gap-2 text-xs font-semibold py-1.5 px-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded">
-                            <Bot class="w-3.5 h-3.5 text-emerald-500" />
+                          <DropdownMenuItem @click="triggerLeadAction(lead, 'auto_message')" class="cursor-pointer flex items-center gap-2 text-xs font-semibold py-1.5 px-2 hover:bg-muted hover:bg-muted rounded">
+                            <Bot class="w-3.5 h-3.5 text-success" />
                             AI Auto Message
                           </DropdownMenuItem>
-                          <DropdownMenuItem @click="triggerLeadAction(lead, 'archive')" class="cursor-pointer flex items-center gap-2 text-xs font-semibold py-1.5 px-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded text-red-505">
+                          <DropdownMenuItem @click="triggerLeadAction(lead, 'archive')" class="cursor-pointer flex items-center gap-2 text-xs font-semibold py-1.5 px-2 hover:bg-muted hover:bg-muted rounded text-destructive">
                             <Archive class="w-3.5 h-3.5" />
                             Archive Lead
                           </DropdownMenuItem>
@@ -736,44 +736,44 @@
             </div>
 
             <!-- Leads Pagination footer -->
-            <div class="mt-auto flex justify-between items-center px-6 py-3.5 border-t border-gray-100 dark:border-border bg-white dark:bg-card">
+            <div class="mt-auto flex justify-between items-center px-6 py-3.5 border-t border-border border-border bg-card">
               <div class="flex items-center gap-1">
-                <button class="p-1 rounded border border-gray-200 dark:border-border text-gray-400 disabled:opacity-40 cursor-pointer"><ChevronLeft class="w-4 h-4" /></button>
-                <button class="px-2.5 py-0.5 rounded border border-gray-300 dark:border-border bg-white dark:bg-card text-xs font-bold text-gray-805">1</button>
-                <button class="px-2.5 py-0.5 rounded border border-transparent text-xs text-gray-500 hover:bg-gray-50">2</button>
-                <button class="px-2.5 py-0.5 rounded border border-transparent text-xs text-gray-500 hover:bg-gray-50">3</button>
-                <span class="text-gray-400 text-xs">...</span>
-                <button class="px-2.5 py-0.5 rounded border border-transparent text-xs text-gray-500 hover:bg-gray-50">10</button>
-                <button class="p-1 rounded border border-gray-200 dark:border-border text-gray-400 cursor-pointer"><ChevronRight class="w-4 h-4" /></button>
+                <button class="p-1 rounded border border-border text-muted-foreground disabled:opacity-40 cursor-pointer"><ChevronLeft class="w-4 h-4" /></button>
+                <button class="px-2.5 py-0.5 rounded border border-border border-border bg-card text-xs font-bold text-foreground">1</button>
+                <button class="px-2.5 py-0.5 rounded border border-transparent text-xs text-muted-foreground hover:bg-muted">2</button>
+                <button class="px-2.5 py-0.5 rounded border border-transparent text-xs text-muted-foreground hover:bg-muted">3</button>
+                <span class="text-muted-foreground text-xs">...</span>
+                <button class="px-2.5 py-0.5 rounded border border-transparent text-xs text-muted-foreground hover:bg-muted">10</button>
+                <button class="p-1 rounded border border-border text-muted-foreground cursor-pointer"><ChevronRight class="w-4 h-4" /></button>
               </div>
-              <div class="text-[11px] text-gray-500">Page 1 of 10</div>
+              <div class="text-[11px] text-muted-foreground">Page 1 of 10</div>
             </div>
           </div>
 
           <!-- Right Column Sidebar -->
           <div class="xl:col-span-4 space-y-6">
             <!-- Widget 1: QR Code Card -->
-            <div class="bg-white dark:bg-card border border-gray-200 dark:border-border p-5 rounded-2xl shadow-sm space-y-4">
-              <h3 class="font-bold text-gray-950 dark:text-foreground text-xs uppercase tracking-wider">QR Code</h3>
+            <div class="bg-card border border-border p-5 rounded-2xl shadow-sm space-y-4">
+              <h3 class="font-bold text-foreground text-xs uppercase tracking-wider">QR Code</h3>
               
-              <div class="flex items-center justify-center p-3 bg-white dark:bg-muted rounded-xl border border-gray-100 dark:border-border">
+              <div class="flex items-center justify-center p-3 bg-card rounded-xl border border-border border-border">
                 <img src="/rakansales_qr_code.png" class="w-32 h-32 object-contain" alt="RakanSales QR Code" />
               </div>
 
-              <p class="text-xs text-gray-500 dark:text-muted-foreground text-center leading-relaxed">
+              <p class="text-xs text-muted-foreground text-center leading-relaxed">
                 Start by just asking for an event registration and build on top agenda of that
               </p>
 
               <div class="grid grid-cols-2 gap-2 pt-2">
                 <button
                   @click="copyEventLink"
-                  class="py-2 bg-primary hover:bg-[#1a943e] text-white rounded-lg text-xs font-bold shadow-sm transition-all cursor-pointer text-center"
+                  class="py-2 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg text-xs font-bold shadow-sm transition-all cursor-pointer text-center"
                 >
                   Copy Link
                 </button>
                 <a
                   href="#"
-                  class="py-2 bg-white dark:bg-card hover:bg-gray-50 dark:hover:bg-muted border border-gray-200 dark:border-border text-gray-700 dark:text-foreground rounded-lg text-xs font-bold shadow-sm text-center"
+                  class="py-2 bg-card hover:bg-muted hover:bg-muted border border-border text-foreground rounded-lg text-xs font-bold shadow-sm text-center"
                 >
                   Open New Tab
                 </a>
@@ -781,126 +781,126 @@
             </div>
 
             <!-- Widget 2: Conversion Funnel -->
-            <div class="bg-white dark:bg-card border border-gray-200 dark:border-border p-5 rounded-2xl shadow-sm space-y-4">
+            <div class="bg-card border border-border p-5 rounded-2xl shadow-sm space-y-4">
               <div class="flex justify-between items-center">
-                <h3 class="font-bold text-gray-955 dark:text-foreground text-xs uppercase tracking-wider">Conversion Funnel</h3>
-                <input type="checkbox" class="rounded border-gray-300 w-3.5 h-3.5 cursor-pointer" checked />
+                <h3 class="font-bold text-foreground text-xs uppercase tracking-wider">Conversion Funnel</h3>
+                <input type="checkbox" class="rounded border-border w-3.5 h-3.5 cursor-pointer" checked />
               </div>
 
               <div class="space-y-3 py-2 text-xs">
                 <div>
-                  <div class="flex justify-between text-[11px] text-gray-500 mb-1">
+                  <div class="flex justify-between text-[11px] text-muted-foreground mb-1">
                     <span>Total Leads</span>
-                    <span class="font-bold text-gray-800 dark:text-foreground">{{ samentaLeads.length }}</span>
+                    <span class="font-bold text-foreground">{{ samentaLeads.length }}</span>
                   </div>
-                  <div class="h-5 bg-gray-50 dark:bg-slate-800 rounded-md overflow-hidden relative border border-gray-200 dark:border-slate-700">
-                    <div class="h-full bg-emerald-600 rounded-l" style="width: 100%"></div>
+                  <div class="h-5 bg-muted bg-muted rounded-md overflow-hidden relative border border-border border-border">
+                    <div class="h-full bg-success rounded-l" style="width: 100%"></div>
                   </div>
                 </div>
 
                 <div>
-                  <div class="flex justify-between text-[11px] text-gray-500 mb-1">
+                  <div class="flex justify-between text-[11px] text-muted-foreground mb-1">
                     <span>Contacted</span>
-                    <span class="font-bold text-gray-800 dark:text-foreground">{{ funnelContactedCount }}</span>
+                    <span class="font-bold text-foreground">{{ funnelContactedCount }}</span>
                   </div>
-                  <div class="h-5 bg-gray-50 dark:bg-slate-800 rounded-md overflow-hidden relative border border-gray-200 dark:border-slate-700">
-                    <div class="h-full bg-emerald-500 rounded-l transition-all duration-300" :style="{ width: (funnelContactedCount / samentaLeads.length * 100) + '%' }"></div>
+                  <div class="h-5 bg-muted bg-muted rounded-md overflow-hidden relative border border-border border-border">
+                    <div class="h-full bg-success rounded-l transition-all duration-300" :style="{ width: (funnelContactedCount / samentaLeads.length * 100) + '%' }"></div>
                   </div>
                 </div>
 
                 <div>
-                  <div class="flex justify-between text-[11px] text-gray-500 mb-1">
+                  <div class="flex justify-between text-[11px] text-muted-foreground mb-1">
                     <span>Demo Booked</span>
-                    <span class="font-bold text-gray-800 dark:text-foreground">08</span>
+                    <span class="font-bold text-foreground">08</span>
                   </div>
-                  <div class="h-5 bg-gray-50 dark:bg-slate-800 rounded-md overflow-hidden relative border border-gray-200 dark:border-slate-700">
-                    <div class="h-full bg-emerald-400 rounded-l" style="width: 44.4%"></div>
+                  <div class="h-5 bg-muted bg-muted rounded-md overflow-hidden relative border border-border border-border">
+                    <div class="h-full bg-success rounded-l" style="width: 44.4%"></div>
                   </div>
                 </div>
 
                 <div>
-                  <div class="flex justify-between text-[11px] text-gray-500 mb-1">
+                  <div class="flex justify-between text-[11px] text-muted-foreground mb-1">
                     <span>Proposal Sent</span>
-                    <span class="font-bold text-gray-800 dark:text-foreground">05</span>
+                    <span class="font-bold text-foreground">05</span>
                   </div>
-                  <div class="h-5 bg-gray-50 dark:bg-slate-800 rounded-md overflow-hidden relative border border-gray-200 dark:border-slate-700">
-                    <div class="h-full bg-emerald-350 rounded-l" style="width: 27.8%"></div>
+                  <div class="h-5 bg-muted rounded-md overflow-hidden relative border border-border">
+                    <div class="h-full bg-success rounded-l" style="width: 27.8%"></div>
                   </div>
                 </div>
 
                 <div>
-                  <div class="flex justify-between text-[11px] text-gray-500 mb-1">
+                  <div class="flex justify-between text-[11px] text-muted-foreground mb-1">
                     <span>Won</span>
-                    <span class="font-bold text-gray-800 dark:text-foreground">03</span>
+                    <span class="font-bold text-foreground">03</span>
                   </div>
-                  <div class="h-5 bg-gray-50 dark:bg-slate-800 rounded-md overflow-hidden relative border border-gray-200 dark:border-slate-700">
-                    <div class="h-full bg-emerald-700 rounded-l" style="width: 16.7%"></div>
+                  <div class="h-5 bg-muted bg-muted rounded-md overflow-hidden relative border border-border border-border">
+                    <div class="h-full bg-success rounded-l" style="width: 16.7%"></div>
                   </div>
                 </div>
               </div>
 
-              <div class="border-t border-dashed border-gray-200 dark:border-slate-800 pt-3 flex flex-col gap-1.5 text-xs">
+              <div class="border-t border-dashed border-border border-border pt-3 flex flex-col gap-1.5 text-xs">
                 <div class="flex justify-between">
-                  <span class="text-gray-500">Lead : Won</span>
-                  <span class="font-bold text-emerald-600 dark:text-emerald-400">11.1%</span>
+                  <span class="text-muted-foreground">Lead : Won</span>
+                  <span class="font-bold text-success">11.1%</span>
                 </div>
                 <div class="flex justify-between">
-                  <span class="text-gray-500">Contacted rate</span>
-                  <span class="font-bold text-gray-800 dark:text-foreground">{{ contactedRate }}%</span>
+                  <span class="text-muted-foreground">Contacted rate</span>
+                  <span class="font-bold text-foreground">{{ contactedRate }}%</span>
                 </div>
               </div>
             </div>
 
             <!-- Widget 3: Lead Source -->
-            <div class="bg-white dark:bg-card border border-gray-200 dark:border-border p-5 rounded-2xl shadow-sm space-y-4">
+            <div class="bg-card border border-border p-5 rounded-2xl shadow-sm space-y-4">
               <div class="flex justify-between items-center">
-                <h3 class="font-bold text-gray-950 dark:text-foreground text-xs uppercase tracking-wider">Lead Source</h3>
-                <input type="checkbox" class="rounded border-gray-300 w-3.5 h-3.5 cursor-pointer" checked />
+                <h3 class="font-bold text-foreground text-xs uppercase tracking-wider">Lead Source</h3>
+                <input type="checkbox" class="rounded border-border w-3.5 h-3.5 cursor-pointer" checked />
               </div>
 
               <div class="flex items-center justify-center py-2 relative">
                 <svg class="w-36 h-36 transform -rotate-95" viewBox="0 0 42 42">
-                  <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#e2e8f0" stroke-width="4.5" />
-                  <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#22c55e" stroke-width="4.5" stroke-dasharray="35 65" stroke-dashoffset="0" />
-                  <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#3b82f6" stroke-width="4.5" stroke-dasharray="15 85" stroke-dashoffset="-35" />
-                  <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#06b6d4" stroke-width="4.5" stroke-dasharray="40 60" stroke-dashoffset="-50" />
-                  <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#f97316" stroke-width="4.5" stroke-dasharray="10 90" stroke-dashoffset="-90" />
+                  <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="var(--border)" stroke-width="4.5" />
+                  <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="var(--success)" stroke-width="4.5" stroke-dasharray="35 65" stroke-dashoffset="0" />
+                  <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="var(--tag-1)" stroke-width="4.5" stroke-dasharray="15 85" stroke-dashoffset="-35" />
+                  <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="var(--tag-2)" stroke-width="4.5" stroke-dasharray="40 60" stroke-dashoffset="-50" />
+                  <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="var(--tag-5)" stroke-width="4.5" stroke-dasharray="10 90" stroke-dashoffset="-90" />
                 </svg>
                 
                 <div class="absolute flex flex-col items-center justify-center text-center">
-                  <span class="text-xl font-black text-gray-900 dark:text-foreground leading-none">{{ samentaLeads.length }}</span>
-                  <span class="text-[9px] text-gray-400 font-bold uppercase tracking-wider mt-0.5">Leads</span>
+                  <span class="text-xl font-black text-foreground leading-none">{{ samentaLeads.length }}</span>
+                  <span class="text-[9px] text-muted-foreground font-bold uppercase tracking-wider mt-0.5">Leads</span>
                 </div>
               </div>
 
-              <div class="space-y-1.5 text-[11px] text-gray-500 pt-1">
+              <div class="space-y-1.5 text-[11px] text-muted-foreground pt-1">
                 <div class="flex justify-between items-center">
                   <div class="flex items-center gap-2">
-                    <span class="w-2.5 h-2.5 rounded bg-emerald-500 shrink-0"></span>
+                    <span class="w-2.5 h-2.5 rounded bg-success shrink-0"></span>
                     <span>Web Form</span>
                   </div>
-                  <span class="font-bold text-gray-800 dark:text-foreground">13.72%</span>
+                  <span class="font-bold text-foreground">13.72%</span>
                 </div>
                 <div class="flex justify-between items-center">
                   <div class="flex items-center gap-2">
-                    <span class="w-2.5 h-2.5 rounded bg-blue-500 shrink-0"></span>
+                    <span class="w-2.5 h-2.5 rounded bg-info shrink-0"></span>
                     <span>Name Cards</span>
                   </div>
-                  <span class="font-bold text-gray-800 dark:text-foreground">5.28%</span>
+                  <span class="font-bold text-foreground">5.28%</span>
                 </div>
                 <div class="flex justify-between items-center">
                   <div class="flex items-center gap-2">
-                    <span class="w-2.5 h-2.5 rounded bg-cyan-500 shrink-0"></span>
+                    <span class="w-2.5 h-2.5 rounded bg-tag-6 shrink-0"></span>
                     <span>New</span>
                   </div>
-                  <span class="font-bold text-gray-800 dark:text-foreground">14.78%</span>
+                  <span class="font-bold text-foreground">14.78%</span>
                 </div>
                 <div class="flex justify-between items-center">
                   <div class="flex items-center gap-2">
-                    <span class="w-2.5 h-2.5 rounded bg-orange-500 shrink-0"></span>
+                    <span class="w-2.5 h-2.5 rounded bg-warning shrink-0"></span>
                     <span>Existing</span>
                   </div>
-                  <span class="font-bold text-gray-800 dark:text-foreground">5.28%</span>
+                  <span class="font-bold text-foreground">5.28%</span>
                 </div>
               </div>
 
@@ -917,9 +917,9 @@
          CREATE NEW EVENT MODAL
          ═══════════════════════════════════════════════ -->
     <Dialog v-model:open="createModalOpen">
-      <DialogContent class="sm:max-w-[480px] rounded-2xl bg-white dark:bg-card border border-gray-250 dark:border-border p-6 shadow-2xl z-[90]">
-        <DialogHeader class="border-b border-gray-155 dark:border-border pb-3">
-          <DialogTitle class="text-base font-bold text-gray-955 dark:text-foreground">Create New Event</DialogTitle>
+      <DialogContent class="sm:max-w-[480px] rounded-2xl bg-card border border-border border-border p-6 shadow-2xl z-[90]">
+        <DialogHeader class="border-b border-border border-border pb-3">
+          <DialogTitle class="text-base font-bold text-foreground">Create New Event</DialogTitle>
           <DialogDescription class="text-xs text-muted-foreground mt-0.5">
             Add a new event with metrics to the workspace database.
           </DialogDescription>
@@ -927,41 +927,41 @@
 
         <div class="py-4 space-y-4">
           <div class="space-y-1.5">
-            <label class="text-[11px] font-bold text-gray-500 dark:text-muted-foreground uppercase tracking-wider">Event Name</label>
+            <label class="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Event Name</label>
             <input
               v-model="newEvent.name"
               type="text"
               placeholder="e.g. SAMENTA AI Fest 2026"
-              class="w-full px-3 py-2 bg-gray-50 dark:bg-muted border border-gray-250 dark:border-border rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary text-gray-800 dark:text-foreground"
+              class="w-full px-3 py-2 bg-muted border border-border border-border rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary text-foreground"
             />
           </div>
 
           <div class="grid grid-cols-2 gap-3">
             <div class="space-y-1.5">
-              <label class="text-[11px] font-bold text-gray-500 dark:text-muted-foreground uppercase tracking-wider">Location</label>
+              <label class="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Location</label>
               <input
                 v-model="newEvent.location"
                 type="text"
                 placeholder="e.g. Penang, Online"
-                class="w-full px-3 py-2 bg-gray-50 dark:bg-muted border border-gray-250 dark:border-border rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary text-gray-800 dark:text-foreground"
+                class="w-full px-3 py-2 bg-muted border border-border border-border rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary text-foreground"
               />
             </div>
             <div class="space-y-1.5">
-              <label class="text-[11px] font-bold text-gray-500 dark:text-muted-foreground uppercase tracking-wider">Date</label>
+              <label class="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Date</label>
               <input
                 v-model="newEvent.date"
                 type="text"
                 placeholder="e.g. May 02, 2026"
-                class="w-full px-3 py-2 bg-gray-50 dark:bg-muted border border-gray-255 dark:border-border rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary text-gray-800 dark:text-foreground"
+                class="w-full px-3 py-2 bg-muted border border-border border-border rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary text-foreground"
               />
             </div>
           </div>
 
           <div class="space-y-1.5">
-            <label class="text-[11px] font-bold text-gray-505 dark:text-muted-foreground uppercase tracking-wider">Status</label>
+            <label class="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Status</label>
             <select
               v-model="newEvent.status"
-              class="w-full py-2 bg-gray-50 dark:bg-muted border border-gray-250 dark:border-border rounded-lg text-xs text-gray-700 dark:text-foreground focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary px-3 cursor-pointer"
+              class="w-full py-2 bg-muted border border-border border-border rounded-lg text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary px-3 cursor-pointer"
             >
               <option value="Active">Active</option>
               <option value="Upcoming">Upcoming</option>
@@ -969,60 +969,60 @@
             </select>
           </div>
 
-          <div class="border-t border-dashed border-gray-200 dark:border-border pt-4">
-            <span class="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest block mb-3">Event Metrics</span>
+          <div class="border-t border-dashed border-border pt-4">
+            <span class="text-[10px] font-extrabold text-muted-foreground uppercase tracking-widest block mb-3">Event Metrics</span>
             
             <div class="grid grid-cols-2 gap-3.5">
               <div class="space-y-1.5">
-                <label class="text-[11px] font-bold text-gray-500 dark:text-muted-foreground uppercase tracking-wider">Leads</label>
+                <label class="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Leads</label>
                 <input
                   v-model.number="newEvent.leads"
                   type="number"
                   min="0"
-                  class="w-full px-3 py-2 bg-gray-50 dark:bg-muted border border-gray-250 dark:border-border rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary text-gray-800 dark:text-foreground"
+                  class="w-full px-3 py-2 bg-muted border border-border border-border rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary text-foreground"
                 />
               </div>
               <div class="space-y-1.5">
-                <label class="text-[11px] font-bold text-gray-500 dark:text-muted-foreground uppercase tracking-wider">Not Contacted</label>
+                <label class="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Not Contacted</label>
                 <input
                   v-model="newEvent.notContactedInput"
                   type="text"
                   placeholder="e.g. 3, Awaiting Event"
-                  class="w-full px-3 py-2 bg-gray-50 dark:bg-muted border border-gray-250 dark:border-border rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary text-gray-800 dark:text-foreground"
+                  class="w-full px-3 py-2 bg-muted border border-border border-border rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary text-foreground"
                 />
               </div>
               <div class="space-y-1.5">
-                <label class="text-[11px] font-bold text-gray-500 dark:text-muted-foreground uppercase tracking-wider">Converted</label>
+                <label class="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Converted</label>
                 <input
                   v-model.number="newEvent.convertedCount"
                   type="number"
                   min="0"
-                  class="w-full px-3 py-2 bg-gray-50 dark:bg-muted border border-gray-250 dark:border-border rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary text-gray-800 dark:text-foreground"
+                  class="w-full px-3 py-2 bg-muted border border-border border-border rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary text-foreground"
                 />
               </div>
               <div class="space-y-1.5">
-                <label class="text-[11px] font-bold text-gray-500 dark:text-muted-foreground uppercase tracking-wider">Won Revenue (RM)</label>
+                <label class="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Won Revenue (RM)</label>
                 <input
                   v-model.number="newEvent.wonRevenue"
                   type="number"
                   min="0"
                   placeholder="e.g. 2100"
-                  class="w-full px-3 py-2 bg-gray-50 dark:bg-muted border border-gray-250 dark:border-border rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary text-gray-800 dark:text-foreground"
+                  class="w-full px-3 py-2 bg-muted border border-border border-border rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary text-foreground"
                 />
               </div>
             </div>
           </div>
         </div>
 
-        <DialogFooter class="border-t border-gray-150 dark:border-border pt-4 flex gap-2 justify-end">
+        <DialogFooter class="border-t border-border border-border pt-4 flex gap-2 justify-end">
           <DialogClose as-child>
-            <button class="px-4 py-2 border border-gray-200 dark:border-border rounded-lg text-xs font-semibold text-gray-600 dark:text-muted-foreground bg-gray-50 dark:bg-muted hover:bg-gray-100 dark:hover:bg-card cursor-pointer">
+            <button class="px-4 py-2 border border-border rounded-lg text-xs font-semibold text-muted-foreground bg-muted hover:bg-muted/80 cursor-pointer">
               Cancel
             </button>
           </DialogClose>
           <button
             @click="saveEvent"
-            class="px-4 py-2 bg-primary hover:bg-[#1a943e] text-white rounded-lg text-xs font-bold shadow-sm cursor-pointer"
+            class="px-4 py-2 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg text-xs font-bold shadow-sm cursor-pointer"
           >
             Save Event
           </button>
@@ -1034,11 +1034,11 @@
          MODAL 1: AI NAME CARD SCANNER (POPUP MODAL)
          ═══════════════════════════════════════════════ -->
     <Dialog v-model:open="scannerModalOpen">
-      <DialogContent class="sm:max-w-[720px] rounded-2xl bg-white dark:bg-card border border-gray-250 dark:border-border p-6 shadow-2xl z-[90]">
-        <DialogHeader class="border-b border-gray-150 dark:border-border pb-3">
+      <DialogContent class="sm:max-w-[720px] rounded-2xl bg-card border border-border border-border p-6 shadow-2xl z-[90]">
+        <DialogHeader class="border-b border-border border-border pb-3">
           <div class="flex items-center gap-2">
-            <Sparkles class="w-5 h-5 text-indigo-500" />
-            <DialogTitle class="text-base font-bold text-gray-955 dark:text-foreground">AI Name Card Scanner</DialogTitle>
+            <Sparkles class="w-5 h-5 text-tag-4-foreground" />
+            <DialogTitle class="text-base font-bold text-foreground">AI Name Card Scanner</DialogTitle>
           </div>
           <DialogDescription class="text-xs text-muted-foreground mt-0.5">
             Demonstrate optical card parsing turning instantly into lead record.
@@ -1047,27 +1047,27 @@
 
         <div class="py-4 flex flex-col md:flex-row gap-6">
           <!-- Left: Scanner Viewport Mockup -->
-          <div class="flex-1 border border-gray-200 dark:border-border rounded-2xl p-5 bg-slate-900/5 dark:bg-slate-950/20 flex flex-col items-center justify-center relative overflow-hidden min-h-[260px]">
-            <div v-if="scannerState.scanning" class="absolute inset-x-0 top-0 h-1 bg-emerald-500 shadow-md shadow-emerald-500/50 animate-scanner z-10"></div>
+          <div class="flex-1 border border-border rounded-2xl p-5 bg-muted/10 flex flex-col items-center justify-center relative overflow-hidden min-h-[260px]">
+            <div v-if="scannerState.scanning" class="absolute inset-x-0 top-0 h-1 bg-success shadow-md shadow-success/50 animate-scanner z-10"></div>
             
-            <div class="w-full aspect-[1.6/1] bg-white border border-gray-300 rounded-xl shadow-lg relative p-4 flex flex-col justify-between overflow-hidden cursor-pointer hover:border-emerald-500/50 hover:shadow-emerald-500/5 transition-all duration-200"
+            <div class="w-full aspect-[1.6/1] bg-card border border-border rounded-xl shadow-lg relative p-4 flex flex-col justify-between overflow-hidden cursor-pointer hover:border-primary/50 hover:shadow-primary/5 transition-all duration-200"
                  @click="!scannerState.scanning && triggerScanner()"
                  :class="scannerState.scanning ? 'brightness-90 transition-all duration-300' : ''"
                  title="Click card to start scanning">
               <div class="flex items-center gap-1.5">
-                <div class="w-4 h-4 rounded-full bg-indigo-600 flex items-center justify-center text-white text-[7px] font-bold">TS</div>
-                <span class="text-[8px] font-black text-indigo-900 tracking-wider">TechSolutions</span>
+                <div class="w-4 h-4 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-[7px] font-bold">TS</div>
+                <span class="text-[8px] font-black text-foreground tracking-wider">TechSolutions</span>
               </div>
               <div>
-                <h4 class="text-sm font-black text-gray-900 leading-none">Cheah Kok Peng</h4>
-                <p class="text-[9px] text-gray-500 mt-0.5">VP of Technology</p>
+                <h4 class="text-sm font-black text-foreground leading-none">Cheah Kok Peng</h4>
+                <p class="text-[9px] text-muted-foreground mt-0.5">VP of Technology</p>
               </div>
-              <div class="text-[7px] text-gray-400 space-y-0.5 border-t border-gray-100 pt-1.5 flex justify-between items-end">
+              <div class="text-[7px] text-muted-foreground space-y-0.5 border-t border-border pt-1.5 flex justify-between items-end">
                 <div>
                   <p>kp.cheah@techsolutions.com</p>
                   <p>+60 12-345 6789</p>
                 </div>
-                <p class="font-semibold text-gray-600 text-[6px]">Kuala Lumpur, MY</p>
+                <p class="font-semibold text-muted-foreground text-[6px]">Kuala Lumpur, MY</p>
               </div>
             </div>
 
@@ -1075,12 +1075,12 @@
 
           <!-- Right Panel: Step 1 (Scanned Metadata) -->
           <div v-if="scannerState.step === 1" class="flex-1 space-y-4">
-            <div class="pb-1 border-b border-gray-100 flex justify-between items-center">
-              <h4 class="font-bold text-gray-955 dark:text-foreground text-[12px] flex items-center gap-1.5">
-                <Bot class="w-4 h-4 text-indigo-500" />
+            <div class="pb-1 border-b border-border flex justify-between items-center">
+              <h4 class="font-bold text-foreground text-[12px] flex items-center gap-1.5">
+                <Bot class="w-4 h-4 text-tag-4-foreground" />
                 AI Scanned Metadata
               </h4>
-              <span class="text-[10px] font-semibold text-gray-400 bg-gray-50 dark:bg-slate-800 px-2 py-0.5 rounded border border-gray-100 dark:border-border">
+              <span class="text-[10px] font-semibold text-muted-foreground bg-muted bg-muted px-2 py-0.5 rounded border border-border border-border">
                 Step 1 of 2
               </span>
             </div>
@@ -1089,43 +1089,43 @@
 
             <div class="space-y-3">
               <div class="space-y-1">
-                <label class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Scanned Name</label>
+                <label class="text-[9px] font-bold text-muted-foreground uppercase tracking-wider">Scanned Name</label>
                 <input
                   v-model="scannerState.result.name"
                   type="text"
                   placeholder="Waiting for scan..."
-                  class="w-full px-3 py-1.5 bg-gray-50 border border-gray-250 rounded-lg text-xs font-semibold text-gray-800 focus:ring-1 focus:ring-primary"
+                  class="w-full px-3 py-1.5 bg-muted border border-border rounded-lg text-xs font-semibold text-foreground focus:ring-1 focus:ring-primary"
                 />
               </div>
 
               <div class="grid grid-cols-2 gap-2">
                 <div class="space-y-1">
-                  <label class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Role</label>
+                  <label class="text-[9px] font-bold text-muted-foreground uppercase tracking-wider">Role</label>
                   <input
                     v-model="scannerState.result.role"
                     type="text"
                     placeholder="Waiting..."
-                    class="w-full px-3 py-1.5 bg-gray-50 border border-gray-250 rounded-lg text-xs text-gray-800"
+                    class="w-full px-3 py-1.5 bg-muted border border-border rounded-lg text-xs text-foreground"
                   />
                 </div>
                 <div class="space-y-1">
-                  <label class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Company</label>
+                  <label class="text-[9px] font-bold text-muted-foreground uppercase tracking-wider">Company</label>
                   <input
                     v-model="scannerState.result.company"
                     type="text"
                     placeholder="Waiting..."
-                    class="w-full px-3 py-1.5 bg-gray-50 border border-gray-250 rounded-lg text-xs text-gray-800"
+                    class="w-full px-3 py-1.5 bg-muted border border-border rounded-lg text-xs text-foreground"
                   />
                 </div>
               </div>
 
               <div class="space-y-1">
-                <label class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Email Address</label>
+                <label class="text-[9px] font-bold text-muted-foreground uppercase tracking-wider">Email Address</label>
                 <input
                   v-model="scannerState.result.email"
                   type="text"
                   placeholder="Waiting for scan..."
-                  class="w-full px-3 py-1.5 bg-gray-50 border border-gray-250 rounded-lg text-xs text-gray-800"
+                  class="w-full px-3 py-1.5 bg-muted border border-border rounded-lg text-xs text-foreground"
                 />
               </div>
             </div>
@@ -1133,27 +1133,27 @@
 
           <!-- Right Panel: Step 2 (Qualifiers) -->
           <div v-else class="flex-1 space-y-4">
-            <div class="pb-1 border-b border-gray-100 flex justify-between items-center">
-              <h4 class="font-bold text-gray-955 dark:text-foreground text-[12px] flex items-center gap-1.5">
-                <Sparkles class="w-4 h-4 text-indigo-500" />
+            <div class="pb-1 border-b border-border flex justify-between items-center">
+              <h4 class="font-bold text-foreground text-[12px] flex items-center gap-1.5">
+                <Sparkles class="w-4 h-4 text-tag-4-foreground" />
                 Lead Qualifiers
               </h4>
-              <span class="text-[10px] font-semibold text-gray-400 bg-gray-50 dark:bg-slate-800 px-2 py-0.5 rounded border border-gray-100 dark:border-border">
+              <span class="text-[10px] font-semibold text-muted-foreground bg-muted bg-muted px-2 py-0.5 rounded border border-border border-border">
                 Step 2 of 2
               </span>
             </div>
 
             <!-- Header details for context -->
-            <div class="p-3 bg-indigo-50/50 dark:bg-indigo-950/20 border border-indigo-100 dark:border-indigo-900/40 rounded-xl space-y-0.5">
-              <span class="text-[9px] text-indigo-500 font-extrabold uppercase tracking-widest block">Qualifying Scanned Lead</span>
-              <span class="text-xs font-bold text-gray-900 dark:text-foreground">{{ scannerState.result.name }}</span>
-              <span class="text-[10px] text-gray-550 block">{{ scannerState.result.role }} at {{ scannerState.result.company }}</span>
+            <div class="p-3 bg-tag-4/10 border border-tag-4/30 rounded-xl space-y-0.5">
+              <span class="text-[9px] text-tag-4-foreground font-extrabold uppercase tracking-widest block">Qualifying Scanned Lead</span>
+              <span class="text-xs font-bold text-foreground">{{ scannerState.result.name }}</span>
+              <span class="text-[10px] text-muted-foreground block">{{ scannerState.result.role }} at {{ scannerState.result.company }}</span>
             </div>
 
             <div class="space-y-4">
               <!-- Temperature Selector -->
               <div class="space-y-1.5">
-                <label class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Lead Temperature</label>
+                <label class="text-[9px] font-bold text-muted-foreground uppercase tracking-wider">Lead Temperature</label>
                 <div class="flex gap-1.5">
                   <button
                     v-for="t in ['Cold', 'Warm', 'Hot']"
@@ -1163,10 +1163,10 @@
                     :class="[
                       'flex-1 py-1.5 rounded-lg text-xs font-bold border transition-all cursor-pointer text-center',
                       scannerState.qualifiers.temperature === t
-                        ? t === 'Hot' ? 'bg-red-500 border-red-500 text-white shadow-sm shadow-red-500/20'
-                          : t === 'Warm' ? 'bg-amber-500 border-amber-500 text-white shadow-sm shadow-amber-500/20'
-                          : 'bg-blue-500 border-blue-500 text-white shadow-sm shadow-blue-500/20'
-                        : 'border-gray-250 text-gray-505 bg-white dark:bg-slate-900 hover:bg-gray-50 dark:hover:bg-slate-800'
+                        ? t === 'Hot' ? 'bg-destructive border-destructive text-primary-foreground shadow-sm shadow-destructive/20'
+                          : t === 'Warm' ? 'bg-warning border-warning text-primary-foreground shadow-sm shadow-warning/20'
+                          : 'bg-info border-info text-primary-foreground shadow-sm shadow-info/20'
+                        : 'border-border text-muted-foreground bg-card hover:bg-muted'
                     ]"
                   >
                     {{ t }}
@@ -1176,7 +1176,7 @@
 
               <!-- Priority Selector -->
               <div class="space-y-1.5">
-                <label class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Sales Priority</label>
+                <label class="text-[9px] font-bold text-muted-foreground uppercase tracking-wider">Sales Priority</label>
                 <div class="flex gap-1.5">
                   <button
                     v-for="p in ['Low', 'Med', 'High']"
@@ -1186,8 +1186,8 @@
                     :class="[
                       'flex-1 py-1.5 rounded-lg text-xs font-bold border transition-all cursor-pointer text-center',
                       scannerState.qualifiers.priority === p
-                        ? 'bg-slate-900 border-slate-900 text-white dark:bg-slate-700 dark:border-slate-700'
-                        : 'border-gray-250 text-gray-505 bg-white dark:bg-slate-900 hover:bg-gray-50 dark:hover:bg-slate-800'
+                        ? 'bg-primary border-primary text-primary-foreground'
+                        : 'border-border text-muted-foreground bg-card hover:bg-muted'
                     ]"
                   >
                     {{ p }}
@@ -1196,31 +1196,31 @@
               </div>
 
               <!-- VIP Switch Toggle -->
-              <div class="flex items-center justify-between py-2 px-3.5 bg-gray-50 dark:bg-slate-900/50 border border-gray-150 dark:border-slate-800 rounded-xl">
+              <div class="flex items-center justify-between py-2 px-3.5 bg-muted/50 border border-border border-border rounded-xl">
                 <div class="flex flex-col text-left">
-                  <span class="text-xs font-bold text-gray-800 dark:text-foreground">Mark as VIP Lead</span>
-                  <span class="text-[9px] text-gray-400">Gives high-touch customer priority tag.</span>
+                  <span class="text-xs font-bold text-foreground">Mark as VIP Lead</span>
+                  <span class="text-[9px] text-muted-foreground">Gives high-touch customer priority tag.</span>
                 </div>
                 <input
                   type="checkbox"
                   v-model="scannerState.qualifiers.vip"
-                  class="rounded border-gray-300 text-primary w-4 h-4 cursor-pointer"
+                  class="rounded border-border text-primary w-4 h-4 cursor-pointer"
                 />
               </div>
             </div>
           </div>
         </div>
 
-        <DialogFooter class="border-t border-gray-150 dark:border-border pt-4 flex gap-2 justify-end">
+        <DialogFooter class="border-t border-border border-border pt-4 flex gap-2 justify-end">
           <template v-if="scannerState.step === 1">
             <DialogClose as-child>
-              <button class="px-4 py-2 border border-gray-200 dark:border-border rounded-lg text-xs font-semibold text-gray-600 dark:text-muted-foreground bg-gray-50 dark:bg-muted hover:bg-gray-100 cursor-pointer">
+              <button class="px-4 py-2 border border-border rounded-lg text-xs font-semibold text-muted-foreground bg-muted hover:bg-muted cursor-pointer">
                 Cancel
               </button>
             </DialogClose>
             <button
               @click="scannerState.step = 2"
-              class="px-5 py-2 bg-primary hover:bg-[#1a943e] text-white rounded-lg text-xs font-bold shadow-sm cursor-pointer disabled:opacity-40 disabled:hover:bg-primary"
+              class="px-5 py-2 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg text-xs font-bold shadow-sm cursor-pointer disabled:opacity-40 disabled:hover:bg-primary"
               :disabled="!scannerState.scanned"
             >
               Next
@@ -1229,13 +1229,13 @@
           <template v-else>
             <button
               @click="scannerState.step = 1"
-              class="px-4 py-2 border border-gray-200 dark:border-border rounded-lg text-xs font-semibold text-gray-600 dark:text-muted-foreground bg-gray-50 dark:bg-muted hover:bg-gray-100 cursor-pointer"
+              class="px-4 py-2 border border-border rounded-lg text-xs font-semibold text-muted-foreground bg-muted hover:bg-muted cursor-pointer"
             >
               Back
             </button>
             <button
               @click="addScannedLead"
-              class="px-5 py-2 bg-primary hover:bg-[#1a943e] text-white rounded-lg text-xs font-bold shadow-sm cursor-pointer"
+              class="px-5 py-2 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg text-xs font-bold shadow-sm cursor-pointer"
             >
               Create Lead
             </button>
@@ -1248,11 +1248,11 @@
          MODAL 2: AI AUTO MESSAGE AUTOMATION
          ═══════════════════════════════════════════════ -->
     <Dialog v-model:open="automationModalOpen">
-      <DialogContent class="sm:max-w-[725px] rounded-2xl bg-white dark:bg-card border border-gray-250 dark:border-border p-6 shadow-2xl z-[90]">
-        <DialogHeader class="border-b border-gray-150 dark:border-border pb-3">
+      <DialogContent class="sm:max-w-[725px] rounded-2xl bg-card border border-border border-border p-6 shadow-2xl z-[90]">
+        <DialogHeader class="border-b border-border border-border pb-3">
           <div class="flex items-center gap-2">
-            <Bot class="w-5 h-5 text-emerald-500" />
-            <DialogTitle class="text-base font-bold text-gray-955 dark:text-foreground">AI Follow-up Automation</DialogTitle>
+            <Bot class="w-5 h-5 text-success" />
+            <DialogTitle class="text-base font-bold text-foreground">AI Follow-up Automation</DialogTitle>
           </div>
           <DialogDescription class="text-xs text-muted-foreground mt-0.5">
             Draft automated event campaigns and follow-up templates dynamically.
@@ -1263,10 +1263,10 @@
           <!-- Controls left (4 cols) -->
           <div class="md:col-span-4 space-y-4">
             <div class="space-y-1.5">
-              <label class="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Target Lead</label>
+              <label class="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Target Lead</label>
               <select
                 v-model="automationState.targetLeadId"
-                class="w-full py-2 bg-gray-50 border border-gray-250 rounded-lg text-xs text-gray-700 focus:outline-none px-3 cursor-pointer"
+                class="w-full py-2 bg-muted border border-border rounded-lg text-xs text-foreground focus:outline-none px-3 cursor-pointer"
               >
                 <option v-for="l in samentaLeads" :key="l.id" :value="l.id">
                   {{ l.name }} ({{ l.company }})
@@ -1275,10 +1275,10 @@
             </div>
 
             <div class="space-y-1.5">
-              <label class="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Message Tone</label>
+              <label class="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Message Tone</label>
               <select
                 v-model="automationState.tone"
-                class="w-full py-2 bg-gray-50 border border-gray-250 rounded-lg text-xs text-gray-700 focus:outline-none px-3 cursor-pointer"
+                class="w-full py-2 bg-muted border border-border rounded-lg text-xs text-foreground focus:outline-none px-3 cursor-pointer"
               >
                 <option value="Professional">Professional & Direct</option>
                 <option value="Friendly">Friendly & Collaborative</option>
@@ -1287,7 +1287,7 @@
             </div>
 
             <div class="space-y-1.5">
-              <label class="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Channel</label>
+              <label class="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Channel</label>
               <div class="flex gap-2">
                 <button
                   v-for="ch in ['email', 'whatsapp']"
@@ -1296,8 +1296,8 @@
                   :class="[
                     'flex-1 py-1.5 border rounded-lg text-xs font-semibold capitalize transition-all cursor-pointer text-center',
                     automationState.channel === ch
-                      ? 'bg-slate-900 border-slate-900 text-white dark:bg-muted dark:border-border'
-                      : 'border-gray-250 text-gray-600 bg-white hover:bg-gray-50'
+                      ? 'bg-primary border-primary text-primary-foreground'
+                      : 'border-border text-muted-foreground bg-card hover:bg-muted'
                   ]"
                 >
                   {{ ch }}
@@ -1318,31 +1318,31 @@
           <!-- Output right (8 cols) -->
           <div class="md:col-span-8 space-y-3 relative">
             <div>
-              <label class="text-[10px] font-bold text-gray-500 uppercase tracking-wider block mb-1.5">Drafted Content</label>
+              <label class="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block mb-1.5">Drafted Content</label>
               <textarea
                 v-model="automationState.message"
                 rows="8"
-                class="w-full p-3.5 bg-slate-900/5 border border-gray-255 rounded-xl text-xs font-medium text-gray-800 dark:text-foreground focus:outline-none leading-relaxed"
+                class="w-full p-3.5 bg-muted/10 border border-border rounded-xl text-xs font-medium text-foreground focus:outline-none leading-relaxed"
                 placeholder="Choose options and click Generate..."
               ></textarea>
               
-              <div v-if="automationState.drafting" class="absolute inset-0 bg-white/75 dark:bg-card/75 flex flex-col items-center justify-center gap-2">
-                <span class="w-6 h-6 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin"></span>
-                <span class="text-[11px] font-bold text-gray-600">AI is drafting personalized message...</span>
+              <div v-if="automationState.drafting" class="absolute inset-0 bg-card/75 flex flex-col items-center justify-center gap-2">
+                <span class="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin"></span>
+                <span class="text-[11px] font-bold text-muted-foreground">AI is drafting personalized message...</span>
               </div>
             </div>
           </div>
         </div>
 
-        <DialogFooter class="border-t border-gray-150 dark:border-border pt-4 flex gap-2 justify-end">
+        <DialogFooter class="border-t border-border border-border pt-4 flex gap-2 justify-end">
           <DialogClose as-child>
-            <button class="px-4 py-2 border border-gray-200 dark:border-border rounded-lg text-xs font-semibold text-gray-600 dark:text-muted-foreground bg-gray-50 dark:bg-muted hover:bg-gray-100 cursor-pointer">
+            <button class="px-4 py-2 border border-border rounded-lg text-xs font-semibold text-muted-foreground bg-muted hover:bg-muted cursor-pointer">
               Cancel
             </button>
           </DialogClose>
           <button
             @click="sendAutomationMessage"
-            class="px-4 py-2 bg-primary hover:bg-[#1a943e] text-white rounded-lg text-xs font-bold shadow-sm cursor-pointer"
+            class="px-4 py-2 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg text-xs font-bold shadow-sm cursor-pointer"
             :disabled="!automationState.message"
           >
             Send Message
@@ -1355,11 +1355,11 @@
          MODAL 3: LOCALIZED EVENT ANALYTICS
          ═══════════════════════════════════════════════ -->
     <Dialog v-model:open="analyticsModalOpen">
-      <DialogContent class="sm:max-w-[650px] rounded-2xl bg-white dark:bg-card border border-gray-250 dark:border-border p-6 shadow-2xl z-[90]">
-        <DialogHeader class="border-b border-gray-150 dark:border-border pb-3">
+      <DialogContent class="sm:max-w-[650px] rounded-2xl bg-card border border-border border-border p-6 shadow-2xl z-[90]">
+        <DialogHeader class="border-b border-border border-border pb-3">
           <div class="flex items-center gap-2">
-            <TrendingUp class="w-5 h-5 text-blue-500" />
-            <DialogTitle class="text-base font-bold text-gray-955 dark:text-foreground">SAMENTA AI Fest 2026 Analytics</DialogTitle>
+            <TrendingUp class="w-5 h-5 text-info" />
+            <DialogTitle class="text-base font-bold text-foreground">SAMENTA AI Fest 2026 Analytics</DialogTitle>
           </div>
           <DialogDescription class="text-xs text-muted-foreground mt-0.5">
             Real-time localized metrics converted specifically from this event.
@@ -1369,48 +1369,48 @@
         <div class="py-4 space-y-6">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- funnel chart -->
-            <div class="border border-gray-200 dark:border-border rounded-xl p-4 space-y-3 bg-gray-50/50 dark:bg-muted/10">
-              <span class="text-[10px] font-bold text-gray-400 dark:text-muted-foreground uppercase tracking-wider block">Lead Conversion Pipeline</span>
+            <div class="border border-border rounded-xl p-4 space-y-3 bg-muted/30">
+              <span class="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">Lead Conversion Pipeline</span>
               <div class="space-y-2">
                 <div>
-                  <div class="flex justify-between text-xs text-gray-600 mb-1">
+                  <div class="flex justify-between text-xs text-muted-foreground mb-1">
                     <span>Lead-to-Contacted</span>
-                    <span class="font-bold text-gray-900">83.3%</span>
+                    <span class="font-bold text-foreground">83.3%</span>
                   </div>
-                  <div class="h-1.5 bg-gray-200 dark:bg-slate-800 rounded-full overflow-hidden">
-                    <div class="h-full bg-emerald-500 rounded-full" style="width: 83.3%"></div>
+                  <div class="h-1.5 bg-muted rounded-full overflow-hidden">
+                    <div class="h-full bg-success rounded-full" style="width: 83.3%"></div>
                   </div>
                 </div>
                 <div>
-                  <div class="flex justify-between text-xs text-gray-600 mb-1">
+                  <div class="flex justify-between text-xs text-muted-foreground mb-1">
                     <span>Lead-to-Demo</span>
-                    <span class="font-bold text-gray-900">44.4%</span>
+                    <span class="font-bold text-foreground">44.4%</span>
                   </div>
-                  <div class="h-1.5 bg-gray-200 dark:bg-slate-800 rounded-full overflow-hidden">
-                    <div class="h-full bg-emerald-400 rounded-full" style="width: 44.4%"></div>
+                  <div class="h-1.5 bg-muted rounded-full overflow-hidden">
+                    <div class="h-full bg-success rounded-full" style="width: 44.4%"></div>
                   </div>
                 </div>
                 <div>
-                  <div class="flex justify-between text-xs text-gray-600 mb-1">
+                  <div class="flex justify-between text-xs text-muted-foreground mb-1">
                     <span>Lead-to-Won</span>
-                    <span class="font-bold text-gray-900">11.1%</span>
+                    <span class="font-bold text-foreground">11.1%</span>
                   </div>
-                  <div class="h-1.5 bg-gray-200 dark:bg-slate-800 rounded-full overflow-hidden">
-                    <div class="h-full bg-emerald-600 rounded-full" style="width: 11.1%"></div>
+                  <div class="h-1.5 bg-muted rounded-full overflow-hidden">
+                    <div class="h-full bg-success rounded-full" style="width: 11.1%"></div>
                   </div>
                 </div>
               </div>
             </div>
 
             <!-- roi stats -->
-            <div class="border border-gray-200 dark:border-border rounded-xl p-4 space-y-3 bg-gray-50/50 dark:bg-muted/10">
-              <span class="text-[10px] font-bold text-gray-400 dark:text-muted-foreground uppercase tracking-wider block">ROI Financial Insights</span>
-              <div class="space-y-1.5 text-xs text-gray-600 dark:text-muted-foreground">
-                <p>• Total event budget spent: <span class="font-bold text-gray-950 dark:text-foreground">RM 2,200</span></p>
-                <p>• Value generated from won deals: <span class="font-bold text-gray-950 dark:text-foreground">RM 2,100</span></p>
-                <p>• Cost per Lead (CPL): <span class="font-bold text-gray-955 dark:text-foreground">RM 122.20</span></p>
-                <p>• Potential pipeline conversion: <span class="font-bold text-gray-955 dark:text-foreground">RM 9,400</span></p>
-                <p class="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold border-t border-dashed border-gray-200 dark:border-slate-800 pt-2 mt-2">
+            <div class="border border-border rounded-xl p-4 space-y-3 bg-muted/30">
+              <span class="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">ROI Financial Insights</span>
+              <div class="space-y-1.5 text-xs text-muted-foreground">
+                <p>• Total event budget spent: <span class="font-bold text-foreground">RM 2,200</span></p>
+                <p>• Value generated from won deals: <span class="font-bold text-foreground">RM 2,100</span></p>
+                <p>• Cost per Lead (CPL): <span class="font-bold text-foreground">RM 122.20</span></p>
+                <p>• Potential pipeline conversion: <span class="font-bold text-foreground">RM 9,400</span></p>
+                <p class="text-[10px] text-success font-bold border-t border-dashed border-border pt-2 mt-2">
                   ✔ ROI is at 0.95 and projected to exceed 4.5 upon pipeline closure.
                 </p>
               </div>
@@ -1418,9 +1418,9 @@
           </div>
         </div>
 
-        <DialogFooter class="border-t border-gray-150 dark:border-border pt-4">
+        <DialogFooter class="border-t border-border border-border pt-4">
           <DialogClose as-child>
-            <button class="px-4 py-2 bg-primary hover:bg-[#1a943e] text-white rounded-lg text-xs font-bold shadow-sm cursor-pointer">
+            <button class="px-4 py-2 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg text-xs font-bold shadow-sm cursor-pointer">
               Close Dashboard
             </button>
           </DialogClose>
@@ -1432,31 +1432,31 @@
          MODAL 4: OMNICHANNEL SUCCESS MODAL
          ═══════════════════════════════════════════════ -->
     <Dialog v-model:open="successModalOpen">
-      <DialogContent class="sm:max-w-[420px] rounded-2xl bg-white dark:bg-card border border-gray-250 dark:border-border p-6 shadow-2xl z-[90]">
+      <DialogContent class="sm:max-w-[420px] rounded-2xl bg-card border border-border border-border p-6 shadow-2xl z-[90]">
         <DialogHeader class="text-center flex flex-col items-center">
-          <div class="w-12 h-12 rounded-full bg-emerald-50 dark:bg-emerald-950/30 flex items-center justify-center text-emerald-500 mb-3 border border-emerald-100 dark:border-emerald-900/40">
+          <div class="w-12 h-12 rounded-full bg-success/10 flex items-center justify-center text-success mb-3 border border-success/30">
             <CheckCircle2 class="w-6 h-6" />
           </div>
-          <DialogTitle class="text-base font-bold text-gray-955 dark:text-foreground">Follow-up Message Sent</DialogTitle>
+          <DialogTitle class="text-base font-bold text-foreground">Follow-up Message Sent</DialogTitle>
           <DialogDescription class="text-xs text-muted-foreground mt-1 text-center">
-            Your automated message has been successfully generated and dispatched to <strong class="text-gray-900 dark:text-foreground">{{ sentLeadName }}</strong> via {{ sentChannel }}.
+            Your automated message has been successfully generated and dispatched to <strong class="text-foreground">{{ sentLeadName }}</strong> via {{ sentChannel }}.
           </DialogDescription>
         </DialogHeader>
 
-        <div class="py-2.5 text-center text-xs text-muted-foreground border-t border-b border-dashed border-gray-150 dark:border-border my-4">
-          <span class="block">Lead Stage updated to <strong class="text-emerald-600 dark:text-emerald-400">Proposal Sent</strong>.</span>
+        <div class="py-2.5 text-center text-xs text-muted-foreground border-t border-b border-dashed border-border border-border my-4">
+          <span class="block">Lead Stage updated to <strong class="text-success">Proposal Sent</strong>.</span>
         </div>
 
         <DialogFooter class="flex flex-col sm:flex-row gap-2 w-full justify-center">
           <button
             @click="openOmnichannelChat"
-            class="w-full sm:flex-1 px-4 py-2 bg-primary hover:bg-[#1a943e] text-white rounded-lg text-xs font-bold shadow-sm cursor-pointer flex items-center justify-center gap-1.5"
+            class="w-full sm:flex-1 px-4 py-2 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg text-xs font-bold shadow-sm cursor-pointer flex items-center justify-center gap-1.5"
           >
             <MessageSquare class="w-3.5 h-3.5" />
             Open Conversation
           </button>
           <DialogClose as-child>
-            <button class="w-full sm:w-auto px-4 py-2 border border-gray-200 dark:border-border rounded-lg text-xs font-semibold text-gray-600 dark:text-muted-foreground bg-gray-50 dark:bg-muted hover:bg-gray-100 cursor-pointer">
+            <button class="w-full sm:w-auto px-4 py-2 border border-border rounded-lg text-xs font-semibold text-muted-foreground bg-muted hover:bg-muted cursor-pointer">
               Done
             </button>
           </DialogClose>

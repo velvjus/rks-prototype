@@ -1,6 +1,6 @@
 <template>
   <nav
-    class="bg-gray-950 flex flex-col h-full border-r border-gray-800 shrink-0 transition-all duration-200 z-[60]"
+    class="bg-rail flex flex-col h-full border-r border-rail-border shrink-0 transition-all duration-200 z-[60]"
     :class="ui.isSidebarCollapsed ? 'w-[58px]' : 'w-[210px]'"
   >
     <!-- Sidebar Items -->
@@ -14,7 +14,7 @@
         @click="handleItemClick(item)"
       />
 
-      <div class="my-1.5 border-t border-gray-800"></div>
+      <div class="my-1.5 border-t border-rail-border"></div>
 
       <SidebarItem
         v-for="item in bottomNavItems"

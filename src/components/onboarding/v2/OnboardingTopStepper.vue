@@ -3,17 +3,17 @@
     <div class="max-w-xl mx-auto space-y-2">
       <!-- Top Text Row: Step Counter, Subtitle & Discreet Exit -->
       <div class="flex items-center justify-between text-xs">
-        <span class="font-bold text-[#23B750] tracking-wider uppercase text-[11px]">
+        <span class="font-bold text-primary tracking-wider uppercase text-[11px]">
           Step {{ currentStep }} of 4
         </span>
         <div class="flex items-center gap-2.5">
-          <span class="text-gray-400 font-medium text-xs">
+          <span class="text-muted-foreground font-medium text-xs">
             {{ currentStepSubtitle }}
           </span>
-          <span class="text-gray-300 select-none">·</span>
+          <span class="text-muted-foreground/40 select-none">·</span>
           <router-link
             to="/dashboard"
-            class="text-xs font-medium text-gray-400 hover:text-gray-700 transition-colors"
+            class="text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
           >
             Exit
           </router-link>
@@ -36,7 +36,7 @@
           :disabled="!isClickable(s)"
           class="h-1.5 rounded-full transition-all duration-300 focus:outline-none"
           :class="[
-            currentStep >= s ? 'bg-[#23B750]' : 'bg-gray-200/80',
+            currentStep >= s ? 'bg-primary' : 'bg-muted',
             isClickable(s) ? 'cursor-pointer hover:opacity-80' : 'cursor-default'
           ]"
           :title="`Go to step ${s}`"

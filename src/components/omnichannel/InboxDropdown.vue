@@ -68,11 +68,11 @@ const handleSelect = (val: InboxFilterType) => {
       :class="[ 
         'flex items-center gap-1.5 px-3 h-7 transition-all duration-200 cursor-pointer outline-none rounded-full text-[11px] font-medium whitespace-nowrap border select-none', 
         selectedInbox !== 'All' 
-          ? 'border-green-250 bg-green-50 text-[#23B750] hover:bg-green-100/50 font-bold' 
-          : 'border-gray-250 bg-gray-50 text-gray-700 hover:bg-gray-100/70 hover:text-gray-900 hover:border-gray-300' 
+          ? 'border-primary/30 bg-primary/10 text-primary hover:bg-primary/20 font-bold' 
+          : 'border-border bg-card text-card-foreground hover:bg-accent hover:text-accent-foreground hover:border-input' 
       ]"
     >
-      <svg class="w-3.5 h-3.5 flex-shrink-0" :class="[selectedInbox !== 'All' ? 'text-[#23B750]' : 'text-gray-400']" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <svg class="w-3.5 h-3.5 flex-shrink-0" :class="[selectedInbox !== 'All' ? 'text-primary' : 'text-muted-foreground']" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/>
         <path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>
       </svg>
@@ -84,7 +84,7 @@ const handleSelect = (val: InboxFilterType) => {
         selectedInbox === 'Resolved' ? 'Resolved' :
         'Archived'
       }}</span>
-      <svg class="w-3 h-3 transition-transform duration-250 flex-shrink-0 ml-0.5" :class="[isOpen ? 'rotate-180 text-[#23B750]' : 'text-gray-400']" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <svg class="w-3 h-3 transition-transform duration-250 flex-shrink-0 ml-0.5" :class="[isOpen ? 'rotate-180 text-primary' : 'text-muted-foreground']" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <polyline points="6 9 12 15 18 9"/>
       </svg>
     </button>
@@ -102,9 +102,9 @@ const handleSelect = (val: InboxFilterType) => {
         <div 
           v-if="isOpen"
           :style="dropdownStyle"
-          class="fixed w-52 bg-white border border-gray-200 rounded-2xl z-[999] py-2 shadow-lg focus:outline-none select-none"
+          class="fixed w-52 bg-popover text-popover-foreground border border-border rounded-2xl z-[999] py-2 shadow-lg focus:outline-none select-none"
         >
-          <div class="px-3.5 py-1 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+          <div class="px-3.5 py-1 text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
             Quick Filter
           </div>
           
@@ -113,87 +113,87 @@ const handleSelect = (val: InboxFilterType) => {
             <button 
               type="button"
               @click="handleSelect('All')"
-              class="w-full text-left px-3.5 py-2 text-xs flex items-center justify-between hover:bg-gray-50 transition-colors cursor-pointer"
-              :class="[selectedInbox === 'All' ? 'text-[#23B750] font-bold bg-green-50/30' : 'text-gray-700']"
+              class="w-full text-left px-3.5 py-2 text-xs flex items-center justify-between hover:bg-muted transition-colors cursor-pointer"
+              :class="[selectedInbox === 'All' ? 'text-primary font-bold bg-primary/10' : 'text-foreground']"
             >
               <div class="flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full border border-gray-300 bg-white"></span>
+                <span class="w-2 h-2 rounded-full border border-border bg-card"></span>
                 <span>All</span>
               </div>
-              <svg v-if="selectedInbox === 'All'" class="w-4 h-4 text-[#23B750]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <svg v-if="selectedInbox === 'All'" class="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             </button>
 
             <!-- Mine -->
             <button 
               type="button"
               @click="handleSelect('Mine')"
-              class="w-full text-left px-3.5 py-2 text-xs flex items-center justify-between hover:bg-gray-50 transition-colors cursor-pointer"
-              :class="[selectedInbox === 'Mine' ? 'text-[#23B750] font-bold bg-green-50/30' : 'text-gray-700']"
+              class="w-full text-left px-3.5 py-2 text-xs flex items-center justify-between hover:bg-muted transition-colors cursor-pointer"
+              :class="[selectedInbox === 'Mine' ? 'text-primary font-bold bg-primary/10' : 'text-foreground']"
             >
               <div class="flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-[#23B750]"></span>
+                <span class="w-2 h-2 rounded-full bg-primary"></span>
                 <span>Mine</span>
               </div>
-              <svg v-if="selectedInbox === 'Mine'" class="w-4 h-4 text-[#23B750]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <svg v-if="selectedInbox === 'Mine'" class="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             </button>
 
             <!-- Participating -->
             <button 
               type="button"
               @click="handleSelect('Participating')"
-              class="w-full text-left px-3.5 py-2 text-xs flex items-center justify-between hover:bg-gray-50 transition-colors cursor-pointer"
-              :class="[selectedInbox === 'Participating' ? 'text-[#23B750] font-bold bg-green-50/30' : 'text-gray-700']"
+              class="w-full text-left px-3.5 py-2 text-xs flex items-center justify-between hover:bg-muted transition-colors cursor-pointer"
+              :class="[selectedInbox === 'Participating' ? 'text-primary font-bold bg-primary/10' : 'text-foreground']"
             >
               <div class="flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
+                <span class="w-2 h-2 rounded-full bg-info"></span>
                 <span>Participating</span>
               </div>
-              <svg v-if="selectedInbox === 'Participating'" class="w-4 h-4 text-[#23B750]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <svg v-if="selectedInbox === 'Participating'" class="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             </button>
 
             <!-- Unassigned -->
             <button 
               type="button"
               @click="handleSelect('Unassigned')"
-              class="w-full text-left px-3.5 py-2 text-xs flex items-center justify-between hover:bg-gray-50 transition-colors cursor-pointer"
-              :class="[selectedInbox === 'Unassigned' ? 'text-[#23B750] font-bold bg-green-50/30' : 'text-gray-700']"
+              class="w-full text-left px-3.5 py-2 text-xs flex items-center justify-between hover:bg-muted transition-colors cursor-pointer"
+              :class="[selectedInbox === 'Unassigned' ? 'text-primary font-bold bg-primary/10' : 'text-foreground']"
             >
               <div class="flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-gray-400"></span>
+                <span class="w-2 h-2 rounded-full bg-muted-foreground"></span>
                 <span>Unassigned</span>
               </div>
-              <svg v-if="selectedInbox === 'Unassigned'" class="w-4 h-4 text-[#23B750]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <svg v-if="selectedInbox === 'Unassigned'" class="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             </button>
 
             <!-- Divider -->
-            <div class="my-1.5 border-t border-gray-150 mx-3.5"></div>
+            <div class="my-1.5 border-t border-border mx-3.5"></div>
 
             <!-- Resolved -->
             <button 
               type="button"
               @click="handleSelect('Resolved')"
-              class="w-full text-left px-3.5 py-2 text-xs flex items-center justify-between hover:bg-gray-50 transition-colors cursor-pointer"
-              :class="[selectedInbox === 'Resolved' ? 'text-[#23B750] font-bold bg-green-50/30' : 'text-gray-700']"
+              class="w-full text-left px-3.5 py-2 text-xs flex items-center justify-between hover:bg-muted transition-colors cursor-pointer"
+              :class="[selectedInbox === 'Resolved' ? 'text-primary font-bold bg-primary/10' : 'text-foreground']"
             >
               <div class="flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+                <span class="w-2 h-2 rounded-full bg-muted-foreground/60"></span>
                 <span>Resolved</span>
               </div>
-              <svg v-if="selectedInbox === 'Resolved'" class="w-4 h-4 text-[#23B750]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <svg v-if="selectedInbox === 'Resolved'" class="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             </button>
 
             <!-- Archived -->
             <button 
               type="button"
               @click="handleSelect('Archived')"
-              class="w-full text-left px-3.5 py-2 text-xs flex items-center justify-between hover:bg-gray-50 transition-colors cursor-pointer"
-              :class="[selectedInbox === 'Archived' ? 'text-[#23B750] font-bold bg-green-50/30' : 'text-gray-700']"
+              class="w-full text-left px-3.5 py-2 text-xs flex items-center justify-between hover:bg-muted transition-colors cursor-pointer"
+              :class="[selectedInbox === 'Archived' ? 'text-primary font-bold bg-primary/10' : 'text-foreground']"
             >
               <div class="flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+                <span class="w-2 h-2 rounded-full bg-warning"></span>
                 <span>Archived</span>
               </div>
-              <svg v-if="selectedInbox === 'Archived'" class="w-4 h-4 text-[#23B750]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <svg v-if="selectedInbox === 'Archived'" class="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             </button>
           </div>
         </div>

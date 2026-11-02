@@ -868,25 +868,28 @@ function simulateLeadIntake() {
 
 // Colors matching the tags on top of columns
 const stageColors: Record<string, { border: string; bg: string; text: string; headerBar: string }> = {
-  New: { border: 'border-t-[#3b82f6]', bg: 'bg-[#3b82f6]/10', text: 'text-[#3b82f6]', headerBar: 'bg-[#3b82f6]' },
-  Acknowledged: { border: 'border-t-[#00D2C4]', bg: 'bg-[#00D2C4]/10', text: 'text-[#00D2C4]', headerBar: 'bg-[#00D2C4]' },
-  Qualifying: { border: 'border-t-[#FFCC00]', bg: 'bg-[#FFCC00]/10', text: 'text-[#FFCC00]', headerBar: 'bg-[#FFCC00]' },
-  'Proposal / Quotation': { border: 'border-t-[#FF8800]', bg: 'bg-[#FF8800]/10', text: 'text-[#FF8800]', headerBar: 'bg-[#FF8800]' },
-  'Follow Up': { border: 'border-t-[#10B981]', bg: 'bg-[#10B981]/10', text: 'text-[#10B981]', headerBar: 'bg-[#10B981]' },
-  Won: { border: 'border-t-[#23B750]', bg: 'bg-[#23B750]/10', text: 'text-[#168638]', headerBar: 'bg-[#23B750]' },
-  Lost: { border: 'border-t-red-500', bg: 'bg-red-50', text: 'text-red-600', headerBar: 'bg-red-500' },
-  Archived: { border: 'border-t-slate-400', bg: 'bg-slate-100', text: 'text-slate-600', headerBar: 'bg-slate-400' }
+  New: { border: 'border-t-stage-1', bg: 'bg-stage-1/10', text: 'text-stage-1', headerBar: 'bg-stage-1' },
+  Acknowledged: { border: 'border-t-stage-2', bg: 'bg-stage-2/10', text: 'text-stage-2', headerBar: 'bg-stage-2' },
+  Qualifying: { border: 'border-t-stage-3', bg: 'bg-stage-3/10', text: 'text-stage-3', headerBar: 'bg-stage-3' },
+  'Proposal / Quotation': { border: 'border-t-stage-4', bg: 'bg-stage-4/10', text: 'text-stage-4', headerBar: 'bg-stage-4' },
+  'Follow Up': { border: 'border-t-stage-5', bg: 'bg-stage-5/10', text: 'text-stage-5', headerBar: 'bg-stage-5' },
+  Won: { border: 'border-t-success', bg: 'bg-success/10', text: 'text-success', headerBar: 'bg-success' },
+  Lost: { border: 'border-t-destructive', bg: 'bg-destructive/10', text: 'text-destructive', headerBar: 'bg-destructive' },
+  Archived: { border: 'border-t-muted-foreground', bg: 'bg-muted', text: 'text-muted-foreground', headerBar: 'bg-muted-foreground' }
 }
 
 const getHeaderBarColor = (stage: string) => {
   const colors: Record<string, string> = {
-    New: '#3b82f6',
-    Acknowledged: '#00D2C4',
-    Qualifying: '#FFCC00',
-    'Proposal / Quotation': '#FF8800',
-    'Follow Up': '#10B981'
+    New: 'var(--stage-1)',
+    Acknowledged: 'var(--stage-2)',
+    Qualifying: 'var(--stage-3)',
+    'Proposal / Quotation': 'var(--stage-4)',
+    'Follow Up': 'var(--stage-5)',
+    Won: 'var(--success)',
+    Lost: 'var(--destructive)',
+    Archived: 'var(--muted-foreground)'
   }
-  return colors[stage] || '#3b82f6'
+  return colors[stage] || 'var(--stage-1)'
 }
 
 // --- Drag & Drop + Bottom Quick-Drop Toolbar ---
@@ -1322,17 +1325,17 @@ function handleOwnerChange(event: Event) {
 </script>
 
 <template>
-  <div class="h-[calc(100vh-52px)] flex flex-col bg-[#F3F4F6] text-gray-800 font-sans overflow-hidden relative">
+  <div class="h-[calc(100vh-52px)] flex flex-col bg-background text-foreground font-sans overflow-hidden relative">
     <!-- Selection Action Bar (Shown when isBulkEditMode is true) -->
     <header
       v-if="isBulkEditMode"
-      class="bg-slate-900 border-b border-slate-800 px-6 py-3 flex items-center justify-between flex-shrink-0 z-25 shadow-md text-white h-[53px]"
+      class="bg-card border-b border-border px-6 py-3 flex items-center justify-between flex-shrink-0 z-25 shadow-md text-foreground h-[53px]"
     >
       <div class="flex items-center gap-3">
         <!-- Close Selection Mode -->
         <button
           @click="clearSelection"
-          class="p-1.5 hover:bg-slate-800 rounded-lg text-slate-400 hover:text-white transition-colors cursor-pointer"
+          class="p-1.5 hover:bg-muted rounded-lg text-muted-foreground hover:text-primary-foreground transition-colors cursor-pointer"
           title="Cancel Bulk Edit"
         >
           <X class="w-4 h-4" />
@@ -1345,7 +1348,7 @@ function handleOwnerChange(event: Event) {
         <!-- Reassign Sales Agent -->
         <button
           @click="showReassignModal = true"
-          class="flex items-center gap-1.5 bg-[#23B750] hover:bg-[#1f9f46] text-white font-bold text-xs px-2.5 py-1.5 rounded-md shadow-sm transition-all cursor-pointer animate-fade-in"
+          class="flex items-center gap-1.5 bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-xs px-2.5 py-1.5 rounded-md shadow-sm transition-all cursor-pointer animate-fade-in"
         >
           <User class="w-3.5 h-3.5" />
           Reassign Agent
@@ -1354,7 +1357,7 @@ function handleOwnerChange(event: Event) {
         <!-- Update Pipeline Stage -->
         <button
           @click="showBulkStageModal = true"
-          class="flex items-center gap-1.5 bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs px-2.5 py-1.5 rounded-md shadow-sm transition-all cursor-pointer animate-fade-in"
+          class="flex items-center gap-1.5 bg-info hover:bg-info/90 text-primary-foreground font-bold text-xs px-2.5 py-1.5 rounded-md shadow-sm transition-all cursor-pointer animate-fade-in"
         >
           <FolderKanban class="w-3.5 h-3.5" />
           Update Stage
@@ -1363,7 +1366,7 @@ function handleOwnerChange(event: Event) {
         <!-- Update Urgency -->
         <button
           @click="showBulkUrgencyModal = true"
-          class="flex items-center gap-1.5 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs px-2.5 py-1.5 rounded-md shadow-sm transition-all cursor-pointer animate-fade-in"
+          class="flex items-center gap-1.5 bg-warning hover:bg-warning/90 text-primary-foreground font-bold text-xs px-2.5 py-1.5 rounded-md shadow-sm transition-all cursor-pointer animate-fade-in"
         >
           <Flame class="w-3.5 h-3.5" />
           Change Urgency
@@ -1372,14 +1375,14 @@ function handleOwnerChange(event: Event) {
         <!-- Delete Selected -->
         <button
           @click="performBulkDelete"
-          class="flex items-center gap-1.5 bg-red-650 hover:bg-red-750 text-white font-bold text-xs px-2.5 py-1.5 rounded-md shadow-sm transition-all cursor-pointer animate-fade-in"
+          class="flex items-center gap-1.5 bg-destructive hover:bg-destructive/90 text-destructive-foreground font-bold text-xs px-2.5 py-1.5 rounded-md shadow-sm transition-all cursor-pointer animate-fade-in"
         >
           Delete Selected
         </button>
 
         <button
           @click="clearSelection"
-          class="text-xs text-slate-400 hover:text-white font-bold px-2.5 py-1.5 border border-slate-800 hover:border-slate-700 rounded-md transition-colors cursor-pointer"
+          class="text-xs text-muted-foreground hover:text-primary-foreground font-bold px-2.5 py-1.5 border border-border hover:border-border rounded-md transition-colors cursor-pointer"
         >
           Cancel
         </button>
@@ -1389,17 +1392,17 @@ function handleOwnerChange(event: Event) {
     <!-- Normal Dashboard Header -->
     <header
       v-else
-      class="bg-white border-b border-gray-200 px-6 py-3 flex items-center justify-between flex-shrink-0 z-20 shadow-sm h-[53px]"
+      class="bg-card border-b border-border px-6 py-3 flex items-center justify-between flex-shrink-0 z-20 shadow-sm h-[53px]"
     >
       <!-- Left side: View switchers, Add Deal, Stats -->
       <div class="flex items-center gap-3">
         <!-- View Toggle Buttons -->
-        <div class="flex items-center bg-gray-100 p-0.5 rounded-lg border border-gray-200">
+        <div class="flex items-center bg-muted p-0.5 rounded-lg border border-border">
           <button
             @click="currentView = 'kanban'"
             :class="[
               'p-1.5 rounded-md transition-all cursor-pointer',
-              currentView === 'kanban' ? 'bg-white shadow-sm text-primary' : 'text-gray-500 hover:text-gray-900'
+              currentView === 'kanban' ? 'bg-card shadow-sm text-primary' : 'text-muted-foreground hover:text-foreground'
             ]"
             title="Kanban Board"
           >
@@ -1409,7 +1412,7 @@ function handleOwnerChange(event: Event) {
             @click="currentView = 'list'"
             :class="[
               'p-1.5 rounded-md transition-all cursor-pointer',
-              currentView === 'list' ? 'bg-white shadow-sm text-primary' : 'text-gray-500 hover:text-gray-900'
+              currentView === 'list' ? 'bg-card shadow-sm text-primary' : 'text-muted-foreground hover:text-foreground'
             ]"
             title="List View"
           >
@@ -1419,7 +1422,7 @@ function handleOwnerChange(event: Event) {
             @click="currentView = 'forecast'"
             :class="[
               'p-1.5 rounded-md transition-all cursor-pointer',
-              currentView === 'forecast' ? 'bg-white shadow-sm text-primary' : 'text-gray-500 hover:text-gray-900'
+              currentView === 'forecast' ? 'bg-card shadow-sm text-primary' : 'text-muted-foreground hover:text-foreground'
             ]"
             title="Value Forecast"
           >
@@ -1430,29 +1433,29 @@ function handleOwnerChange(event: Event) {
         <!-- Add Deal Button -->
         <button
           @click="showAddDealModal = true"
-          class="flex items-center gap-1.5 bg-[#23B750] hover:bg-[#1f9f46] text-white font-semibold text-xs px-3 py-1.5 rounded-md shadow-sm transition-all cursor-pointer"
+          class="flex items-center gap-1.5 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs px-3 py-1.5 rounded-md shadow-sm transition-all cursor-pointer"
         >
           <Plus class="w-3.5 h-3.5" />
           Add Deal
         </button>
 
         <!-- Stats indicator -->
-        <span class="text-xs text-gray-500 font-medium ml-2">
+        <span class="text-xs text-muted-foreground font-medium ml-2">
           D {{ dealStats.total }} • W {{ dealStats.won }} • T {{ dealStats.lost }}
         </span>
       </div>
 
       <!-- Center: Search input -->
       <div class="flex-1 max-w-md mx-6 relative">
-        <Search class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+        <Search class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
         <input
           v-model="searchQuery"
           type="text"
           placeholder="Search for Deals"
-          class="w-full pl-9 pr-12 py-1.5 text-xs bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#23B750]/20 focus:border-[#23B750] transition-all"
+          class="w-full pl-9 pr-12 py-1.5 text-xs bg-muted/30 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
         />
         <div class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center pointer-events-none">
-          <span class="text-[9px] text-gray-400 font-semibold bg-white border border-gray-200 px-1.5 py-0.5 rounded shadow-sm">⌘K</span>
+          <span class="text-[9px] text-muted-foreground font-semibold bg-card border border-border px-1.5 py-0.5 rounded shadow-sm">⌘K</span>
         </div>
       </div>
 
@@ -1460,22 +1463,22 @@ function handleOwnerChange(event: Event) {
       <div class="flex items-center gap-3 relative">
         <!-- Pipeline Select -->
         <div class="relative">
-          <button class="flex items-center gap-1.5 border border-gray-200 rounded-lg px-3 py-1.5 text-xs bg-white text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer">
+          <button class="flex items-center gap-1.5 border border-border rounded-lg px-3 py-1.5 text-xs bg-card text-foreground hover:bg-muted/30 transition-colors cursor-pointer">
             <span>{{ selectedPipeline }}</span>
-            <ChevronDown class="w-3.5 h-3.5 text-gray-400" />
+            <ChevronDown class="w-3.5 h-3.5 text-muted-foreground" />
           </button>
         </div>
 
         <!-- Filter trigger button -->
         <button
           @click="showFiltersModal = true"
-          class="flex items-center gap-1.5 border border-gray-200 rounded-lg px-3 py-1.5 text-xs bg-white text-gray-700 hover:bg-gray-55 transition-colors relative cursor-pointer"
+          class="flex items-center gap-1.5 border border-border rounded-lg px-3 py-1.5 text-xs bg-card text-foreground hover:bg-muted/50 transition-colors relative cursor-pointer"
         >
-          <Filter class="w-3.5 h-3.5 text-gray-500" />
+          <Filter class="w-3.5 h-3.5 text-muted-foreground" />
           <span>Filters</span>
           <span
             v-if="activeFiltersCount > 0"
-            class="bg-[#EF4444] text-white text-[9px] font-bold w-4 h-4 flex items-center justify-center rounded-full ml-1"
+            class="bg-destructive text-primary-foreground text-[9px] font-bold w-4 h-4 flex items-center justify-center rounded-full ml-1"
           >
             {{ activeFiltersCount }}
           </span>
@@ -1485,41 +1488,41 @@ function handleOwnerChange(event: Event) {
         <div class="relative">
           <button
             @click="showAgentDropdown = !showAgentDropdown"
-            class="flex items-center gap-2 hover:bg-gray-55 px-2 py-1 rounded-lg border border-gray-200 transition-colors bg-white text-gray-700 text-xs font-semibold cursor-pointer h-8"
+            class="flex items-center gap-2 hover:bg-muted/50 px-2 py-1 rounded-lg border border-border transition-colors bg-card text-foreground text-xs font-semibold cursor-pointer h-8"
           >
-            <div class="w-5 h-5 rounded-full bg-pink-100 flex items-center justify-center overflow-hidden border border-gray-200 shrink-0">
+            <div class="w-5 h-5 rounded-full bg-muted flex items-center justify-center overflow-hidden border border-border shrink-0">
               <img
                 v-if="selectedAgentFilter !== 'Everyone'"
                 :src="getAgentAvatar(selectedAgentFilter)"
                 class="w-full h-full object-cover"
                 alt="Avatar"
               />
-              <User v-else class="w-3.5 h-3.5 text-gray-500" />
+              <User v-else class="w-3.5 h-3.5 text-muted-foreground" />
             </div>
             <span>{{ selectedAgentFilter }}</span>
-            <ChevronDown class="w-3.5 h-3.5 text-gray-400" />
+            <ChevronDown class="w-3.5 h-3.5 text-muted-foreground" />
           </button>
 
           <!-- Dropdown List -->
           <div
             v-if="showAgentDropdown"
-            class="absolute right-0 mt-1.5 w-52 bg-white border border-gray-200 rounded-xl shadow-xl z-50 max-h-64 overflow-y-auto py-1"
+            class="absolute right-0 mt-1.5 w-52 bg-card border border-border rounded-xl shadow-xl z-50 max-h-64 overflow-y-auto py-1"
           >
             <button
               v-for="agent in uniqueAgents"
               :key="agent"
               @click="selectedAgentFilter = agent; showAgentDropdown = false"
-              class="w-full text-left px-3 py-2 text-xs font-semibold hover:bg-gray-55 transition-colors flex items-center gap-2 cursor-pointer"
-              :class="selectedAgentFilter === agent ? 'bg-gray-50 text-[#23B750]' : 'text-gray-700'"
+              class="w-full text-left px-3 py-2 text-xs font-semibold hover:bg-muted/50 transition-colors flex items-center gap-2 cursor-pointer"
+              :class="selectedAgentFilter === agent ? 'bg-muted/30 text-primary' : 'text-foreground'"
             >
-              <div class="w-5 h-5 rounded-full bg-pink-100 flex items-center justify-center overflow-hidden border border-gray-200 shrink-0">
+              <div class="w-5 h-5 rounded-full bg-muted flex items-center justify-center overflow-hidden border border-border shrink-0">
                 <img
                   v-if="agent !== 'Everyone'"
                   :src="getAgentAvatar(agent)"
                   class="w-full h-full object-cover"
                   alt="avatar"
                 />
-                <User v-else class="w-3.5 h-3.5 text-gray-500" />
+                <User v-else class="w-3.5 h-3.5 text-muted-foreground" />
               </div>
               <span class="truncate">{{ agent }}</span>
             </button>
@@ -1530,7 +1533,7 @@ function handleOwnerChange(event: Event) {
         <div class="relative">
           <button
             @click="showThreeDotDropdown = !showThreeDotDropdown"
-            class="p-1.5 text-gray-400 hover:text-gray-655 rounded-md transition-colors cursor-pointer"
+            class="p-1.5 text-muted-foreground hover:text-foreground rounded-md transition-colors cursor-pointer"
           >
             <MoreVertical class="w-4 h-4" />
           </button>
@@ -1538,46 +1541,46 @@ function handleOwnerChange(event: Event) {
           <!-- Dropdown menu content -->
           <div
             v-if="showThreeDotDropdown"
-            class="absolute right-0 mt-1.5 w-52 bg-white border border-gray-200 rounded-xl shadow-xl z-50 py-1"
+            class="absolute right-0 mt-1.5 w-52 bg-card border border-border rounded-xl shadow-xl z-50 py-1"
           >
             <button
               @click="selectAllDeals"
-              class="w-full text-left px-4 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-55 transition-colors cursor-pointer"
+              class="w-full text-left px-4 py-2 text-xs font-semibold text-foreground hover:bg-muted/50 transition-colors cursor-pointer"
             >
               Select All Deals
             </button>
             <button
               @click="isBulkEditMode = true; showThreeDotDropdown = false"
-              class="w-full text-left px-4 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-55 transition-colors cursor-pointer"
+              class="w-full text-left px-4 py-2 text-xs font-semibold text-foreground hover:bg-muted/50 transition-colors cursor-pointer"
             >
               Bulk Edit
             </button>
             <button
               @click="showThreeDotDropdown = false"
-              class="w-full text-left px-4 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-55 border-t border-gray-100 cursor-pointer"
+              class="w-full text-left px-4 py-2 text-xs font-semibold text-foreground hover:bg-muted/50 border-t border-border cursor-pointer"
             >
               Export Pipeline
             </button>
 
             <!-- Divider -->
-            <div class="border-t border-gray-100 my-1"></div>
+            <div class="border-t border-border my-1"></div>
 
             <!-- Round Robin Settings -->
             <button
               @click="showRoundRobinModal = true; showThreeDotDropdown = false"
-              class="w-full text-left px-4 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-55 transition-colors flex items-center gap-2 cursor-pointer"
+              class="w-full text-left px-4 py-2 text-xs font-semibold text-foreground hover:bg-muted/50 transition-colors flex items-center gap-2 cursor-pointer"
             >
-              <Shuffle class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
+              <Shuffle class="w-3.5 h-3.5 text-success flex-shrink-0" />
               <span class="flex-1">Round Robin Settings</span>
-              <span v-if="isRoundRobinEnabled" class="w-2 h-2 rounded-full bg-emerald-500 flex-shrink-0"></span>
+              <span v-if="isRoundRobinEnabled" class="w-2 h-2 rounded-full bg-success/100 flex-shrink-0"></span>
             </button>
 
             <!-- Exit Handover Wizard -->
             <button
               @click="openExitWizard(); showThreeDotDropdown = false"
-              class="w-full text-left px-4 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-55 transition-colors flex items-center gap-2 cursor-pointer"
+              class="w-full text-left px-4 py-2 text-xs font-semibold text-foreground hover:bg-muted/50 transition-colors flex items-center gap-2 cursor-pointer"
             >
-              <UserX class="w-3.5 h-3.5 text-red-500 flex-shrink-0" />
+              <UserX class="w-3.5 h-3.5 text-destructive flex-shrink-0" />
               <span>Exit Handover Wizard</span>
             </button>
           </div>
@@ -1586,10 +1589,10 @@ function handleOwnerChange(event: Event) {
     </header>
 
     <!-- MAIN WORKSPACE CONTENT CANVAS -->
-    <div class="flex-1 overflow-x-auto overflow-y-hidden p-6 relative flex flex-col min-h-0 bg-[#F9FAFB]">
+    <div class="flex-1 overflow-x-auto overflow-y-hidden p-6 relative flex flex-col min-h-0 bg-background">
       <!-- Quick filter pills row (shown above all views) -->
       <div class="flex items-center gap-2 mb-4 overflow-x-auto pb-1.5 shrink-0 no-scrollbar select-none">
-        <span class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mr-2 text-nowrap">Quick Filter:</span>
+        <span class="text-[11px] font-bold text-muted-foreground uppercase tracking-wider mr-2 text-nowrap">Quick Filter:</span>
         <button
           v-for="agent in uniqueAgents"
           :key="agent"
@@ -1597,11 +1600,11 @@ function handleOwnerChange(event: Event) {
           :class="[
             'flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-bold transition-all duration-150 cursor-pointer shadow-sm shrink-0',
             selectedAgentFilter === agent
-              ? 'bg-[#23B750]/15 text-[#168638] border-[#23B750]'
-              : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
+              ? 'bg-primary/15 text-primary border-primary'
+              : 'bg-card text-muted-foreground border-border hover:bg-muted/30'
           ]"
         >
-          <div v-if="agent !== 'Everyone'" class="w-4 h-4 rounded-full overflow-hidden border border-gray-100 shrink-0">
+          <div v-if="agent !== 'Everyone'" class="w-4 h-4 rounded-full overflow-hidden border border-border shrink-0">
             <img :src="getAgentAvatar(agent)" class="w-full h-full object-cover" />
           </div>
           <span>{{ agent }}</span>
@@ -1623,7 +1626,7 @@ function handleOwnerChange(event: Event) {
           @dragenter="draggedOverStage = stage; draggedOverAction = null"
           @dragleave="handleColumnDragLeave(stage, $event)"
           @drop="handleDrop(stage); draggedOverStage = null"
-          :style="draggedOverStage === stage ? { border: '2px dashed ' + getHeaderBarColor(stage), borderRadius: '16px', backgroundColor: getHeaderBarColor(stage) + '0d' } : {}"
+          :style="draggedOverStage === stage ? { border: '2px dashed ' + getHeaderBarColor(stage), borderRadius: '16px', backgroundColor: 'color-mix(in srgb, ' + getHeaderBarColor(stage) + ' 5%, transparent)' } : {}"
         >
           <!-- Stage Column Header top stripe -->
           <div
@@ -1635,27 +1638,27 @@ function handleOwnerChange(event: Event) {
           <div class="px-1 mb-4 flex flex-col gap-1 shrink-0 w-full">
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-1.5">
-                <span class="font-extrabold text-sm text-gray-900 leading-none">{{ stage }}</span>
-                <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-gray-200 text-gray-500">
+                <span class="font-extrabold text-sm text-foreground leading-none">{{ stage }}</span>
+                <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground">
                   {{ getStageDeals(stage).length }}
                 </span>
               </div>
               <div class="flex items-center gap-1">
                 <button
                   @click="newDeal.stage = stage; showAddDealModal = true"
-                  class="p-0.5 hover:bg-gray-200 rounded text-gray-400 hover:text-gray-655 transition-colors"
+                  class="p-0.5 hover:bg-muted rounded text-muted-foreground hover:text-foreground transition-colors"
                 >
                   <Plus class="w-3.5 h-3.5" />
                 </button>
-                <button class="p-0.5 hover:bg-gray-200 rounded text-gray-400 hover:text-gray-655 transition-colors">
+                <button class="p-0.5 hover:bg-muted rounded text-muted-foreground hover:text-foreground transition-colors">
                   <MoreVertical class="w-3.5 h-3.5" />
                 </button>
               </div>
             </div>
             <!-- Weighted values indicator -->
-            <div class="text-[11px] text-gray-500 flex items-center gap-1">
+            <div class="text-[11px] text-muted-foreground flex items-center gap-1">
               <span>Weighted value</span>
-              <span class="text-[#23B750] font-semibold">{{ getStageWeightedValueSum(stage) }}</span>
+              <span class="text-primary font-semibold">{{ getStageWeightedValueSum(stage) }}</span>
             </div>
           </div>
 
@@ -1669,10 +1672,10 @@ function handleOwnerChange(event: Event) {
               @dragend="resetDragState"
               @click="isBulkEditMode ? toggleCardSelection(deal.id) : (selectedDealForPreview = deal)"
               :class="[
-                'w-full bg-white rounded-xl border p-2.5 shadow-sm transition-all duration-200 cursor-pointer active:cursor-grabbing group relative flex flex-col gap-1.5 flex-shrink-0',
+                'w-full bg-card rounded-xl border p-2.5 shadow-sm transition-all duration-200 cursor-pointer active:cursor-grabbing group relative flex flex-col gap-1.5 flex-shrink-0',
                 isDragActive && draggedDealId === deal.id
-                  ? 'opacity-45 border-dashed border-[#23B750] ring-2 ring-[#23B750]/20'
-                  : 'border-gray-200 hover:border-emerald-300 hover:shadow-[0_8px_20px_rgba(35,183,80,0.08)] hover:-translate-y-0.5'
+                  ? 'opacity-45 border-dashed border-primary ring-2 ring-primary/20'
+                  : 'border-border hover:border-success/40 hover:shadow-md hover:shadow-primary/10 hover:-translate-y-0.5'
               ]"
             >
               <!-- Card top line: Title, hot tag, menu -->
@@ -1684,49 +1687,49 @@ function handleOwnerChange(event: Event) {
                     type="checkbox"
                     :checked="selectedDealIds.includes(deal.id)"
                     @change.stop="toggleCardSelection(deal.id)"
-                    class="w-3.5 h-3.5 text-[#23B750] border-gray-350 rounded focus:ring-[#23B750] cursor-pointer shrink-0"
+                    class="w-3.5 h-3.5 text-primary border-border rounded focus:ring-primary cursor-pointer shrink-0"
                   />
-                  <h3 class="font-bold text-xs text-gray-900 group-hover:text-[#23B750] transition-colors leading-tight truncate flex-1 min-w-0" :title="deal.title">
+                  <h3 class="font-bold text-xs text-foreground group-hover:text-primary transition-colors leading-tight truncate flex-1 min-w-0" :title="deal.title">
                     {{ deal.title }}
                   </h3>
                 </div>
                 <div class="flex items-center gap-0.5 shrink-0">
                   <div
                     v-if="deal.hotLead"
-                    class="flex items-center gap-0.5 text-gray-500 bg-gray-50 border border-gray-200 px-1 py-0.2 rounded text-[8px] font-bold"
+                    class="flex items-center gap-0.5 text-muted-foreground bg-muted/30 border border-border px-1 py-0.2 rounded text-[8px] font-bold"
                   >
-                    <Flame class="w-2.5 h-2.5 text-amber-500 fill-amber-500" />
+                    <Flame class="w-2.5 h-2.5 text-warning fill-warning" />
                     <span>{{ deal.hotLead }}</span>
                   </div>
-                  <button class="text-gray-400 hover:text-gray-655 rounded" @click.stop>
+                  <button class="text-muted-foreground hover:text-foreground rounded" @click.stop>
                     <MoreVertical class="w-3.5 h-3.5" />
                   </button>
                 </div>
               </div>
 
               <!-- Client Name (not Sales Agent name) -->
-              <div class="text-[10px] text-gray-400 font-semibold -mt-1 truncate w-full">
+              <div class="text-[10px] text-muted-foreground font-semibold -mt-1 truncate w-full">
                 {{ deal.clientName }}
               </div>
 
               <!-- Value Badge & Subtitle -->
               <div class="flex items-center gap-1.5 flex-wrap w-full min-w-0">
-                <span class="border border-gray-200 bg-white text-gray-700 text-[10px] font-bold px-1.5 py-0.5 rounded shadow-sm leading-none shrink-0 font-mono">
+                <span class="border border-border bg-card text-foreground text-[10px] font-bold px-1.5 py-0.5 rounded shadow-sm leading-none shrink-0 font-mono">
                   RM {{ deal.value.toLocaleString() }}
                 </span>
-                <span class="text-[10px] text-gray-300 font-semibold shrink-0">•</span>
-                <span class="text-[10px] text-gray-500 truncate flex-1 min-w-0 leading-none">{{ deal.description }}</span>
+                <span class="text-[10px] text-muted-foreground font-semibold shrink-0">•</span>
+                <span class="text-[10px] text-muted-foreground truncate flex-1 min-w-0 leading-none">{{ deal.description }}</span>
               </div>
 
-                            <div class="border-t border-gray-100 my-0.5 w-full"></div>
+                            <div class="border-t border-border my-0.5 w-full"></div>
               <div class="flex items-center justify-between w-full min-w-0">
                 <!-- Assignee Avatar -->
-                <div class="w-5 h-5 rounded-full overflow-hidden border border-gray-100 bg-pink-100 flex items-center justify-center shrink-0">
+                <div class="w-5 h-5 rounded-full overflow-hidden border border-border bg-muted flex items-center justify-center shrink-0">
                   <img :src="deal.avatar" class="w-full h-full object-cover" alt="owner" />
                 </div>
 
                 <!-- Icons container -->
-                <div class="flex items-center gap-2 text-[10px] font-semibold text-gray-400 shrink-0">
+                <div class="flex items-center gap-2 text-[10px] font-semibold text-muted-foreground shrink-0">
                   <div class="flex items-center gap-0.5" title="Attachments">
                     <Paperclip class="w-3 h-3" />
                     <span>{{ deal.attachments }}</span>
@@ -1746,9 +1749,9 @@ function handleOwnerChange(event: Event) {
             <!-- Empty column indicator -->
             <div
               v-if="getStageDeals(stage).length === 0"
-              class="border-2 border-dashed border-gray-300/60 rounded-xl p-8 text-center text-xs text-gray-400 flex flex-col items-center justify-center gap-2 h-36 w-full"
+              class="border-2 border-dashed border-border/60 rounded-xl p-8 text-center text-xs text-muted-foreground flex flex-col items-center justify-center gap-2 h-36 w-full"
             >
-              <FolderKanban class="w-8 h-8 text-gray-300" />
+              <FolderKanban class="w-8 h-8 text-muted-foreground" />
               <span>Drag deals here</span>
             </div>
           </div>
@@ -1756,14 +1759,14 @@ function handleOwnerChange(event: Event) {
       </div>
 
       <!-- VIEW 2: LIST VIEW -->
-      <div v-else-if="currentView === 'list'" class="flex-1 bg-white rounded-xl border border-gray-200 overflow-hidden flex flex-col shadow-sm max-w-6xl w-full mx-auto min-h-0">
+      <div v-else-if="currentView === 'list'" class="flex-1 bg-card rounded-xl border border-border overflow-hidden flex flex-col shadow-sm max-w-6xl w-full mx-auto min-h-0">
         <!-- List controls row -->
-        <div class="px-6 py-4 border-b border-gray-255 flex items-center justify-between gap-4 bg-gray-50 flex-shrink-0">
+        <div class="px-6 py-4 border-b border-border flex items-center justify-between gap-4 bg-muted/30 flex-shrink-0">
           <div class="flex items-center gap-2">
-            <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Stage Filter:</span>
+            <span class="text-xs font-bold text-muted-foreground uppercase tracking-wider">Stage Filter:</span>
             <select
               v-model="listStageFilter"
-              class="bg-white border border-gray-250 rounded-lg text-xs font-bold px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-[#23B750]/20 focus:border-[#23B750] cursor-pointer"
+              class="bg-card border border-input rounded-lg text-xs font-bold px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary cursor-pointer"
             >
               <option value="All">All Stages</option>
               <option v-for="stg in stages" :key="stg" :value="stg">{{ stg }}</option>
@@ -1772,30 +1775,30 @@ function handleOwnerChange(event: Event) {
               <option value="Archived">Archived</option>
             </select>
           </div>
-          <div class="text-xs font-bold text-gray-500">
+          <div class="text-xs font-bold text-muted-foreground">
             Showing {{ sortedFilteredDeals.length }} deals
           </div>
         </div>
 
         <div class="overflow-x-auto overflow-y-auto flex-1">
           <table class="w-full text-left text-sm border-collapse">
-            <thead class="bg-gray-50 border-b border-gray-200 text-xs font-extrabold text-gray-505 uppercase tracking-wider sticky top-0 z-10">
+            <thead class="bg-muted/30 border-b border-border text-xs font-extrabold text-muted-foreground uppercase tracking-wider sticky top-0 z-10">
               <tr>
                 <th class="px-6 py-4 w-12 text-center">
                   <input
                     type="checkbox"
                     :checked="selectedDealIds.length === sortedFilteredDeals.length && sortedFilteredDeals.length > 0"
                     @change="selectedDealIds.length === sortedFilteredDeals.length ? clearSelection() : selectAllDeals()"
-                    class="w-3.5 h-3.5 text-[#23B750] border-gray-300 rounded focus:ring-[#23B750] cursor-pointer"
+                    class="w-3.5 h-3.5 text-primary border-border rounded focus:ring-primary cursor-pointer"
                   />
                 </th>
                 <th
                   @click="toggleSort('title')"
-                  class="px-6 py-4 cursor-pointer hover:bg-gray-100 transition-colors select-none"
+                  class="px-6 py-4 cursor-pointer hover:bg-muted transition-colors select-none"
                 >
                   <div class="flex items-center gap-1.5">
                     <span>Deal Title</span>
-                    <span class="text-[9.5px] text-gray-400 font-bold font-mono">
+                    <span class="text-[9.5px] text-muted-foreground font-bold font-mono">
                       {{ sortField === 'title' ? (sortOrder === 'asc' ? '▲' : '▼') : '↕' }}
                     </span>
                   </div>
@@ -1804,11 +1807,11 @@ function handleOwnerChange(event: Event) {
                 <th class="px-6 py-4">Stage</th>
                 <th
                   @click="toggleSort('value')"
-                  class="px-6 py-4 cursor-pointer hover:bg-gray-100 transition-colors select-none"
+                  class="px-6 py-4 cursor-pointer hover:bg-muted transition-colors select-none"
                 >
                   <div class="flex items-center gap-1.5">
                     <span>Deal Value</span>
-                    <span class="text-[9.5px] text-gray-400 font-bold font-mono">
+                    <span class="text-[9.5px] text-muted-foreground font-bold font-mono">
                       {{ sortField === 'value' ? (sortOrder === 'asc' ? '▲' : '▼') : '↕' }}
                     </span>
                   </div>
@@ -1817,25 +1820,25 @@ function handleOwnerChange(event: Event) {
                 <th class="px-6 py-4">Urgency</th>
                 <th
                   @click="toggleSort('age')"
-                  class="px-6 py-4 cursor-pointer hover:bg-gray-100 transition-colors select-none text-right pr-8"
+                  class="px-6 py-4 cursor-pointer hover:bg-muted transition-colors select-none text-right pr-8"
                 >
                   <div class="flex items-center justify-end gap-1.5">
                     <span>Age</span>
-                    <span class="text-[9.5px] text-gray-400 font-bold font-mono">
+                    <span class="text-[9.5px] text-muted-foreground font-bold font-mono">
                       {{ sortField === 'age' ? (sortOrder === 'asc' ? '▲' : '▼') : '↕' }}
                     </span>
                   </div>
                 </th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-gray-100">
+            <tbody class="divide-y divide-border">
               <tr
                 v-for="deal in sortedFilteredDeals"
                 :key="deal.id"
                 @click="isBulkEditMode ? toggleCardSelection(deal.id) : (selectedDealForPreview = deal)"
                 :class="[
-                  'hover:bg-gray-50/75 transition-colors cursor-pointer',
-                  selectedDealIds.includes(deal.id) ? 'bg-[#23B750]/5 hover:bg-[#23B750]/10' : ''
+                  'hover:bg-muted/75 transition-colors cursor-pointer',
+                  selectedDealIds.includes(deal.id) ? 'bg-primary/5 hover:bg-primary/10' : ''
                 ]"
               >
                 <!-- Row select check box -->
@@ -1844,16 +1847,16 @@ function handleOwnerChange(event: Event) {
                     type="checkbox"
                     :checked="selectedDealIds.includes(deal.id)"
                     @change="toggleCardSelection(deal.id); isBulkEditMode = true"
-                    class="w-3.5 h-3.5 text-[#23B750] border-gray-300 rounded focus:ring-[#23B750] cursor-pointer"
+                    class="w-3.5 h-3.5 text-primary border-border rounded focus:ring-primary cursor-pointer"
                   />
                 </td>
-                <td class="px-6 py-4 font-bold text-gray-900">{{ deal.title }}</td>
+                <td class="px-6 py-4 font-bold text-foreground">{{ deal.title }}</td>
                 <td class="px-6 py-4">
                   <div class="flex flex-col">
-                    <span class="text-xs font-bold text-gray-900 leading-normal">{{ deal.clientName }}</span>
+                    <span class="text-xs font-bold text-foreground leading-normal">{{ deal.clientName }}</span>
                     <div class="flex items-center gap-1.5 mt-0.5">
                       <img :src="deal.avatar" class="w-3.5 h-3.5 rounded-full object-cover shrink-0" alt="avatar" />
-                      <span class="text-[10px] font-semibold text-gray-500">{{ deal.owner }}</span>
+                      <span class="text-[10px] font-semibold text-muted-foreground">{{ deal.owner }}</span>
                     </div>
                   </div>
                 </td>
@@ -1862,19 +1865,19 @@ function handleOwnerChange(event: Event) {
                     {{ deal.stage }}
                   </span>
                 </td>
-                <td class="px-6 py-4 font-bold text-gray-900 font-mono">RM {{ deal.value.toLocaleString() }}</td>
-                <td class="px-6 py-4 text-gray-500 text-xs">{{ deal.description }}</td>
+                <td class="px-6 py-4 font-bold text-foreground font-mono">RM {{ deal.value.toLocaleString() }}</td>
+                <td class="px-6 py-4 text-muted-foreground text-xs">{{ deal.description }}</td>
                 <td class="px-6 py-4">
-                  <span class="flex items-center gap-1 text-xs text-amber-605 font-bold">
-                    <Flame class="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
+                  <span class="flex items-center gap-1 text-xs text-warning font-bold">
+                    <Flame class="w-3.5 h-3.5 fill-warning text-warning" />
                     {{ deal.hotLead }}
                   </span>
                 </td>
-                <td class="px-6 py-4 text-gray-400 font-semibold text-xs text-right pr-8">{{ deal.age }}</td>
+                <td class="px-6 py-4 text-muted-foreground font-semibold text-xs text-right pr-8">{{ deal.age }}</td>
               </tr>
               <!-- Empty state row -->
               <tr v-if="sortedFilteredDeals.length === 0">
-                <td colspan="8" class="px-6 py-12 text-center text-gray-400 text-xs font-bold">
+                <td colspan="8" class="px-6 py-12 text-center text-muted-foreground text-xs font-bold">
                   No deals match the active filters.
                 </td>
               </tr>
@@ -1890,39 +1893,39 @@ function handleOwnerChange(event: Event) {
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 shrink-0">
           
           <!-- Card 1: Active Deals -->
-          <div class="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm flex flex-col gap-1">
-            <span class="text-[10px] text-gray-400 font-extrabold uppercase tracking-wider">Active Deals</span>
-            <span class="text-3xl font-semibold text-blue-605 mt-1">
+          <div class="bg-card rounded-2xl p-6 border border-border shadow-sm flex flex-col gap-1">
+            <span class="text-[10px] text-muted-foreground font-extrabold uppercase tracking-wider">Active Deals</span>
+            <span class="text-3xl font-semibold text-primary mt-1">
               {{ activeDealsCount }}
             </span>
-            <span class="text-xs text-gray-400 font-medium">closing in July 2026</span>
+            <span class="text-xs text-muted-foreground font-medium">closing in July 2026</span>
           </div>
 
           <!-- Card 2: Pipeline Value -->
-          <div class="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm flex flex-col gap-1">
-            <span class="text-[10px] text-gray-400 font-extrabold uppercase tracking-wider">Pipeline Value</span>
-            <span class="text-3xl font-semibold text-slate-900 mt-1">
+          <div class="bg-card rounded-2xl p-6 border border-border shadow-sm flex flex-col gap-1">
+            <span class="text-[10px] text-muted-foreground font-extrabold uppercase tracking-wider">Pipeline Value</span>
+            <span class="text-3xl font-semibold text-foreground mt-1">
               RM{{ pipelineValueSum.toLocaleString() }}
             </span>
-            <span class="text-xs text-gray-400 font-medium">Total active deal value closing in July 2026</span>
+            <span class="text-xs text-muted-foreground font-medium">Total active deal value closing in July 2026</span>
           </div>
 
           <!-- Card 3: Won -->
-          <div class="bg-[#E8F5E9]/40 rounded-2xl p-6 border border-emerald-250 shadow-sm flex flex-col gap-1">
-            <span class="text-[10px] text-emerald-700 font-extrabold uppercase tracking-wider">Won</span>
-            <span class="text-3xl font-semibold text-[#23B750] mt-1">
+          <div class="bg-success/10 rounded-2xl p-6 border border-success/30 shadow-sm flex flex-col gap-1">
+            <span class="text-[10px] text-success font-extrabold uppercase tracking-wider">Won</span>
+            <span class="text-3xl font-semibold text-primary mt-1">
               RM{{ wonDealsValueSum.toLocaleString() }}
             </span>
-            <span class="text-xs text-emerald-600/80 font-medium">{{ wonDealsCount }} deals closing in July 2026</span>
+            <span class="text-xs text-success/80 font-medium">{{ wonDealsCount }} deals closing in July 2026</span>
           </div>
 
           <!-- Card 4: Lost -->
-          <div class="bg-[#FFEBEE]/40 rounded-2xl p-6 border border-red-200 shadow-sm flex flex-col gap-1">
-            <span class="text-[10px] text-red-500 font-extrabold uppercase tracking-wider">Lost</span>
-            <span class="text-3xl font-semibold text-red-600 mt-1">
+          <div class="bg-destructive/10 rounded-2xl p-6 border border-destructive/30 shadow-sm flex flex-col gap-1">
+            <span class="text-[10px] text-destructive font-extrabold uppercase tracking-wider">Lost</span>
+            <span class="text-3xl font-semibold text-destructive mt-1">
               RM{{ lostDealsValueSum.toLocaleString() }}
             </span>
-            <span class="text-xs text-red-505/80 font-medium">{{ lostDealsCount }} deals closing in July 2026</span>
+            <span class="text-xs text-destructive/80 font-medium">{{ lostDealsCount }} deals closing in July 2026</span>
           </div>
 
         </div>
@@ -1931,38 +1934,38 @@ function handleOwnerChange(event: Event) {
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-5 shrink-0">
           
           <!-- Bar Chart Widget (col-span-3) -->
-          <div class="lg:col-span-3 bg-white p-6 rounded-2xl border border-gray-200 shadow-sm flex flex-col gap-4">
+          <div class="lg:col-span-3 bg-card p-6 rounded-2xl border border-border shadow-sm flex flex-col gap-4">
             <div class="flex items-center justify-between">
               <div>
-                <h3 class="text-sm font-black text-slate-900 leading-none">Monthly revenue — Jul 2026</h3>
-                <span class="text-[10px] text-gray-400 font-bold mt-1.5 block">Last 6 periods • MYR</span>
+                <h3 class="text-sm font-black text-foreground leading-none">Monthly revenue — Jul 2026</h3>
+                <span class="text-[10px] text-muted-foreground font-bold mt-1.5 block">Last 6 periods • MYR</span>
               </div>
               <!-- Legend -->
-              <div class="flex items-center gap-4 text-[10px] font-bold text-gray-500">
+              <div class="flex items-center gap-4 text-[10px] font-bold text-muted-foreground">
                 <span class="flex items-center gap-1.5">
-                  <span class="w-2.5 h-2.5 rounded bg-[#23B750]"></span> Current
+                  <span class="w-2.5 h-2.5 rounded bg-primary"></span> Current
                 </span>
                 <span class="flex items-center gap-1.5">
-                  <span class="w-2.5 h-2.5 rounded bg-gray-300"></span> Previous
+                  <span class="w-2.5 h-2.5 rounded bg-muted"></span> Previous
                 </span>
               </div>
             </div>
 
             <!-- Chart Columns Container -->
-            <div class="h-44 flex items-end justify-between px-6 pt-6 pb-2 border-b border-gray-100 relative mt-2">
+            <div class="h-44 flex items-end justify-between px-6 pt-6 pb-2 border-b border-border relative mt-2">
               <div
                 v-for="period in monthlyRevenuePeriods"
                 :key="period.label"
                 class="flex flex-col items-center flex-1 h-full justify-end group relative"
               >
                 <!-- Value label on top -->
-                <span class="text-[10px] font-extrabold text-slate-800 mb-1 opacity-100 transition-opacity">
+                <span class="text-[10px] font-extrabold text-foreground mb-1 opacity-100 transition-opacity">
                   {{ period.display }}
                 </span>
                 
                 <!-- Bar representation -->
                 <div
-                  class="bg-[#23B750] w-12 rounded-t-md transition-all duration-300 hover:opacity-90 hover:scale-x-105 cursor-pointer"
+                  class="bg-primary w-12 rounded-t-md transition-all duration-300 hover:opacity-90 hover:scale-x-105 cursor-pointer"
                   :style="{
                     height: period.value > 0 
                       ? `${Math.max(5, (period.value / 600000) * 100)}%` 
@@ -1973,7 +1976,7 @@ function handleOwnerChange(event: Event) {
             </div>
 
             <!-- X-axis Labels -->
-            <div class="flex justify-between px-6 text-[10px] font-bold text-gray-400">
+            <div class="flex justify-between px-6 text-[10px] font-bold text-muted-foreground">
               <span
                 v-for="period in monthlyRevenuePeriods"
                 :key="period.label"
@@ -1985,17 +1988,17 @@ function handleOwnerChange(event: Event) {
           </div>
 
           <!-- Pipeline Funnel Widget (col-span-1) -->
-          <div class="lg:col-span-1 bg-white p-6 rounded-2xl border border-gray-200 shadow-sm flex flex-col gap-4">
+          <div class="lg:col-span-1 bg-card p-6 rounded-2xl border border-border shadow-sm flex flex-col gap-4">
             <div>
-              <h3 class="text-sm font-black text-slate-900 leading-none">Pipeline funnel</h3>
-              <span class="text-[10px] text-gray-400 font-bold mt-1.5 block">Active deals • count & value</span>
+              <h3 class="text-sm font-black text-foreground leading-none">Pipeline funnel</h3>
+              <span class="text-[10px] text-muted-foreground font-bold mt-1.5 block">Active deals • count & value</span>
             </div>
 
             <div class="flex-1 flex flex-col justify-between gap-4 mt-2">
               <div v-for="stage in stages" :key="stage" class="flex flex-col gap-1 w-full">
-                <div class="flex items-center justify-between text-[11px] font-extrabold text-slate-800">
+                <div class="flex items-center justify-between text-[11px] font-extrabold text-foreground">
                   <span class="truncate max-w-[110px]" :title="stage">{{ stage }}</span>
-                  <span class="font-mono text-gray-500">
+                  <span class="font-mono text-muted-foreground">
                     {{ getStageDeals(stage).reduce((sum, d) => sum + d.value, 0) >= 1000000 
                       ? `${(getStageDeals(stage).reduce((sum, d) => sum + d.value, 0) / 1000000).toFixed(1)}M` 
                       : getStageDeals(stage).reduce((sum, d) => sum + d.value, 0) >= 1000 
@@ -2007,14 +2010,14 @@ function handleOwnerChange(event: Event) {
 
                 <div class="flex items-center gap-2">
                   <!-- Blue Count Badge -->
-                  <span class="bg-blue-600/10 text-blue-600 text-[9px] font-black px-1.5 py-0.5 rounded shrink-0">
+                  <span class="bg-info/10 text-info text-[9px] font-black px-1.5 py-0.5 rounded shrink-0">
                     {{ getStageDeals(stage).length }} deals
                   </span>
 
                   <!-- Funnel progress bar representation -->
-                  <div class="flex-1 bg-slate-100 h-2.5 rounded-full overflow-hidden relative">
+                  <div class="flex-1 bg-muted h-2.5 rounded-full overflow-hidden relative">
                     <div
-                      class="bg-blue-500 h-full rounded-full transition-all duration-300"
+                      class="bg-info/100 h-full rounded-full transition-all duration-300"
                       :style="{
                         width: `${(getStageDeals(stage).length / Math.max(1, activeDealsCount)) * 100}%`
                       }"
@@ -2028,28 +2031,28 @@ function handleOwnerChange(event: Event) {
         </div>
 
         <!-- 3. Bottom Row: Agent Performance -->
-        <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm flex flex-col gap-5 shrink-0">
+        <div class="bg-card p-6 rounded-2xl border border-border shadow-sm flex flex-col gap-5 shrink-0">
           <div>
-            <h3 class="text-sm font-black text-slate-900 leading-none">Agent Performance</h3>
-            <span class="text-[10px] text-gray-400 font-bold mt-1.5 block">Active deals by stage per agent • July 2026</span>
+            <h3 class="text-sm font-black text-foreground leading-none">Agent Performance</h3>
+            <span class="text-[10px] text-muted-foreground font-bold mt-1.5 block">Active deals by stage per agent • July 2026</span>
           </div>
 
           <!-- Color Legends row -->
-          <div class="flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-gray-50 pb-3 text-[9px] font-extrabold text-gray-500 uppercase tracking-wider select-none shrink-0">
+          <div class="flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-border/50 pb-3 text-[9px] font-extrabold text-muted-foreground uppercase tracking-wider select-none shrink-0">
             <span class="flex items-center gap-1">
-              <span class="w-2.5 h-2.5 rounded bg-[#3b82f6]"></span> New Leads
+              <span class="w-2.5 h-2.5 rounded bg-stage-1"></span> New Leads
             </span>
             <span class="flex items-center gap-1">
-              <span class="w-2.5 h-2.5 rounded bg-[#00D2C4]"></span> Acknowledged
+              <span class="w-2.5 h-2.5 rounded bg-stage-2"></span> Acknowledged
             </span>
             <span class="flex items-center gap-1">
-              <span class="w-2.5 h-2.5 rounded bg-[#FFCC00]"></span> Qualifying
+              <span class="w-2.5 h-2.5 rounded bg-stage-3"></span> Qualifying
             </span>
             <span class="flex items-center gap-1">
-              <span class="w-2.5 h-2.5 rounded bg-[#FF8800]"></span> Proposal / Quotation
+              <span class="w-2.5 h-2.5 rounded bg-stage-4"></span> Proposal / Quotation
             </span>
             <span class="flex items-center gap-1">
-              <span class="w-2.5 h-2.5 rounded bg-[#10B981]"></span> Follow up / Negotiation
+              <span class="w-2.5 h-2.5 rounded bg-stage-5"></span> Follow up / Negotiation
             </span>
           </div>
 
@@ -2062,59 +2065,59 @@ function handleOwnerChange(event: Event) {
             >
               <!-- Agent column (2/12 col span) -->
               <div class="md:col-span-2 flex items-center gap-2.5 min-w-0">
-                <div class="w-7 h-7 rounded-full bg-pink-100 flex items-center justify-center overflow-hidden border border-gray-150 shrink-0">
+                <div class="w-7 h-7 rounded-full bg-muted flex items-center justify-center overflow-hidden border border-border shrink-0">
                   <img
                     v-if="agent.avatar"
                     :src="agent.avatar"
                     class="w-full h-full object-cover"
                     alt="Agent Avatar"
                   />
-                  <User v-else class="w-4 h-4 text-gray-500" />
+                  <User v-else class="w-4 h-4 text-muted-foreground" />
                 </div>
-                <span class="text-xs font-bold text-slate-800 truncate">{{ agent.name }}</span>
+                <span class="text-xs font-bold text-foreground truncate">{{ agent.name }}</span>
               </div>
 
               <!-- Active count (1/12 col span) -->
               <div class="md:col-span-1 shrink-0 flex flex-col justify-center">
-                <span class="text-xs font-black text-slate-900 leading-none">{{ agent.activeCount }}</span>
-                <span class="text-[8px] text-gray-400 font-extrabold uppercase mt-0.5 tracking-wider leading-none">Active</span>
+                <span class="text-xs font-black text-foreground leading-none">{{ agent.activeCount }}</span>
+                <span class="text-[8px] text-muted-foreground font-extrabold uppercase mt-0.5 tracking-wider leading-none">Active</span>
               </div>
 
               <!-- Stacked progress bar breakdown (9/12 col span) -->
               <div class="md:col-span-9 flex items-center w-full min-w-0">
-                <div class="h-6 w-full bg-slate-100 rounded-full flex overflow-hidden shadow-inner border border-gray-100">
+                <div class="h-6 w-full bg-muted rounded-full flex overflow-hidden shadow-inner border border-border">
                   <!-- Segment: New -->
                   <div
                     v-if="agent.breakdown['New'] > 0"
-                    class="bg-[#3b82f6] h-full transition-all duration-300 cursor-pointer hover:opacity-90 flex items-center justify-center"
+                    class="bg-stage-1 h-full transition-all duration-300 cursor-pointer hover:opacity-90 flex items-center justify-center"
                     :style="{ width: `${(agent.breakdown['New'] / agent.activeCount) * 100}%` }"
                     :title="`New Leads: ${agent.breakdown['New']} deals`"
                   ></div>
                   <!-- Segment: Acknowledged -->
                   <div
                     v-if="agent.breakdown['Acknowledged'] > 0"
-                    class="bg-[#00D2C4] h-full transition-all duration-300 cursor-pointer hover:opacity-90 flex items-center justify-center"
+                    class="bg-stage-2 h-full transition-all duration-300 cursor-pointer hover:opacity-90 flex items-center justify-center"
                     :style="{ width: `${(agent.breakdown['Acknowledged'] / agent.activeCount) * 100}%` }"
                     :title="`Acknowledged: ${agent.breakdown['Acknowledged']} deals`"
                   ></div>
                   <!-- Segment: Qualifying -->
                   <div
                     v-if="agent.breakdown['Qualifying'] > 0"
-                    class="bg-[#FFCC00] h-full transition-all duration-300 cursor-pointer hover:opacity-90 flex items-center justify-center"
+                    class="bg-stage-3 h-full transition-all duration-300 cursor-pointer hover:opacity-90 flex items-center justify-center"
                     :style="{ width: `${(agent.breakdown['Qualifying'] / agent.activeCount) * 100}%` }"
                     :title="`Qualifying: ${agent.breakdown['Qualifying']} deals`"
                   ></div>
                   <!-- Segment: Proposal / Quotation -->
                   <div
                     v-if="agent.breakdown['Proposal / Quotation'] > 0"
-                    class="bg-[#FF8800] h-full transition-all duration-300 cursor-pointer hover:opacity-90 flex items-center justify-center"
+                    class="bg-stage-4 h-full transition-all duration-300 cursor-pointer hover:opacity-90 flex items-center justify-center"
                     :style="{ width: `${(agent.breakdown['Proposal / Quotation'] / agent.activeCount) * 100}%` }"
                     :title="`Proposal / Quotation: ${agent.breakdown['Proposal / Quotation']} deals`"
                   ></div>
                   <!-- Segment: Follow Up / Negotiation -->
                   <div
                     v-if="agent.breakdown['Follow Up'] > 0"
-                    class="bg-[#10B981] h-full transition-all duration-300 cursor-pointer hover:opacity-90 flex items-center justify-center"
+                    class="bg-stage-5 h-full transition-all duration-300 cursor-pointer hover:opacity-90 flex items-center justify-center"
                     :style="{ width: `${(agent.breakdown['Follow Up'] / agent.activeCount) * 100}%` }"
                     :title="`Follow Up / Negotiation: ${agent.breakdown['Follow Up']} deals`"
                   ></div>
@@ -2139,18 +2142,18 @@ function handleOwnerChange(event: Event) {
         aria-label="Quick deal drop actions"
       >
         <div
-          class="w-full max-w-[640px] pointer-events-auto rounded-2xl bg-white/95 backdrop-blur-md border border-slate-200/90 ring-1 ring-slate-900/5 p-2 shadow-[0_18px_42px_-8px_rgba(15,23,42,0.16),0_4px_12px_-2px_rgba(15,23,42,0.06)]"
+          class="w-full max-w-[640px] pointer-events-auto rounded-2xl bg-card/95 backdrop-blur-md border border-border/90 ring-1 ring-border p-2 shadow-2xl"
           @dragover.prevent.stop="draggedOverStage = null"
         >
           <!-- Dragged deal context bar -->
-          <div class="flex items-center justify-between gap-3 px-2.5 pb-1.5 mb-1.5 border-b border-slate-100 text-xs pointer-events-none">
+          <div class="flex items-center justify-between gap-3 px-2.5 pb-1.5 mb-1.5 border-b border-border text-xs pointer-events-none">
             <div class="flex items-center gap-2 min-w-0">
-              <span class="h-2 w-2 rounded-full bg-[#23B750] shrink-0"></span>
-              <span class="font-bold text-slate-900 truncate">{{ draggedDeal.title }}</span>
-              <span class="text-slate-400 shrink-0">•</span>
-              <span class="text-slate-600 font-medium truncate">{{ draggedDeal.clientName }}</span>
+              <span class="h-2 w-2 rounded-full bg-primary shrink-0"></span>
+              <span class="font-bold text-foreground truncate">{{ draggedDeal.title }}</span>
+              <span class="text-muted-foreground shrink-0">•</span>
+              <span class="text-muted-foreground font-medium truncate">{{ draggedDeal.clientName }}</span>
             </div>
-            <span class="font-mono tabular-nums font-bold text-[#168638] shrink-0">
+            <span class="font-mono tabular-nums font-bold text-primary shrink-0">
               RM {{ draggedDeal.value.toLocaleString() }}
             </span>
           </div>
@@ -2166,8 +2169,8 @@ function handleOwnerChange(event: Event) {
               :class="[
                 'flex items-center justify-center gap-2 rounded-xl px-4 py-3.5 border text-xs font-extrabold transition-all duration-150',
                 draggedOverAction === 'won'
-                  ? 'bg-[#168638] border-[#168638] text-white scale-[1.02] -translate-y-0.5 shadow-[0_10px_22px_-4px_rgba(22,134,56,0.35)]'
-                  : 'bg-emerald-50/85 border-dashed border-emerald-400 text-[#146c2e]'
+                  ? 'bg-primary border-primary text-primary-foreground scale-[1.02] -translate-y-0.5 shadow-lg shadow-success/30'
+                  : 'bg-success/10 border-dashed border-success/50 text-primary'
               ]"
             >
               <Trophy class="h-4 w-4 shrink-0 pointer-events-none" />
@@ -2183,8 +2186,8 @@ function handleOwnerChange(event: Event) {
               :class="[
                 'flex items-center justify-center gap-2 rounded-xl px-4 py-3.5 border text-xs font-extrabold transition-all duration-150',
                 draggedOverAction === 'lost'
-                  ? 'bg-red-600 border-red-600 text-white scale-[1.02] -translate-y-0.5 shadow-[0_10px_22px_-4px_rgba(220,38,38,0.35)]'
-                  : 'bg-rose-50/85 border-dashed border-rose-400 text-rose-800'
+                  ? 'bg-destructive border-destructive text-primary-foreground scale-[1.02] -translate-y-0.5 shadow-lg shadow-destructive/30'
+                  : 'bg-destructive/10 border-dashed border-destructive/40 text-destructive'
               ]"
             >
               <XCircle class="h-4 w-4 shrink-0 pointer-events-none" />
@@ -2200,8 +2203,8 @@ function handleOwnerChange(event: Event) {
               :class="[
                 'flex items-center justify-center gap-2 rounded-xl px-4 py-3.5 border text-xs font-extrabold transition-all duration-150',
                 draggedOverAction === 'archive'
-                  ? 'bg-slate-800 border-slate-800 text-white scale-[1.02] -translate-y-0.5 shadow-[0_10px_22px_-4px_rgba(30,41,59,0.28)]'
-                  : 'bg-slate-50 border-dashed border-slate-300 text-slate-700'
+                  ? 'bg-muted border-border text-foreground scale-[1.02] -translate-y-0.5 shadow-lg'
+                  : 'bg-muted/30 border-dashed border-border text-foreground'
               ]"
             >
               <Archive class="h-4 w-4 shrink-0 pointer-events-none" />
@@ -2217,7 +2220,7 @@ function handleOwnerChange(event: Event) {
       <div
         v-if="quickActionToast"
         :class="[
-          'absolute right-6 z-40 flex items-center gap-3 rounded-xl bg-white border border-slate-200 px-3.5 py-2.5 text-xs text-slate-800 shadow-[0_14px_32px_-6px_rgba(15,23,42,0.14),0_4px_10px_-2px_rgba(15,23,42,0.06)] transition-all duration-200 max-w-md',
+          'absolute right-6 z-40 flex items-center gap-3 rounded-xl bg-card border border-border px-3.5 py-2.5 text-xs text-foreground shadow-xl transition-all duration-200 max-w-md',
           isDragActive ? 'bottom-28' : 'bottom-5'
         ]"
         role="status"
@@ -2227,10 +2230,10 @@ function handleOwnerChange(event: Event) {
           :class="[
             'flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border',
             quickActionToast.action === 'won'
-              ? 'bg-emerald-50 border-emerald-200 text-[#146c2e]'
+              ? 'bg-success/10 border-success/30 text-primary'
               : quickActionToast.action === 'lost'
-                ? 'bg-rose-50 border-rose-200 text-rose-700'
-                : 'bg-slate-100 border-slate-200 text-slate-700'
+                ? 'bg-destructive/10 border-destructive/30 text-destructive'
+                : 'bg-muted border-border text-foreground'
           ]"
         >
           <Trophy v-if="quickActionToast.action === 'won'" class="h-3.5 w-3.5" />
@@ -2239,12 +2242,12 @@ function handleOwnerChange(event: Event) {
         </span>
 
         <div class="min-w-0 flex-1">
-          <div class="font-bold text-slate-900 truncate">
+          <div class="font-bold text-foreground truncate">
             {{ quickActionToast.action === 'won' ? 'Marked as Won' : quickActionToast.action === 'lost' ? 'Marked as Lost' : 'Deal Archived' }}
           </div>
-          <div class="text-slate-600 truncate">
+          <div class="text-muted-foreground truncate">
             {{ quickActionToast.dealTitle }}
-            <span v-if="quickActionToast.action === 'won'" class="font-mono tabular-nums font-semibold text-[#168638]">
+            <span v-if="quickActionToast.action === 'won'" class="font-mono tabular-nums font-semibold text-primary">
               • RM {{ quickActionToast.dealValue.toLocaleString() }}
             </span>
           </div>
@@ -2253,7 +2256,7 @@ function handleOwnerChange(event: Event) {
         <button
           type="button"
           @click="undoQuickAction"
-          class="inline-flex items-center gap-1 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 px-2.5 py-1.5 text-xs font-bold text-slate-700 hover:text-slate-900 transition-colors cursor-pointer shrink-0"
+          class="inline-flex items-center gap-1 rounded-lg bg-muted/30 hover:bg-muted border border-border px-2.5 py-1.5 text-xs font-bold text-foreground hover:text-foreground transition-colors cursor-pointer shrink-0"
         >
           <RotateCcw class="h-3 w-3" />
           Undo
@@ -2262,7 +2265,7 @@ function handleOwnerChange(event: Event) {
         <button
           type="button"
           @click="dismissQuickActionToast"
-          class="p-1 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-md transition-colors cursor-pointer shrink-0"
+          class="p-1 text-muted-foreground hover:text-foreground hover:bg-muted rounded-md transition-colors cursor-pointer shrink-0"
           aria-label="Dismiss notification"
         >
           <X class="h-3.5 w-3.5" />
@@ -2275,48 +2278,48 @@ function handleOwnerChange(event: Event) {
          ────────────────────────────────────────────────────────────────── -->
     <div
       v-if="showAddDealModal"
-      class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/65 backdrop-blur-md animate-fade-in"
+      class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-card/65 backdrop-blur-md animate-fade-in"
     >
-      <div class="bg-white rounded-2xl w-full max-w-md overflow-hidden shadow-2xl border border-gray-100 flex flex-col">
-        <header class="px-6 py-4 bg-gray-50 border-b border-gray-100 flex items-center justify-between flex-shrink-0">
-          <h3 class="font-bold text-sm text-gray-900 flex items-center gap-2">
-            <Plus class="w-4 h-4 text-[#23B750]" />
+      <div class="bg-card rounded-2xl w-full max-w-md overflow-hidden shadow-2xl border border-border flex flex-col">
+        <header class="px-6 py-4 bg-muted/30 border-b border-border flex items-center justify-between flex-shrink-0">
+          <h3 class="font-bold text-sm text-foreground flex items-center gap-2">
+            <Plus class="w-4 h-4 text-primary" />
             Create New Deal
           </h3>
-          <button @click="showAddDealModal = false" class="text-gray-400 hover:text-gray-655 rounded cursor-pointer">
+          <button @click="showAddDealModal = false" class="text-muted-foreground hover:text-foreground rounded cursor-pointer">
             <X class="w-4 h-4" />
           </button>
         </header>
 
         <form @submit.prevent="submitNewDeal" class="p-6 space-y-4 text-xs font-semibold">
           <div class="space-y-1">
-            <label class="block text-gray-700">Deal / Company Title</label>
+            <label class="block text-foreground">Deal / Company Title</label>
             <input
               v-model="newDeal.title"
               type="text"
               required
               placeholder="e.g. Acme Corporation"
-              class="w-full p-2 border border-gray-250 rounded-lg text-xs font-normal focus:outline-none focus:ring-2 focus:ring-[#23B750]/20 focus:border-[#23B750]"
+              class="w-full p-2 border border-input rounded-lg text-xs font-normal focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
             />
           </div>
 
           <div class="grid grid-cols-2 gap-4">
             <div class="space-y-1">
-              <label class="block text-gray-700">Client Name</label>
+              <label class="block text-foreground">Client Name</label>
               <input
                 v-model="newDeal.clientName"
                 type="text"
                 required
                 placeholder="e.g. Mei Ting"
-                class="w-full p-2 border border-gray-250 rounded-lg text-xs font-normal focus:outline-none focus:ring-2 focus:ring-[#23B750]/20 focus:border-[#23B750]"
+                class="w-full p-2 border border-input rounded-lg text-xs font-normal focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
             </div>
             <div class="space-y-1">
-              <label class="block text-gray-700">Sales Agent / Owner</label>
+              <label class="block text-foreground">Sales Agent / Owner</label>
               <select
                 v-model="newDeal.owner"
                 required
-                class="w-full p-2 border border-gray-250 rounded-lg text-xs font-normal focus:outline-none focus:ring-2 focus:ring-[#23B750]/20 focus:border-[#23B750]"
+                class="w-full p-2 border border-input rounded-lg text-xs font-normal focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               >
                 <option value="" disabled>Select agent...</option>
                 <option v-for="agent in uniqueAgents.filter(a => a !== 'Everyone')" :key="agent" :value="agent">
@@ -2328,20 +2331,20 @@ function handleOwnerChange(event: Event) {
 
           <div class="grid grid-cols-2 gap-4">
             <div class="space-y-1">
-              <label class="block text-gray-700">Deal Value (RM)</label>
+              <label class="block text-foreground">Deal Value (RM)</label>
               <input
                 v-model="newDeal.value"
                 type="number"
                 required
                 placeholder="e.g. 50000"
-                class="w-full p-2 border border-gray-250 rounded-lg text-xs font-normal focus:outline-none focus:ring-2 focus:ring-[#23B750]/20 focus:border-[#23B750]"
+                class="w-full p-2 border border-input rounded-lg text-xs font-normal focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
             </div>
             <div class="space-y-1">
-              <label class="block text-gray-700">Pipeline Stage</label>
+              <label class="block text-foreground">Pipeline Stage</label>
               <select
                 v-model="newDeal.stage"
-                class="w-full p-2 border border-gray-250 rounded-lg text-xs font-normal focus:outline-none focus:ring-2 focus:ring-[#23B750]/20 focus:border-[#23B750]"
+                class="w-full p-2 border border-input rounded-lg text-xs font-normal focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               >
                 <option v-for="stg in stages" :key="stg" :value="stg">{{ stg }}</option>
               </select>
@@ -2349,36 +2352,36 @@ function handleOwnerChange(event: Event) {
           </div>
 
           <div class="space-y-1">
-            <label class="block text-gray-700">Expected Close Date</label>
+            <label class="block text-foreground">Expected Close Date</label>
             <input
               v-model="newDeal.expectedCloseDate"
               type="date"
               @click="($event.target as HTMLInputElement).showPicker?.()"
-              class="w-full p-2 border border-gray-250 rounded-lg text-xs font-normal focus:outline-none focus:ring-2 focus:ring-[#23B750]/20 focus:border-[#23B750] cursor-pointer"
+              class="w-full p-2 border border-input rounded-lg text-xs font-normal focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary cursor-pointer"
             />
           </div>
 
           <div class="space-y-1">
-            <label class="block text-gray-700">Deal description</label>
+            <label class="block text-foreground">Deal description</label>
             <input
               v-model="newDeal.description"
               type="text"
               placeholder="e.g. Cloud Migration / Implementation"
-              class="w-full p-2 border border-gray-250 rounded-lg text-xs font-normal focus:outline-none focus:ring-2 focus:ring-[#23B750]/20 focus:border-[#23B750]"
+              class="w-full p-2 border border-input rounded-lg text-xs font-normal focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
             />
           </div>
 
-          <footer class="pt-4 border-t border-gray-100 flex justify-end gap-2">
+          <footer class="pt-4 border-t border-border flex justify-end gap-2">
             <button
               type="button"
               @click="showAddDealModal = false"
-              class="px-4 py-2 border border-gray-200 text-gray-600 rounded-lg hover:bg-gray-50 transition-colors"
+              class="px-4 py-2 border border-border text-muted-foreground rounded-lg hover:bg-muted/30 transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
-              class="px-4 py-2 bg-[#23B750] text-white rounded-lg hover:bg-[#1f9f46] transition-colors"
+              class="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
             >
               Create Deal
             </button>
@@ -2390,51 +2393,51 @@ function handleOwnerChange(event: Event) {
     <!-- MODALS: FILTERS -->
     <div
       v-if="showFiltersModal"
-      class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/65 backdrop-blur-md animate-fade-in"
+      class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-card/65 backdrop-blur-md animate-fade-in"
     >
-      <div class="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl border border-gray-100 flex flex-col">
-        <header class="px-6 py-4 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
-          <h3 class="font-bold text-sm text-gray-900 flex items-center gap-2">
-            <Filter class="w-4 h-4 text-[#23B750]" />
+      <div class="bg-card rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl border border-border flex flex-col">
+        <header class="px-6 py-4 bg-muted/30 border-b border-border flex items-center justify-between">
+          <h3 class="font-bold text-sm text-foreground flex items-center gap-2">
+            <Filter class="w-4 h-4 text-primary" />
             Filter Deals
           </h3>
-          <button @click="showFiltersModal = false" class="text-gray-400 hover:text-gray-600 rounded">
+          <button @click="showFiltersModal = false" class="text-muted-foreground hover:text-muted-foreground rounded">
             <X class="w-4 h-4" />
           </button>
         </header>
 
         <div class="p-6 space-y-4 text-xs font-semibold">
           <div class="space-y-1">
-            <label class="block text-gray-700">Filter by Contact Owner</label>
+            <label class="block text-foreground">Filter by Contact Owner</label>
             <input
               v-model="filterOwner"
               type="text"
               placeholder="e.g. Ahmad Faizal"
-              class="w-full p-2 border border-gray-250 rounded-lg text-xs font-normal focus:outline-none"
+              class="w-full p-2 border border-input rounded-lg text-xs font-normal focus:outline-none"
             />
           </div>
 
           <div class="space-y-1">
-            <label class="block text-gray-700">Minimum Deal Value (RM)</label>
+            <label class="block text-foreground">Minimum Deal Value (RM)</label>
             <input
               v-model="filterValueMin"
               type="number"
               placeholder="e.g. 30000"
-              class="w-full p-2 border border-gray-250 rounded-lg text-xs font-normal focus:outline-none"
+              class="w-full p-2 border border-input rounded-lg text-xs font-normal focus:outline-none"
             />
           </div>
 
-          <footer class="pt-4 border-t border-gray-100 flex justify-between gap-2">
+          <footer class="pt-4 border-t border-border flex justify-between gap-2">
             <button
               type="button"
               @click="clearFilters"
-              class="px-4 py-2 border border-gray-200 text-gray-600 rounded-lg hover:bg-gray-50 transition-colors"
+              class="px-4 py-2 border border-border text-muted-foreground rounded-lg hover:bg-muted/30 transition-colors"
             >
               Clear Filters
             </button>
             <button
               @click="showFiltersModal = false"
-              class="px-4 py-2 bg-[#23B750] text-white rounded-lg hover:bg-[#1f9f46] transition-colors"
+              class="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
             >
               Apply Filters
             </button>
@@ -2446,26 +2449,26 @@ function handleOwnerChange(event: Event) {
     <!-- MODALS: REASSIGN AGENT -->
     <div
       v-if="showReassignModal"
-      class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/65 backdrop-blur-md animate-fade-in"
+      class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-card/65 backdrop-blur-md animate-fade-in"
     >
-      <div class="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl border border-gray-100 flex flex-col">
-        <header class="px-6 py-4 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
-          <h3 class="font-bold text-sm text-gray-900 flex items-center gap-2">
-            <User class="w-4 h-4 text-[#23B750]" />
+      <div class="bg-card rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl border border-border flex flex-col">
+        <header class="px-6 py-4 bg-muted/30 border-b border-border flex items-center justify-between">
+          <h3 class="font-bold text-sm text-foreground flex items-center gap-2">
+            <User class="w-4 h-4 text-primary" />
             Reassign Sales Agent
           </h3>
-          <button @click="showReassignModal = false" class="text-gray-400 hover:text-gray-600 rounded cursor-pointer">
+          <button @click="showReassignModal = false" class="text-muted-foreground hover:text-muted-foreground rounded cursor-pointer">
             <X class="w-4 h-4" />
           </button>
         </header>
 
         <form @submit.prevent="performBulkReassign" class="p-6 space-y-4 text-xs font-semibold">
           <div class="space-y-1">
-            <label class="block text-gray-700">Select New Agent</label>
+            <label class="block text-foreground">Select New Agent</label>
             <select
               v-model="reassignTargetAgent"
               required
-              class="w-full p-2.5 border border-gray-250 rounded-lg text-xs font-normal focus:outline-none focus:ring-2 focus:ring-[#23B750]/20 focus:border-[#23B750]"
+              class="w-full p-2.5 border border-input rounded-lg text-xs font-normal focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
             >
               <option value="" disabled>Select an agent...</option>
               <option
@@ -2478,17 +2481,17 @@ function handleOwnerChange(event: Event) {
             </select>
           </div>
 
-          <footer class="pt-4 border-t border-gray-100 flex justify-end gap-2">
+          <footer class="pt-4 border-t border-border flex justify-end gap-2">
             <button
               type="button"
               @click="showReassignModal = false"
-              class="px-4 py-2 border border-gray-250 text-gray-600 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
+              class="px-4 py-2 border border-input text-muted-foreground rounded-lg hover:bg-muted/30 transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
-              class="px-4 py-2 bg-[#23B750] text-white rounded-lg hover:bg-[#1f9f46] transition-colors cursor-pointer"
+              class="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors cursor-pointer"
             >
               Reassign
             </button>
@@ -2500,42 +2503,42 @@ function handleOwnerChange(event: Event) {
     <!-- MODALS: BULK UPDATE STAGE -->
     <div
       v-if="showBulkStageModal"
-      class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/65 backdrop-blur-md animate-fade-in"
+      class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-card/65 backdrop-blur-md animate-fade-in"
     >
-      <div class="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl border border-gray-100 flex flex-col">
-        <header class="px-6 py-4 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
-          <h3 class="font-bold text-sm text-gray-900 flex items-center gap-2">
-            <FolderKanban class="w-4 h-4 text-[#23B750]" />
+      <div class="bg-card rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl border border-border flex flex-col">
+        <header class="px-6 py-4 bg-muted/30 border-b border-border flex items-center justify-between">
+          <h3 class="font-bold text-sm text-foreground flex items-center gap-2">
+            <FolderKanban class="w-4 h-4 text-primary" />
             Bulk Update Stage
           </h3>
-          <button @click="showBulkStageModal = false" class="text-gray-400 hover:text-gray-600 rounded cursor-pointer">
+          <button @click="showBulkStageModal = false" class="text-muted-foreground hover:text-muted-foreground rounded cursor-pointer">
             <X class="w-4 h-4" />
           </button>
         </header>
 
         <form @submit.prevent="performBulkStageUpdate" class="p-6 space-y-4 text-xs font-semibold">
           <div class="space-y-1">
-            <label class="block text-gray-700">Select New Pipeline Stage</label>
+            <label class="block text-foreground">Select New Pipeline Stage</label>
             <select
               v-model="bulkTargetStage"
               required
-              class="w-full p-2.5 border border-gray-250 rounded-lg text-xs font-normal focus:outline-none focus:ring-2 focus:ring-[#23B750]/20 focus:border-[#23B750]"
+              class="w-full p-2.5 border border-input rounded-lg text-xs font-normal focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
             >
               <option v-for="stg in stages" :key="stg" :value="stg">{{ stg }}</option>
             </select>
           </div>
 
-          <footer class="pt-4 border-t border-gray-100 flex justify-end gap-2">
+          <footer class="pt-4 border-t border-border flex justify-end gap-2">
             <button
               type="button"
               @click="showBulkStageModal = false"
-              class="px-4 py-2 border border-gray-250 text-gray-600 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
+              class="px-4 py-2 border border-input text-muted-foreground rounded-lg hover:bg-muted/30 transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
-              class="px-4 py-2 bg-[#23B750] text-white rounded-lg hover:bg-[#1f9f46] transition-colors cursor-pointer"
+              class="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors cursor-pointer"
             >
               Update Stage
             </button>
@@ -2547,26 +2550,26 @@ function handleOwnerChange(event: Event) {
     <!-- MODALS: BULK UPDATE URGENCY -->
     <div
       v-if="showBulkUrgencyModal"
-      class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/65 backdrop-blur-md animate-fade-in"
+      class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-card/65 backdrop-blur-md animate-fade-in"
     >
-      <div class="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl border border-gray-100 flex flex-col">
-        <header class="px-6 py-4 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
-          <h3 class="font-bold text-sm text-gray-900 flex items-center gap-2">
-            <Flame class="w-4 h-4 text-amber-500 fill-amber-500 animate-pulse" />
+      <div class="bg-card rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl border border-border flex flex-col">
+        <header class="px-6 py-4 bg-muted/30 border-b border-border flex items-center justify-between">
+          <h3 class="font-bold text-sm text-foreground flex items-center gap-2">
+            <Flame class="w-4 h-4 text-warning fill-warning animate-pulse" />
             Bulk Change Urgency
           </h3>
-          <button @click="showBulkUrgencyModal = false" class="text-gray-400 hover:text-gray-600 rounded cursor-pointer">
+          <button @click="showBulkUrgencyModal = false" class="text-muted-foreground hover:text-muted-foreground rounded cursor-pointer">
             <X class="w-4 h-4" />
           </button>
         </header>
 
         <form @submit.prevent="performBulkUrgencyUpdate" class="p-6 space-y-4 text-xs font-semibold">
           <div class="space-y-1">
-            <label class="block text-gray-700">Select Urgency / Hot Lead Time</label>
+            <label class="block text-foreground">Select Urgency / Hot Lead Time</label>
             <select
               v-model="bulkTargetUrgency"
               required
-              class="w-full p-2.5 border border-gray-250 rounded-lg text-xs font-normal focus:outline-none focus:ring-2 focus:ring-[#23B750]/20 focus:border-[#23B750]"
+              class="w-full p-2.5 border border-input rounded-lg text-xs font-normal focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
             >
               <option value="1h">1 Hour (Hot Lead)</option>
               <option value="1.5h">1.5 Hours</option>
@@ -2580,17 +2583,17 @@ function handleOwnerChange(event: Event) {
             </select>
           </div>
 
-          <footer class="pt-4 border-t border-gray-100 flex justify-end gap-2">
+          <footer class="pt-4 border-t border-border flex justify-end gap-2">
             <button
               type="button"
               @click="showBulkUrgencyModal = false"
-              class="px-4 py-2 border border-gray-250 text-gray-600 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
+              class="px-4 py-2 border border-input text-muted-foreground rounded-lg hover:bg-muted/30 transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
-              class="px-4 py-2 bg-[#23B750] text-white rounded-lg hover:bg-[#1f9f46] transition-colors cursor-pointer"
+              class="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors cursor-pointer"
             >
               Change Urgency
             </button>
@@ -2605,7 +2608,7 @@ function handleOwnerChange(event: Event) {
     <Transition name="modal">
       <div
         v-if="selectedDealForPreview"
-        class="fixed inset-0 z-[120] flex items-center justify-center bg-slate-950/60 p-2 backdrop-blur-sm sm:p-5"
+        class="fixed inset-0 z-[120] flex items-center justify-center bg-card/60 p-2 backdrop-blur-sm sm:p-5"
         @click.self="selectedDealForPreview = null"
       >
         <!-- Modal Card — Centered floating container matching reference proportions -->
@@ -2613,28 +2616,28 @@ function handleOwnerChange(event: Event) {
           role="dialog"
           aria-modal="true"
           aria-labelledby="deal-preview-title"
-          class="modal-card deal-preview-compact flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-[#F7F8FA] shadow-[0_32px_90px_rgba(15,23,42,0.28)] transition-all duration-200"
+          class="modal-card deal-preview-compact flex flex-col overflow-hidden rounded-2xl border border-border bg-background shadow-2xl transition-all duration-200"
         >
 
 
           <!-- ── MODAL HEADER ────────────────────────────────── -->
-          <header class="flex-shrink-0 bg-white px-5 py-5 sm:px-8 sm:py-6">
+          <header class="flex-shrink-0 bg-card px-5 py-5 sm:px-8 sm:py-6">
             <!-- Row 1: Title + Action Buttons -->
             <div class="flex items-start justify-between gap-4">
               <div class="min-w-0">
-                <h2 id="deal-preview-title" class="truncate text-xl font-bold tracking-[-0.02em] text-slate-900 sm:text-2xl">
+                <h2 id="deal-preview-title" class="truncate text-xl font-bold tracking-[-0.02em] text-foreground sm:text-2xl">
                   {{ selectedDealForPreview.title }}
                 </h2>
                 <!-- Metadata badges row -->
-                <div class="mt-2.5 flex flex-wrap items-center gap-2.5 text-sm text-slate-500">
-                  <span class="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-2.5 py-1 font-medium text-slate-600">
-                    <Flame class="h-3.5 w-3.5 fill-orange-500 text-orange-500" /> Hot
+                <div class="mt-2.5 flex flex-wrap items-center gap-2.5 text-sm text-muted-foreground">
+                  <span class="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-2.5 py-1 font-medium text-muted-foreground">
+                    <Flame class="h-3.5 w-3.5 fill-warning text-warning" /> Hot
                   </span>
-                  <span class="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-2.5 py-1 font-medium text-slate-600">
-                    <AlertTriangle class="h-3.5 w-3.5 text-slate-400" /> Urgent
+                  <span class="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-2.5 py-1 font-medium text-muted-foreground">
+                    <AlertTriangle class="h-3.5 w-3.5 text-muted-foreground" /> Urgent
                   </span>
                   <span class="inline-flex min-w-0 items-center gap-1.5 px-1 font-medium">
-                    <Building2 class="h-3.5 w-3.5 shrink-0 text-slate-400" /> <span class="truncate">{{ selectedDealForPreview.title }}</span>
+                    <Building2 class="h-3.5 w-3.5 shrink-0 text-muted-foreground" /> <span class="truncate">{{ selectedDealForPreview.title }}</span>
                   </span>
                 </div>
               </div>
@@ -2646,8 +2649,8 @@ function handleOwnerChange(event: Event) {
                   :class="[
                     'inline-flex items-center gap-1.5 text-xs font-bold px-3.5 py-1.5 rounded-lg border transition-all duration-150 cursor-pointer shadow-sm',
                     (selectedDealForPreview.stage === 'Follow Up' || selectedDealForPreview.stage === 'Won')
-                      ? 'bg-[#23B750] text-white border-[#23B750] opacity-80 cursor-not-allowed'
-                      : 'bg-[#23B750] text-white border-[#23B750] hover:bg-[#1a8c3d] hover:border-[#1a8c3d]'
+                      ? 'bg-primary text-primary-foreground border-primary opacity-80 cursor-not-allowed'
+                      : 'bg-primary text-primary-foreground border-primary hover:bg-primary hover:border-primary'
                   ]"
                   :disabled="selectedDealForPreview.stage === 'Follow Up' || selectedDealForPreview.stage === 'Won'"
                 >
@@ -2659,24 +2662,24 @@ function handleOwnerChange(event: Event) {
                   :class="[
                     'inline-flex items-center gap-1.5 text-xs font-bold px-3.5 py-1.5 rounded-lg border transition-all duration-150 cursor-pointer shadow-sm',
                     selectedDealForPreview.stage === 'Lost'
-                      ? 'bg-red-500 text-white border-red-500 opacity-80 cursor-not-allowed'
-                      : 'bg-red-500 text-white border-red-500 hover:bg-red-600 hover:border-red-600'
+                      ? 'bg-destructive text-primary-foreground border-destructive/20 opacity-80 cursor-not-allowed'
+                      : 'bg-destructive text-primary-foreground border-destructive/20 hover:bg-destructive hover:border-destructive'
                   ]"
                   :disabled="selectedDealForPreview.stage === 'Lost'"
                 >
                   <XCircle class="w-3.5 h-3.5" />
                   {{ selectedDealForPreview.stage === 'Lost' ? 'Lost' : 'Mark as Lost' }}
                 </button>
-                <div class="h-6 w-[1px] bg-slate-200 mx-1"></div>
+                <div class="h-6 w-[1px] bg-muted mx-1"></div>
                 <button
-                  class="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
+                  class="p-1.5 text-muted-foreground hover:text-muted-foreground hover:bg-muted rounded-lg transition-colors cursor-pointer"
                   title="Expand"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
                 </button>
                 <button
                   @click="selectedDealForPreview = null"
-                  class="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
+                  class="p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors cursor-pointer"
                   title="Close"
                 >
                   <X class="w-4.5 h-4.5" />
@@ -2686,31 +2689,31 @@ function handleOwnerChange(event: Event) {
           </header>
 
           <!-- ── CHEVRON PIPELINE BAR ─────────────────────────── -->
-          <div class="flex-shrink-0 overflow-x-auto bg-white px-5 pb-3 sm:px-8">
+          <div class="flex-shrink-0 overflow-x-auto bg-card px-5 pb-3 sm:px-8">
             <div class="flex min-w-[700px] select-none items-stretch gap-0.5">
               <!-- New Deal -->
               <div :class="['clip-chevron min-w-[130px] flex-1 py-1.5 text-center text-[10px] font-bold transition-all duration-200',
-                selectedDealForPreview.stage === 'New' ? 'bg-blue-600 text-white' : 'bg-blue-100 text-blue-700']">
+                selectedDealForPreview.stage === 'New' ? 'bg-primary text-primary-foreground' : 'bg-info/20 text-info']">
                 New Deal / 3days
               </div>
               <!-- Acknowledge -->
               <div :class="['clip-chevron min-w-[110px] flex-1 py-1.5 text-center text-[10px] font-bold transition-all duration-200',
-                selectedDealForPreview.stage === 'Acknowledged' ? 'bg-blue-600 text-white' : 'bg-blue-100 text-blue-700']">
+                selectedDealForPreview.stage === 'Acknowledged' ? 'bg-primary text-primary-foreground' : 'bg-info/20 text-info']">
                 Acknowledge
               </div>
               <!-- Qualifying -->
               <div :class="['clip-chevron min-w-[110px] flex-1 py-1.5 text-center text-[10px] font-bold transition-all duration-200',
-                (selectedDealForPreview.stage === 'Qualifying' || selectedDealForPreview.stage === 'New' || selectedDealForPreview.stage === 'Acknowledged') ? 'bg-blue-600 text-white' : 'bg-blue-100 text-blue-700']">
+                (selectedDealForPreview.stage === 'Qualifying' || selectedDealForPreview.stage === 'New' || selectedDealForPreview.stage === 'Acknowledged') ? 'bg-primary text-primary-foreground' : 'bg-info/20 text-info']">
                 Qualifying
               </div>
               <!-- Follow Up -->
               <div :class="['clip-chevron min-w-[110px] flex-1 py-1.5 text-center text-[10px] font-bold transition-all duration-200',
-                (selectedDealForPreview.stage === 'Proposal / Quotation' || selectedDealForPreview.stage === 'Follow Up') ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500']">
+                (selectedDealForPreview.stage === 'Proposal / Quotation' || selectedDealForPreview.stage === 'Follow Up') ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground']">
                 Follow Up
               </div>
               <!-- Results -->
               <div :class="['clip-chevron min-w-[90px] flex-1 py-1.5 text-center text-[10px] font-bold transition-all duration-200',
-                (selectedDealForPreview.stage === 'Won' || selectedDealForPreview.stage === 'Lost') ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500']">
+                (selectedDealForPreview.stage === 'Won' || selectedDealForPreview.stage === 'Lost') ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground']">
                 Results
               </div>
             </div>
@@ -2723,23 +2726,23 @@ function handleOwnerChange(event: Event) {
             <aside class="flex w-full flex-shrink-0 flex-col gap-4 md:w-[300px] md:overflow-y-auto md:pr-1 xl:w-[360px]">
 
               <!-- Widget: Deal Info -->
-              <div class="shrink-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+              <div class="shrink-0 overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
                 <button
                   type="button"
                   role="switch"
                   :aria-checked="showPreviewDealInfo"
-                  class="flex w-full items-center justify-between px-4 py-2.5 text-left transition-colors hover:bg-slate-50"
+                  class="flex w-full items-center justify-between px-4 py-2.5 text-left transition-colors hover:bg-muted/30"
                   @click="showPreviewDealInfo = !showPreviewDealInfo"
                 >
-                  <span class="text-sm font-extrabold text-slate-900">Deal Info</span>
-                  <div :class="['w-7 h-4 rounded-full p-0.5 transition-colors duration-200 flex items-center flex-shrink-0', showPreviewDealInfo ? 'bg-[#23B750]' : 'bg-gray-300']">
-                    <div :class="['w-3 h-3 rounded-full bg-white transition-transform duration-200 shadow', showPreviewDealInfo ? 'translate-x-3' : 'translate-x-0']"></div>
+                  <span class="text-sm font-extrabold text-foreground">Deal Info</span>
+                  <div :class="['w-7 h-4 rounded-full p-0.5 transition-colors duration-200 flex items-center flex-shrink-0', showPreviewDealInfo ? 'bg-primary' : 'bg-muted']">
+                    <div :class="['w-3 h-3 rounded-full bg-background transition-transform duration-200 shadow', showPreviewDealInfo ? 'translate-x-3' : 'translate-x-0']"></div>
                   </div>
                 </button>
-                <div v-if="showPreviewDealInfo" class="space-y-2 border-t border-slate-100 px-4 pb-3.5 pt-3">
+                <div v-if="showPreviewDealInfo" class="space-y-2 border-t border-border px-4 pb-3.5 pt-3">
                   <div class="flex items-center justify-between gap-2">
-                    <span class="flex shrink-0 items-center gap-2 text-xs font-semibold text-slate-400"><FolderKanban class="h-3.5 w-3.5 text-slate-400" /> Stage</span>
-                    <select v-model="selectedDealForPreview.stage" class="max-w-[180px] cursor-pointer rounded-lg border border-slate-200 bg-slate-50 px-2 py-1 text-xs font-bold text-slate-800 outline-none focus:border-[#23B750]">
+                    <span class="flex shrink-0 items-center gap-2 text-xs font-semibold text-muted-foreground"><FolderKanban class="h-3.5 w-3.5 text-muted-foreground" /> Stage</span>
+                    <select v-model="selectedDealForPreview.stage" class="max-w-[180px] cursor-pointer rounded-lg border border-border bg-muted/30 px-2 py-1 text-xs font-bold text-foreground outline-none focus:border-primary">
                       <option v-for="stg in stages" :key="stg" :value="stg">{{ stg }}</option>
                       <option value="Won">Won</option>
                       <option value="Lost">Lost</option>
@@ -2747,49 +2750,49 @@ function handleOwnerChange(event: Event) {
                     </select>
                   </div>
                   <div class="flex items-center justify-between gap-2">
-                    <span class="flex shrink-0 items-center gap-2 text-xs font-semibold text-slate-400"><DollarSign class="h-3.5 w-3.5 text-slate-400" /> Est. Deal Value</span>
+                    <span class="flex shrink-0 items-center gap-2 text-xs font-semibold text-muted-foreground"><DollarSign class="h-3.5 w-3.5 text-muted-foreground" /> Est. Deal Value</span>
                     <div class="flex items-center gap-1">
-                      <span class="text-xs font-semibold text-slate-400">RM</span>
-                      <input v-model.number="selectedDealForPreview.value" type="number" aria-label="Estimated deal value" class="w-24 rounded-lg border border-slate-200 bg-slate-50 px-2 py-1 text-right text-xs font-bold text-slate-800 outline-none focus:border-[#23B750]" />
+                      <span class="text-xs font-semibold text-muted-foreground">RM</span>
+                      <input v-model.number="selectedDealForPreview.value" type="number" aria-label="Estimated deal value" class="w-24 rounded-lg border border-border bg-muted/30 px-2 py-1 text-right text-xs font-bold text-foreground outline-none focus:border-primary" />
                     </div>
                   </div>
                   <div class="flex items-center justify-between gap-2">
-                    <span class="flex items-center gap-2 text-xs font-semibold text-slate-400"><CalendarDays class="h-3.5 w-3.5 text-slate-400" /> Est. Close Date</span>
-                    <span class="text-xs font-bold text-slate-700">{{ selectedDealForPreview.closeDate || '22/05/2026' }}</span>
+                    <span class="flex items-center gap-2 text-xs font-semibold text-muted-foreground"><CalendarDays class="h-3.5 w-3.5 text-muted-foreground" /> Est. Close Date</span>
+                    <span class="text-xs font-bold text-foreground">{{ selectedDealForPreview.closeDate || '22/05/2026' }}</span>
                   </div>
                   <div class="flex items-center justify-between gap-2">
-                    <span class="flex items-center gap-2 text-xs font-semibold text-slate-400"><FileText class="h-3.5 w-3.5 text-slate-400" /> Service Type</span>
-                    <span class="max-w-[160px] truncate text-xs font-bold text-slate-700">{{ selectedDealForPreview.description }}</span>
+                    <span class="flex items-center gap-2 text-xs font-semibold text-muted-foreground"><FileText class="h-3.5 w-3.5 text-muted-foreground" /> Service Type</span>
+                    <span class="max-w-[160px] truncate text-xs font-bold text-foreground">{{ selectedDealForPreview.description }}</span>
                   </div>
                   <div class="flex items-center justify-between gap-2">
-                    <span class="flex items-center gap-2 text-xs font-semibold text-slate-400"><TrendingUp class="h-3.5 w-3.5 text-slate-400" /> Sales Motion</span>
-                    <span class="text-xs font-bold text-slate-700">Inbound</span>
+                    <span class="flex items-center gap-2 text-xs font-semibold text-muted-foreground"><TrendingUp class="h-3.5 w-3.5 text-muted-foreground" /> Sales Motion</span>
+                    <span class="text-xs font-bold text-foreground">Inbound</span>
                   </div>
                 </div>
               </div>
 
               <!-- Widget: Sales Info -->
-              <div class="shrink-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+              <div class="shrink-0 overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
                 <button
                   type="button"
                   role="switch"
                   :aria-checked="showPreviewSalesInfo"
-                  class="flex w-full items-center justify-between px-4 py-2.5 text-left transition-colors hover:bg-slate-50"
+                  class="flex w-full items-center justify-between px-4 py-2.5 text-left transition-colors hover:bg-muted/30"
                   @click="showPreviewSalesInfo = !showPreviewSalesInfo"
                 >
-                  <span class="text-sm font-extrabold text-slate-900">Sales Info</span>
-                  <div :class="['w-7 h-4 rounded-full p-0.5 transition-colors duration-200 flex items-center flex-shrink-0', showPreviewSalesInfo ? 'bg-[#23B750]' : 'bg-gray-300']">
-                    <div :class="['w-3 h-3 rounded-full bg-white transition-transform duration-200 shadow', showPreviewSalesInfo ? 'translate-x-3' : 'translate-x-0']"></div>
+                  <span class="text-sm font-extrabold text-foreground">Sales Info</span>
+                  <div :class="['w-7 h-4 rounded-full p-0.5 transition-colors duration-200 flex items-center flex-shrink-0', showPreviewSalesInfo ? 'bg-primary' : 'bg-muted']">
+                    <div :class="['w-3 h-3 rounded-full bg-background transition-transform duration-200 shadow', showPreviewSalesInfo ? 'translate-x-3' : 'translate-x-0']"></div>
                   </div>
                 </button>
-                <div v-if="showPreviewSalesInfo" class="space-y-2 border-t border-slate-100 px-4 pb-3.5 pt-3">
+                <div v-if="showPreviewSalesInfo" class="space-y-2 border-t border-border px-4 pb-3.5 pt-3">
                   <div class="flex items-center gap-2 pt-1">
-                    <img :src="selectedDealForPreview.avatar" class="h-9 w-9 shrink-0 rounded-full border border-slate-200 object-cover" :alt="selectedDealForPreview.owner" />
+                    <img :src="selectedDealForPreview.avatar" class="h-9 w-9 shrink-0 rounded-full border border-border object-cover" :alt="selectedDealForPreview.owner" />
                     <div class="min-w-0">
                       <select
                         :value="selectedDealForPreview.owner"
                         @change="handleOwnerChange"
-                        class="cursor-pointer border-none bg-transparent p-0 text-xs font-bold text-slate-800 focus:outline-none focus:ring-0 focus:border-none focus:text-[#168638] focus:underline"
+                        class="cursor-pointer border-none bg-transparent p-0 text-xs font-bold text-foreground focus:outline-none focus:ring-0 focus:border-none focus:text-primary focus:underline"
                         aria-label="Change sales owner"
                       >
                         <option
@@ -2800,75 +2803,75 @@ function handleOwnerChange(event: Event) {
                           {{ agent }}
                         </option>
                       </select>
-                      <div class="text-xs font-medium text-slate-400">Sales Owner</div>
+                      <div class="text-xs font-medium text-muted-foreground">Sales Owner</div>
                     </div>
                   </div>
-                  <div class="text-xs font-semibold text-slate-400">Deal created {{ selectedDealForPreview.age }} ago</div>
+                  <div class="text-xs font-semibold text-muted-foreground">Deal created {{ selectedDealForPreview.age }} ago</div>
                 </div>
               </div>
 
               <!-- Widget: Primary Contact -->
-              <div class="shrink-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+              <div class="shrink-0 overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
                 <button
                   type="button"
                   role="switch"
                   :aria-checked="showPreviewContactInfo"
-                  class="flex w-full items-center justify-between px-4 py-2.5 text-left transition-colors hover:bg-slate-50"
+                  class="flex w-full items-center justify-between px-4 py-2.5 text-left transition-colors hover:bg-muted/30"
                   @click="showPreviewContactInfo = !showPreviewContactInfo"
                 >
-                  <span class="text-sm font-extrabold text-slate-900">Primary</span>
-                  <div :class="['w-7 h-4 rounded-full p-0.5 transition-colors duration-200 flex items-center flex-shrink-0', showPreviewContactInfo ? 'bg-[#23B750]' : 'bg-gray-300']">
-                    <div :class="['w-3 h-3 rounded-full bg-white transition-transform duration-200 shadow', showPreviewContactInfo ? 'translate-x-3' : 'translate-x-0']"></div>
+                  <span class="text-sm font-extrabold text-foreground">Primary</span>
+                  <div :class="['w-7 h-4 rounded-full p-0.5 transition-colors duration-200 flex items-center flex-shrink-0', showPreviewContactInfo ? 'bg-primary' : 'bg-muted']">
+                    <div :class="['w-3 h-3 rounded-full bg-background transition-transform duration-200 shadow', showPreviewContactInfo ? 'translate-x-3' : 'translate-x-0']"></div>
                   </div>
                 </button>
-                <div v-if="showPreviewContactInfo" class="space-y-2.5 border-t border-slate-100 px-4 pb-3.5 pt-3">
+                <div v-if="showPreviewContactInfo" class="space-y-2.5 border-t border-border px-4 pb-3.5 pt-3">
                   <div class="flex items-center justify-between gap-2">
                     <div class="flex items-center gap-2.5">
-                      <img :src="selectedDealForPreview.clientAvatar || selectedDealForPreview.avatar" class="h-14 w-14 shrink-0 rounded-full border-4 border-white object-cover shadow ring-1 ring-slate-200" :alt="selectedDealForPreview.clientName" />
+                      <img :src="selectedDealForPreview.clientAvatar || selectedDealForPreview.avatar" class="h-14 w-14 shrink-0 rounded-full border-4 border-border object-cover shadow ring-1 ring-border" :alt="selectedDealForPreview.clientName" />
                       <div>
-                        <div class="flex items-center gap-1 text-xs font-bold text-slate-800">
-                          {{ selectedDealForPreview.clientName }} <Crown class="w-3 h-3 text-amber-400 fill-amber-400 shrink-0" />
+                        <div class="flex items-center gap-1 text-xs font-bold text-foreground">
+                          {{ selectedDealForPreview.clientName }} <Crown class="w-3 h-3 text-warning fill-warning shrink-0" />
                         </div>
-                        <div class="mt-1 max-w-[170px] truncate text-xs font-medium text-slate-400">Primary decision maker</div>
+                        <div class="mt-1 max-w-[170px] truncate text-xs font-medium text-muted-foreground">Primary decision maker</div>
                       </div>
                     </div>
                     <div class="flex gap-1">
-                      <button class="p-1 rounded hover:bg-gray-100 text-gray-400 hover:text-gray-600 cursor-pointer transition-colors"><MoreVertical class="w-3.5 h-3.5" /></button>
-                      <button class="p-1 rounded hover:bg-gray-100 text-gray-400 hover:text-gray-600 cursor-pointer transition-colors"><ChevronDown class="w-3.5 h-3.5" /></button>
+                      <button class="p-1 rounded hover:bg-muted text-muted-foreground hover:text-muted-foreground cursor-pointer transition-colors"><MoreVertical class="w-3.5 h-3.5" /></button>
+                      <button class="p-1 rounded hover:bg-muted text-muted-foreground hover:text-muted-foreground cursor-pointer transition-colors"><ChevronDown class="w-3.5 h-3.5" /></button>
                     </div>
                   </div>
-                  <div class="space-y-1.5 pt-1 border-t border-gray-100">
-                    <a :href="'tel:' + selectedDealForPreview.phone" class="flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-[#23B750]"><Phone class="h-3.5 w-3.5 shrink-0 text-slate-400" /> {{ selectedDealForPreview.phone }}</a>
-                    <a :href="'mailto:' + selectedDealForPreview.email" class="flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-[#23B750]"><Mail class="h-3.5 w-3.5 shrink-0 text-slate-400" /><span class="truncate">{{ selectedDealForPreview.email }}</span></a>
+                  <div class="space-y-1.5 pt-1 border-t border-border">
+                    <a :href="'tel:' + selectedDealForPreview.phone" class="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary"><Phone class="h-3.5 w-3.5 shrink-0 text-muted-foreground" /> {{ selectedDealForPreview.phone }}</a>
+                    <a :href="'mailto:' + selectedDealForPreview.email" class="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary"><Mail class="h-3.5 w-3.5 shrink-0 text-muted-foreground" /><span class="truncate">{{ selectedDealForPreview.email }}</span></a>
                   </div>
                   <div class="flex flex-wrap gap-1.5 pt-1">
-                    <span class="inline-flex items-center gap-1 bg-gray-100 border border-gray-200 text-gray-600 text-[9px] font-bold px-2 py-0.5 rounded cursor-pointer hover:bg-gray-200 transition-colors"><MessageSquare class="w-2.5 h-2.5" /> Source</span>
-                    <span class="inline-flex items-center gap-1 bg-amber-50 border border-amber-200 text-amber-700 text-[9px] font-bold px-2 py-0.5 rounded cursor-pointer hover:bg-amber-100 transition-colors"><Thermometer class="w-2.5 h-2.5" /> Temp</span>
-                    <span class="inline-flex items-center gap-1 bg-red-50 border border-red-200 text-red-600 text-[9px] font-bold px-2 py-0.5 rounded cursor-pointer hover:bg-red-100 transition-colors"><AlertTriangle class="w-2.5 h-2.5" /> Urgency</span>
+                    <span class="inline-flex items-center gap-1 bg-muted border border-border text-muted-foreground text-[9px] font-bold px-2 py-0.5 rounded cursor-pointer hover:bg-muted transition-colors"><MessageSquare class="w-2.5 h-2.5" /> Source</span>
+                    <span class="inline-flex items-center gap-1 bg-warning/10 border border-warning/30 text-warning text-[9px] font-bold px-2 py-0.5 rounded cursor-pointer hover:bg-warning/20 transition-colors"><Thermometer class="w-2.5 h-2.5" /> Temp</span>
+                    <span class="inline-flex items-center gap-1 bg-destructive/10 border border-destructive/30 text-destructive text-[9px] font-bold px-2 py-0.5 rounded cursor-pointer hover:bg-destructive/20 transition-colors"><AlertTriangle class="w-2.5 h-2.5" /> Urgency</span>
                   </div>
                 </div>
               </div>
 
               <!-- Widget: Company Info -->
-              <div class="shrink-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+              <div class="shrink-0 overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
                 <button
                   type="button"
                   role="switch"
                   :aria-checked="showPreviewCompanyInfo"
-                  class="flex w-full items-center justify-between px-4 py-2.5 text-left transition-colors hover:bg-slate-50"
+                  class="flex w-full items-center justify-between px-4 py-2.5 text-left transition-colors hover:bg-muted/30"
                   @click="showPreviewCompanyInfo = !showPreviewCompanyInfo"
                 >
-                  <span class="text-sm font-extrabold text-slate-900">Company Info</span>
-                  <div :class="['w-7 h-4 rounded-full p-0.5 transition-colors duration-200 flex items-center flex-shrink-0', showPreviewCompanyInfo ? 'bg-[#23B750]' : 'bg-gray-300']">
-                    <div :class="['w-3 h-3 rounded-full bg-white transition-transform duration-200 shadow', showPreviewCompanyInfo ? 'translate-x-3' : 'translate-x-0']"></div>
+                  <span class="text-sm font-extrabold text-foreground">Company Info</span>
+                  <div :class="['w-7 h-4 rounded-full p-0.5 transition-colors duration-200 flex items-center flex-shrink-0', showPreviewCompanyInfo ? 'bg-primary' : 'bg-muted']">
+                    <div :class="['w-3 h-3 rounded-full bg-background transition-transform duration-200 shadow', showPreviewCompanyInfo ? 'translate-x-3' : 'translate-x-0']"></div>
                   </div>
                 </button>
-                <div v-if="showPreviewCompanyInfo" class="space-y-2 border-t border-slate-100 px-4 pb-3.5 pt-3 text-xs text-slate-500">
-                  <div class="flex items-start gap-2 font-semibold text-slate-700">
-                    <Building2 class="mt-0.5 h-3.5 w-3.5 shrink-0 text-slate-400" />
+                <div v-if="showPreviewCompanyInfo" class="space-y-2 border-t border-border px-4 pb-3.5 pt-3 text-xs text-muted-foreground">
+                  <div class="flex items-start gap-2 font-semibold text-foreground">
+                    <Building2 class="mt-0.5 h-3.5 w-3.5 shrink-0 text-muted-foreground" />
                     {{ selectedDealForPreview.title }}
                   </div>
-                  <a href="https://example.com" target="_blank" rel="noreferrer" class="flex items-center gap-2 hover:text-[#23B750]"><Link2 class="h-3.5 w-3.5" /> company.example.com</a>
+                  <a href="https://example.com" target="_blank" rel="noreferrer" class="flex items-center gap-2 hover:text-primary"><Link2 class="h-3.5 w-3.5" /> company.example.com</a>
                   <p class="flex items-start gap-2"><MapPin class="mt-0.5 h-3.5 w-3.5 shrink-0" /> Kuala Lumpur, Malaysia</p>
                   <p class="flex items-center gap-2"><BriefcaseBusiness class="h-3.5 w-3.5" /> Professional Services</p>
                 </div>
@@ -2877,10 +2880,10 @@ function handleOwnerChange(event: Event) {
             </aside>
 
             <!-- RIGHT PANEL: Flex-1, white, tabs + content + footer -->
-            <main class="flex min-h-[640px] flex-1 flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm md:min-h-0">
+            <main class="flex min-h-[640px] flex-1 flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm md:min-h-0">
 
               <!-- Main Tab Bar -->
-              <div class="flex-shrink-0 border-b border-slate-200 px-4 sm:px-6">
+              <div class="flex-shrink-0 border-b border-border px-4 sm:px-6">
                 <div class="flex items-center gap-6 overflow-x-auto no-scrollbar py-0.5">
                   <button
                     v-for="tab in ['Deal Info', 'Conversations', 'People', 'Appointments (0)', 'Tickets (0)', 'Logs']"
@@ -2890,13 +2893,13 @@ function handleOwnerChange(event: Event) {
                     :class="[
                       'border-b-2 px-1 py-3 text-xs font-bold whitespace-nowrap transition-colors cursor-pointer mr-2 sm:mr-4',
                       previewMainTab === tab
-                        ? 'border-[#23B750] text-[#168638]'
-                        : 'border-transparent text-slate-500 hover:text-slate-800'
+                        ? 'border-primary text-primary'
+                        : 'border-transparent text-muted-foreground hover:text-foreground'
                     ]"
                   >
                     <span v-if="tab.includes('(')">
                       <span>{{ tab.split(' ')[0] }} </span>
-                      <span class="text-slate-400 font-medium text-[10px]">{{ tab.split(' ')[1] }}</span>
+                      <span class="text-muted-foreground font-medium text-[10px]">{{ tab.split(' ')[1] }}</span>
                     </span>
                     <span v-else>{{ tab }}</span>
                   </button>
@@ -2904,12 +2907,12 @@ function handleOwnerChange(event: Event) {
               </div>
 
               <!-- Sub Tab Bar (Notes / Files / Media) -->
-              <section v-if="previewMainTab === 'Deal Info'" class="mx-4 mt-4 flex-shrink-0 rounded-xl bg-violet-50 px-4 py-4 sm:mx-6 sm:px-5">
-                <h3 class="text-sm font-bold text-violet-700">Rakan Insights</h3>
-                <p class="mt-1.5 text-sm leading-6 text-violet-600 sm:text-base">High-potential opportunity. The latest activity shows strong interest in {{ selectedDealForPreview.description.toLowerCase() }}. Confirm the decision timeline and agree on the next owner action.</p>
+              <section v-if="previewMainTab === 'Deal Info'" class="mx-4 mt-4 flex-shrink-0 rounded-xl bg-tag-6/10 px-4 py-4 sm:mx-6 sm:px-5">
+                <h3 class="text-sm font-bold text-tag-6-foreground">Rakan Insights</h3>
+                <p class="mt-1.5 text-sm leading-6 text-tag-6-foreground sm:text-base">High-potential opportunity. The latest activity shows strong interest in {{ selectedDealForPreview.description.toLowerCase() }}. Confirm the decision timeline and agree on the next owner action.</p>
               </section>
 
-              <div v-if="previewMainTab === 'Deal Info'" class="flex flex-shrink-0 items-center gap-6 border-b border-slate-200 px-4 pt-2 sm:px-6">
+              <div v-if="previewMainTab === 'Deal Info'" class="flex flex-shrink-0 items-center gap-6 border-b border-border px-4 pt-2 sm:px-6">
                 <button
                   v-for="sub in ['Notes', 'Files', 'Media']"
                   :key="sub"
@@ -2917,8 +2920,8 @@ function handleOwnerChange(event: Event) {
                   :class="[
                     'border-b-2 px-1 py-3 text-sm font-semibold transition-colors',
                     previewSubTab === sub
-                      ? 'border-[#23B750] text-[#168638]'
-                      : 'border-transparent text-slate-500 hover:text-slate-800'
+                      ? 'border-primary text-primary'
+                      : 'border-transparent text-muted-foreground hover:text-foreground'
                   ]"
                 >
                   {{ sub }}
@@ -2933,9 +2936,9 @@ function handleOwnerChange(event: Event) {
 
                   <!-- Description block -->
                   <section>
-                    <h3 class="mb-4 text-base font-semibold text-slate-700">Description</h3>
-                    <div class="max-w-5xl space-y-3 text-sm leading-6 text-slate-700 sm:text-base sm:leading-7">
-                      <p class="font-semibold text-gray-900">Linda Teo from Care Corner Singapore Ltd is requesting a quote for a digital project related to their appreciation dinner on November 26.</p>
+                    <h3 class="mb-4 text-base font-semibold text-foreground">Description</h3>
+                    <div class="max-w-5xl space-y-3 text-sm leading-6 text-foreground sm:text-base sm:leading-7">
+                      <p class="font-semibold text-foreground">Linda Teo from Care Corner Singapore Ltd is requesting a quote for a digital project related to their appreciation dinner on November 26.</p>
                       <p>Below are the requirements of the website:</p>
                       <ul class="list-decimal pl-5 space-y-1">
                         <li>Purchasing Form:
@@ -2958,19 +2961,19 @@ function handleOwnerChange(event: Event) {
 
                   <!-- Notes log -->
                   <section>
-                    <h3 class="mb-4 text-base font-semibold text-slate-700">Notes</h3>
-                    <p v-if="!(dealNotes[selectedDealForPreview.id] && dealNotes[selectedDealForPreview.id].length > 0)" class="text-sm text-slate-400">No notes yet. Add the first update below.</p>
+                    <h3 class="mb-4 text-base font-semibold text-foreground">Notes</h3>
+                    <p v-if="!(dealNotes[selectedDealForPreview.id] && dealNotes[selectedDealForPreview.id].length > 0)" class="text-sm text-muted-foreground">No notes yet. Add the first update below.</p>
                     <div v-else class="space-y-2">
                       <div
                         v-for="note in dealNotes[selectedDealForPreview.id]"
                         :key="note.id"
-                        class="space-y-1 border-l-2 border-emerald-100 py-1 pl-4"
+                        class="space-y-1 border-l-2 border-success/20 py-1 pl-4"
                       >
-                        <div class="flex items-center justify-between text-xs font-medium text-slate-400">
+                        <div class="flex items-center justify-between text-xs font-medium text-muted-foreground">
                           <span>Updated by Sales Agent</span>
                           <span>{{ note.date }}</span>
                         </div>
-                        <p class="text-sm leading-6 text-slate-700 sm:text-base">{{ note.text }}</p>
+                        <p class="text-sm leading-6 text-foreground sm:text-base">{{ note.text }}</p>
                       </div>
                     </div>
                   </section>
@@ -2978,53 +2981,53 @@ function handleOwnerChange(event: Event) {
 
                 <!-- FILES VIEW -->
                 <div v-else-if="previewMainTab === 'Deal Info' && previewSubTab === 'Files'" class="flex flex-col items-center justify-center h-full text-center py-16">
-                  <div class="w-14 h-14 rounded-2xl bg-gray-100 flex items-center justify-center mb-3">
-                    <Paperclip class="w-6 h-6 text-gray-400" />
+                  <div class="w-14 h-14 rounded-2xl bg-muted flex items-center justify-center mb-3">
+                    <Paperclip class="w-6 h-6 text-muted-foreground" />
                   </div>
-                  <h4 class="font-extrabold text-sm text-gray-700">No Files Uploaded</h4>
-                  <p class="text-xs text-gray-400 mt-1">Upload client briefs, design specs or formal invoices here.</p>
-                  <button class="mt-4 bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 font-bold text-xs px-4 py-2 rounded-lg shadow-sm cursor-pointer transition-all">Upload File</button>
+                  <h4 class="font-extrabold text-sm text-foreground">No Files Uploaded</h4>
+                  <p class="text-xs text-muted-foreground mt-1">Upload client briefs, design specs or formal invoices here.</p>
+                  <button class="mt-4 bg-card hover:bg-muted/30 border border-border text-foreground font-bold text-xs px-4 py-2 rounded-lg shadow-sm cursor-pointer transition-all">Upload File</button>
                 </div>
 
                 <!-- MEDIA VIEW -->
                 <div v-else-if="previewMainTab === 'Deal Info' && previewSubTab === 'Media'" class="flex flex-col items-center justify-center h-full text-center py-16">
-                  <div class="w-14 h-14 rounded-2xl bg-gray-100 flex items-center justify-center mb-3">
-                    <FileText class="w-6 h-6 text-gray-400" />
+                  <div class="w-14 h-14 rounded-2xl bg-muted flex items-center justify-center mb-3">
+                    <FileText class="w-6 h-6 text-muted-foreground" />
                   </div>
-                  <h4 class="font-extrabold text-sm text-gray-700">No Media Assets</h4>
-                  <p class="text-xs text-gray-400 mt-1">Images, diagrams, and video walkthroughs go here.</p>
+                  <h4 class="font-extrabold text-sm text-foreground">No Media Assets</h4>
+                  <p class="text-xs text-muted-foreground mt-1">Images, diagrams, and video walkthroughs go here.</p>
                 </div>
 
                 <!-- OTHER TABS -->
                 <div v-else class="flex flex-col items-center justify-center h-full text-center py-16">
-                  <div class="w-14 h-14 rounded-2xl bg-gray-100 flex items-center justify-center mb-3">
-                    <MessageSquare class="w-6 h-6 text-gray-400" />
+                  <div class="w-14 h-14 rounded-2xl bg-muted flex items-center justify-center mb-3">
+                    <MessageSquare class="w-6 h-6 text-muted-foreground" />
                   </div>
-                  <h4 class="font-extrabold text-sm text-gray-700">{{ previewMainTab }}</h4>
-                  <p class="text-xs text-gray-400 mt-1">This module is synced with your RakanSales CRM pipeline.</p>
+                  <h4 class="font-extrabold text-sm text-foreground">{{ previewMainTab }}</h4>
+                  <p class="text-xs text-muted-foreground mt-1">This module is synced with your RakanSales CRM pipeline.</p>
                 </div>
 
               </div>
 
               <!-- Add Note Footer -->
-              <footer v-if="previewMainTab === 'Deal Info' && previewSubTab === 'Notes'" class="flex-shrink-0 border-t border-slate-200 bg-white p-4 sm:px-6 sm:py-5">
-                <div class="flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2.5 shadow-sm transition-all focus-within:border-[#23B750] focus-within:ring-2 focus-within:ring-[#23B750]/10">
+              <footer v-if="previewMainTab === 'Deal Info' && previewSubTab === 'Notes'" class="flex-shrink-0 border-t border-border bg-card p-4 sm:px-6 sm:py-5">
+                <div class="flex items-center gap-2 rounded-xl border border-border bg-card px-4 py-2.5 shadow-sm transition-all focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/10">
                   <input
                     v-model="newNoteText"
                     type="text"
                     placeholder="Add a note"
                     @keydown.enter="addNoteToDeal"
                     aria-label="Add a note"
-                    class="min-w-0 flex-1 bg-transparent text-sm font-medium text-slate-800 outline-none placeholder:text-slate-400 sm:text-base"
+                    class="min-w-0 flex-1 bg-transparent text-sm font-medium text-foreground outline-none placeholder:text-muted-foreground sm:text-base"
                   />
                   <div class="flex items-center gap-1">
-                    <button type="button" aria-label="Add emoji" class="rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700"><Smile class="h-5 w-5" /></button>
-                    <button type="button" aria-label="Attach file" class="rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700"><Paperclip class="h-5 w-5" /></button>
+                    <button type="button" aria-label="Add emoji" class="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"><Smile class="h-5 w-5" /></button>
+                    <button type="button" aria-label="Attach file" class="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"><Paperclip class="h-5 w-5" /></button>
                     <button
                       @click="addNoteToDeal"
                       type="button"
                       :disabled="!newNoteText.trim()"
-                      class="ml-1 rounded-lg px-3 py-1.5 text-sm font-semibold text-[#168638] transition-colors hover:bg-emerald-50 disabled:cursor-not-allowed disabled:opacity-40"
+                      class="ml-1 rounded-lg px-3 py-1.5 text-sm font-semibold text-primary transition-colors hover:bg-success/10 disabled:cursor-not-allowed disabled:opacity-40"
                     >
                       Add Note
                     </button>
@@ -3042,16 +3045,16 @@ function handleOwnerChange(event: Event) {
     <!-- ── AGENT EXIT REASSIGNMENT WIZARD MODAL ────────────────────── -->
     <div
       v-if="showExitWizardModal"
-      class="fixed inset-0 z-[105] flex items-center justify-center p-4 bg-slate-950/65 backdrop-blur-md animate-fade-in"
+      class="fixed inset-0 z-[105] flex items-center justify-center p-4 bg-card/65 backdrop-blur-md animate-fade-in"
     >
-      <div class="bg-white rounded-2xl w-full max-w-md overflow-hidden shadow-2xl border border-gray-100 flex flex-col animate-scale-up">
+      <div class="bg-card rounded-2xl w-full max-w-md overflow-hidden shadow-2xl border border-border flex flex-col animate-scale-up">
         <!-- Modal Header -->
-        <header class="px-6 py-4.5 bg-gray-50 border-b border-gray-100 flex items-center justify-between flex-shrink-0">
-          <h3 class="font-extrabold text-sm text-slate-900 flex items-center gap-2">
-            <UserX class="w-4 h-4 text-red-500" />
+        <header class="px-6 py-4.5 bg-muted/30 border-b border-border flex items-center justify-between flex-shrink-0">
+          <h3 class="font-extrabold text-sm text-foreground flex items-center gap-2">
+            <UserX class="w-4 h-4 text-destructive" />
             Departing Agent Offboarding Wizard
           </h3>
-          <button @click="showExitWizardModal = false" class="text-gray-400 hover:text-gray-600 rounded cursor-pointer" :disabled="isExecutingHandover">
+          <button @click="showExitWizardModal = false" class="text-muted-foreground hover:text-muted-foreground rounded cursor-pointer" :disabled="isExecutingHandover">
             <X class="w-4.5 h-4.5" />
           </button>
         </header>
@@ -3060,14 +3063,14 @@ function handleOwnerChange(event: Event) {
         <div class="p-6 flex-1 overflow-y-auto text-xs font-semibold space-y-5 font-sans">
           <!-- Step 1: Select departing agent -->
           <div v-if="handoverStep === 1 && !isExecutingHandover" class="space-y-4">
-            <p class="text-gray-550 leading-relaxed font-normal">
+            <p class="text-muted-foreground leading-relaxed font-normal">
               Manage the offboarding of a departing sales representative. Select the team member leaving to review their active pipeline impact.
             </p>
             <div class="space-y-1.5">
-              <label class="block text-gray-700">Departing Team Member</label>
+              <label class="block text-foreground">Departing Team Member</label>
               <select
                 v-model="exitSelectedAgent"
-                class="w-full p-2.5 bg-white border border-gray-250 rounded-lg font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#23B750]/20 focus:border-[#23B750] cursor-pointer font-sans"
+                class="w-full p-2.5 bg-card border border-input rounded-lg font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary cursor-pointer font-sans"
               >
                 <option value="" disabled>-- Select Departing Agent --</option>
                 <option v-for="agent in ['Ahmad Faizal', 'Siti Nur Aisyah', 'Rajesh Kumar', 'Lim Wei Jie', 'Nurul Huda']" :key="agent" :value="agent">
@@ -3077,19 +3080,19 @@ function handleOwnerChange(event: Event) {
             </div>
 
             <!-- Pipeline Impact Card -->
-            <div v-if="exitSelectedAgent" class="bg-red-50/50 rounded-xl p-4.5 border border-red-100/80 space-y-3 animate-fade-in">
-              <h4 class="text-red-700 font-extrabold flex items-center gap-1.5">
-                <AlertTriangle class="w-4 h-4 text-red-500" />
+            <div v-if="exitSelectedAgent" class="bg-destructive/10 rounded-xl p-4.5 border border-destructive/20 space-y-3 animate-fade-in">
+              <h4 class="text-destructive font-extrabold flex items-center gap-1.5">
+                <AlertTriangle class="w-4 h-4 text-destructive" />
                 Active Pipeline Impact Details
               </h4>
-              <div class="grid grid-cols-2 gap-3 text-slate-700">
-                <div class="bg-white rounded-lg p-2.5 border border-red-50">
-                  <span class="text-[10px] text-gray-400 block font-bold uppercase">Active Deals</span>
-                  <span class="text-lg font-extrabold text-slate-900 mt-0.5 block">{{ exitDealsCount }}</span>
+              <div class="grid grid-cols-2 gap-3 text-foreground">
+                <div class="bg-card rounded-lg p-2.5 border border-destructive/20">
+                  <span class="text-[10px] text-muted-foreground block font-bold uppercase">Active Deals</span>
+                  <span class="text-lg font-extrabold text-foreground mt-0.5 block">{{ exitDealsCount }}</span>
                 </div>
-                <div class="bg-white rounded-lg p-2.5 border border-red-50">
-                  <span class="text-[10px] text-gray-400 block font-bold uppercase">Pipeline Value</span>
-                  <span class="text-lg font-extrabold text-red-600 mt-0.5 block font-mono">RM {{ exitDealsValue.toLocaleString() }}</span>
+                <div class="bg-card rounded-lg p-2.5 border border-destructive/20">
+                  <span class="text-[10px] text-muted-foreground block font-bold uppercase">Pipeline Value</span>
+                  <span class="text-lg font-extrabold text-destructive mt-0.5 block font-mono">RM {{ exitDealsValue.toLocaleString() }}</span>
                 </div>
               </div>
             </div>
@@ -3098,35 +3101,35 @@ function handleOwnerChange(event: Event) {
             <button
               @click="handoverStep = 2"
               :disabled="!exitSelectedAgent || exitDealsCount === 0"
-              class="w-full py-2.5 bg-[#23B750] hover:bg-[#168638] disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs font-bold rounded-lg shadow-sm cursor-pointer transition-colors"
+              class="w-full py-2.5 bg-primary hover:bg-primary disabled:opacity-40 disabled:cursor-not-allowed text-primary-foreground text-xs font-bold rounded-lg shadow-sm cursor-pointer transition-colors"
             >
               Continue to Handover Setup
             </button>
-            <p v-if="exitSelectedAgent && exitDealsCount === 0" class="text-center text-[10.5px] text-amber-605 font-medium">
+            <p v-if="exitSelectedAgent && exitDealsCount === 0" class="text-center text-[10.5px] text-warning font-medium">
               This agent has no active deals. You can safely delete their profile.
             </p>
           </div>
 
           <!-- Step 2: Configure handover mode -->
           <div v-else-if="handoverStep === 2 && !isExecutingHandover" class="space-y-4">
-            <h4 class="text-slate-800 font-extrabold uppercase tracking-wider text-[10px]">Select Reassignment Mode</h4>
+            <h4 class="text-foreground font-extrabold uppercase tracking-wider text-[10px]">Select Reassignment Mode</h4>
             <div class="grid grid-cols-2 gap-3">
               <!-- Mode 1: Single Target -->
               <div
                 @click="exitAssignMode = 'single'"
                 :class="[
                   'border rounded-xl p-4.5 cursor-pointer transition-all flex flex-col gap-2 relative',
-                  exitAssignMode === 'single' ? 'border-[#23B750] bg-[#23B750]/5 shadow-sm' : 'border-gray-200 hover:bg-gray-50'
+                  exitAssignMode === 'single' ? 'border-primary bg-primary/5 shadow-sm' : 'border-border hover:bg-muted/30'
                 ]"
               >
-                <div class="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center">
-                  <UserCheck class="w-3.5 h-3.5 text-slate-600" />
+                <div class="w-6 h-6 rounded-full bg-muted flex items-center justify-center">
+                  <UserCheck class="w-3.5 h-3.5 text-muted-foreground" />
                 </div>
                 <div>
-                  <span class="block text-slate-800 font-extrabold">Single Agent</span>
-                  <span class="text-[10px] text-gray-400 font-medium mt-0.5 block leading-normal font-normal">Assign all deals to one specific agent</span>
+                  <span class="block text-foreground font-extrabold">Single Agent</span>
+                  <span class="text-[10px] text-muted-foreground font-medium mt-0.5 block leading-normal font-normal">Assign all deals to one specific agent</span>
                 </div>
-                <div v-if="exitAssignMode === 'single'" class="absolute top-3 right-3 w-4 h-4 rounded-full bg-[#23B750] flex items-center justify-center text-white text-[8px] font-extrabold">✓</div>
+                <div v-if="exitAssignMode === 'single'" class="absolute top-3 right-3 w-4 h-4 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-[8px] font-extrabold">✓</div>
               </div>
 
               <!-- Mode 2: Equal Round Robin -->
@@ -3134,26 +3137,26 @@ function handleOwnerChange(event: Event) {
                 @click="exitAssignMode = 'round_robin'"
                 :class="[
                   'border rounded-xl p-4.5 cursor-pointer transition-all flex flex-col gap-2 relative',
-                  exitAssignMode === 'round_robin' ? 'border-[#23B750] bg-[#23B750]/5 shadow-sm' : 'border-gray-200 hover:bg-gray-50'
+                  exitAssignMode === 'round_robin' ? 'border-primary bg-primary/5 shadow-sm' : 'border-border hover:bg-muted/30'
                 ]"
               >
-                <div class="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center">
-                  <Shuffle class="w-3.5 h-3.5 text-slate-600" />
+                <div class="w-6 h-6 rounded-full bg-muted flex items-center justify-center">
+                  <Shuffle class="w-3.5 h-3.5 text-muted-foreground" />
                 </div>
                 <div>
-                  <span class="block text-slate-800 font-extrabold">Round Robin</span>
-                  <span class="text-[10px] text-gray-400 font-medium mt-0.5 block leading-normal font-normal">Fairly rotate deals across active queue pool</span>
+                  <span class="block text-foreground font-extrabold">Round Robin</span>
+                  <span class="text-[10px] text-muted-foreground font-medium mt-0.5 block leading-normal font-normal">Fairly rotate deals across active queue pool</span>
                 </div>
-                <div v-if="exitAssignMode === 'round_robin'" class="absolute top-3 right-3 w-4 h-4 rounded-full bg-[#23B750] flex items-center justify-center text-white text-[8px] font-extrabold">✓</div>
+                <div v-if="exitAssignMode === 'round_robin'" class="absolute top-3 right-3 w-4 h-4 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-[8px] font-extrabold">✓</div>
               </div>
             </div>
 
             <!-- Single Reassign Form -->
             <div v-if="exitAssignMode === 'single'" class="space-y-1.5 animate-fade-in pt-1">
-              <label class="block text-gray-700">Target Successor Agent</label>
+              <label class="block text-foreground">Target Successor Agent</label>
               <select
                 v-model="exitTargetAgent"
-                class="w-full p-2.5 bg-white border border-gray-250 rounded-lg font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#23B750]/20 focus:border-[#23B750] cursor-pointer"
+                class="w-full p-2.5 bg-card border border-input rounded-lg font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary cursor-pointer"
               >
                 <option value="" disabled>-- Select Successor Agent --</option>
                 <option v-for="agent in uniqueAgents.filter(a => a !== 'Everyone' && a !== exitSelectedAgent)" :key="agent" :value="agent">
@@ -3166,14 +3169,14 @@ function handleOwnerChange(event: Event) {
             <div class="flex gap-3 pt-2">
               <button
                 @click="handoverStep = 1"
-                class="flex-1 py-2.5 border border-gray-255 hover:bg-gray-50 text-slate-700 text-xs font-bold rounded-lg cursor-pointer transition-colors"
+                class="flex-1 py-2.5 border border-border hover:bg-muted/30 text-foreground text-xs font-bold rounded-lg cursor-pointer transition-colors"
               >
                 Back
               </button>
               <button
                 @click="executeHandover"
                 :disabled="exitAssignMode === 'single' && !exitTargetAgent"
-                class="flex-1 py-2.5 bg-red-600 hover:bg-red-700 disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs font-bold rounded-lg shadow-sm cursor-pointer transition-colors"
+                class="flex-1 py-2.5 bg-destructive hover:bg-destructive/90 disabled:opacity-40 disabled:cursor-not-allowed text-primary-foreground text-xs font-bold rounded-lg shadow-sm cursor-pointer transition-colors"
               >
                 Execute Reassignment
               </button>
@@ -3182,21 +3185,21 @@ function handleOwnerChange(event: Event) {
 
           <!-- Step 3: Success Screen (replaces alerts) -->
           <div v-else-if="handoverStep === 3 && !isExecutingHandover" class="py-6 flex flex-col items-center justify-center text-center space-y-4 animate-fade-in">
-            <div class="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600">
+            <div class="w-12 h-12 rounded-full bg-success/20 flex items-center justify-center text-success">
               <CheckCircle class="w-7 h-7" />
             </div>
             <div class="space-y-1.5">
-              <h4 class="text-sm font-extrabold text-slate-900">Handover Successful!</h4>
-              <p v-if="exitAssignMode === 'single'" class="text-xs text-gray-500 font-normal leading-relaxed">
-                All deals have been successfully reassigned to <span class="font-bold text-slate-800">{{ exitTargetAgent }}</span>.
+              <h4 class="text-sm font-extrabold text-foreground">Handover Successful!</h4>
+              <p v-if="exitAssignMode === 'single'" class="text-xs text-muted-foreground font-normal leading-relaxed">
+                All deals have been successfully reassigned to <span class="font-bold text-foreground">{{ exitTargetAgent }}</span>.
               </p>
-              <p v-else class="text-xs text-gray-500 font-normal leading-relaxed">
+              <p v-else class="text-xs text-muted-foreground font-normal leading-relaxed">
                 Deals have been successfully distributed via Round Robin among active team members.
               </p>
             </div>
             <button
               @click="showExitWizardModal = false"
-              class="w-full py-2.5 bg-[#23B750] hover:bg-[#168638] text-white text-xs font-bold rounded-lg shadow-sm cursor-pointer transition-colors"
+              class="w-full py-2.5 bg-primary hover:bg-primary text-primary-foreground text-xs font-bold rounded-lg shadow-sm cursor-pointer transition-colors"
             >
               Close Wizard
             </button>
@@ -3205,12 +3208,12 @@ function handleOwnerChange(event: Event) {
           <!-- Step 4: Loading State -->
           <div v-else-if="isExecutingHandover" class="py-12 flex flex-col items-center justify-center text-center space-y-4 animate-fade-in">
             <div class="relative w-14 h-14">
-              <div class="absolute inset-0 rounded-full border-4 border-slate-100"></div>
-              <div class="absolute inset-0 rounded-full border-4 border-t-[#23B750] animate-spin"></div>
+              <div class="absolute inset-0 rounded-full border-4 border-border"></div>
+              <div class="absolute inset-0 rounded-full border-4 border-t-brand animate-spin"></div>
             </div>
             <div class="space-y-1">
-              <h4 class="text-sm font-extrabold text-slate-900">Executing Reassignment...</h4>
-              <p class="text-xs text-gray-500 font-normal">Transferring owner permissions & updating timeline logs</p>
+              <h4 class="text-sm font-extrabold text-foreground">Executing Reassignment...</h4>
+              <p class="text-xs text-muted-foreground font-normal">Transferring owner permissions & updating timeline logs</p>
             </div>
           </div>
         </div>
@@ -3220,16 +3223,16 @@ function handleOwnerChange(event: Event) {
     <!-- ── ROUND ROBIN ROUTING & INTAKE MODAL ───────────────────────── -->
     <div
       v-if="showRoundRobinModal"
-      class="fixed inset-0 z-[105] flex items-center justify-center p-4 bg-slate-950/65 backdrop-blur-md animate-fade-in"
+      class="fixed inset-0 z-[105] flex items-center justify-center p-4 bg-card/65 backdrop-blur-md animate-fade-in"
     >
-      <div class="bg-white rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl border border-gray-100 flex flex-col animate-scale-up">
+      <div class="bg-card rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl border border-border flex flex-col animate-scale-up">
         <!-- Modal Header -->
-        <header class="px-6 py-4.5 bg-slate-900 border-b border-slate-800 flex items-center justify-between flex-shrink-0 text-white">
+        <header class="px-6 py-4.5 bg-card border-b border-border flex items-center justify-between flex-shrink-0 text-foreground">
           <h3 class="font-extrabold text-sm flex items-center gap-2">
-            <Shuffle class="w-4 h-4 text-[#23B750]" />
+            <Shuffle class="w-4 h-4 text-primary" />
             Round Robin Assignment Settings
           </h3>
-          <button @click="showRoundRobinModal = false" class="text-slate-400 hover:text-slate-200 rounded cursor-pointer">
+          <button @click="showRoundRobinModal = false" class="text-muted-foreground hover:text-muted-foreground rounded cursor-pointer">
             <X class="w-4.5 h-4.5" />
           </button>
         </header>
@@ -3237,32 +3240,32 @@ function handleOwnerChange(event: Event) {
         <!-- Body content -->
         <div class="p-6 flex-1 overflow-y-auto text-xs font-semibold space-y-6 max-h-[500px]">
           <!-- Switcher -->
-          <div class="flex items-center justify-between bg-slate-50 p-4 border border-gray-200 rounded-xl">
+          <div class="flex items-center justify-between bg-muted/30 p-4 border border-border rounded-xl">
             <div>
-              <span class="block text-slate-800 font-extrabold">Enable Automated Queue Routing</span>
-              <span class="text-[10px] text-gray-400 font-medium mt-0.5 block leading-normal font-normal">Incoming deals are distributed fairly in a rotation loop</span>
+              <span class="block text-foreground font-extrabold">Enable Automated Queue Routing</span>
+              <span class="text-[10px] text-muted-foreground font-medium mt-0.5 block leading-normal font-normal">Incoming deals are distributed fairly in a rotation loop</span>
             </div>
             <button
               @click="isRoundRobinEnabled = !isRoundRobinEnabled"
-              :class="['w-10 h-6 rounded-full p-1 transition-colors duration-205 flex items-center flex-shrink-0 cursor-pointer focus:outline-none', isRoundRobinEnabled ? 'bg-[#23B750]' : 'bg-gray-300']"
+              :class="['w-10 h-6 rounded-full p-1 transition-colors duration-205 flex items-center flex-shrink-0 cursor-pointer focus:outline-none', isRoundRobinEnabled ? 'bg-primary' : 'bg-muted']"
             >
-              <div :class="['w-4 h-4 rounded-full bg-white transition-transform duration-200 shadow-md', isRoundRobinEnabled ? 'translate-x-4' : 'translate-x-0']"></div>
+              <div :class="['w-4 h-4 rounded-full bg-background transition-transform duration-200 shadow-md', isRoundRobinEnabled ? 'translate-x-4' : 'translate-x-0']"></div>
             </button>
           </div>
 
           <!-- Queue Pool List -->
           <div class="space-y-3">
-            <h4 class="text-slate-900 font-extrabold uppercase tracking-wider text-[10px] flex items-center justify-between">
+            <h4 class="text-foreground font-extrabold uppercase tracking-wider text-[10px] flex items-center justify-between">
               <span>Active Agent Rotation Queue ({{ activeRoundRobinQueue.length }} active)</span>
-              <span class="text-[9.5px] text-[#23B750] lowercase">drag to change queue order</span>
+              <span class="text-[9.5px] text-primary lowercase">drag to change queue order</span>
             </h4>
-            <div class="border border-gray-250 rounded-xl divide-y divide-gray-150 overflow-hidden bg-white shadow-sm">
+            <div class="border border-input rounded-xl divide-y divide-border overflow-hidden bg-card shadow-sm">
               <div
                 v-for="(agent, idx) in roundRobinQueue"
                 :key="agent"
                 :class="[
                   'px-4 py-3 flex items-center justify-between gap-3 transition-colors',
-                  roundRobinActivePool[agent] !== false ? 'hover:bg-slate-50/50' : 'bg-gray-50/70 opacity-60'
+                  roundRobinActivePool[agent] !== false ? 'hover:bg-muted/50' : 'bg-muted/30 opacity-60'
                 ]"
               >
                 <div class="flex items-center gap-3">
@@ -3271,19 +3274,19 @@ function handleOwnerChange(event: Event) {
                     type="checkbox"
                     :checked="roundRobinActivePool[agent] !== false"
                     @change="roundRobinActivePool[agent] = !roundRobinActivePool[agent]"
-                    class="w-3.5 h-3.5 text-[#23B750] border-gray-300 rounded focus:ring-[#23B750] cursor-pointer"
+                    class="w-3.5 h-3.5 text-primary border-border rounded focus:ring-primary cursor-pointer"
                   />
                   <!-- Avatar -->
-                  <div class="w-6.5 h-6.5 rounded-full overflow-hidden border border-gray-155 bg-slate-100 flex-shrink-0">
+                  <div class="w-6.5 h-6.5 rounded-full overflow-hidden border border-border bg-muted flex-shrink-0">
                     <img :src="getAgentAvatar(agent) || '/avatars/agent_14_chinese_male_skyblue.png'" class="w-full h-full object-cover" alt="agent" />
                   </div>
                   <!-- Name & Queue Pos -->
                   <div>
-                    <span class="block text-slate-800 font-extrabold">{{ agent }}</span>
-                    <span v-if="roundRobinActivePool[agent] !== false" class="text-[9px] text-[#23B750] font-bold mt-0.5 block">
+                    <span class="block text-foreground font-extrabold">{{ agent }}</span>
+                    <span v-if="roundRobinActivePool[agent] !== false" class="text-[9px] text-primary font-bold mt-0.5 block">
                       Queue Priority: #{{ activeRoundRobinQueue.indexOf(agent) + 1 }} Next in Rotation
                     </span>
-                    <span v-else class="text-[9px] text-gray-400 font-bold mt-0.5 block">
+                    <span v-else class="text-[9px] text-muted-foreground font-bold mt-0.5 block">
                       Inactive / Out of Rotation Pool
                     </span>
                   </div>
@@ -3291,50 +3294,50 @@ function handleOwnerChange(event: Event) {
 
                 <!-- Assignment count -->
                 <div class="text-right">
-                  <span class="text-[10px] text-gray-400 block font-bold uppercase">Assigned Today</span>
-                  <span class="text-sm font-extrabold text-slate-800 mt-0.5 block font-mono">{{ leadsAssignedToday[agent] || 0 }}</span>
+                  <span class="text-[10px] text-muted-foreground block font-bold uppercase">Assigned Today</span>
+                  <span class="text-sm font-extrabold text-foreground mt-0.5 block font-mono">{{ leadsAssignedToday[agent] || 0 }}</span>
                 </div>
               </div>
             </div>
           </div>
 
           <!-- Lead Intake Simulator Widget -->
-          <div class="bg-slate-900 text-white rounded-2xl p-5 border border-slate-800 space-y-4">
-            <h4 class="text-[#23B750] font-extrabold flex items-center gap-1.5 uppercase tracking-wider text-[10px]">
-              <Zap class="w-4 h-4 animate-pulse text-[#23B750]" />
+          <div class="bg-card text-foreground rounded-2xl p-5 border border-border space-y-4">
+            <h4 class="text-primary font-extrabold flex items-center gap-1.5 uppercase tracking-wider text-[10px]">
+              <Zap class="w-4 h-4 animate-pulse text-primary" />
               Lead Intake Simulator (Sandbox Testing)
             </h4>
-            <p class="text-slate-400 leading-relaxed font-normal text-[11px]">
+            <p class="text-muted-foreground leading-relaxed font-normal text-[11px]">
               Simulate the arrival of an inbound lead to verify the rotation pool distribution and queue priority shifts.
             </p>
 
             <button
               @click="simulateLeadIntake"
               :disabled="isSimulatingLead || !isRoundRobinEnabled || activeRoundRobinQueue.length === 0"
-              class="w-full py-2.5 bg-[#23B750] hover:bg-[#168638] disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs font-bold rounded-lg shadow-sm cursor-pointer transition-colors"
+              class="w-full py-2.5 bg-primary hover:bg-primary disabled:opacity-40 disabled:cursor-not-allowed text-primary-foreground text-xs font-bold rounded-lg shadow-sm cursor-pointer transition-colors"
             >
               <span v-if="isSimulatingLead">Generating & Routing Inbound Lead...</span>
               <span v-else>Trigger Lead Intake Simulation</span>
             </button>
 
             <!-- Latest Simulation logs -->
-            <div v-if="simulatedLeadInfo" class="bg-slate-950/70 border border-slate-800 rounded-xl p-3.5 space-y-2 animate-fade-in text-[11px]">
-              <div class="flex items-center justify-between border-b border-slate-800 pb-1.5">
-                <span class="text-[#23B750] font-extrabold font-mono">SIMULATION SUCCESS</span>
-                <span class="text-slate-400">Routed Successfully</span>
+            <div v-if="simulatedLeadInfo" class="bg-card/70 border border-border rounded-xl p-3.5 space-y-2 animate-fade-in text-[11px]">
+              <div class="flex items-center justify-between border-b border-border pb-1.5">
+                <span class="text-primary font-extrabold font-mono">SIMULATION SUCCESS</span>
+                <span class="text-muted-foreground">Routed Successfully</span>
               </div>
-              <div class="grid grid-cols-3 gap-2 text-slate-300">
+              <div class="grid grid-cols-3 gap-2 text-muted-foreground">
                 <div>
-                  <span class="text-[9px] text-slate-500 block">Lead Name</span>
-                  <span class="font-bold text-slate-200 block truncate">{{ simulatedLeadInfo.title }}</span>
+                  <span class="text-[9px] text-muted-foreground block">Lead Name</span>
+                  <span class="font-bold text-muted-foreground block truncate">{{ simulatedLeadInfo.title }}</span>
                 </div>
                 <div>
-                  <span class="text-[9px] text-slate-500 block">Assigned To</span>
-                  <span class="font-bold text-slate-200 block truncate">{{ simulatedLeadInfo.assignedTo }}</span>
+                  <span class="text-[9px] text-muted-foreground block">Assigned To</span>
+                  <span class="font-bold text-muted-foreground block truncate">{{ simulatedLeadInfo.assignedTo }}</span>
                 </div>
                 <div>
-                  <span class="text-[9px] text-slate-500 block">Deal Value</span>
-                  <span class="font-bold text-emerald-400 block font-mono">RM {{ simulatedLeadInfo.value.toLocaleString() }}</span>
+                  <span class="text-[9px] text-muted-foreground block">Deal Value</span>
+                  <span class="font-bold text-success block font-mono">RM {{ simulatedLeadInfo.value.toLocaleString() }}</span>
                 </div>
               </div>
             </div>
@@ -3365,7 +3368,7 @@ function handleOwnerChange(event: Event) {
 /* Enable vertical scrollbars on column cards list specifically */
 .column-cards-list {
   scrollbar-width: thin !important;
-  scrollbar-color: #cbd5e1 transparent !important;
+  scrollbar-color: var(--border) transparent !important;
   -ms-overflow-style: auto !important;
 }
 .column-cards-list::-webkit-scrollbar {
@@ -3376,11 +3379,11 @@ function handleOwnerChange(event: Event) {
   background: transparent !important;
 }
 .column-cards-list::-webkit-scrollbar-thumb {
-  background: #cbd5e1 !important;
+  background: var(--border) !important;
   border-radius: 4px !important;
 }
 .column-cards-list::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8 !important;
+  background: var(--muted-foreground) !important;
 }
 
 /* Chevron Progress Bar */

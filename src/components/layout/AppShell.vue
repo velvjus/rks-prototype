@@ -1,9 +1,9 @@
 <template>
-  <div v-if="route.meta.standalone" class="h-screen w-full overflow-y-auto bg-gray-50 font-sans">
+  <div v-if="route.meta.standalone" class="h-screen w-full overflow-y-auto bg-background font-sans">
     <slot></slot>
   </div>
 
-  <div v-else class="h-screen w-full flex flex-col bg-gray-50 overflow-hidden font-sans">
+  <div v-else class="h-screen w-full flex flex-col bg-background overflow-hidden font-sans">
     <TopNav />
 
     <div class="flex-1 flex overflow-hidden relative">
@@ -24,7 +24,7 @@
       />
 
       <!-- Main Content Area -->
-      <main :class="['flex-1 bg-gray-50 transition-all duration-200 relative', route.meta.fullWidth ? 'overflow-hidden h-full max-h-full flex flex-col min-h-0' : 'overflow-y-auto [scrollbar-gutter:stable]']">
+      <main :class="['flex-1 bg-background transition-all duration-200 relative', route.meta.fullWidth ? 'overflow-hidden h-full max-h-full flex flex-col min-h-0' : 'overflow-y-auto [scrollbar-gutter:stable]']">
         <div v-if="!route.meta.fullWidth" class="px-4 sm:px-6 lg:px-8 py-6 md:py-8 max-w-7xl mx-auto w-full">
           <slot></slot>
         </div>

@@ -169,7 +169,7 @@ function handleCreateNewTemplate() {
           @click="router.push('/web-forms')"
           class="gap-1.5 font-bold text-xs cursor-pointer hover:bg-muted"
         >
-          <ArrowLeft class="w-4 h-4 text-emerald-600" />
+          <ArrowLeft class="w-4 h-4 text-primary" />
           Back to Web Forms
         </Button>
 
@@ -271,7 +271,7 @@ function handleCreateNewTemplate() {
                 ]"
               >
                 <div class="flex items-center gap-2.5">
-                  <Check class="w-4 h-4 text-emerald-600" />
+                  <Check class="w-4 h-4 text-success" />
                   <span>Published</span>
                 </div>
                 <Badge variant="secondary" class="text-[10px] px-2 py-0.5">
@@ -287,7 +287,7 @@ function handleCreateNewTemplate() {
                 ]"
               >
                 <div class="flex items-center gap-2.5">
-                  <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                  <span class="w-2 h-2 rounded-full bg-info"></span>
                   <span>Unpublished</span>
                 </div>
                 <Badge variant="secondary" class="text-[10px] px-2 py-0.5">
@@ -402,7 +402,7 @@ function handleCreateNewTemplate() {
                   <Badge
                     :class="[
                       'text-[10px] font-bold',
-                      tpl.state === 'Published' ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20' : 'bg-slate-500/10 text-slate-600 border-slate-500/20'
+                      tpl.state === 'Published' ? 'bg-success/10 text-success border-success/20' : 'bg-muted text-muted-foreground border-border'
                     ]"
                   >
                     {{ tpl.state }}
@@ -420,7 +420,7 @@ function handleCreateNewTemplate() {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                       <DropdownMenuItem @click="handleUseTemplate(tpl.id)" class="cursor-pointer text-xs">
-                        <Plus class="w-3.5 h-3.5 mr-2 text-emerald-600" /> Use Template
+                        <Plus class="w-3.5 h-3.5 mr-2 text-primary" /> Use Template
                       </DropdownMenuItem>
                       <DropdownMenuItem @click="handleUseTemplate(tpl.id)" class="cursor-pointer text-xs">
                         <Copy class="w-3.5 h-3.5 mr-2" /> Duplicate

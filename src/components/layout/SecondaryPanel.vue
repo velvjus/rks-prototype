@@ -9,16 +9,16 @@
   >
     <aside
       v-if="isOpen"
-      class="absolute top-0 bottom-0 bg-gray-950 border-r border-gray-800 flex flex-col z-40 shadow-2xl transition-all duration-200"
+      class="absolute top-0 bottom-0 bg-sidebar border-r border-sidebar-border flex flex-col z-40 shadow-2xl transition-all duration-200"
       :class="ui.isSidebarCollapsed ? 'left-[58px]' : 'left-[210px]'"
       style="width: 220px"
     >
       <!-- Panel Header -->
-      <div class="h-10 px-3 flex items-center justify-between border-b border-gray-800 shrink-0">
-        <h2 class="text-xs font-bold text-white uppercase tracking-wider">{{ title }}</h2>
+      <div class="h-10 px-3 flex items-center justify-between border-b border-sidebar-border shrink-0">
+        <h2 class="text-xs font-bold text-sidebar-foreground uppercase tracking-wider">{{ title }}</h2>
         <button
           @click="$emit('close')"
-          class="p-1 text-gray-400 hover:text-white rounded transition-colors"
+          class="p-1 text-rail-muted-foreground hover:text-sidebar-foreground rounded transition-colors"
           title="Close panel"
         >
           <Minus class="w-4 h-4" />
@@ -32,10 +32,10 @@
             <!-- Group Header (if not default) -->
             <h3
               v-if="groupName !== 'Default'"
-              class="px-2.5 py-1 text-[9px] font-bold text-gray-500 uppercase tracking-widest flex items-center justify-between"
+              class="px-2.5 py-1 text-[9px] font-bold text-rail-muted-foreground/70 uppercase tracking-widest flex items-center justify-between"
             >
               {{ groupName }}
-              <span v-if="group.badge" class="bg-gray-800 text-gray-400 px-1.5 py-0.5 rounded text-[8px]">
+              <span v-if="group.badge" class="bg-sidebar-accent text-rail-muted-foreground px-1.5 py-0.5 rounded text-[8px]">
                 {{ group.badge }}
               </span>
             </h3>
@@ -48,8 +48,8 @@
               class="w-full flex items-center px-2.5 py-1 text-[13px] rounded-md transition-colors group text-left cursor-pointer"
               :class="[
                 item.route && route.path === item.route
-                  ? 'bg-emerald-950/60 text-[#23B750] font-semibold'
-                  : 'text-gray-300 hover:bg-gray-800 hover:text-white',
+                  ? 'bg-primary/10 text-primary font-semibold'
+                  : 'text-rail-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
                 item.undesigned ? 'opacity-80' : ''
               ]"
             >
@@ -58,11 +58,11 @@
                 :is="item.icon"
                 :class="[
                   'w-[15px] h-[15px] mr-1.5 shrink-0',
-                  item.route && route.path === item.route ? 'text-[#23B750]' : 'text-gray-500 group-hover:text-gray-300'
+                  item.route && route.path === item.route ? 'text-primary' : 'text-rail-muted-foreground group-hover:text-sidebar-accent-foreground'
                 ]"
               />
               <span class="flex-1 truncate">{{ item.label }}</span>
-              <span v-if="item.badge" class="ml-2 bg-gray-800 text-gray-400 px-1.5 py-0.5 rounded text-[8px]">
+              <span v-if="item.badge" class="ml-2 bg-sidebar-accent text-rail-muted-foreground px-1.5 py-0.5 rounded text-[8px]">
                 {{ item.badge }}
               </span>
             </button>
@@ -70,7 +70,7 @@
         </div>
 
         <!-- No content state -->
-        <div v-else class="p-4 text-gray-500 text-sm italic">
+        <div v-else class="p-4 text-rail-muted-foreground text-sm italic">
           No submenu configuration for {{ title }}.
         </div>
       </div>
@@ -399,10 +399,10 @@ const currentMenu = computed<MenuConfig | null>(() => {
   background: transparent;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #1f2937;
+  background: var(--sidebar-border);
   border-radius: 10px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #374151;
+  background: var(--sidebar-accent);
 }
 </style>

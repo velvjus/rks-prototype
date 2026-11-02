@@ -94,14 +94,14 @@ const currentSource = computed(() => {
 })
 
 const sourceOptions = [
-  { label: 'WhatsApp', key: 'WhatsApp', color: 'border-green-200 bg-green-50/80 text-green-700 hover:bg-green-100/90' },
-  { label: 'Messenger', key: 'Messenger', color: 'border-blue-200 bg-blue-50/80 text-blue-700 hover:bg-blue-100/90' },
-  { label: 'Instagram', key: 'Instagram', color: 'border-pink-200 bg-pink-50/80 text-pink-700 hover:bg-pink-100/90' },
-  { label: 'Telegram', key: 'Telegram', color: 'border-cyan-200 bg-cyan-50/80 text-cyan-700 hover:bg-cyan-100/90' },
-  { label: 'LinkedIn', key: 'LinkedIn', color: 'border-blue-200 bg-blue-50/80 text-blue-700 hover:bg-blue-100/90' },
-  { label: 'Email', key: 'Mail', color: 'border-purple-200 bg-purple-50/80 text-purple-700 hover:bg-purple-100/90' },
-  { label: 'Live Chat', key: 'LiveChat', color: 'border-emerald-200 bg-emerald-50/80 text-emerald-700 hover:bg-emerald-100/90' },
-  { label: 'Facebook', key: 'Facebook', color: 'border-blue-200 bg-blue-50/80 text-blue-700 hover:bg-blue-100/90' }
+  { label: 'WhatsApp', key: 'WhatsApp', color: 'border-success/30 bg-success/10 text-success hover:bg-success/20' },
+  { label: 'Messenger', key: 'Messenger', color: 'border-info/30 bg-info/10 text-info hover:bg-info/20' },
+  { label: 'Instagram', key: 'Instagram', color: 'border-tag-1/30 bg-tag-1/10 text-tag-1-foreground hover:bg-tag-1/20' },
+  { label: 'Telegram', key: 'Telegram', color: 'border-info/30 bg-info/10 text-info hover:bg-info/20' },
+  { label: 'LinkedIn', key: 'LinkedIn', color: 'border-info/30 bg-info/10 text-info hover:bg-info/20' },
+  { label: 'Email', key: 'Mail', color: 'border-tag-6/30 bg-tag-6/10 text-tag-6-foreground hover:bg-tag-6/20' },
+  { label: 'Live Chat', key: 'LiveChat', color: 'border-success/30 bg-success/10 text-success hover:bg-success/20' },
+  { label: 'Facebook', key: 'Facebook', color: 'border-info/30 bg-info/10 text-info hover:bg-info/20' }
 ]
 
 const setSource = (src: string) => {
@@ -128,9 +128,9 @@ const currentTemperature = computed(() => {
 })
 
 const tempOptions = [
-  { label: 'Hot', key: 'Hot', color: 'border-orange-200 bg-orange-50/80 text-orange-700 hover:bg-orange-100/90', icon: 'Flame' },
-  { label: 'Warm', key: 'Warm', color: 'border-amber-200 bg-amber-50/80 text-amber-700 hover:bg-amber-100/90', icon: 'Sparkles' },
-  { label: 'Cold', key: 'Cold', color: 'border-cyan-200 bg-cyan-50/80 text-cyan-700 hover:bg-cyan-100/90', icon: 'Sparkles' }
+  { label: 'Hot', key: 'Hot', color: 'border-destructive/30 bg-destructive/10 text-destructive hover:bg-destructive/20', icon: 'Flame' },
+  { label: 'Warm', key: 'Warm', color: 'border-warning/30 bg-warning/10 text-warning hover:bg-warning/20', icon: 'Sparkles' },
+  { label: 'Cold', key: 'Cold', color: 'border-info/30 bg-info/10 text-info hover:bg-info/20', icon: 'Sparkles' }
 ]
 
 const setTemperature = (temp: string) => {
@@ -169,9 +169,9 @@ const currentPriority = computed(() => {
 })
 
 const priorityOptions = [
-  { label: 'High / Urgent', key: 'High', color: 'border-red-200 bg-red-50/80 text-red-700 hover:bg-red-100/90' },
-  { label: 'Medium', key: 'Medium', color: 'border-yellow-200 bg-yellow-50/80 text-yellow-800 hover:bg-yellow-100/90' },
-  { label: 'Low', key: 'Low', color: 'border-gray-200 bg-gray-50/80 text-gray-600 hover:bg-gray-100/90' }
+  { label: 'High / Urgent', key: 'High', color: 'border-destructive/30 bg-destructive/10 text-destructive hover:bg-destructive/20' },
+  { label: 'Medium', key: 'Medium', color: 'border-warning/30 bg-warning/10 text-warning hover:bg-warning/20' },
+  { label: 'Low', key: 'Low', color: 'border-border bg-muted text-muted-foreground hover:bg-muted/80' }
 ]
 
 const setPriority = (pri: string) => {
@@ -867,38 +867,38 @@ const handleAction = (type: string) => {
 }
 
 const getTagChipClass = (tag: string) => {
-  if (tag === 'SMEAievent2026' || tag === 'SMEAIEvent2026') return 'text-teal-900 bg-teal-50 border-teal-200'
-  if (tag === '2026Q2') return 'text-orange-900 bg-orange-50 border-orange-200'
-  return 'text-gray-700 bg-gray-50 border-gray-200'
+  if (tag === 'SMEAievent2026' || tag === 'SMEAIEvent2026') return 'text-tag-2-foreground bg-tag-2/10 border-tag-2/30'
+  if (tag === '2026Q2') return 'text-tag-5-foreground bg-tag-5/10 border-tag-5/30'
+  return 'text-foreground bg-muted border-border'
 }
 
 const snoozeButtonClass = computed(() => {
   return props.activeConversation?.isSnoozed 
-    ? 'border-blue-200 bg-blue-50 text-blue-900 hover:bg-blue-100' 
-    : 'border-gray-200 bg-white hover:bg-gray-50 text-gray-700'
+    ? 'border-info/30 bg-info/10 text-info hover:bg-info/20' 
+    : 'border-border bg-card hover:bg-muted text-foreground'
 })
 
 const resolveButtonClass = computed(() => {
   const isResolved = props.activeConversation?.section === 'Resolved' || props.activeConversation?.lifecycleState === 'closed'
   return isResolved 
-    ? 'border-emerald-300 bg-emerald-50 text-emerald-900 hover:bg-emerald-100' 
-    : 'border-gray-200 bg-white hover:bg-gray-50 text-gray-700'
+    ? 'border-success/30 bg-success/10 text-success hover:bg-success/20' 
+    : 'border-border bg-card hover:bg-muted text-foreground'
 })
 </script>
 
 <template>
   <aside 
-    class="w-[320px] border-l border-gray-200 bg-white flex flex-col h-full shrink-0 select-none overflow-y-auto scrollbar-thin z-10 animate-in slide-in-from-right duration-250"
+    class="w-[320px] border-l border-border bg-card flex flex-col h-full shrink-0 select-none overflow-y-auto scrollbar-thin z-10 animate-in slide-in-from-right duration-250"
   >
     <!-- Drawer Header with Dynamic List / Grid View Switcher -->
-    <div class="px-5 py-4 flex items-center justify-between border-b border-gray-100 shrink-0">
-      <h2 class="text-sm font-bold text-gray-955">Contact Information</h2>
+    <div class="px-5 py-4 flex items-center justify-between border-b border-border shrink-0">
+      <h2 class="text-sm font-bold text-foreground">Contact Information</h2>
       <div class="flex items-center gap-2">
         <!-- List / Grid View Switch Button: When in grid view, shows List icon to switch; when in list view, shows Grid icon to switch -->
         <button 
           v-if="viewMode === 'grid'"
           @click="viewMode = 'list'"
-          class="text-gray-400 hover:text-gray-700 hover:bg-gray-100 p-1.5 rounded-lg transition-colors cursor-pointer border-0 bg-transparent flex items-center justify-center" 
+          class="text-muted-foreground hover:text-foreground hover:bg-muted p-1.5 rounded-lg transition-colors cursor-pointer border-0 bg-transparent flex items-center justify-center" 
           title="Switch to List View (Compact)"
         >
           <List class="w-4 h-4" />
@@ -906,7 +906,7 @@ const resolveButtonClass = computed(() => {
         <button 
           v-else
           @click="viewMode = 'grid'"
-          class="text-gray-400 hover:text-gray-700 hover:bg-gray-100 p-1.5 rounded-lg transition-colors cursor-pointer border-0 bg-transparent flex items-center justify-center" 
+          class="text-muted-foreground hover:text-foreground hover:bg-muted p-1.5 rounded-lg transition-colors cursor-pointer border-0 bg-transparent flex items-center justify-center" 
           title="Switch to Grid View (Stylized)"
         >
           <LayoutGrid class="w-4 h-4" />
@@ -914,7 +914,7 @@ const resolveButtonClass = computed(() => {
 
         <button 
           @click="emit('close')"
-          class="text-gray-400 hover:text-gray-655 p-1 rounded transition-colors cursor-pointer flex items-center justify-center border-0 bg-transparent" 
+          class="text-muted-foreground hover:text-foreground p-1 rounded transition-colors cursor-pointer flex items-center justify-center border-0 bg-transparent" 
           title="Close panel"
         >
           <ChevronRight class="w-4.5 h-4.5" />
@@ -927,13 +927,13 @@ const resolveButtonClass = computed(() => {
     <!-- ======================================================== -->
     <div v-if="viewMode === 'grid'" class="flex flex-col flex-1">
       <!-- Profile Card Section -->
-      <div class="p-5 border-b border-gray-100 flex flex-col gap-4">
+      <div class="p-5 border-b border-border flex flex-col gap-4">
         <!-- Image & Details Grid -->
         <div class="flex items-start gap-4">
           <!-- Avatar with status dot -->
           <div class="relative shrink-0">
-            <img :src="profile.avatar" class="w-14 h-14 rounded-full object-cover border border-gray-150" alt="Contact Avatar" />
-            <span class="absolute bottom-0.5 right-0.5 w-3 h-3 rounded-full border-2 border-white bg-[#23B750]"></span>
+            <img :src="profile.avatar" class="w-14 h-14 rounded-full object-cover border border-border" alt="Contact Avatar" />
+            <span class="absolute bottom-0.5 right-0.5 w-3 h-3 rounded-full border-2 border-card bg-primary"></span>
           </div>
           
           <!-- Details Column -->
@@ -941,20 +941,20 @@ const resolveButtonClass = computed(() => {
             <!-- Name & Toggleable VIP Badge & Kebab Actions Menu -->
             <div class="flex items-center justify-between gap-1.5 mb-1.5">
               <div class="flex items-center gap-1.5 min-w-0">
-                <h3 class="font-extrabold text-gray-900 text-sm truncate">{{ profile.name }}</h3>
+                <h3 class="font-extrabold text-foreground text-sm truncate">{{ profile.name }}</h3>
                 
-                <!-- Toggleable VIP Badge (Green when active, gray/faded when inactive) -->
+                <!-- Toggleable VIP Badge (Purple when active, gray/faded when inactive) -->
                 <button 
                   @click="toggleVip"
                   class="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full text-[9px] font-bold shrink-0 leading-none cursor-pointer transition-all duration-150 select-none border"
                   :class="[
                     isVipActive 
-                      ? 'border-green-300 text-green-700 bg-green-50 hover:bg-green-100 shadow-2xs font-extrabold' 
-                      : 'border-gray-200 text-gray-400 bg-gray-50/70 hover:bg-gray-100 hover:text-gray-600 opacity-60 hover:opacity-100'
+                      ? 'border-accent-purple/30 text-accent-purple bg-accent-purple/10 hover:bg-accent-purple/20 shadow-xs font-extrabold' 
+                      : 'border-border text-muted-foreground bg-muted/70 hover:bg-muted hover:text-foreground opacity-60 hover:opacity-100'
                   ]"
                   :title="isVipActive ? 'VIP Contact (Click to disable)' : 'Standard Contact (Click to mark as VIP)'"
                 >
-                  <Crown class="w-2.5 h-2.5" :class="isVipActive ? 'text-green-600' : 'text-gray-400'" />
+                  <Crown class="w-2.5 h-2.5" :class="isVipActive ? 'text-accent-purple' : 'text-muted-foreground'" />
                   <span>VIP</span>
                 </button>
               </div>
@@ -963,7 +963,7 @@ const resolveButtonClass = computed(() => {
               <div class="relative shrink-0" ref="kebabRef">
                 <button 
                   @click="isKebabOpen = !isKebabOpen"
-                  class="text-gray-400 hover:text-gray-700 cursor-pointer p-1 rounded-lg hover:bg-gray-100 transition-colors flex items-center justify-center border-0 bg-transparent"
+                  class="text-muted-foreground hover:text-foreground cursor-pointer p-1 rounded-lg hover:bg-muted transition-colors flex items-center justify-center border-0 bg-transparent"
                   title="Contact options"
                 >
                   <MoreVertical class="w-4 h-4" />
@@ -980,35 +980,35 @@ const resolveButtonClass = computed(() => {
                 >
                   <div 
                     v-if="isKebabOpen"
-                    class="absolute right-0 mt-1.5 w-44 bg-white border border-gray-200 rounded-xl shadow-xl z-50 py-1 text-left text-xs font-semibold text-gray-700"
+                    class="absolute right-0 mt-1.5 w-44 bg-popover border border-border rounded-xl shadow-xl z-50 py-1 text-left text-xs font-semibold text-foreground"
                   >
                     <button 
                       @click="handleDuplicateContact"
-                      class="w-full px-3 py-2 text-left hover:bg-gray-50 flex items-center gap-2 cursor-pointer border-0 bg-transparent text-gray-700 hover:text-gray-900 transition-colors"
+                      class="w-full px-3 py-2 text-left hover:bg-muted flex items-center gap-2 cursor-pointer border-0 bg-transparent text-foreground hover:text-foreground transition-colors"
                     >
-                      <Copy class="w-3.5 h-3.5 text-gray-400" />
+                      <Copy class="w-3.5 h-3.5 text-muted-foreground" />
                       <span>Duplicate Contact</span>
                     </button>
                     <button 
                       @click="handleExportContact"
-                      class="w-full px-3 py-2 text-left hover:bg-gray-50 flex items-center gap-2 cursor-pointer border-0 bg-transparent text-gray-700 hover:text-gray-900 transition-colors"
+                      class="w-full px-3 py-2 text-left hover:bg-muted flex items-center gap-2 cursor-pointer border-0 bg-transparent text-foreground hover:text-foreground transition-colors"
                     >
-                      <Download class="w-3.5 h-3.5 text-gray-400" />
+                      <Download class="w-3.5 h-3.5 text-muted-foreground" />
                       <span>Export vCard</span>
                     </button>
                     <button 
                       @click="handleMarkSpam"
-                      class="w-full px-3 py-2 text-left hover:bg-gray-50 flex items-center gap-2 cursor-pointer border-0 bg-transparent text-gray-700 hover:text-gray-900 transition-colors"
+                      class="w-full px-3 py-2 text-left hover:bg-muted flex items-center gap-2 cursor-pointer border-0 bg-transparent text-foreground hover:text-foreground transition-colors"
                     >
-                      <ShieldAlert class="w-3.5 h-3.5 text-gray-400" />
+                      <ShieldAlert class="w-3.5 h-3.5 text-muted-foreground" />
                       <span>Mark as Spam</span>
                     </button>
-                    <div class="border-t border-gray-100 my-1"></div>
+                    <div class="border-t border-border my-1"></div>
                     <button 
                       @click="handleDeleteContact"
-                      class="w-full px-3 py-2 text-left hover:bg-red-50 flex items-center gap-2 cursor-pointer border-0 bg-transparent text-red-600 font-bold transition-colors"
+                      class="w-full px-3 py-2 text-left hover:bg-destructive/10 flex items-center gap-2 cursor-pointer border-0 bg-transparent text-destructive font-bold transition-colors"
                     >
-                      <Trash2 class="w-3.5 h-3.5 text-red-500" />
+                      <Trash2 class="w-3.5 h-3.5 text-destructive" />
                       <span>Delete Contact</span>
                     </button>
                   </div>
@@ -1017,22 +1017,22 @@ const resolveButtonClass = computed(() => {
             </div>
             
             <!-- Contact rows -->
-            <div class="space-y-1.5 text-xs text-gray-500 font-medium">
+            <div class="space-y-1.5 text-xs text-muted-foreground font-medium">
               <div class="flex items-center gap-2">
-                <Phone class="w-3.5 h-3.5 text-gray-455 shrink-0" />
+                <Phone class="w-3.5 h-3.5 text-muted-foreground shrink-0" />
                 <span class="truncate">{{ profile.phone }}</span>
               </div>
               <div class="flex items-center gap-2">
-                <Mail class="w-3.5 h-3.5 text-gray-455 shrink-0" />
-                <span class="truncate text-gray-600">{{ profile.email }}</span>
+                <Mail class="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+                <span class="truncate text-foreground">{{ profile.email }}</span>
               </div>
               <div class="flex items-center gap-2">
-                <Building2 class="w-3.5 h-3.5 text-gray-455 shrink-0" />
-                <span class="truncate text-gray-600">{{ profile.company }}</span>
+                <Building2 class="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+                <span class="truncate text-foreground">{{ profile.company }}</span>
               </div>
               <div class="flex items-center gap-2">
-                <Globe class="w-3.5 h-3.5 text-gray-455 shrink-0" />
-                <span class="truncate text-gray-655">{{ profile.website }}</span>
+                <Globe class="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+                <span class="truncate text-foreground">{{ profile.website }}</span>
               </div>
             </div>
           </div>
@@ -1048,11 +1048,11 @@ const resolveButtonClass = computed(() => {
                 @click="isSourceDropdownOpen = !isSourceDropdownOpen"
                 class="relative group/badge w-full inline-flex items-center justify-center gap-1 px-2 py-1 rounded-full text-[11px] font-bold border transition-all cursor-pointer select-none shadow-2xs hover:shadow-xs overflow-hidden h-7"
                 :class="[
-                  currentSource === 'WhatsApp' ? 'border-green-200 bg-green-50/80 text-green-700 hover:bg-green-100/90' :
-                  currentSource === 'Messenger' ? 'border-blue-200 bg-blue-50/80 text-blue-700 hover:bg-blue-100/90' :
-                  currentSource === 'Instagram' ? 'border-pink-200 bg-pink-50/80 text-pink-700 hover:bg-pink-100/90' :
-                  currentSource === 'Email' ? 'border-purple-200 bg-purple-50/80 text-purple-700 hover:bg-purple-100/90' :
-                  'border-gray-200 bg-gray-50/80 text-gray-700 hover:bg-gray-100/90'
+                  currentSource === 'WhatsApp' ? 'border-success/30 bg-success/10 text-success hover:bg-success/20' :
+                  currentSource === 'Messenger' ? 'border-info/30 bg-info/10 text-info hover:bg-info/20' :
+                  currentSource === 'Instagram' ? 'border-tag-1/30 bg-tag-1/10 text-tag-1-foreground hover:bg-tag-1/20' :
+                  currentSource === 'Email' ? 'border-tag-6/30 bg-tag-6/10 text-tag-6-foreground hover:bg-tag-6/20' :
+                  'border-border bg-muted/80 text-foreground hover:bg-muted'
                 ]"
                 title="Click to change source platform"
               >
@@ -1066,11 +1066,11 @@ const resolveButtonClass = computed(() => {
                 <div 
                   class="absolute right-0 inset-y-0 w-6 flex items-center justify-end pr-1.5 opacity-0 group-hover/badge:opacity-100 transition-opacity duration-150 rounded-r-full"
                   :class="[
-                    currentSource === 'WhatsApp' ? 'bg-gradient-to-l from-green-100 via-green-100/90 to-transparent' :
-                    currentSource === 'Messenger' ? 'bg-gradient-to-l from-blue-100 via-blue-100/90 to-transparent' :
-                    currentSource === 'Instagram' ? 'bg-gradient-to-l from-pink-100 via-pink-100/90 to-transparent' :
-                    currentSource === 'Mail' || currentSource === 'Email' ? 'bg-gradient-to-l from-purple-100 via-purple-100/90 to-transparent' :
-                    'bg-gradient-to-l from-gray-100 via-gray-100/90 to-transparent'
+                    currentSource === 'WhatsApp' ? 'bg-gradient-to-l from-success/20 via-success/15 to-transparent' :
+                    currentSource === 'Messenger' ? 'bg-gradient-to-l from-info/20 via-info/15 to-transparent' :
+                    currentSource === 'Instagram' ? 'bg-gradient-to-l from-tag-1/20 via-tag-1/15 to-transparent' :
+                    currentSource === 'Mail' || currentSource === 'Email' ? 'bg-gradient-to-l from-tag-6/20 via-tag-6/15 to-transparent' :
+                    'bg-gradient-to-l from-muted via-muted/90 to-transparent'
                   ]"
                 >
                   <ChevronDown class="w-3 h-3 opacity-80" />
@@ -1088,21 +1088,21 @@ const resolveButtonClass = computed(() => {
               >
                 <div 
                   v-if="isSourceDropdownOpen"
-                  class="absolute left-0 mt-1.5 w-40 bg-white border border-gray-200 rounded-xl shadow-xl z-50 py-1 text-xs font-semibold text-gray-700"
+                  class="absolute left-0 mt-1.5 w-40 bg-popover border border-border rounded-xl shadow-xl z-50 py-1 text-xs font-semibold text-foreground"
                 >
-                  <div class="px-2.5 py-1 text-[10px] font-extrabold text-gray-400 uppercase tracking-wider">Select Source</div>
+                  <div class="px-2.5 py-1 text-[10px] font-extrabold text-muted-foreground uppercase tracking-wider">Select Source</div>
                   <button 
                     v-for="src in sourceOptions" 
                     :key="src.key"
                     @click="setSource(src.key)"
-                    class="w-full px-3 py-1.5 text-left hover:bg-gray-50 flex items-center justify-between cursor-pointer border-0 bg-transparent text-gray-700 hover:text-gray-900 transition-colors"
-                    :class="currentSource === src.key ? 'bg-green-50/50 text-green-700 font-extrabold' : ''"
+                    class="w-full px-3 py-1.5 text-left hover:bg-muted flex items-center justify-between cursor-pointer border-0 bg-transparent text-foreground transition-colors"
+                    :class="currentSource === src.key ? 'bg-success/10 text-success font-extrabold' : ''"
                   >
                     <div class="flex items-center gap-2">
                       <PlatformIcon :platform="src.key" size="sm" variant="colored" />
                       <span>{{ src.label }}</span>
                     </div>
-                    <Check v-if="currentSource === src.key" class="w-3 h-3 text-green-600 font-bold" />
+                    <Check v-if="currentSource === src.key" class="w-3 h-3 text-success font-bold" />
                   </button>
                 </div>
               </transition>
@@ -1114,17 +1114,17 @@ const resolveButtonClass = computed(() => {
                 @click="isTempDropdownOpen = !isTempDropdownOpen"
                 class="relative group/badge w-full inline-flex items-center justify-center gap-1 px-2 py-1 rounded-full text-[11px] font-bold border transition-all cursor-pointer select-none shadow-2xs hover:shadow-xs overflow-hidden h-7"
                 :class="[
-                  currentTemperature === 'Hot' ? 'border-orange-200 bg-orange-50/80 text-orange-755 hover:bg-orange-100/90' :
-                  currentTemperature === 'Warm' ? 'border-amber-200 bg-amber-50/80 text-amber-700 hover:bg-amber-100/90' :
-                  'border-cyan-200 bg-cyan-50/80 text-cyan-700 hover:bg-cyan-100/90'
+                  currentTemperature === 'Hot' ? 'border-destructive/30 bg-destructive/10 text-destructive hover:bg-destructive/20' :
+                  currentTemperature === 'Warm' ? 'border-warning/30 bg-warning/10 text-warning hover:bg-warning/20' :
+                  'border-info/30 bg-info/10 text-info hover:bg-info/20'
                 ]"
                 title="Click to change temperature"
               >
                 <!-- Content row: Icon + Label -->
                 <div class="flex items-center gap-1 min-w-0 truncate">
-                  <Flame v-if="currentTemperature === 'Hot'" class="w-3 h-3 text-orange-500 fill-current shrink-0" />
-                  <Sparkles v-else-if="currentTemperature === 'Warm'" class="w-3 h-3 text-amber-500 fill-current shrink-0" />
-                  <Sparkles v-else class="w-3 h-3 text-cyan-500 shrink-0" />
+                  <Flame v-if="currentTemperature === 'Hot'" class="w-3 h-3 text-destructive fill-current shrink-0" />
+                  <Sparkles v-else-if="currentTemperature === 'Warm'" class="w-3 h-3 text-warning fill-current shrink-0" />
+                  <Sparkles v-else class="w-3 h-3 text-info shrink-0" />
                   <span class="truncate">{{ currentTemperature }}</span>
                 </div>
 
@@ -1132,9 +1132,9 @@ const resolveButtonClass = computed(() => {
                 <div 
                   class="absolute right-0 inset-y-0 w-6 flex items-center justify-end pr-1.5 opacity-0 group-hover/badge:opacity-100 transition-opacity duration-150 rounded-r-full"
                   :class="[
-                    currentTemperature === 'Hot' ? 'bg-gradient-to-l from-orange-100 via-orange-100/90 to-transparent' :
-                    currentTemperature === 'Warm' ? 'bg-gradient-to-l from-amber-100 via-amber-100/90 to-transparent' :
-                    'bg-gradient-to-l from-cyan-100 via-cyan-100/90 to-transparent'
+                    currentTemperature === 'Hot' ? 'bg-gradient-to-l from-destructive/20 via-destructive/15 to-transparent' :
+                    currentTemperature === 'Warm' ? 'bg-gradient-to-l from-warning/20 via-warning/15 to-transparent' :
+                    'bg-gradient-to-l from-info/20 via-info/15 to-transparent'
                   ]"
                 >
                   <ChevronDown class="w-3 h-3 opacity-80" />
@@ -1152,23 +1152,23 @@ const resolveButtonClass = computed(() => {
               >
                 <div 
                   v-if="isTempDropdownOpen"
-                  class="absolute left-1/2 -translate-x-1/2 mt-1.5 w-32 bg-white border border-gray-200 rounded-xl shadow-xl z-50 py-1 text-xs font-semibold text-gray-700"
+                  class="absolute left-1/2 -translate-x-1/2 mt-1.5 w-32 bg-popover border border-border rounded-xl shadow-xl z-50 py-1 text-xs font-semibold text-foreground"
                 >
-                  <div class="px-2.5 py-1 text-[10px] font-extrabold text-gray-400 uppercase tracking-wider">Temperature</div>
+                  <div class="px-2.5 py-1 text-[10px] font-extrabold text-muted-foreground uppercase tracking-wider">Temperature</div>
                   <button 
                     v-for="t in tempOptions" 
                     :key="t.key"
                     @click="setTemperature(t.key)"
-                    class="w-full px-3 py-1.5 text-left hover:bg-gray-50 flex items-center justify-between cursor-pointer border-0 bg-transparent text-gray-700 hover:text-gray-900 transition-colors"
-                    :class="currentTemperature === t.key ? 'bg-orange-50/50 text-orange-700 font-extrabold' : ''"
+                    class="w-full px-3 py-1.5 text-left hover:bg-muted flex items-center justify-between cursor-pointer border-0 bg-transparent text-foreground transition-colors"
+                    :class="currentTemperature === t.key ? 'bg-destructive/10 text-destructive font-extrabold' : ''"
                   >
                     <div class="flex items-center gap-1.5">
-                      <Flame v-if="t.key === 'Hot'" class="w-3.5 h-3.5 text-orange-500 fill-current" />
-                      <Sparkles v-else-if="t.key === 'Warm'" class="w-3.5 h-3.5 text-amber-500 fill-current" />
-                      <Sparkles v-else class="w-3.5 h-3.5 text-cyan-500" />
+                      <Flame v-if="t.key === 'Hot'" class="w-3.5 h-3.5 text-destructive fill-current" />
+                      <Sparkles v-else-if="t.key === 'Warm'" class="w-3.5 h-3.5 text-warning fill-current" />
+                      <Sparkles v-else class="w-3.5 h-3.5 text-info" />
                       <span>{{ t.label }}</span>
                     </div>
-                    <Check v-if="currentTemperature === t.key" class="w-3 h-3 text-orange-600 font-bold" />
+                    <Check v-if="currentTemperature === t.key" class="w-3 h-3 text-destructive font-bold" />
                   </button>
                 </div>
               </transition>
@@ -1180,15 +1180,15 @@ const resolveButtonClass = computed(() => {
                 @click="isPriorityDropdownOpen = !isPriorityDropdownOpen"
                 class="relative group/badge w-full inline-flex items-center justify-center gap-1 px-2 py-1 rounded-full text-[11px] font-bold border transition-all cursor-pointer select-none shadow-2xs hover:shadow-xs overflow-hidden h-7"
                 :class="[
-                  currentPriority === 'High' ? 'border-orange-200 bg-orange-50/80 text-orange-700 hover:bg-orange-100/90' :
-                  currentPriority === 'Medium' ? 'border-yellow-200 bg-yellow-50/80 text-yellow-800 hover:bg-yellow-100/90' :
-                  'border-gray-200 bg-gray-50/80 text-gray-600 hover:bg-gray-100/90'
+                  currentPriority === 'High' ? 'border-destructive/30 bg-destructive/10 text-destructive hover:bg-destructive/20' :
+                  currentPriority === 'Medium' ? 'border-warning/30 bg-warning/10 text-warning hover:bg-warning/20' :
+                  'border-border bg-muted text-muted-foreground hover:bg-muted/80'
                 ]"
                 title="Click to change priority"
               >
                 <!-- Content row: Icon + Label -->
                 <div class="flex items-center gap-1 min-w-0 truncate">
-                  <AlertTriangle class="w-3 h-3 shrink-0" :class="currentPriority === 'High' ? 'text-orange-500' : currentPriority === 'Medium' ? 'text-yellow-600' : 'text-gray-400'" />
+                  <AlertTriangle class="w-3 h-3 shrink-0" :class="currentPriority === 'High' ? 'text-destructive' : currentPriority === 'Medium' ? 'text-warning' : 'text-muted-foreground'" />
                   <span class="truncate">{{ currentPriority }}</span>
                 </div>
 
@@ -1196,9 +1196,9 @@ const resolveButtonClass = computed(() => {
                 <div 
                   class="absolute right-0 inset-y-0 w-6 flex items-center justify-end pr-1.5 opacity-0 group-hover/badge:opacity-100 transition-opacity duration-150 rounded-r-full"
                   :class="[
-                    currentPriority === 'High' ? 'bg-gradient-to-l from-orange-100 via-orange-100/90 to-transparent' :
-                    currentPriority === 'Medium' ? 'bg-gradient-to-l from-yellow-100 via-yellow-100/90 to-transparent' :
-                    'bg-gradient-to-l from-gray-100 via-gray-100/90 to-transparent'
+                    currentPriority === 'High' ? 'bg-gradient-to-l from-destructive/20 via-destructive/15 to-transparent' :
+                    currentPriority === 'Medium' ? 'bg-gradient-to-l from-warning/20 via-warning/15 to-transparent' :
+                    'bg-gradient-to-l from-muted via-muted/90 to-transparent'
                   ]"
                 >
                   <ChevronDown class="w-3 h-3 opacity-80" />
@@ -1216,21 +1216,21 @@ const resolveButtonClass = computed(() => {
               >
                 <div 
                   v-if="isPriorityDropdownOpen"
-                  class="absolute right-0 mt-1.5 w-32 bg-white border border-gray-200 rounded-xl shadow-xl z-50 py-1 text-xs font-semibold text-gray-700"
+                  class="absolute right-0 mt-1.5 w-32 bg-popover border border-border rounded-xl shadow-xl z-50 py-1 text-xs font-semibold text-foreground"
                 >
-                  <div class="px-2.5 py-1 text-[10px] font-extrabold text-gray-400 uppercase tracking-wider">Priority</div>
+                  <div class="px-2.5 py-1 text-[10px] font-extrabold text-muted-foreground uppercase tracking-wider">Priority</div>
                   <button 
                     v-for="p in priorityOptions" 
                     :key="p.key"
                     @click="setPriority(p.key)"
-                    class="w-full px-3 py-1.5 text-left hover:bg-gray-50 flex items-center justify-between cursor-pointer border-0 bg-transparent text-gray-700 hover:text-gray-900 transition-colors"
-                    :class="currentPriority === p.key ? 'bg-orange-50/50 text-orange-700 font-extrabold' : ''"
+                    class="w-full px-3 py-1.5 text-left hover:bg-muted flex items-center justify-between cursor-pointer border-0 bg-transparent text-foreground transition-colors"
+                    :class="currentPriority === p.key ? 'bg-destructive/10 text-destructive font-extrabold' : ''"
                   >
                     <div class="flex items-center gap-1.5">
-                      <span class="w-2 h-2 rounded-full" :class="p.key === 'High' ? 'bg-orange-500' : p.key === 'Medium' ? 'bg-yellow-500' : 'bg-gray-400'"></span>
+                      <span class="w-2 h-2 rounded-full" :class="p.key === 'High' ? 'bg-destructive' : p.key === 'Medium' ? 'bg-warning' : 'bg-muted-foreground'"></span>
                       <span>{{ p.label }}</span>
                     </div>
-                    <Check v-if="currentPriority === p.key" class="w-3 h-3 text-orange-600 font-bold" />
+                    <Check v-if="currentPriority === p.key" class="w-3 h-3 text-destructive font-bold" />
                   </button>
                 </div>
               </transition>
@@ -1238,7 +1238,7 @@ const resolveButtonClass = computed(() => {
           </div>
           
           <!-- Upgraded Secondary Tag Autocomplete Row Editor (Seamless borderless design) -->
-          <div class="relative w-full border-t border-gray-100 pt-2" ref="tagInputWrapperRef">
+          <div class="relative w-full border-t border-border pt-2" ref="tagInputWrapperRef">
             <div class="relative w-full">
               <!-- Seamless borderless tag row container -->
               <div 
@@ -1254,12 +1254,12 @@ const resolveButtonClass = computed(() => {
                 >
                   <span 
                     class="w-1.5 h-1.5 rounded-full"
-                    :class="[ tag === 'SMEAievent2026' || tag === 'SMEAIEvent2026' ? 'bg-teal-500' : tag === '2026Q2' ? 'bg-orange-500' : 'bg-gray-400' ]"
+                    :class="[ tag === 'SMEAievent2026' || tag === 'SMEAIEvent2026' ? 'bg-tag-2' : tag === '2026Q2' ? 'bg-tag-5' : 'bg-muted-foreground' ]"
                   ></span>
                   <span>{{ tag }}</span>
                   <button 
                     @click.stop="emit('removeTag', tag)" 
-                    class="w-3.5 h-3.5 rounded-full hover:bg-black/5 flex items-center justify-center text-current opacity-60 hover:opacity-100 ml-0.5 cursor-pointer transition-all border-0 bg-transparent p-0"
+                    class="w-3.5 h-3.5 rounded-full hover:bg-muted flex items-center justify-center text-current opacity-60 hover:opacity-100 ml-0.5 cursor-pointer transition-all border-0 bg-transparent p-0"
                   >
                     <X class="w-2.5 h-2.5" />
                   </button>
@@ -1276,7 +1276,7 @@ const resolveButtonClass = computed(() => {
                     @keydown.backspace="handleKeyDown"
                     @focus="isSuggestionsVisible = true"
                     placeholder="+ Add tag..."
-                    class="text-xs bg-transparent focus:outline-none flex-1 text-gray-700 font-semibold py-1 placeholder:text-gray-400 border-0 outline-none"
+                    class="text-xs bg-transparent focus:outline-none flex-1 text-foreground font-semibold py-1 placeholder:text-muted-foreground border-0 outline-none"
                   />
                 </div>
               </div>
@@ -1292,7 +1292,7 @@ const resolveButtonClass = computed(() => {
               >
                 <div 
                   v-if="isSuggestionsVisible && filteredSuggestions.length > 0"
-                  class="absolute left-0 right-0 mt-1.5 bg-white border border-gray-200 rounded-xl z-30 shadow-lg max-h-48 overflow-y-auto py-1"
+                  class="absolute left-0 right-0 mt-1.5 bg-popover border border-border rounded-xl z-30 shadow-lg max-h-48 overflow-y-auto py-1"
                 >
                   <button 
                     v-for="(sug, index) in filteredSuggestions" 
@@ -1300,17 +1300,17 @@ const resolveButtonClass = computed(() => {
                     @click="addSuggestedTag(sug)"
                     @mouseenter="activeSuggestionIndex = index"
                     class="w-full text-left px-3 py-1.5 text-xs flex items-center justify-between cursor-pointer font-semibold"
-                    :class="activeSuggestionIndex === index ? 'bg-gray-50 text-gray-900' : 'text-gray-700'"
+                    :class="activeSuggestionIndex === index ? 'bg-muted text-foreground' : 'text-foreground'"
                   >
                     <div class="flex items-center gap-2">
                       <span 
                         class="w-1.5 h-1.5 rounded-full"
-                        :class="[ sug === 'SMEAievent2026' || sug === 'SMEAIEvent2026' ? 'bg-teal-500' : sug === '2026Q2' ? 'bg-orange-500' : 'bg-green-500' ]"
+                        :class="[ sug === 'SMEAievent2026' || sug === 'SMEAIEvent2026' ? 'bg-tag-2' : sug === '2026Q2' ? 'bg-tag-5' : 'bg-primary' ]"
                       ></span>
                       <span>{{ sug }}</span>
                     </div>
                     <!-- Show New label if tag does not exist in base availableTags -->
-                    <span v-if="!availableTags.includes(sug)" class="text-[9px] font-bold text-green-600 bg-green-50 border border-green-200 px-1.5 py-0.5 rounded-md leading-none shrink-0">New</span>
+                    <span v-if="!availableTags.includes(sug)" class="text-[9px] font-bold text-success bg-success/10 border border-success/30 px-1.5 py-0.5 rounded-md leading-none shrink-0">New</span>
                   </button>
                 </div>
               </transition>
@@ -1320,15 +1320,15 @@ const resolveButtonClass = computed(() => {
       </div>
 
       <!-- COLLAPSIBLE SECTION: Conversation Info -->
-      <div class="border-b border-gray-100">
+      <div class="border-b border-border">
         <!-- Section Header -->
         <div class="px-5 py-3.5 flex items-center justify-between">
           <div class="flex items-center gap-2">
-            <h4 class="text-sm font-bold text-gray-800">Conversation Info</h4>
+            <h4 class="text-sm font-bold text-foreground">Conversation Info</h4>
             <!-- Reply indicator -->
             <span 
               v-if="activeConversation.rightBadge"
-              class="px-2.5 py-0.5 rounded text-[10px] font-extrabold bg-green-50 text-green-700 border border-green-200/80 leading-none"
+              class="px-2.5 py-0.5 rounded text-[10px] font-extrabold bg-success/10 text-success border border-success/30 leading-none"
             >
               {{ activeConversation.rightBadge }}
             </span>
@@ -1336,11 +1336,11 @@ const resolveButtonClass = computed(() => {
           <!-- Custom Switch -->
           <button 
             @click="isConversationInfoOpen = !isConversationInfoOpen"
-            class="w-9 h-5 rounded-full p-0.5 transition-colors focus:outline-none cursor-pointer border border-gray-200 bg-gray-100 flex items-center"
-            :class="isConversationInfoOpen ? 'bg-gray-200' : 'bg-gray-100'"
+            class="w-9 h-5 rounded-full p-0.5 transition-colors focus:outline-none cursor-pointer border border-border bg-muted flex items-center"
+            :class="isConversationInfoOpen ? 'bg-primary/20' : 'bg-muted'"
           >
             <div 
-              class="w-4 h-4 bg-white rounded-full shadow-xs transform duration-200"
+              class="w-4 h-4 bg-card rounded-full shadow-xs transform duration-200"
               :class="isConversationInfoOpen ? 'translate-x-4' : 'translate-x-0'"
             ></div>
           </button>
@@ -1358,18 +1358,18 @@ const resolveButtonClass = computed(() => {
           <div v-show="isConversationInfoOpen" class="px-5 pb-4 space-y-3">
             <!-- Date Added Row -->
             <div class="flex items-center justify-between text-xs py-0.5">
-              <span class="text-gray-400 font-semibold flex items-center gap-1.5">
-                <Clock class="w-3.5 h-3.5 text-gray-400" /> Date Added
+              <span class="text-muted-foreground font-semibold flex items-center gap-1.5">
+                <Clock class="w-3.5 h-3.5 text-muted-foreground" /> Date Added
               </span>
-              <span class="text-gray-655 font-bold">{{ profile.dateAdded }}</span>
+              <span class="text-foreground font-bold">{{ profile.dateAdded }}</span>
             </div>
 
             <!-- Dynamic Scheduled Meeting Info Banner (Updates live upon scheduling) -->
-            <div v-if="scheduledMeeting" class="flex items-center justify-between text-xs py-1 border-t border-gray-100 pt-2 animate-in fade-in slide-in-from-top-1 duration-200">
-              <span class="text-gray-400 font-semibold flex items-center gap-1.5">
-                <Calendar class="w-3.5 h-3.5 text-green-500" /> Scheduled Call
+            <div v-if="scheduledMeeting" class="flex items-center justify-between text-xs py-1 border-t border-border pt-2 animate-in fade-in slide-in-from-top-1 duration-200">
+              <span class="text-muted-foreground font-semibold flex items-center gap-1.5">
+                <Calendar class="w-3.5 h-3.5 text-success" /> Scheduled Call
               </span>
-              <span class="text-green-800 font-bold bg-green-50 px-2 py-0.5 rounded border border-green-200/50 text-[10px] truncate max-w-[170px]" :title="scheduledMeeting.type">
+              <span class="text-success font-bold bg-success/10 px-2 py-0.5 rounded border border-success/30 text-[10px] truncate max-w-[170px]" :title="scheduledMeeting.type">
                 {{ scheduledMeeting.type }}: {{ scheduledMeeting.date }} {{ scheduledMeeting.time }}
               </span>
             </div>
@@ -1378,13 +1378,13 @@ const resolveButtonClass = computed(() => {
             <div class="relative" ref="assigneeDropdownRef">
               <button 
                 @click="isAssigneeDropdownOpen = !isAssigneeDropdownOpen"
-                class="w-full flex items-center justify-between border border-gray-200 rounded-xl px-3 py-2 text-xs bg-white hover:bg-gray-50 cursor-pointer outline-none font-semibold text-gray-705 transition-colors"
+                class="w-full flex items-center justify-between border border-border rounded-xl px-3 py-2 text-xs bg-card hover:bg-muted cursor-pointer outline-none font-semibold text-foreground transition-colors"
               >
                 <div class="flex items-center gap-2">
                   <img :src="currentAgent.avatar" class="w-5 h-5 rounded-full object-cover" />
                   <span>{{ currentAgent.name }}</span>
                 </div>
-                <ChevronDown class="w-4 h-4 text-gray-400" />
+                <ChevronDown class="w-4 h-4 text-muted-foreground" />
               </button>
               
               <!-- Dropdown Options -->
@@ -1398,21 +1398,21 @@ const resolveButtonClass = computed(() => {
               >
                 <div 
                   v-if="isAssigneeDropdownOpen"
-                  class="absolute left-0 right-0 mt-1 bg-white border border-gray-250 rounded-xl z-30 py-1 shadow-md max-h-48 overflow-y-auto"
+                  class="absolute left-0 right-0 mt-1 bg-popover border border-border rounded-xl z-30 py-1 shadow-md max-h-48 overflow-y-auto"
                 >
                   <button 
                     v-for="agent in agents" 
                     :key="agent.name"
                     @click="handleAssign(agent)"
-                    class="w-full text-left px-3 py-1.5 text-xs hover:bg-gray-50 flex items-center justify-between cursor-pointer"
-                    :class="currentAgent.key === agent.key ? 'bg-gray-50/50' : ''"
+                    class="w-full text-left px-3 py-1.5 text-xs hover:bg-muted flex items-center justify-between cursor-pointer"
+                    :class="currentAgent.key === agent.key ? 'bg-muted' : ''"
                   >
-                    <div class="flex items-center gap-2 font-medium text-gray-700">
+                    <div class="flex items-center gap-2 font-medium text-foreground">
                       <img :src="agent.avatar" class="w-5 h-5 rounded-full object-cover" />
                       <span>{{ agent.name }}</span>
                     </div>
                     <!-- Tick mark if active -->
-                    <span v-if="currentAgent.key === agent.key" class="text-green-500 font-bold">✓</span>
+                    <span v-if="currentAgent.key === agent.key" class="text-success font-bold">✓</span>
                   </button>
                 </div>
               </transition>
@@ -1422,20 +1422,20 @@ const resolveButtonClass = computed(() => {
             <div class="w-full relative" ref="participantInputWrapperRef">
               <!-- Row of chips, input, and absolute info icon -->
               <div 
-                class="flex flex-wrap gap-1.5 pl-2 pr-8 py-2 border border-gray-150 rounded-xl bg-gray-55 min-h-[42px] items-center cursor-text focus-within:bg-white focus-within:border-green-300 transition-all duration-150 relative"
+                class="flex flex-wrap gap-1.5 pl-2 pr-8 py-2 border border-border rounded-xl bg-muted/30 min-h-[42px] items-center cursor-text focus-within:bg-card focus-within:border-primary transition-all duration-150 relative"
                 @click="focusParticipantInput"
               >
                 <!-- Participant chips -->
                 <span 
                   v-for="pName in participants" 
                   :key="pName"
-                  class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs border border-gray-200 bg-white font-bold text-gray-655 shadow-none leading-none h-6 select-none animate-in fade-in zoom-in-95 duration-100"
+                  class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs border border-border bg-card font-bold text-foreground shadow-none leading-none h-6 select-none animate-in fade-in zoom-in-95 duration-100"
                 >
                   <img :src="getAgentAvatar(pName)" class="w-3.5 h-3.5 rounded-full object-cover mr-0.5" />
                   <span>{{ pName }}</span>
                   <button 
                     @click.stop="removeParticipant(pName)" 
-                    class="hover:text-red-500 font-semibold cursor-pointer outline-none ml-1 text-gray-405 border-0 bg-transparent p-0 flex items-center"
+                    class="hover:text-destructive font-semibold cursor-pointer outline-none ml-1 text-muted-foreground border-0 bg-transparent p-0 flex items-center"
                   >
                     ×
                   </button>
@@ -1450,13 +1450,13 @@ const resolveButtonClass = computed(() => {
                   @keydown.enter.prevent="handleParticipantEnterKey"
                   @keydown.backspace="handleParticipantBackspace"
                   :placeholder="participants.length === 0 ? '+ Add Participants' : '+ Add...'"
-                  class="text-xs bg-transparent focus:outline-none flex-1 min-w-[70px] text-gray-700 font-semibold py-0.5"
+                  class="text-xs bg-transparent focus:outline-none flex-1 min-w-[70px] text-foreground font-semibold py-0.5"
                 />
 
                 <!-- Info Icon with Hoverable Toolbox Popover (Absolute-aligned inside right-2) -->
                 <div class="absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center justify-center group/info">
                   <button 
-                    class="text-gray-400 hover:text-gray-655 transition-colors p-1 rounded-full hover:bg-gray-150 cursor-pointer outline-none border-0 flex items-center justify-center"
+                    class="text-muted-foreground hover:text-foreground transition-colors p-1 rounded-full hover:bg-muted cursor-pointer outline-none border-0 flex items-center justify-center"
                     title="How to use Participants"
                     type="button"
                     @click.stop
@@ -1466,23 +1466,23 @@ const resolveButtonClass = computed(() => {
                   
                   <!-- Floating Info Toolbox Card -->
                   <div 
-                    class="absolute right-0 bottom-full mb-2.5 w-64 bg-white/95 backdrop-blur-md border border-gray-200 rounded-2xl shadow-xl z-40 p-4 text-left pointer-events-none opacity-0 scale-95 group-hover/info:opacity-100 group-hover/info:scale-100 group-hover/info:pointer-events-auto transition-all duration-200 origin-bottom-right"
+                    class="absolute right-0 bottom-full mb-2.5 w-64 bg-popover/95 backdrop-blur-md border border-border rounded-2xl shadow-xl z-40 p-4 text-left pointer-events-none opacity-0 scale-95 group-hover/info:opacity-100 group-hover/info:scale-100 group-hover/info:pointer-events-auto transition-all duration-200 origin-bottom-right"
                   >
-                    <div class="flex items-center gap-1.5 border-b border-gray-100 pb-2 mb-2">
-                      <Users class="w-4 h-4 text-green-600" />
-                      <h5 class="text-xs font-extrabold text-gray-900">Conversation Participants</h5>
+                    <div class="flex items-center gap-1.5 border-b border-border pb-2 mb-2">
+                      <Users class="w-4 h-4 text-primary" />
+                      <h5 class="text-xs font-extrabold text-foreground">Conversation Participants</h5>
                     </div>
-                    <ul class="space-y-2 text-[11px] text-gray-500 font-bold leading-normal list-none p-0 m-0">
+                    <ul class="space-y-2 text-[11px] text-muted-foreground font-bold leading-normal list-none p-0 m-0">
                       <li class="flex items-start gap-1.5">
-                        <span class="w-1.5 h-1.5 rounded-full bg-green-500 mt-1 shrink-0"></span>
+                        <span class="w-1.5 h-1.5 rounded-full bg-primary mt-1 shrink-0"></span>
                         <span>Add sales agents to follow and monitor this conversation.</span>
                       </li>
                       <li class="flex items-start gap-1.5">
-                        <span class="w-1.5 h-1.5 rounded-full bg-green-500 mt-1 shrink-0"></span>
+                        <span class="w-1.5 h-1.5 rounded-full bg-primary mt-1 shrink-0"></span>
                         <span>Participants receive notifications for incoming customer messages.</span>
                       </li>
                       <li class="flex items-start gap-1.5">
-                        <span class="w-1.5 h-1.5 rounded-full bg-green-500 mt-1 shrink-0"></span>
+                        <span class="w-1.5 h-1.5 rounded-full bg-primary mt-1 shrink-0"></span>
                         <span>Allows seamless collaboration and internal private notes inside the team.</span>
                       </li>
                     </ul>
@@ -1501,15 +1501,15 @@ const resolveButtonClass = computed(() => {
               >
                 <div 
                   v-if="isParticipantSuggestionsVisible && filteredParticipantSuggestions.length > 0"
-                  class="absolute left-0 right-0 mt-1.5 bg-white border border-gray-250 rounded-xl z-30 shadow-lg max-h-48 overflow-y-auto py-1"
+                  class="absolute left-0 right-0 mt-1.5 bg-popover border border-border rounded-xl z-30 shadow-lg max-h-48 overflow-y-auto py-1"
                 >
                   <button 
                     v-for="(agent, index) in filteredParticipantSuggestions" 
                     :key="agent.name"
                     @click="addParticipantName(agent.name)"
                     @mouseenter="activeParticipantSuggestionIndex = index"
-                    class="w-full text-left px-3 py-1.5 text-xs hover:bg-gray-50 flex items-center justify-between cursor-pointer font-semibold"
-                    :class="activeParticipantSuggestionIndex === index ? 'bg-gray-50 text-gray-900' : 'text-gray-700'"
+                    class="w-full text-left px-3 py-1.5 text-xs hover:bg-muted flex items-center justify-between cursor-pointer font-semibold"
+                    :class="activeParticipantSuggestionIndex === index ? 'bg-muted text-foreground' : 'text-foreground'"
                   >
                     <div class="flex items-center gap-2">
                       <img :src="agent.avatar" class="w-5 h-5 rounded-full object-cover" />
@@ -1524,15 +1524,15 @@ const resolveButtonClass = computed(() => {
       </div>
 
       <!-- COLLAPSIBLE SECTION: Deal Info -->
-      <div class="border-b border-gray-100">
+      <div class="border-b border-border">
         <!-- Section Header with hover trigger for + button -->
         <div class="px-5 py-3.5 flex items-center justify-between group">
           <div class="flex items-center gap-1.5">
-            <h4 class="text-sm font-bold text-gray-800">Deal Info</h4>
+            <h4 class="text-sm font-bold text-foreground">Deal Info</h4>
             <!-- + button, visible only on hover of group -->
             <button 
               @click="openCreateDealModal"
-              class="opacity-0 group-hover:opacity-100 p-0.5 rounded hover:bg-gray-100 text-gray-400 hover:text-gray-700 transition-all duration-150 cursor-pointer outline-none flex items-center justify-center border-0 bg-transparent"
+              class="opacity-0 group-hover:opacity-100 p-0.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition-all duration-150 cursor-pointer outline-none flex items-center justify-center border-0 bg-transparent"
               title="Create Deal"
             >
               <Plus class="w-4 h-4" />
@@ -1542,11 +1542,11 @@ const resolveButtonClass = computed(() => {
           <!-- Custom Switch -->
           <button 
             @click="isDealInfoOpen = !isDealInfoOpen"
-            class="w-9 h-5 rounded-full p-0.5 transition-colors focus:outline-none cursor-pointer border border-gray-200 bg-gray-100 flex items-center"
-            :class="isDealInfoOpen ? 'bg-gray-200' : 'bg-gray-100'"
+            class="w-9 h-5 rounded-full p-0.5 transition-colors focus:outline-none cursor-pointer border border-border bg-muted flex items-center"
+            :class="isDealInfoOpen ? 'bg-primary/20' : 'bg-muted'"
           >
             <div 
-              class="w-4 h-4 bg-white rounded-full shadow-xs transform duration-200"
+              class="w-4 h-4 bg-card rounded-full shadow-xs transform duration-200"
               :class="isDealInfoOpen ? 'translate-x-4' : 'translate-x-0'"
             ></div>
           </button>
@@ -1562,26 +1562,26 @@ const resolveButtonClass = computed(() => {
           leave-to-class="opacity-0 max-h-0 overflow-hidden"
         >
           <div v-show="isDealInfoOpen" class="px-5 pb-4">
-            <div v-if="currentActiveDeal" class="border border-gray-200 rounded-xl p-3.5 bg-white hover:shadow-xs transition-shadow">
-              <h5 class="font-extrabold text-gray-900 text-xs leading-tight mb-1.5">{{ currentActiveDeal.title }}</h5>
-              <div class="flex items-center gap-1.5 text-xs text-gray-500 font-medium">
+            <div v-if="currentActiveDeal" class="border border-border rounded-xl p-3.5 bg-card hover:shadow-xs transition-shadow">
+              <h5 class="font-extrabold text-foreground text-xs leading-tight mb-1.5">{{ currentActiveDeal.title }}</h5>
+              <div class="flex items-center gap-1.5 text-xs text-muted-foreground font-medium">
                 <span>{{ currentActiveDeal.stage }}</span>
-                <span class="text-gray-305">•</span>
+                <span class="text-muted-foreground">•</span>
                 <span>{{ currentActiveDeal.pipeline }}</span>
               </div>
-              <div v-if="currentActiveDeal.expectedCloseDate" class="flex items-center gap-1.5 text-[11px] text-gray-400 font-semibold mt-2 pt-2 border-t border-gray-100">
-                <Calendar class="w-3.5 h-3.5 text-gray-400 shrink-0" />
-                <span>Expected close: <span class="text-gray-700 font-bold">{{ formatDisplayDate(currentActiveDeal.expectedCloseDate) }}</span></span>
+              <div v-if="currentActiveDeal.expectedCloseDate" class="flex items-center gap-1.5 text-[11px] text-muted-foreground font-semibold mt-2 pt-2 border-t border-border">
+                <Calendar class="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+                <span>Expected close: <span class="text-foreground font-bold">{{ formatDisplayDate(currentActiveDeal.expectedCloseDate) }}</span></span>
               </div>
             </div>
             <!-- Empty state indicating there is no active deal, which turns into a + Create Deal button on hover -->
             <div 
               v-else
               @click="openCreateDealModal"
-              class="text-xs text-gray-450 italic text-center p-3 bg-gray-50 rounded-xl border border-dashed border-gray-200 leading-normal cursor-pointer transition-all duration-200 group hover:border-[#23B750] select-none flex items-center justify-center min-h-[46px]"
+              class="text-xs text-muted-foreground italic text-center p-3 bg-muted/40 rounded-xl border border-dashed border-border leading-normal cursor-pointer transition-all duration-200 group hover:border-primary select-none flex items-center justify-center min-h-[46px]"
             >
               <span class="group-hover:hidden">No active deal for this conversation.</span>
-              <span class="hidden group-hover:inline-flex items-center gap-1 font-bold text-[#23B750]">
+              <span class="hidden group-hover:inline-flex items-center gap-1 font-bold text-primary">
                 <Plus class="w-3.5 h-3.5" /> Create Deal
               </span>
             </div>
@@ -1590,18 +1590,18 @@ const resolveButtonClass = computed(() => {
       </div>
 
       <!-- COLLAPSIBLE SECTION: Company Info (DEFAULT OPEN) -->
-      <div class="border-b border-gray-100">
+      <div class="border-b border-border">
         <!-- Section Header -->
         <div class="px-5 py-3.5 flex items-center justify-between">
-          <h4 class="text-sm font-bold text-gray-800">Company Info</h4>
+          <h4 class="text-sm font-bold text-foreground">Company Info</h4>
           <!-- Custom Switch -->
           <button 
             @click="isCompanyInfoOpen = !isCompanyInfoOpen"
-            class="w-9 h-5 rounded-full p-0.5 transition-colors focus:outline-none cursor-pointer border border-gray-200 bg-gray-100 flex items-center"
-            :class="isCompanyInfoOpen ? 'bg-gray-200' : 'bg-gray-100'"
+            class="w-9 h-5 rounded-full p-0.5 transition-colors focus:outline-none cursor-pointer border border-border bg-muted flex items-center"
+            :class="isCompanyInfoOpen ? 'bg-primary/20' : 'bg-muted'"
           >
             <div 
-              class="w-4 h-4 bg-white rounded-full shadow-xs transform duration-200"
+              class="w-4 h-4 bg-card rounded-full shadow-xs transform duration-200"
               :class="isCompanyInfoOpen ? 'translate-x-4' : 'translate-x-0'"
             ></div>
           </button>
@@ -1616,26 +1616,26 @@ const resolveButtonClass = computed(() => {
           leave-from-class="opacity-100 max-h-[300px]"
           leave-to-class="opacity-0 max-h-0 overflow-hidden"
         >
-          <div v-show="isCompanyInfoOpen" class="px-5 pb-4 space-y-3.5 text-xs text-gray-500 font-medium">
+          <div v-show="isCompanyInfoOpen" class="px-5 pb-4 space-y-3.5 text-xs text-muted-foreground font-medium">
             <div class="flex items-start gap-2.5">
-              <Building2 class="w-4 h-4 text-gray-400 shrink-0 mt-0.5" />
-              <span class="text-gray-700 leading-normal">{{ profile.companyFull }}</span>
+              <Building2 class="w-4 h-4 text-muted-foreground shrink-0 mt-0.5" />
+              <span class="text-foreground leading-normal">{{ profile.companyFull }}</span>
             </div>
             <div class="flex items-start gap-2.5">
-              <Link2 class="w-4 h-4 text-gray-400 shrink-0 mt-0.5" />
+              <Link2 class="w-4 h-4 text-muted-foreground shrink-0 mt-0.5" />
               <a :href="'https://' + profile.companyWebsite" target="_blank" class="text-primary hover:underline leading-normal truncate">{{ profile.companyWebsite }}</a>
             </div>
             <div class="flex items-start gap-2.5">
-              <MapPin class="w-4 h-4 text-gray-400 shrink-0 mt-0.5" />
-              <span class="leading-relaxed text-gray-655">{{ profile.companyLocation }}</span>
+              <MapPin class="w-4 h-4 text-muted-foreground shrink-0 mt-0.5" />
+              <span class="leading-relaxed text-foreground">{{ profile.companyLocation }}</span>
             </div>
             <div class="flex items-center gap-2.5">
-              <Tag class="w-4 h-4 text-gray-405 shrink-0" />
+              <Tag class="w-4 h-4 text-muted-foreground shrink-0" />
               <span class="leading-normal">{{ profile.companyIndustry }}</span>
             </div>
             <div class="flex items-center gap-2.5">
-              <Briefcase class="w-4 h-4 text-gray-455 shrink-0" />
-              <span class="leading-normal text-gray-700">{{ profile.companySize }}</span>
+              <Briefcase class="w-4 h-4 text-muted-foreground shrink-0" />
+              <span class="leading-normal text-foreground">{{ profile.companySize }}</span>
             </div>
           </div>
         </transition>
@@ -1645,15 +1645,15 @@ const resolveButtonClass = computed(() => {
       <div>
         <!-- Section Header -->
         <div class="px-5 py-3.5 flex items-center justify-between">
-          <h4 class="text-sm font-bold text-gray-800">Actions</h4>
+          <h4 class="text-sm font-bold text-foreground">Actions</h4>
           <!-- Custom Switch -->
           <button 
             @click="isActionsOpen = !isActionsOpen"
-            class="w-9 h-5 rounded-full p-0.5 transition-colors focus:outline-none cursor-pointer border border-gray-200 bg-gray-100 flex items-center"
-            :class="isActionsOpen ? 'bg-gray-200' : 'bg-gray-100'"
+            class="w-9 h-5 rounded-full p-0.5 transition-colors focus:outline-none cursor-pointer border border-border bg-muted flex items-center"
+            :class="isActionsOpen ? 'bg-primary/20' : 'bg-muted'"
           >
             <div 
-              class="w-4 h-4 bg-white rounded-full shadow-xs transform duration-200"
+              class="w-4 h-4 bg-card rounded-full shadow-xs transform duration-200"
               :class="isActionsOpen ? 'translate-x-4' : 'translate-x-0'"
             ></div>
           </button>
@@ -1673,13 +1673,13 @@ const resolveButtonClass = computed(() => {
               <!-- Tasks Button -->
               <button 
                 @click="handleAction('tasks')"
-                class="aspect-square bg-amber-500 hover:bg-amber-600 active:scale-95 text-white rounded-xl flex items-center justify-center relative transition-all cursor-pointer shadow-xs border-0 outline-none"
-                :class="showTasksPanel ? 'ring-2 ring-amber-300 bg-amber-600' : ''"
+                class="aspect-square bg-warning hover:bg-warning/90 active:scale-95 text-warning-foreground rounded-xl flex items-center justify-center relative transition-all cursor-pointer shadow-xs border-0 outline-none"
+                :class="showTasksPanel ? 'ring-2 ring-ring bg-warning/90' : ''"
                 title="Tasks Checklist"
               >
                 <Clock class="w-5 h-5" />
                 <!-- Completed vs Active Tasks Badge -->
-                <span class="absolute -top-1.5 -right-1.5 bg-gray-100 text-gray-800 text-[10px] font-extrabold w-5 h-5 rounded-full border border-white flex items-center justify-center shadow-xs">
+                <span class="absolute -top-1.5 -right-1.5 bg-card text-foreground text-[10px] font-extrabold w-5 h-5 rounded-full border border-border flex items-center justify-center shadow-xs">
                   {{ activeTasks.length }}
                 </span>
               </button>
@@ -1687,12 +1687,12 @@ const resolveButtonClass = computed(() => {
               <!-- Watchers / Participants focus Button -->
               <button 
                 @click="handleAction('watchers')"
-                class="aspect-square bg-purple-500 hover:bg-purple-655 active:scale-95 text-white rounded-xl flex items-center justify-center relative transition-all cursor-pointer shadow-xs border-0 outline-none"
+                class="aspect-square bg-tag-6 hover:bg-tag-6/90 active:scale-95 text-tag-6-foreground rounded-xl flex items-center justify-center relative transition-all cursor-pointer shadow-xs border-0 outline-none"
                 title="Focus Watchers / Participants"
               >
                 <Users class="w-5 h-5" />
                 <!-- Badge -->
-                <span class="absolute -top-1.5 -right-1.5 bg-gray-100 text-gray-800 text-[10px] font-extrabold w-5 h-5 rounded-full border border-white flex items-center justify-center shadow-xs">
+                <span class="absolute -top-1.5 -right-1.5 bg-card text-foreground text-[10px] font-extrabold w-5 h-5 rounded-full border border-border flex items-center justify-center shadow-xs">
                   {{ participants.length }}
                 </span>
               </button>
@@ -1700,8 +1700,8 @@ const resolveButtonClass = computed(() => {
               <!-- Chat bubble Note Logger Button -->
               <button 
                 @click="handleAction('chat')"
-                class="aspect-square bg-cyan-500 hover:bg-cyan-600 active:scale-95 text-white rounded-xl flex items-center justify-center relative transition-all cursor-pointer shadow-xs border-0 outline-none"
-                :class="showNotesPanel ? 'ring-2 ring-cyan-300 bg-cyan-650' : ''"
+                class="aspect-square bg-tag-2 hover:bg-tag-2/90 active:scale-95 text-tag-2-foreground rounded-xl flex items-center justify-center relative transition-all cursor-pointer shadow-xs border-0 outline-none"
+                :class="showNotesPanel ? 'ring-2 ring-ring bg-tag-2/90' : ''"
                 title="Private Note Logs"
               >
                 <MessageSquare class="w-5 h-5" />
@@ -1710,7 +1710,7 @@ const resolveButtonClass = computed(() => {
               <!-- Calendar Scheduler Modal Button -->
               <button 
                 @click="handleAction('calendar')"
-                class="aspect-square bg-blue-600 hover:bg-blue-700 active:scale-95 text-white rounded-xl flex items-center justify-center relative transition-all cursor-pointer shadow-xs border-0 outline-none"
+                class="aspect-square bg-primary hover:bg-primary/90 active:scale-95 text-primary-foreground rounded-xl flex items-center justify-center relative transition-all cursor-pointer shadow-xs border-0 outline-none"
                 title="Schedule Meeting"
               >
                 <Calendar class="w-5 h-5" />
@@ -1747,10 +1747,10 @@ const resolveButtonClass = computed(() => {
               leave-from-class="opacity-100 max-h-[300px]"
               leave-to-class="opacity-0 max-h-0 overflow-hidden"
             >
-              <div v-show="showTasksPanel" class="mt-4 border border-gray-150 rounded-xl p-3.5 bg-gray-50/70 space-y-3 text-left">
+              <div v-show="showTasksPanel" class="mt-4 border border-border rounded-xl p-3.5 bg-muted/40 space-y-3 text-left">
                 <div class="flex items-center justify-between">
-                  <h5 class="text-xs font-extrabold text-gray-800">Tasks Checklist</h5>
-                  <span class="text-[10px] font-bold text-gray-600 bg-white border border-gray-200 px-2 py-0.5 rounded-full select-none">
+                  <h5 class="text-xs font-extrabold text-foreground">Tasks Checklist</h5>
+                  <span class="text-[10px] font-bold text-muted-foreground bg-card border border-border px-2 py-0.5 rounded-full select-none">
                     {{ completedTasksCount }}/{{ activeTasks.length }} done
                   </span>
                 </div>
@@ -1761,26 +1761,26 @@ const resolveButtonClass = computed(() => {
                     <input 
                       type="checkbox" 
                       v-model="task.completed" 
-                      class="w-4 h-4 accent-green-600 rounded border-gray-300 focus:ring-0 cursor-pointer shrink-0 mt-0.5" 
+                      class="w-4 h-4 accent-primary rounded border-input focus:ring-0 cursor-pointer shrink-0 mt-0.5" 
                     />
-                    <span class="font-semibold leading-tight" :class="task.completed ? 'line-through text-gray-400 font-medium' : 'text-gray-700'">
+                    <span class="font-semibold leading-tight" :class="task.completed ? 'line-through text-muted-foreground font-medium' : 'text-foreground'">
                       {{ task.text }}
                     </span>
                   </li>
                 </ul>
                 
                 <!-- Add new checklist task -->
-                <div class="flex gap-1.5 border-t border-gray-100 pt-2.5">
+                <div class="flex gap-1.5 border-t border-border pt-2.5">
                   <input 
                     type="text" 
                     v-model="newTaskText" 
                     @keyup.enter="addTask" 
                     placeholder="Add a checklist task..." 
-                    class="flex-1 text-xs border border-gray-200 rounded-lg px-2.5 py-1.5 bg-white focus:outline-none focus:border-green-300 font-semibold text-gray-800"
+                    class="flex-1 text-xs border border-input rounded-lg px-2.5 py-1.5 bg-card focus:outline-none focus:border-ring font-semibold text-foreground"
                   />
                   <button 
                     @click="addTask" 
-                    class="px-2.5 py-1.5 bg-green-500 hover:bg-green-600 text-white rounded-lg text-xs font-bold border-0 cursor-pointer transition-colors flex items-center justify-center shrink-0"
+                    class="px-2.5 py-1.5 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg text-xs font-bold border-0 cursor-pointer transition-colors flex items-center justify-center shrink-0"
                   >
                     <Plus class="w-4 h-4" />
                   </button>
@@ -1797,38 +1797,38 @@ const resolveButtonClass = computed(() => {
               leave-from-class="opacity-100 max-h-[350px]"
               leave-to-class="opacity-0 max-h-0 overflow-hidden"
             >
-              <div v-show="showNotesPanel" class="mt-4 border border-gray-150 rounded-xl p-3.5 bg-gray-50/70 space-y-3 text-left">
-                <h5 class="text-xs font-extrabold text-gray-800">Private logs / Notes</h5>
+              <div v-show="showNotesPanel" class="mt-4 border border-border rounded-xl p-3.5 bg-muted/40 space-y-3 text-left">
+                <h5 class="text-xs font-extrabold text-foreground">Private logs / Notes</h5>
                 
                 <!-- Log feed list -->
                 <div v-if="activeNotes.length > 0" class="space-y-2 max-h-40 overflow-y-auto pr-1">
-                  <div v-for="note in activeNotes" :key="note.id" class="p-2.5 bg-white border border-gray-150 rounded-lg text-[11px] font-semibold text-gray-700 shadow-2xs relative group/note">
+                  <div v-for="note in activeNotes" :key="note.id" class="p-2.5 bg-card border border-border rounded-lg text-[11px] font-semibold text-foreground shadow-xs relative group/note">
                     <p class="leading-relaxed pr-4 whitespace-pre-wrap">{{ note.text }}</p>
-                    <span class="text-[9px] text-gray-400 block mt-1 font-bold">{{ note.time }}</span>
+                    <span class="text-[9px] text-muted-foreground block mt-1 font-bold">{{ note.time }}</span>
                     <button 
                       @click="deleteNote(note.id)" 
-                      class="absolute right-1 top-1 text-gray-300 hover:text-red-500 opacity-0 group-hover/note:opacity-100 transition-opacity p-1 cursor-pointer bg-transparent border-0 flex items-center justify-center"
+                      class="absolute right-1 top-1 text-muted-foreground/60 hover:text-destructive opacity-0 group-hover/note:opacity-100 transition-opacity p-1 cursor-pointer bg-transparent border-0 flex items-center justify-center"
                       title="Delete log"
                     >
                       <X class="w-3 h-3" />
                     </button>
                   </div>
                 </div>
-                <div v-else class="text-[11px] text-gray-400 italic text-center py-4 bg-white border border-gray-100 rounded-lg">
+                <div v-else class="text-[11px] text-muted-foreground italic text-center py-4 bg-card border border-border rounded-lg">
                   No logs or notes registered for this contact.
                 </div>
                 
                 <!-- Note Input text box -->
-                <div class="flex flex-col gap-1.5 border-t border-gray-100 pt-2.5">
+                <div class="flex flex-col gap-1.5 border-t border-border pt-2.5">
                   <textarea 
                     rows="2" 
                     v-model="newNoteContent" 
                     placeholder="Add details, updates, or logs..." 
-                    class="w-full text-xs border border-gray-200 rounded-lg p-2.5 bg-white focus:outline-none focus:border-green-300 font-semibold text-gray-800 resize-none leading-relaxed"
+                    class="w-full text-xs border border-input rounded-lg p-2.5 bg-card focus:outline-none focus:border-ring font-semibold text-foreground resize-none leading-relaxed"
                   ></textarea>
                   <button 
                     @click="addNote" 
-                    class="w-full py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg text-xs font-bold border-0 cursor-pointer transition-colors flex items-center justify-center"
+                    class="w-full py-2 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg text-xs font-bold border-0 cursor-pointer transition-colors flex items-center justify-center"
                   >
                     Save Note Log
                   </button>
@@ -1846,83 +1846,83 @@ const resolveButtonClass = computed(() => {
     <div v-else class="flex flex-col flex-1 p-4 space-y-4 text-xs font-medium animate-in fade-in duration-200">
       
       <!-- Contact Header (Compact) -->
-      <div class="flex items-center gap-3 pb-3 border-b border-gray-100">
-        <img :src="profile.avatar" class="w-10 h-10 rounded-full object-cover border border-gray-200 shrink-0" />
+      <div class="flex items-center gap-3 pb-3 border-b border-border">
+        <img :src="profile.avatar" class="w-10 h-10 rounded-full object-cover border border-border shrink-0" />
         <div class="flex-1 min-w-0">
           <div class="flex items-center gap-1.5 mb-0.5">
-            <h3 class="font-extrabold text-gray-900 text-sm truncate">{{ profile.name }}</h3>
+            <h3 class="font-extrabold text-foreground text-sm truncate">{{ profile.name }}</h3>
             <!-- Toggleable VIP Badge in List View -->
             <button 
               @click="toggleVip"
               class="inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded-full text-[9px] font-bold border shrink-0 cursor-pointer transition-all duration-150 select-none"
               :class="[
                 isVipActive 
-                  ? 'border-green-300 text-green-700 bg-green-50 font-extrabold' 
-                  : 'border-gray-200 text-gray-400 bg-gray-50 opacity-60'
+                  ? 'border-accent-purple/30 text-accent-purple bg-accent-purple/10 font-extrabold' 
+                  : 'border-border text-muted-foreground bg-muted opacity-60'
               ]"
               :title="isVipActive ? 'VIP Contact (Click to disable)' : 'Standard Contact (Click to mark as VIP)'"
             >
-              <Crown class="w-2.5 h-2.5" :class="isVipActive ? 'text-green-600' : 'text-gray-400'" />
+              <Crown class="w-2.5 h-2.5" :class="isVipActive ? 'text-accent-purple' : 'text-muted-foreground'" />
               <span>VIP</span>
             </button>
           </div>
-          <p class="text-[11px] text-gray-400 truncate">{{ profile.email }}</p>
+          <p class="text-[11px] text-muted-foreground truncate">{{ profile.email }}</p>
         </div>
       </div>
 
       <!-- Section: Properties (Key-Value Density) -->
       <div class="space-y-2">
-        <h5 class="text-[10px] font-extrabold text-gray-400 uppercase tracking-wider">Properties</h5>
+        <h5 class="text-[10px] font-extrabold text-muted-foreground uppercase tracking-wider">Properties</h5>
         
-        <div class="bg-gray-50/70 border border-gray-100 rounded-xl divide-y divide-gray-100 text-xs">
+        <div class="bg-muted/40 border border-border rounded-xl divide-y divide-border text-xs">
           <!-- Phone -->
           <div class="flex items-center justify-between px-3 py-2">
-            <span class="text-gray-400 font-semibold flex items-center gap-1.5"><Phone class="w-3 h-3 text-gray-400" /> Phone</span>
-            <span class="text-gray-800 font-bold truncate">{{ profile.phone }}</span>
+            <span class="text-muted-foreground font-semibold flex items-center gap-1.5"><Phone class="w-3 h-3 text-muted-foreground" /> Phone</span>
+            <span class="text-foreground font-bold truncate">{{ profile.phone }}</span>
           </div>
           <!-- Platform / Source -->
           <div class="flex items-center justify-between px-3 py-2">
-            <span class="text-gray-400 font-semibold flex items-center gap-1.5"><PlatformIcon :platform="currentSource" size="xs" variant="colored" /> Source</span>
+            <span class="text-muted-foreground font-semibold flex items-center gap-1.5"><PlatformIcon :platform="currentSource" size="xs" variant="colored" /> Source</span>
             <PlatformIcon :platform="currentSource" size="xs" variant="badge" />
           </div>
           <!-- Temperature -->
           <div class="flex items-center justify-between px-3 py-2">
-            <span class="text-gray-400 font-semibold flex items-center gap-1.5"><Flame class="w-3 h-3 text-orange-400" /> Temperature</span>
-            <span class="text-orange-700 font-extrabold bg-orange-50 px-2 py-0.5 rounded border border-orange-200/50 text-[10px]">{{ currentTemperature }}</span>
+            <span class="text-muted-foreground font-semibold flex items-center gap-1.5"><Flame class="w-3 h-3 text-destructive" /> Temperature</span>
+            <span class="text-destructive font-extrabold bg-destructive/10 px-2 py-0.5 rounded border border-destructive/20 text-[10px]">{{ currentTemperature }}</span>
           </div>
           <!-- Priority -->
           <div class="flex items-center justify-between px-3 py-2">
-            <span class="text-gray-400 font-semibold flex items-center gap-1.5"><AlertTriangle class="w-3 h-3 text-amber-400" /> Priority</span>
-            <span class="text-gray-800 font-bold">{{ currentPriority }}</span>
+            <span class="text-muted-foreground font-semibold flex items-center gap-1.5"><AlertTriangle class="w-3 h-3 text-warning" /> Priority</span>
+            <span class="text-foreground font-bold">{{ currentPriority }}</span>
           </div>
           <!-- Assignee -->
           <div class="flex items-center justify-between px-3 py-2">
-            <span class="text-gray-400 font-semibold flex items-center gap-1.5"><Users class="w-3 h-3 text-gray-400" /> Assignee</span>
-            <div class="flex items-center gap-1 text-gray-800 font-bold">
+            <span class="text-muted-foreground font-semibold flex items-center gap-1.5"><Users class="w-3 h-3 text-muted-foreground" /> Assignee</span>
+            <div class="flex items-center gap-1 text-foreground font-bold">
               <img :src="currentAgent.avatar" class="w-4 h-4 rounded-full object-cover" />
               <span>{{ currentAgent.name }}</span>
             </div>
           </div>
           <!-- Date Added -->
           <div class="flex items-center justify-between px-3 py-2">
-            <span class="text-gray-400 font-semibold flex items-center gap-1.5"><Clock class="w-3 h-3 text-gray-400" /> Date Added</span>
-            <span class="text-gray-700 font-bold">{{ profile.dateAdded }}</span>
+            <span class="text-muted-foreground font-semibold flex items-center gap-1.5"><Clock class="w-3 h-3 text-muted-foreground" /> Date Added</span>
+            <span class="text-foreground font-bold">{{ profile.dateAdded }}</span>
           </div>
         </div>
       </div>
 
       <!-- Section: Tags List -->
       <div class="space-y-1.5">
-        <h5 class="text-[10px] font-extrabold text-gray-400 uppercase tracking-wider">Tags</h5>
+        <h5 class="text-[10px] font-extrabold text-muted-foreground uppercase tracking-wider">Tags</h5>
         <div class="flex flex-wrap gap-1.5">
           <span 
             v-for="t in activeConversation.tags" 
             :key="t" 
-            class="px-2 py-0.5 rounded-md text-[10px] font-bold border border-gray-200 bg-white text-gray-700"
+            class="px-2 py-0.5 rounded-md text-[10px] font-bold border border-border bg-card text-foreground"
           >
             {{ t }}
           </span>
-          <span v-if="!activeConversation.tags || activeConversation.tags.length === 0" class="text-gray-400 italic text-[11px]">
+          <span v-if="!activeConversation.tags || activeConversation.tags.length === 0" class="text-muted-foreground italic text-[11px]">
             No tags attached
           </span>
         </div>
@@ -1931,25 +1931,25 @@ const resolveButtonClass = computed(() => {
       <!-- Section: Deal Information (Simple) -->
       <div class="space-y-1.5">
         <div class="flex items-center justify-between">
-          <h5 class="text-[10px] font-extrabold text-gray-400 uppercase tracking-wider">Deal</h5>
+          <h5 class="text-[10px] font-extrabold text-muted-foreground uppercase tracking-wider">Deal</h5>
           <button 
             v-if="!currentActiveDeal" 
             @click="openCreateDealModal" 
-            class="text-[10px] text-green-600 font-bold hover:underline cursor-pointer border-0 bg-transparent p-0"
+            class="text-[10px] text-primary font-bold hover:underline cursor-pointer border-0 bg-transparent p-0"
           >
             + Create Deal
           </button>
         </div>
-        <div class="bg-gray-50/70 border border-gray-100 rounded-xl p-2.5">
+        <div class="bg-muted/40 border border-border rounded-xl p-2.5">
           <div v-if="currentActiveDeal">
-            <div class="font-bold text-gray-900 text-xs truncate">{{ currentActiveDeal.title }}</div>
-            <div class="text-[10px] text-gray-500 mt-0.5">{{ currentActiveDeal.stage }} • {{ currentActiveDeal.pipeline }}</div>
-            <div v-if="currentActiveDeal.expectedCloseDate" class="text-[10px] text-gray-400 mt-1 flex items-center gap-1">
-              <Calendar class="w-3 h-3 text-gray-400 shrink-0" />
-              <span>Expected close: <span class="text-gray-700 font-bold">{{ formatDisplayDate(currentActiveDeal.expectedCloseDate) }}</span></span>
+            <div class="font-bold text-foreground text-xs truncate">{{ currentActiveDeal.title }}</div>
+            <div class="text-[10px] text-muted-foreground mt-0.5">{{ currentActiveDeal.stage }} • {{ currentActiveDeal.pipeline }}</div>
+            <div v-if="currentActiveDeal.expectedCloseDate" class="text-[10px] text-muted-foreground mt-1 flex items-center gap-1">
+              <Calendar class="w-3 h-3 text-muted-foreground shrink-0" />
+              <span>Expected close: <span class="text-foreground font-bold">{{ formatDisplayDate(currentActiveDeal.expectedCloseDate) }}</span></span>
             </div>
           </div>
-          <div v-else class="text-[11px] text-gray-400 italic">
+          <div v-else class="text-[11px] text-muted-foreground italic">
             No active deal registered
           </div>
         </div>
@@ -1957,38 +1957,38 @@ const resolveButtonClass = computed(() => {
 
       <!-- Section: Company Information (Simple List) -->
       <div class="space-y-1.5">
-        <h5 class="text-[10px] font-extrabold text-gray-400 uppercase tracking-wider">Company Details</h5>
-        <div class="bg-gray-50/70 border border-gray-100 rounded-xl divide-y divide-gray-100 text-xs">
+        <h5 class="text-[10px] font-extrabold text-muted-foreground uppercase tracking-wider">Company Details</h5>
+        <div class="bg-muted/40 border border-border rounded-xl divide-y divide-border text-xs">
           <div class="flex items-center justify-between px-3 py-1.5">
-            <span class="text-gray-400 font-semibold">Name</span>
-            <span class="text-gray-800 font-bold truncate max-w-[170px]">{{ profile.companyFull || profile.company }}</span>
+            <span class="text-muted-foreground font-semibold">Name</span>
+            <span class="text-foreground font-bold truncate max-w-[170px]">{{ profile.companyFull || profile.company }}</span>
           </div>
           <div class="flex items-center justify-between px-3 py-1.5">
-            <span class="text-gray-400 font-semibold">Website</span>
+            <span class="text-muted-foreground font-semibold">Website</span>
             <a :href="'https://' + profile.companyWebsite" target="_blank" class="text-primary hover:underline truncate max-w-[170px] font-bold">{{ profile.companyWebsite }}</a>
           </div>
           <div class="flex items-center justify-between px-3 py-1.5">
-            <span class="text-gray-400 font-semibold">Industry</span>
-            <span class="text-gray-800 font-bold">{{ profile.companyIndustry }}</span>
+            <span class="text-muted-foreground font-semibold">Industry</span>
+            <span class="text-foreground font-bold">{{ profile.companyIndustry }}</span>
           </div>
           <div class="flex items-center justify-between px-3 py-1.5">
-            <span class="text-gray-400 font-semibold">Size</span>
-            <span class="text-gray-800 font-bold">{{ profile.companySize }}</span>
+            <span class="text-muted-foreground font-semibold">Size</span>
+            <span class="text-foreground font-bold">{{ profile.companySize }}</span>
           </div>
         </div>
       </div>
 
       <!-- Quick Action Buttons Strip in List View -->
-      <div class="pt-2 border-t border-gray-100 flex items-center gap-2">
+      <div class="pt-2 border-t border-border flex items-center gap-2">
         <button 
           @click="openCreateDealModal"
-          class="flex-1 py-1.5 bg-green-500 hover:bg-green-600 text-white rounded-lg text-xs font-bold transition-colors cursor-pointer border-0 flex items-center justify-center gap-1 shadow-2xs"
+          class="flex-1 py-1.5 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg text-xs font-bold transition-colors cursor-pointer border-0 flex items-center justify-center gap-1 shadow-xs"
         >
           <Plus class="w-3.5 h-3.5" /> Deal
         </button>
         <button 
           @click="isCalendarModalOpen = true"
-          class="flex-1 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold transition-colors cursor-pointer border-0 flex items-center justify-center gap-1 shadow-2xs"
+          class="flex-1 py-1.5 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg text-xs font-bold transition-colors cursor-pointer border-0 flex items-center justify-center gap-1 shadow-xs"
         >
           <Calendar class="w-3.5 h-3.5" /> Call
         </button>
@@ -2008,17 +2008,17 @@ const resolveButtonClass = computed(() => {
       >
         <div 
           v-if="isCreateDealOpen" 
-          class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs select-none"
+          class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm select-none"
         >
           <div 
-            class="bg-white rounded-2xl max-w-lg w-full p-6 border border-gray-100 shadow-2xl flex flex-col gap-5 animate-in fade-in zoom-in-95 duration-200"
+            class="bg-card rounded-2xl max-w-lg w-full p-6 border border-border shadow-2xl flex flex-col gap-5 animate-in fade-in zoom-in-95 duration-200"
           >
             <!-- Header -->
             <div class="flex items-center justify-between pb-1">
-              <h2 class="text-base font-extrabold text-gray-900">Create Deal</h2>
+              <h2 class="text-base font-extrabold text-foreground">Create Deal</h2>
               <button 
                 @click="isCreateDealOpen = false" 
-                class="text-gray-400 hover:text-gray-700 cursor-pointer p-1 rounded-full hover:bg-gray-100 transition-colors"
+                class="text-muted-foreground hover:text-foreground cursor-pointer p-1 rounded-full hover:bg-muted transition-colors"
               >
                 <X class="w-5 h-5" />
               </button>
@@ -2028,27 +2028,27 @@ const resolveButtonClass = computed(() => {
             <div class="space-y-4">
               <!-- Pipeline Select -->
               <div class="grid grid-cols-3 items-center gap-4">
-                <label class="text-sm font-semibold text-gray-700">Choose Pipeline</label>
+                <label class="text-sm font-semibold text-foreground">Choose Pipeline</label>
                 <div class="col-span-2 relative flex items-center">
                   <select 
                     v-model="dealPipeline" 
-                    class="w-full border border-gray-200 rounded-xl pl-3.5 pr-10 py-2.5 text-xs bg-white font-bold text-gray-700 focus:outline-none focus:border-green-300 transition-colors cursor-pointer appearance-none"
+                    class="w-full border border-input rounded-xl pl-3.5 pr-10 py-2.5 text-xs bg-card font-bold text-foreground focus:outline-none focus:border-ring transition-colors cursor-pointer appearance-none"
                   >
                     <option value="Sales Pipeline">Sales Pipeline</option>
                     <option value="Marketing Pipeline">Marketing Pipeline</option>
                     <option value="Support Pipeline">Support Pipeline</option>
                   </select>
-                  <ChevronDown class="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                  <ChevronDown class="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
                 </div>
               </div>
               
               <!-- Stage Select -->
               <div class="grid grid-cols-3 items-center gap-4">
-                <label class="text-sm font-semibold text-gray-700">Stage</label>
+                <label class="text-sm font-semibold text-foreground">Stage</label>
                 <div class="col-span-2 relative flex items-center">
                   <select 
                     v-model="dealStage" 
-                    class="w-full border border-gray-200 rounded-xl pl-9 pr-10 py-2.5 text-xs bg-white font-bold text-gray-700 focus:outline-none focus:border-green-300 transition-colors cursor-pointer appearance-none"
+                    class="w-full border border-input rounded-xl pl-9 pr-10 py-2.5 text-xs bg-card font-bold text-foreground focus:outline-none focus:border-ring transition-colors cursor-pointer appearance-none"
                   >
                     <option value="New Leads">New Leads</option>
                     <option value="Contacted">Contacted</option>
@@ -2056,65 +2056,65 @@ const resolveButtonClass = computed(() => {
                     <option value="Proposal Sent">Proposal Sent</option>
                     <option value="Negotiation">Negotiation</option>
                   </select>
-                  <span class="absolute left-3.5 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-blue-500 pointer-events-none"></span>
-                  <ChevronDown class="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                  <span class="absolute left-3.5 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-info pointer-events-none"></span>
+                  <ChevronDown class="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
                 </div>
               </div>
               
               <!-- Assignee Select -->
               <div class="grid grid-cols-3 items-center gap-4">
-                <label class="text-sm font-semibold text-gray-700">Assignee</label>
+                <label class="text-sm font-semibold text-foreground">Assignee</label>
                 <div class="col-span-2 relative flex items-center">
                   <select 
                     v-model="dealAssignee" 
-                    class="w-full border border-gray-200 rounded-xl pl-9 pr-10 py-2.5 text-xs bg-white font-bold text-gray-700 focus:outline-none focus:border-green-300 transition-colors cursor-pointer appearance-none"
+                    class="w-full border border-input rounded-xl pl-9 pr-10 py-2.5 text-xs bg-card font-bold text-foreground focus:outline-none focus:border-ring transition-colors cursor-pointer appearance-none"
                   >
                     <option value="Amirah Tan">Amirah Tan</option>
                     <option v-for="agent in agents" :key="agent.name" :value="agent.name">{{ agent.name }}</option>
                   </select>
-                  <Users class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
-                  <ChevronDown class="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                  <Users class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+                  <ChevronDown class="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
                 </div>
               </div>
 
               <!-- Expected Close Date Input -->
               <div class="grid grid-cols-3 items-center gap-4">
-                <label class="text-sm font-semibold text-gray-700 leading-tight">Expected close date</label>
+                <label class="text-sm font-semibold text-foreground leading-tight">Expected close date</label>
                 <div class="col-span-2 relative flex items-center">
                   <input 
                     type="date" 
                     v-model="dealExpectedCloseDate" 
                     @click="($event.target as HTMLInputElement).showPicker?.()"
-                    class="deal-date-input relative w-full border border-gray-200 rounded-xl pl-3.5 pr-10 py-2.5 text-xs bg-white font-bold focus:outline-none focus:border-green-300 transition-colors cursor-pointer"
-                    :class="dealExpectedCloseDate ? 'text-gray-700' : 'text-gray-400'"
+                    class="deal-date-input relative w-full border border-input rounded-xl pl-3.5 pr-10 py-2.5 text-xs bg-card font-bold focus:outline-none focus:border-ring transition-colors cursor-pointer"
+                    :class="dealExpectedCloseDate ? 'text-foreground' : 'text-muted-foreground'"
                   />
-                  <Calendar class="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                  <Calendar class="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
                 </div>
               </div>
               
               <!-- Deal Title Input -->
               <div class="grid grid-cols-3 items-start gap-4">
-                <label class="text-sm font-semibold text-gray-700 pt-2.5">Deal title</label>
+                <label class="text-sm font-semibold text-foreground pt-2.5">Deal title</label>
                 <div class="col-span-2 flex flex-col gap-1.5 min-h-[58px]">
                   <div class="relative flex items-center">
                     <input 
                       type="text" 
                       v-model="dealTitle" 
-                      class="w-full border border-gray-200 rounded-xl pl-3.5 pr-14 py-2.5 text-xs font-semibold text-gray-800 focus:outline-none focus:border-green-300 transition-colors" 
+                      class="w-full border border-input rounded-xl pl-3.5 pr-14 py-2.5 text-xs font-semibold text-foreground focus:outline-none focus:border-ring transition-colors" 
                       placeholder="Deal Title"
                     />
                     <button 
                       @click="generateAiDealTitle"
-                      class="absolute right-2.5 h-7 px-2 bg-gray-55 border border-gray-200 hover:bg-gray-100 rounded-lg text-[10px] font-bold text-gray-655 flex items-center gap-1 transition-colors cursor-pointer outline-none"
+                      class="absolute right-2.5 h-7 px-2 bg-muted border border-border hover:bg-muted/80 rounded-lg text-[10px] font-bold text-foreground flex items-center gap-1 transition-colors cursor-pointer outline-none"
                       title="Generate with AI"
                     >
-                      <Sparkles class="w-3 h-3 text-purple-650" />
+                      <Sparkles class="w-3 h-3 text-tag-6-foreground" />
                       AI
                     </button>
                   </div>
                   <span 
                     v-if="!isTitleValid"
-                    class="text-[11px] text-red-500 font-bold leading-none animate-in fade-in duration-150"
+                    class="text-[11px] text-destructive font-bold leading-none animate-in fade-in duration-150"
                   >
                     Title must contain at least one letter.
                   </span>
@@ -2123,12 +2123,12 @@ const resolveButtonClass = computed(() => {
               
               <!-- Description Textarea -->
               <div class="grid grid-cols-3 items-start gap-4">
-                <label class="text-sm font-semibold text-gray-700 pt-2.5">Description</label>
+                <label class="text-sm font-semibold text-foreground pt-2.5">Description</label>
                 <div class="col-span-2">
                   <textarea 
                     rows="3" 
                     v-model="dealDescription"
-                    class="w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-gray-850 placeholder:text-gray-400 focus:outline-none focus:border-green-300 transition-colors resize-none leading-relaxed" 
+                    class="w-full border border-input rounded-xl px-3.5 py-2.5 text-xs font-semibold text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-ring transition-colors resize-none leading-relaxed" 
                     placeholder="Description"
                   ></textarea>
                 </div>
@@ -2136,21 +2136,21 @@ const resolveButtonClass = computed(() => {
             </div>
             
             <!-- Horizontal separator line -->
-            <div class="border-t border-gray-150 mt-2"></div>
+            <div class="border-t border-border mt-2"></div>
             
             <!-- Action Buttons -->
             <div class="flex items-center justify-end gap-3 select-none">
               <button 
                 @click="isCreateDealOpen = false" 
-                class="px-4 py-2.5 text-xs font-bold text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-xl transition-colors cursor-pointer outline-none"
+                class="px-4 py-2.5 text-xs font-bold text-muted-foreground hover:text-foreground hover:bg-muted rounded-xl transition-colors cursor-pointer outline-none"
               >
                 Cancel
               </button>
               <button 
                 @click="submitCreateDeal"
                 :disabled="!isTitleValid"
-                class="px-5 py-2.5 text-xs font-bold text-white rounded-xl transition-all select-none border-0 outline-none flex items-center justify-center shadow-xs"
-                :class="isTitleValid ? 'bg-[#67D3B5] hover:bg-[#5bc1a4] cursor-pointer' : 'bg-gray-200 text-gray-400 cursor-not-allowed'"
+                class="px-5 py-2.5 text-xs font-bold rounded-xl transition-all select-none border-0 outline-none flex items-center justify-center shadow-xs"
+                :class="isTitleValid ? 'bg-primary hover:bg-primary/90 text-primary-foreground cursor-pointer' : 'bg-muted text-muted-foreground cursor-not-allowed'"
               >
                 Submit
               </button>
@@ -2172,32 +2172,32 @@ const resolveButtonClass = computed(() => {
       >
         <div 
           v-if="isSuccessModalOpen" 
-          class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs select-none"
+          class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm select-none"
         >
           <div 
-            class="bg-white rounded-2xl max-w-sm w-full p-6 border border-gray-100 shadow-2xl flex flex-col items-center text-center gap-5 animate-in fade-in zoom-in-95 duration-200"
+            class="bg-card rounded-2xl max-w-sm w-full p-6 border border-border shadow-2xl flex flex-col items-center text-center gap-5 animate-in fade-in zoom-in-95 duration-200"
           >
-            <div class="w-14 h-14 bg-green-50 rounded-full flex items-center justify-center border border-green-200">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="w-7 h-7 text-[#23B750]"><path d="M20 6L9 17l-5-5"/></svg>
+            <div class="w-14 h-14 bg-success/10 rounded-full flex items-center justify-center border border-success/30">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="w-7 h-7 text-primary"><path d="M20 6L9 17l-5-5"/></svg>
             </div>
             
             <div class="space-y-2">
-              <h2 class="text-base font-extrabold text-gray-900">Deal Created Successfully!</h2>
-              <p class="text-xs text-gray-500 font-bold leading-normal px-2">
-                The deal <span class="text-gray-800 font-extrabold">"{{ createdDealTitle }}"</span> has been successfully added to your sales pipeline.
+              <h2 class="text-base font-extrabold text-foreground">Deal Created Successfully!</h2>
+              <p class="text-xs text-muted-foreground font-bold leading-normal px-2">
+                The deal <span class="text-foreground font-extrabold">"{{ createdDealTitle }}"</span> has been successfully added to your sales pipeline.
               </p>
             </div>
             
             <div class="flex flex-col w-full gap-2 mt-2">
               <button 
                 @click="router.push('/deals')"
-                class="w-full py-2.5 bg-[#23B750] hover:bg-[#1fa347] active:scale-[0.98] text-white text-xs font-bold rounded-xl transition-all border-0 cursor-pointer outline-none shadow-xs"
+                class="w-full py-2.5 bg-primary hover:bg-primary/90 active:scale-[0.98] text-primary-foreground text-xs font-bold rounded-xl transition-all border-0 cursor-pointer outline-none shadow-xs"
               >
                 Go to Deals Pipeline
               </button>
               <button 
                 @click="isSuccessModalOpen = false"
-                class="w-full py-2.5 bg-gray-50 hover:bg-gray-100 active:scale-[0.98] text-gray-500 hover:text-gray-700 text-xs font-bold rounded-xl transition-all border border-gray-200 cursor-pointer outline-none"
+                class="w-full py-2.5 bg-card hover:bg-muted active:scale-[0.98] text-muted-foreground hover:text-foreground text-xs font-bold rounded-xl transition-all border border-border cursor-pointer outline-none"
               >
                 Close
               </button>
@@ -2219,16 +2219,16 @@ const resolveButtonClass = computed(() => {
       >
         <div 
           v-if="isCalendarModalOpen" 
-          class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs select-none"
+          class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm select-none"
         >
           <div 
-            class="bg-white rounded-2xl max-w-sm w-full p-5 border border-gray-100 shadow-2xl flex flex-col gap-4 animate-in fade-in zoom-in-95 duration-200"
+            class="bg-card rounded-2xl max-w-sm w-full p-5 border border-border shadow-2xl flex flex-col gap-4 animate-in fade-in zoom-in-95 duration-200"
           >
-            <div class="flex items-center justify-between pb-1 border-b border-gray-50 pb-2">
-              <h2 class="text-sm font-extrabold text-gray-900">Schedule Meeting</h2>
+            <div class="flex items-center justify-between pb-1 border-b border-border pb-2">
+              <h2 class="text-sm font-extrabold text-foreground">Schedule Meeting</h2>
               <button 
                 @click="isCalendarModalOpen = false" 
-                class="text-gray-400 hover:text-gray-700 cursor-pointer p-1 rounded-full hover:bg-gray-100 transition-colors flex items-center justify-center border-0 bg-transparent"
+                class="text-muted-foreground hover:text-foreground cursor-pointer p-1 rounded-full hover:bg-muted transition-colors flex items-center justify-center border-0 bg-transparent"
               >
                 <X class="w-4 h-4" />
               </button>
@@ -2236,23 +2236,23 @@ const resolveButtonClass = computed(() => {
             
             <div class="space-y-3.5 text-left">
               <div>
-                <label class="text-[11px] font-extrabold text-gray-500 block mb-1">Meeting Date</label>
-                <input type="date" v-model="meetingDate" class="w-full border border-gray-250 rounded-xl px-3 py-2 text-xs font-semibold text-gray-800 focus:outline-none focus:border-green-300" />
+                <label class="text-[11px] font-extrabold text-muted-foreground block mb-1">Meeting Date</label>
+                <input type="date" v-model="meetingDate" class="w-full border border-input rounded-xl px-3 py-2 text-xs font-semibold text-foreground bg-card focus:outline-none focus:border-ring" />
               </div>
               <div>
-                <label class="text-[11px] font-extrabold text-gray-500 block mb-1">Meeting Time</label>
-                <input type="time" v-model="meetingTime" class="w-full border border-gray-255 rounded-xl px-3 py-2 text-xs font-semibold text-gray-800 focus:outline-none focus:border-green-300" />
+                <label class="text-[11px] font-extrabold text-muted-foreground block mb-1">Meeting Time</label>
+                <input type="time" v-model="meetingTime" class="w-full border border-input rounded-xl px-3 py-2 text-xs font-semibold text-foreground bg-card focus:outline-none focus:border-ring" />
               </div>
               <div class="relative">
-                <label class="text-[11px] font-extrabold text-gray-500 block mb-1">Meeting Type</label>
+                <label class="text-[11px] font-extrabold text-muted-foreground block mb-1">Meeting Type</label>
                 <div class="relative flex items-center">
-                  <select v-model="meetingType" class="w-full border border-gray-255 rounded-xl pl-3 pr-10 py-2.5 text-xs bg-white font-bold text-gray-700 focus:outline-none focus:border-green-300 transition-colors cursor-pointer appearance-none">
+                  <select v-model="meetingType" class="w-full border border-input rounded-xl pl-3 pr-10 py-2.5 text-xs bg-card font-bold text-foreground focus:outline-none focus:border-ring transition-colors cursor-pointer appearance-none">
                     <option value="Introductory Call">Introductory Call</option>
                     <option value="Product Demo">Product Demo</option>
                     <option value="Proposal & Pricing Review">Proposal & Pricing Review</option>
                     <option value="Onboarding & Training">Onboarding & Training</option>
                   </select>
-                  <ChevronDown class="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                  <ChevronDown class="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
                 </div>
               </div>
             </div>
@@ -2260,13 +2260,13 @@ const resolveButtonClass = computed(() => {
             <div class="flex items-center justify-end gap-2.5 mt-2">
               <button 
                 @click="isCalendarModalOpen = false" 
-                class="px-3.5 py-2 text-xs font-bold text-gray-500 hover:text-gray-700 hover:bg-gray-55 rounded-xl transition-colors cursor-pointer outline-none border-0 bg-transparent"
+                class="px-3.5 py-2 text-xs font-bold text-muted-foreground hover:text-foreground hover:bg-muted rounded-xl transition-colors cursor-pointer outline-none border-0 bg-transparent"
               >
                 Cancel
               </button>
               <button 
                 @click="submitScheduleMeeting"
-                class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white text-xs font-bold rounded-xl transition-all cursor-pointer outline-none flex items-center justify-center shadow-xs border-0"
+                class="px-4 py-2 bg-primary hover:bg-primary/90 text-primary-foreground text-xs font-bold rounded-xl transition-all cursor-pointer outline-none flex items-center justify-center shadow-xs border-0"
               >
                 Book Meeting
               </button>
@@ -2288,30 +2288,30 @@ const resolveButtonClass = computed(() => {
       >
         <div 
           v-if="isDeleteContactModalOpen" 
-          class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs select-none"
+          class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm select-none"
         >
           <div 
-            class="bg-white rounded-2xl max-w-xs w-full p-5 border border-gray-100 shadow-2xl flex flex-col items-center text-center gap-4 animate-in fade-in zoom-in-95 duration-200"
+            class="bg-card rounded-2xl max-w-xs w-full p-5 border border-border shadow-2xl flex flex-col items-center text-center gap-4 animate-in fade-in zoom-in-95 duration-200"
           >
-            <div class="w-12 h-12 rounded-full bg-red-50 text-red-600 flex items-center justify-center border border-red-200">
+            <div class="w-12 h-12 rounded-full bg-destructive/10 text-destructive flex items-center justify-center border border-destructive/20">
               <Trash2 class="w-6 h-6" />
             </div>
             <div class="space-y-1">
-              <h3 class="text-sm font-extrabold text-gray-900">Delete Contact?</h3>
-              <p class="text-xs text-gray-500 font-medium leading-relaxed">
-                Are you sure you want to remove <span class="font-bold text-gray-800">{{ profile.name }}</span>? This action cannot be undone.
+              <h3 class="text-sm font-extrabold text-foreground">Delete Contact?</h3>
+              <p class="text-xs text-muted-foreground font-medium leading-relaxed">
+                Are you sure you want to remove <span class="font-bold text-foreground">{{ profile.name }}</span>? This action cannot be undone.
               </p>
             </div>
             <div class="flex items-center justify-center gap-2.5 w-full mt-1">
               <button 
                 @click="isDeleteContactModalOpen = false"
-                class="flex-1 py-2 text-xs font-bold text-gray-600 hover:bg-gray-100 rounded-xl transition-colors border border-gray-200 bg-white cursor-pointer"
+                class="flex-1 py-2 text-xs font-bold text-foreground hover:bg-muted rounded-xl transition-colors border border-border bg-card cursor-pointer"
               >
                 Cancel
               </button>
               <button 
                 @click="confirmDeleteContact"
-                class="flex-1 py-2 text-xs font-bold text-white bg-red-600 hover:bg-red-700 rounded-xl transition-colors border-0 cursor-pointer shadow-xs"
+                class="flex-1 py-2 text-xs font-bold text-destructive-foreground bg-destructive hover:bg-destructive/90 rounded-xl transition-colors border-0 cursor-pointer shadow-xs"
               >
                 Delete
               </button>
@@ -2331,11 +2331,11 @@ const resolveButtonClass = computed(() => {
   background: transparent;
 }
 .scrollbar-thin::-webkit-scrollbar-thumb {
-  background: #f1f1f1;
+  background: var(--border);
   border-radius: 10px;
 }
 .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-  background: #e2e8f0;
+  background: var(--muted-foreground);
 }
 .deal-date-input::-webkit-calendar-picker-indicator {
   opacity: 0;

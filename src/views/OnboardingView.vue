@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full w-full bg-[#f9fafb] flex flex-col font-sans selection:bg-[#23B750]/20 selection:text-emerald-900 text-slate-800 overflow-hidden relative">
+  <div class="h-full w-full bg-background flex flex-col font-sans selection:bg-primary/20 selection:text-primary text-foreground overflow-hidden relative">
     <!-- Top Step Progress Bar (Clean Floating Stepper, No Headerbar) -->
     <OnboardingTopStepper
       v-if="currentStep <= 4 && !isProvisioning"
@@ -48,13 +48,13 @@
             </div>
 
             <!-- Footer Navigation for Steps 1–3 (Locked at bottom of stage) -->
-            <footer class="pt-5 border-t border-gray-200/70 flex items-center justify-between shrink-0">
+            <footer class="pt-5 border-t border-border flex items-center justify-between shrink-0">
               <button
                 type="button"
                 @click="prevAction"
                 :disabled="currentStep === 1"
                 :class="[
-                  'text-xs font-semibold text-gray-500 hover:text-gray-900 transition-colors flex items-center gap-1 cursor-pointer',
+                  'text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1 cursor-pointer',
                   currentStep === 1 ? 'opacity-0 pointer-events-none' : ''
                 ]"
               >
@@ -67,10 +67,10 @@
                 @click="nextAction"
                 :disabled="!isValid"
                 :class="[
-                  'h-11 px-6 text-white text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 cursor-pointer shadow-xs focus-visible:ring-2 focus-visible:ring-[#23B750]',
+                  'h-11 px-6 text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 cursor-pointer shadow-xs focus-visible:ring-2 focus-visible:ring-ring',
                   isValid
-                    ? 'bg-[#23B750] hover:bg-[#1a943e] active:scale-[0.99]'
-                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                    ? 'bg-primary hover:bg-primary/90 active:scale-[0.99] text-primary-foreground'
+                    : 'bg-muted text-muted-foreground cursor-not-allowed'
                 ]"
               >
                 <span>{{ continueText }}</span>
@@ -94,11 +94,11 @@
             />
 
             <!-- Footer Navigation for Step 4 (Constrained to max-w-xl so buttons don't run off!) -->
-            <footer class="pt-5 border-t border-gray-200/70 max-w-xl mx-auto w-full flex items-center justify-between shrink-0">
+            <footer class="pt-5 border-t border-border max-w-xl mx-auto w-full flex items-center justify-between shrink-0">
               <button
                 type="button"
                 @click="prevAction"
-                class="text-xs font-semibold text-gray-500 hover:text-gray-900 transition-colors flex items-center gap-1 cursor-pointer"
+                class="text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1 cursor-pointer"
               >
                 <ArrowLeft class="w-3.5 h-3.5" />
                 <span>Back</span>
@@ -109,10 +109,10 @@
                 @click="nextAction"
                 :disabled="!isValid"
                 :class="[
-                  'h-11 px-6 text-white text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 cursor-pointer shadow-xs focus-visible:ring-2 focus-visible:ring-[#23B750]',
+                  'h-11 px-6 text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 cursor-pointer shadow-xs focus-visible:ring-2 focus-visible:ring-ring',
                   isValid
-                    ? 'bg-[#23B750] hover:bg-[#1a943e] active:scale-[0.99]'
-                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                    ? 'bg-primary hover:bg-primary/90 active:scale-[0.99] text-primary-foreground'
+                    : 'bg-muted text-muted-foreground cursor-not-allowed'
                 ]"
               >
                 <span>Complete Setup & Launch</span>
@@ -130,23 +130,23 @@
         >
           <div class="space-y-6 flex flex-col items-center">
             <!-- Animated Spinner Container -->
-            <div class="w-14 h-14 rounded-2xl bg-emerald-50 border border-emerald-200/80 flex items-center justify-center text-[#23B750] shadow-sm">
-              <Loader2 class="w-7 h-7 animate-spin text-[#23B750]" />
+            <div class="w-14 h-14 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shadow-sm">
+              <Loader2 class="w-7 h-7 animate-spin text-primary" />
             </div>
 
             <div class="space-y-2">
-              <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
+              <h2 class="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">
                 Setting up your workspace...
               </h2>
-              <p class="text-xs sm:text-sm text-gray-500 max-w-sm mx-auto leading-relaxed">
+              <p class="text-xs sm:text-sm text-muted-foreground max-w-sm mx-auto leading-relaxed">
                 Configuring pipeline stages, templates, and team settings for
-                <strong class="text-gray-900 font-semibold">{{ formData.business.businessName || 'your team' }}</strong>.
+                <strong class="text-foreground font-semibold">{{ formData.business.businessName || 'your team' }}</strong>.
               </p>
             </div>
 
             <!-- Soft 2-second progress bar indicator -->
-            <div class="w-48 h-1.5 bg-gray-200/80 rounded-full overflow-hidden">
-              <div class="h-full bg-[#23B750] rounded-full animate-progress"></div>
+            <div class="w-48 h-1.5 bg-muted rounded-full overflow-hidden">
+              <div class="h-full bg-primary rounded-full animate-progress"></div>
             </div>
           </div>
         </div>
@@ -158,19 +158,19 @@
           class="w-full max-w-md mx-auto px-6 py-16 my-auto flex flex-col justify-center text-center animate-in fade-in-50 duration-300"
         >
           <div class="space-y-6">
-            <div class="w-16 h-16 rounded-2xl bg-emerald-50 border border-emerald-200/80 text-[#23B750] flex items-center justify-center mx-auto shadow-sm">
+            <div class="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/20 text-primary flex items-center justify-center mx-auto shadow-sm">
               <Check class="w-8 h-8 stroke-[3]" />
             </div>
 
             <div class="space-y-2">
-              <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
+              <h2 class="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">
                 You're all set!
               </h2>
-              <p class="text-xs sm:text-sm text-gray-500 max-w-sm mx-auto leading-relaxed">
+              <p class="text-xs sm:text-sm text-muted-foreground max-w-sm mx-auto leading-relaxed">
                 Your RakanSales workspace has been created for
-                <strong class="text-gray-900 font-semibold">{{ formData.business.businessName || 'your company' }}</strong>
+                <strong class="text-foreground font-semibold">{{ formData.business.businessName || 'your company' }}</strong>
                 on the
-                <strong class="text-[#23B750] font-semibold">{{ selectedPlanName }}</strong> plan.
+                <strong class="text-primary font-semibold">{{ selectedPlanName }}</strong> plan.
               </p>
             </div>
 
@@ -179,16 +179,16 @@
               <button
                 type="button"
                 @click="launchDashboard"
-                class="w-full sm:w-auto h-11 px-6 bg-white hover:bg-gray-50 active:scale-[0.99] text-gray-700 hover:text-gray-900 border border-gray-200 text-xs font-bold rounded-xl transition-all shadow-2xs inline-flex items-center justify-center gap-2 cursor-pointer"
+                class="w-full sm:w-auto h-11 px-6 bg-card hover:bg-muted active:scale-[0.99] text-foreground border border-border text-xs font-bold rounded-xl transition-all shadow-2xs inline-flex items-center justify-center gap-2 cursor-pointer"
               >
-                <LayoutDashboard class="w-4 h-4 text-gray-500" />
+                <LayoutDashboard class="w-4 h-4 text-muted-foreground" />
                 <span>Launch Dashboard</span>
               </button>
 
               <button
                 type="button"
                 @click="completeSettingUp"
-                class="w-full sm:w-auto h-11 px-7 bg-[#23B750] hover:bg-[#1a943e] active:scale-[0.99] text-white text-xs font-bold rounded-xl transition-all shadow-xs inline-flex items-center justify-center gap-2 cursor-pointer focus-visible:ring-2 focus-visible:ring-[#23B750]"
+                class="w-full sm:w-auto h-11 px-7 bg-primary hover:bg-primary/90 active:scale-[0.99] text-primary-foreground text-xs font-bold rounded-xl transition-all shadow-xs inline-flex items-center justify-center gap-2 cursor-pointer focus-visible:ring-2 focus-visible:ring-ring"
               >
                 <span>Complete Setting Up</span>
                 <ArrowRight class="w-4 h-4" />
@@ -304,12 +304,43 @@ function nextAction() {
   }
 }
 
+/**
+ * Resolves CSS token custom properties from the DOM and converts them to hex colors
+ * for canvas-confetti particle cannons.
+ */
+function getConfettiColors(): string[] {
+  if (typeof window === 'undefined') {
+    return ['#23B750', '#10B981', '#3B82F6', '#F59E0B'];
+  }
+  const temp = document.createElement('div');
+  temp.style.display = 'none';
+  document.body.appendChild(temp);
+
+  const tokens = ['--primary', '--brand-secondary', '--success', '--info', '--warning'];
+  const hexColors: string[] = [];
+
+  for (const token of tokens) {
+    temp.style.color = `var(${token})`;
+    const computed = getComputedStyle(temp).color;
+    const match = computed.match(/\d+/g);
+    if (match && match.length >= 3) {
+      const [r, g, b] = match.map(Number);
+      const hex = `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
+      hexColors.push(hex);
+    }
+  }
+
+  document.body.removeChild(temp);
+  return hexColors.length > 0 ? hexColors : ['#23B750', '#10B981', '#3B82F6', '#F59E0B'];
+}
+
 function fireConfetti() {
+  const colors = getConfettiColors();
   confetti({
     particleCount: 90,
     spread: 75,
     origin: { y: 0.6 },
-    colors: ['#23B750', '#62D816', '#10B981', '#34D399', '#3B82F6', '#F59E0B'],
+    colors,
   });
 
   setTimeout(() => {
@@ -318,14 +349,14 @@ function fireConfetti() {
       angle: 60,
       spread: 55,
       origin: { x: 0, y: 0.65 },
-      colors: ['#23B750', '#10B981', '#3B82F6', '#F59E0B'],
+      colors,
     });
     confetti({
       particleCount: 50,
       angle: 120,
       spread: 55,
       origin: { x: 1, y: 0.65 },
-      colors: ['#23B750', '#10B981', '#3B82F6', '#F59E0B'],
+      colors,
     });
   }, 250);
 }

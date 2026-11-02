@@ -1,11 +1,11 @@
 <template>
-  <div class="h-full w-full bg-[#f9fafb] flex flex-col font-sans selection:bg-[#23B750]/20 selection:text-emerald-900 text-slate-800 overflow-hidden relative">
+  <div class="h-full w-full bg-background flex flex-col font-sans selection:bg-primary/20 selection:text-primary text-foreground overflow-hidden relative">
     <!-- Secret Reset Button (Hidden by default, appears only on hover at top-left) -->
     <div class="absolute top-3 left-3 sm:top-4 sm:left-4 z-50 opacity-0 hover:opacity-100 transition-opacity duration-200">
       <button
         type="button"
         @click="resetAllSteps"
-        class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white hover:bg-gray-50 text-gray-400 hover:text-rose-600 border border-gray-200/90 shadow-2xs text-[11px] font-semibold transition-colors cursor-pointer"
+        class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-card hover:bg-muted text-muted-foreground hover:text-destructive border border-border shadow-2xs text-[11px] font-semibold transition-colors cursor-pointer"
         title="Reset all setup steps to empty"
       >
         <RotateCcw class="w-3 h-3" />
@@ -68,13 +68,13 @@
           </div>
 
           <!-- Footer Navigation for Steps 1–4 (Locked at bottom of viewport) -->
-          <footer class="pt-3.5 border-t border-gray-200/70 flex items-center justify-between shrink-0 mt-3">
+          <footer class="pt-3.5 border-t border-border flex items-center justify-between shrink-0 mt-3">
             <button
               type="button"
               @click="prevAction"
               :disabled="currentStep === 1"
               :class="[
-                'text-xs font-semibold text-gray-500 hover:text-gray-900 transition-colors flex items-center gap-1 cursor-pointer',
+                'text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1 cursor-pointer',
                 currentStep === 1 ? 'opacity-0 pointer-events-none' : ''
               ]"
             >
@@ -87,7 +87,7 @@
                 v-if="currentStep >= 2 && currentStep <= 4"
                 type="button"
                 @click="showSkipConfirmModal = true"
-                class="text-xs font-medium text-gray-400 hover:text-gray-700 px-2.5 py-1.5 cursor-pointer transition-colors"
+                class="text-xs font-medium text-muted-foreground hover:text-foreground px-2.5 py-1.5 cursor-pointer transition-colors"
               >
                 Skip step
               </button>
@@ -96,10 +96,10 @@
                 type="button"
                 @click="handleContinueClick"
                 :class="[
-                  'h-10 px-6 active:scale-[0.99] text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 cursor-pointer focus-visible:ring-2 focus-visible:ring-[#23B750]',
+                  'h-10 px-6 active:scale-[0.99] text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 cursor-pointer focus-visible:ring-2 focus-visible:ring-ring',
                   (currentStep === 1 || isCurrentStepConfigured)
-                    ? 'bg-[#23B750] hover:bg-[#1a943e] text-white shadow-xs'
-                    : 'bg-gray-200 hover:bg-gray-300 text-gray-700 shadow-2xs'
+                    ? 'bg-primary hover:bg-primary/90 text-primary-foreground shadow-xs'
+                    : 'bg-muted hover:bg-muted/80 text-muted-foreground shadow-2xs'
                 ]"
               >
                 <span>{{ continueText }}</span>
@@ -117,23 +117,23 @@
         >
           <div class="space-y-6 flex flex-col items-center">
             <!-- Animated Spinner Container -->
-            <div class="w-14 h-14 rounded-2xl bg-emerald-50 border border-emerald-200/80 flex items-center justify-center text-[#23B750] shadow-sm">
-              <Loader2 class="w-7 h-7 animate-spin text-[#23B750]" />
+            <div class="w-14 h-14 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shadow-sm">
+              <Loader2 class="w-7 h-7 animate-spin text-primary" />
             </div>
 
             <div class="space-y-2">
-              <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
+              <h2 class="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">
                 Setting up your workspace...
               </h2>
-              <p class="text-xs sm:text-sm text-gray-500 max-w-sm mx-auto leading-relaxed">
+              <p class="text-xs sm:text-sm text-muted-foreground max-w-sm mx-auto leading-relaxed">
                 Activating WhatsApp routing, LiveChat embed keys, and team permissions for
-                <strong class="text-gray-900 font-semibold">your workspace</strong>.
+                <strong class="text-foreground font-semibold">your workspace</strong>.
               </p>
             </div>
 
             <!-- Soft progress bar indicator -->
-            <div class="w-48 h-1.5 bg-gray-200/80 rounded-full overflow-hidden">
-              <div class="h-full bg-[#23B750] rounded-full animate-progress"></div>
+            <div class="w-48 h-1.5 bg-muted rounded-full overflow-hidden">
+              <div class="h-full bg-primary rounded-full animate-progress"></div>
             </div>
           </div>
         </div>
@@ -145,15 +145,15 @@
           class="w-full max-w-md mx-auto px-6 py-16 my-auto flex flex-col justify-center text-center animate-in fade-in-50 duration-300"
         >
           <div class="space-y-6">
-            <div class="w-16 h-16 rounded-2xl bg-emerald-50 border border-emerald-200/80 text-[#23B750] flex items-center justify-center mx-auto shadow-sm">
+            <div class="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/20 text-primary flex items-center justify-center mx-auto shadow-sm">
               <Check class="w-8 h-8 stroke-[3]" />
             </div>
 
             <div class="space-y-2">
-              <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
+              <h2 class="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">
                 You're all set!
               </h2>
-              <p class="text-xs sm:text-sm text-gray-500 max-w-sm mx-auto leading-relaxed">
+              <p class="text-xs sm:text-sm text-muted-foreground max-w-sm mx-auto leading-relaxed">
                 Your RakanSales setup is complete. Your sales channels and team permissions are active.
               </p>
             </div>
@@ -163,7 +163,7 @@
               <button
                 type="button"
                 @click="launchDashboard"
-                class="h-11 px-8 bg-[#23B750] hover:bg-[#1a943e] active:scale-[0.99] text-white text-xs font-bold rounded-xl transition-all shadow-xs inline-flex items-center gap-2 cursor-pointer focus-visible:ring-2 focus-visible:ring-[#23B750]"
+                class="h-11 px-8 bg-primary hover:bg-primary/90 active:scale-[0.99] text-primary-foreground text-xs font-bold rounded-xl transition-all shadow-xs inline-flex items-center gap-2 cursor-pointer focus-visible:ring-2 focus-visible:ring-ring"
               >
                 <span>Launch Dashboard</span>
                 <ArrowRight class="w-4 h-4" />
@@ -172,7 +172,7 @@
               <div class="pt-1">
                 <router-link
                   to="/omnichannel"
-                  class="text-xs font-semibold text-gray-500 hover:text-gray-900 transition-colors"
+                  class="text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors"
                 >
                   Or go directly to Omnichannel Conversations →
                 </router-link>
@@ -187,38 +187,38 @@
     <Transition name="modal-fade">
       <div
         v-if="showSkipConfirmModal"
-        class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs"
+        class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-xs"
         @click.self="cancelSkip"
       >
         <div
-          class="bg-white rounded-2xl max-w-sm w-full p-5 border border-gray-200/90 shadow-xl space-y-4 animate-in zoom-in-95 duration-150 text-left"
+          class="bg-card rounded-2xl max-w-sm w-full p-5 border border-border shadow-xl space-y-4 animate-in zoom-in-95 duration-150 text-left text-card-foreground"
         >
           <div class="flex items-start gap-3">
-            <div class="w-10 h-10 rounded-xl bg-amber-50 border border-amber-200/60 text-amber-600 flex items-center justify-center shrink-0">
+            <div class="w-10 h-10 rounded-xl bg-warning/10 border border-warning/20 text-warning flex items-center justify-center shrink-0">
               <AlertTriangle class="w-5 h-5" />
             </div>
             <div class="space-y-1">
-              <h3 class="text-sm font-bold text-gray-900">
+              <h3 class="text-sm font-bold text-foreground">
                 Skip {{ currentStepTitle }}?
               </h3>
-              <p class="text-xs text-gray-500 leading-relaxed">
+              <p class="text-xs text-muted-foreground leading-relaxed">
                 {{ skipWarningMessage }}
               </p>
             </div>
           </div>
 
-          <div class="flex items-center justify-end gap-2 pt-2 border-t border-gray-100">
+          <div class="flex items-center justify-end gap-2 pt-2 border-t border-border">
             <button
               type="button"
               @click="cancelSkip"
-              class="px-3.5 py-2 text-xs font-semibold text-gray-600 hover:text-gray-900 bg-gray-100 hover:bg-gray-200/80 rounded-xl transition-colors cursor-pointer"
+              class="px-3.5 py-2 text-xs font-semibold text-foreground bg-muted hover:bg-muted/80 rounded-xl transition-colors cursor-pointer"
             >
               Keep Configuring
             </button>
             <button
               type="button"
               @click="confirmSkipAnyway"
-              class="px-3.5 py-2 text-xs font-bold text-white bg-gray-900 hover:bg-black rounded-xl transition-all cursor-pointer shadow-xs"
+              class="px-3.5 py-2 text-xs font-bold text-background bg-foreground hover:bg-foreground/90 rounded-xl transition-all cursor-pointer shadow-xs"
             >
               Skip Anyway
             </button>
@@ -411,13 +411,44 @@ function nextAction() {
   }
 }
 
+/**
+ * Resolves CSS token custom properties from the DOM and converts them to hex colors
+ * for canvas-confetti particle cannons.
+ */
+function getConfettiColors(): string[] {
+  if (typeof window === 'undefined') {
+    return ['#23B750', '#10B981', '#3B82F6', '#F59E0B'];
+  }
+  const temp = document.createElement('div');
+  temp.style.display = 'none';
+  document.body.appendChild(temp);
+
+  const tokens = ['--primary', '--brand-secondary', '--success', '--info', '--warning'];
+  const hexColors: string[] = [];
+
+  for (const token of tokens) {
+    temp.style.color = `var(${token})`;
+    const computed = getComputedStyle(temp).color;
+    const match = computed.match(/\d+/g);
+    if (match && match.length >= 3) {
+      const [r, g, b] = match.map(Number);
+      const hex = `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
+      hexColors.push(hex);
+    }
+  }
+
+  document.body.removeChild(temp);
+  return hexColors.length > 0 ? hexColors : ['#23B750', '#10B981', '#3B82F6', '#F59E0B'];
+}
+
 function fireConfetti() {
+  const colors = getConfettiColors();
   // Center celebration cannon
   confetti({
     particleCount: 90,
     spread: 75,
     origin: { y: 0.6 },
-    colors: ['#23B750', '#62D816', '#10B981', '#34D399', '#3B82F6', '#F59E0B'],
+    colors,
   });
 
   // Dual side cannons
@@ -427,14 +458,14 @@ function fireConfetti() {
       angle: 60,
       spread: 55,
       origin: { x: 0, y: 0.65 },
-      colors: ['#23B750', '#10B981', '#3B82F6', '#F59E0B'],
+      colors,
     });
     confetti({
       particleCount: 50,
       angle: 120,
       spread: 55,
       origin: { x: 1, y: 0.65 },
-      colors: ['#23B750', '#10B981', '#3B82F6', '#F59E0B'],
+      colors,
     });
   }, 250);
 }

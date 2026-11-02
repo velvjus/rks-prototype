@@ -376,16 +376,16 @@ const handleApply = () => {
 </script>
 
 <template>
-  <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs select-none">
+  <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm select-none">
     <div 
       ref="modalContainerRef" 
-      class="bg-white rounded-2xl w-full max-w-2xl flex flex-col max-h-[88vh] overflow-hidden border border-gray-200 shadow-2xl animate-modal-slide-up"
+      class="bg-card rounded-2xl w-full max-w-2xl flex flex-col max-h-[88vh] overflow-hidden border border-border shadow-2xl animate-modal-slide-up"
     >
       <!-- Header -->
-      <header class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+      <header class="flex items-center justify-between px-6 py-4 border-b border-border">
         <div class="flex items-center gap-2">
-          <h2 class="text-sm font-bold text-gray-900">Filters</h2>
-          <span v-if="activeFilterCount > 0" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#23B750] text-white font-mono">
+          <h2 class="text-sm font-bold text-foreground">Filters</h2>
+          <span v-if="activeFilterCount > 0" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-primary text-primary-foreground font-mono">
             {{ activeFilterCount }}
           </span>
         </div>
@@ -393,13 +393,13 @@ const handleApply = () => {
         <div class="flex items-center gap-3">
           <button 
             @click="handleClearAll" 
-            class="text-xs text-gray-400 hover:text-gray-700 transition-colors cursor-pointer font-medium"
+            class="text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer font-medium"
           >
             Reset
           </button>
           <button 
             @click="emit('close')" 
-            class="text-gray-400 hover:text-gray-700 cursor-pointer p-1 rounded-md hover:bg-gray-100 transition-colors"
+            class="text-muted-foreground hover:text-foreground cursor-pointer p-1 rounded-md hover:bg-muted transition-colors"
           >
             <X class="w-4 h-4" />
           </button>
@@ -411,13 +411,13 @@ const handleApply = () => {
         
         <!-- SECTION 1: QUICK FILTERS -->
         <div class="space-y-4">
-          <h3 class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Quick Filters</h3>
+          <h3 class="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Quick Filters</h3>
           
           <div class="space-y-3.5">
             <!-- 1. Status Row -->
             <div class="flex items-center justify-between gap-4 text-xs">
-              <div class="flex items-center gap-2 w-32 text-gray-600 font-medium shrink-0">
-                <Hourglass class="w-3.5 h-3.5 text-gray-400" />
+              <div class="flex items-center gap-2 w-32 text-muted-foreground font-medium shrink-0">
+                <Hourglass class="w-3.5 h-3.5 text-muted-foreground" />
                 <span>Status</span>
               </div>
               <div class="flex-1 flex flex-wrap gap-1.5">
@@ -428,22 +428,22 @@ const handleApply = () => {
                   class="px-3 py-1 rounded-full text-[11px] border transition-all duration-150 cursor-pointer"
                   :class="[ 
                     filters.quick.status === opt 
-                      ? 'bg-[#23B750] border-[#23B750] text-white font-bold shadow-2xs' 
-                      : 'bg-white border-gray-200 text-gray-700 hover:border-gray-300 hover:bg-gray-50' 
+                      ? 'bg-primary border-primary text-primary-foreground font-bold shadow-xs' 
+                      : 'bg-card border-border text-foreground hover:border-input hover:bg-muted' 
                   ]"
                 >
                   {{ opt }}
                 </button>
               </div>
-              <button @click="resetQuickFilter('status')" title="Reset" class="text-gray-300 hover:text-gray-600 p-1 cursor-pointer">
+              <button @click="resetQuickFilter('status')" title="Reset" class="text-muted-foreground/60 hover:text-foreground p-1 cursor-pointer">
                 <RotateCcw class="w-3 h-3" />
               </button>
             </div>
 
             <!-- 2. Scope Row -->
             <div class="flex items-center justify-between gap-4 text-xs">
-              <div class="flex items-center gap-2 w-32 text-gray-600 font-medium shrink-0">
-                <Inbox class="w-3.5 h-3.5 text-gray-400" />
+              <div class="flex items-center gap-2 w-32 text-muted-foreground font-medium shrink-0">
+                <Inbox class="w-3.5 h-3.5 text-muted-foreground" />
                 <span>Scope</span>
               </div>
               <div class="flex-1 flex flex-wrap gap-1.5">
@@ -454,22 +454,22 @@ const handleApply = () => {
                   class="px-3 py-1 rounded-full text-[11px] border transition-all duration-150 cursor-pointer"
                   :class="[ 
                     filters.quick.assigned === opt 
-                      ? 'bg-[#23B750] border-[#23B750] text-white font-bold shadow-2xs' 
-                      : 'bg-white border-gray-200 text-gray-700 hover:border-gray-300 hover:bg-gray-50' 
+                      ? 'bg-primary border-primary text-primary-foreground font-bold shadow-xs' 
+                      : 'bg-card border-border text-foreground hover:border-input hover:bg-muted' 
                   ]"
                 >
                   {{ opt }}
                 </button>
               </div>
-              <button @click="resetQuickFilter('assigned')" title="Reset" class="text-gray-300 hover:text-gray-600 p-1 cursor-pointer">
+              <button @click="resetQuickFilter('assigned')" title="Reset" class="text-muted-foreground/60 hover:text-foreground p-1 cursor-pointer">
                 <RotateCcw class="w-3 h-3" />
               </button>
             </div>
 
             <!-- 3. Temperature Row -->
             <div class="flex items-center justify-between gap-4 text-xs">
-              <div class="flex items-center gap-2 w-32 text-gray-600 font-medium shrink-0">
-                <Flame class="w-3.5 h-3.5 text-gray-400" />
+              <div class="flex items-center gap-2 w-32 text-muted-foreground font-medium shrink-0">
+                <Flame class="w-3.5 h-3.5 text-muted-foreground" />
                 <span>Temperature</span>
               </div>
               <div class="flex-1 flex flex-wrap gap-1.5">
@@ -480,22 +480,22 @@ const handleApply = () => {
                   class="px-3 py-1 rounded-full text-[11px] border transition-all duration-150 cursor-pointer"
                   :class="[ 
                     filters.quick.temperature === opt 
-                      ? 'bg-[#23B750] border-[#23B750] text-white font-bold shadow-2xs' 
-                      : 'bg-white border-gray-200 text-gray-700 hover:border-gray-300 hover:bg-gray-50' 
+                      ? 'bg-primary border-primary text-primary-foreground font-bold shadow-xs' 
+                      : 'bg-card border-border text-foreground hover:border-input hover:bg-muted' 
                   ]"
                 >
                   {{ opt }}
                 </button>
               </div>
-              <button @click="resetQuickFilter('temperature')" title="Reset" class="text-gray-300 hover:text-gray-600 p-1 cursor-pointer">
+              <button @click="resetQuickFilter('temperature')" title="Reset" class="text-muted-foreground/60 hover:text-foreground p-1 cursor-pointer">
                 <RotateCcw class="w-3 h-3" />
               </button>
             </div>
 
             <!-- 4. Priority Row -->
             <div class="flex items-center justify-between gap-4 text-xs">
-              <div class="flex items-center gap-2 w-32 text-gray-600 font-medium shrink-0">
-                <AlertTriangle class="w-3.5 h-3.5 text-gray-400" />
+              <div class="flex items-center gap-2 w-32 text-muted-foreground font-medium shrink-0">
+                <AlertTriangle class="w-3.5 h-3.5 text-muted-foreground" />
                 <span>Priority</span>
               </div>
               <div class="flex-1 flex flex-wrap gap-1.5">
@@ -506,44 +506,44 @@ const handleApply = () => {
                   class="px-3 py-1 rounded-full text-[11px] border transition-all duration-150 cursor-pointer"
                   :class="[ 
                     filters.quick.priority === opt 
-                      ? 'bg-[#23B750] border-[#23B750] text-white font-bold shadow-2xs' 
-                      : 'bg-white border-gray-200 text-gray-700 hover:border-gray-300 hover:bg-gray-50' 
+                      ? 'bg-primary border-primary text-primary-foreground font-bold shadow-xs' 
+                      : 'bg-card border-border text-foreground hover:border-input hover:bg-muted' 
                   ]"
                 >
                   {{ opt }}
                 </button>
               </div>
-              <button @click="resetQuickFilter('priority')" title="Reset" class="text-gray-300 hover:text-gray-600 p-1 cursor-pointer">
+              <button @click="resetQuickFilter('priority')" title="Reset" class="text-muted-foreground/60 hover:text-foreground p-1 cursor-pointer">
                 <RotateCcw class="w-3 h-3" />
               </button>
             </div>
           </div>
         </div>
 
-        <div class="border-t border-gray-100"></div>
+        <div class="border-t border-border"></div>
 
         <!-- SECTION 2: ATTRIBUTES & ROUTING -->
         <div class="space-y-4">
-          <h3 class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Attributes & Routing</h3>
+          <h3 class="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Attributes & Routing</h3>
           
           <div class="space-y-3.5">
             <!-- 1. Multi-Select Channels Row -->
             <div v-if="visibleRows.channels" class="flex items-center justify-between gap-4 text-xs">
-              <div class="flex items-center gap-2 w-32 text-gray-600 font-medium shrink-0">
-                <Radio class="w-3.5 h-3.5 text-gray-400" />
+              <div class="flex items-center gap-2 w-32 text-muted-foreground font-medium shrink-0">
+                <Radio class="w-3.5 h-3.5 text-muted-foreground" />
                 <span>Channel</span>
               </div>
               <div class="flex-1 flex gap-2 items-center">
-                <span class="px-2 py-1 bg-gray-50 border border-gray-200 rounded text-gray-400 text-[11px] font-medium">is</span>
+                <span class="px-2 py-1 bg-muted/50 border border-border rounded text-muted-foreground text-[11px] font-medium">is</span>
                 <div class="flex-1 flex flex-wrap gap-1.5 items-center min-h-[34px]">
                   <span 
                     v-for="ch in filters.more.channels" 
                     :key="ch"
-                    class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-gray-50 border border-gray-200 text-gray-800"
+                    class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-muted/50 border border-border text-foreground"
                   >
                     <PlatformIcon :platform="ch" size="xs" variant="colored" />
                     <span>{{ ch }}</span>
-                    <button @click="removeChip('channels', ch)" class="p-0.5 hover:text-red-500 rounded cursor-pointer text-gray-400"><X class="w-2.5 h-2.5" /></button>
+                    <button @click="removeChip('channels', ch)" class="p-0.5 hover:text-destructive rounded cursor-pointer text-muted-foreground"><X class="w-2.5 h-2.5" /></button>
                   </span>
                   
                   <!-- Add Channel Popover Trigger -->
@@ -551,36 +551,36 @@ const handleApply = () => {
                     ref="channelBtnRef"
                     type="button"
                     @click="toggleDropdown('channel', $event)"
-                    class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border border-dashed border-gray-300 text-[11px] font-medium text-gray-500 hover:text-gray-800 hover:border-gray-400 hover:bg-gray-50 cursor-pointer"
+                    class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border border-dashed border-border text-[11px] font-medium text-muted-foreground hover:text-foreground hover:border-input hover:bg-muted cursor-pointer"
                   >
-                    <Plus class="w-3 h-3 text-[#23B750]" />
+                    <Plus class="w-3 h-3 text-primary" />
                     <span>Add</span>
                   </button>
                 </div>
               </div>
-              <div class="flex items-center gap-1 text-gray-300">
-                <button @click="resetMoreFilter('channels')" title="Reset" class="hover:text-gray-600 p-1 cursor-pointer"><RotateCcw class="w-3 h-3" /></button>
-                <button @click="removeMoreFilterRow('channels')" title="Remove" class="hover:text-gray-600 p-1 cursor-pointer"><X class="w-3 h-3" /></button>
+              <div class="flex items-center gap-1 text-muted-foreground/60">
+                <button @click="resetMoreFilter('channels')" title="Reset" class="hover:text-foreground p-1 cursor-pointer"><RotateCcw class="w-3 h-3" /></button>
+                <button @click="removeMoreFilterRow('channels')" title="Remove" class="hover:text-foreground p-1 cursor-pointer"><X class="w-3 h-3" /></button>
               </div>
             </div>
 
             <!-- 2. Multi-Select Assignees Row -->
             <div v-if="visibleRows.assignees" class="flex items-center justify-between gap-4 text-xs">
-              <div class="flex items-center gap-2 w-32 text-gray-600 font-medium shrink-0">
-                <User class="w-3.5 h-3.5 text-gray-400" />
+              <div class="flex items-center gap-2 w-32 text-muted-foreground font-medium shrink-0">
+                <User class="w-3.5 h-3.5 text-muted-foreground" />
                 <span>Agent</span>
               </div>
               <div class="flex-1 flex gap-2 items-center">
-                <span class="px-2 py-1 bg-gray-50 border border-gray-200 rounded text-gray-400 text-[11px] font-medium">is</span>
+                <span class="px-2 py-1 bg-muted/50 border border-border rounded text-muted-foreground text-[11px] font-medium">is</span>
                 <div class="flex-1 flex flex-wrap gap-1.5 items-center min-h-[34px]">
                   <span 
                     v-for="agentId in filters.more.assignees" 
                     :key="agentId"
-                    class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-gray-50 border border-gray-200 text-gray-800"
+                    class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-muted/50 border border-border text-foreground"
                   >
-                    <span class="w-3.5 h-3.5 rounded-full bg-gray-200 text-[9px] font-bold flex items-center justify-center text-gray-600">{{ agentId.slice(0, 1) }}</span>
+                    <span class="w-3.5 h-3.5 rounded-full bg-muted text-[9px] font-bold flex items-center justify-center text-muted-foreground">{{ agentId.slice(0, 1) }}</span>
                     <span>{{ allAgentOptions.find(a => a.id === agentId)?.name || agentId }}</span>
-                    <button @click="removeChip('assignees', agentId)" class="p-0.5 hover:text-red-500 rounded cursor-pointer text-gray-400"><X class="w-2.5 h-2.5" /></button>
+                    <button @click="removeChip('assignees', agentId)" class="p-0.5 hover:text-destructive rounded cursor-pointer text-muted-foreground"><X class="w-2.5 h-2.5" /></button>
                   </span>
                   
                   <!-- Add Agent Popover Trigger -->
@@ -588,35 +588,35 @@ const handleApply = () => {
                     ref="agentBtnRef"
                     type="button"
                     @click="toggleDropdown('agent', $event)"
-                    class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border border-dashed border-gray-300 text-[11px] font-medium text-gray-500 hover:text-gray-800 hover:border-gray-400 hover:bg-gray-50 cursor-pointer"
+                    class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border border-dashed border-border text-[11px] font-medium text-muted-foreground hover:text-foreground hover:border-input hover:bg-muted cursor-pointer"
                   >
-                    <Plus class="w-3 h-3 text-[#23B750]" />
+                    <Plus class="w-3 h-3 text-primary" />
                     <span>Add</span>
                   </button>
                 </div>
               </div>
-              <div class="flex items-center gap-1 text-gray-300">
-                <button @click="resetMoreFilter('assignees')" title="Reset" class="hover:text-gray-600 p-1 cursor-pointer"><RotateCcw class="w-3 h-3" /></button>
-                <button @click="removeMoreFilterRow('assignees')" title="Remove" class="hover:text-gray-600 p-1 cursor-pointer"><X class="w-3 h-3" /></button>
+              <div class="flex items-center gap-1 text-muted-foreground/60">
+                <button @click="resetMoreFilter('assignees')" title="Reset" class="hover:text-foreground p-1 cursor-pointer"><RotateCcw class="w-3 h-3" /></button>
+                <button @click="removeMoreFilterRow('assignees')" title="Remove" class="hover:text-foreground p-1 cursor-pointer"><X class="w-3 h-3" /></button>
               </div>
             </div>
 
             <!-- 3. Multi-Select Team Row -->
             <div v-if="visibleRows.teamNames" class="flex items-center justify-between gap-4 text-xs">
-              <div class="flex items-center gap-2 w-32 text-gray-600 font-medium shrink-0">
-                <Users class="w-3.5 h-3.5 text-gray-400" />
+              <div class="flex items-center gap-2 w-32 text-muted-foreground font-medium shrink-0">
+                <Users class="w-3.5 h-3.5 text-muted-foreground" />
                 <span>Team</span>
               </div>
               <div class="flex-1 flex gap-2 items-center">
-                <span class="px-2 py-1 bg-gray-50 border border-gray-200 rounded text-gray-400 text-[11px] font-medium">is</span>
+                <span class="px-2 py-1 bg-muted/50 border border-border rounded text-muted-foreground text-[11px] font-medium">is</span>
                 <div class="flex-1 flex flex-wrap gap-1.5 items-center min-h-[34px]">
                   <span 
                     v-for="chip in filters.more.teamNames" 
                     :key="chip"
-                    class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-gray-50 border border-gray-200 text-gray-800"
+                    class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-muted/50 border border-border text-foreground"
                   >
                     <span>{{ chip }}</span>
-                    <button @click="removeChip('teamNames', chip)" class="p-0.5 hover:text-red-500 rounded cursor-pointer text-gray-400"><X class="w-2.5 h-2.5" /></button>
+                    <button @click="removeChip('teamNames', chip)" class="p-0.5 hover:text-destructive rounded cursor-pointer text-muted-foreground"><X class="w-2.5 h-2.5" /></button>
                   </span>
                   
                   <!-- Add Team Popover Trigger -->
@@ -624,35 +624,35 @@ const handleApply = () => {
                     ref="teamBtnRef"
                     type="button"
                     @click="toggleDropdown('team', $event)"
-                    class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border border-dashed border-gray-300 text-[11px] font-medium text-gray-500 hover:text-gray-800 hover:border-gray-400 hover:bg-gray-50 cursor-pointer"
+                    class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border border-dashed border-border text-[11px] font-medium text-muted-foreground hover:text-foreground hover:border-input hover:bg-muted cursor-pointer"
                   >
-                    <Plus class="w-3 h-3 text-[#23B750]" />
+                    <Plus class="w-3 h-3 text-primary" />
                     <span>Add</span>
                   </button>
                 </div>
               </div>
-              <div class="flex items-center gap-1 text-gray-300">
-                <button @click="resetMoreFilter('teamNames')" title="Reset" class="hover:text-gray-600 p-1 cursor-pointer"><RotateCcw class="w-3 h-3" /></button>
-                <button @click="removeMoreFilterRow('teamNames')" title="Remove" class="hover:text-gray-600 p-1 cursor-pointer"><X class="w-3 h-3" /></button>
+              <div class="flex items-center gap-1 text-muted-foreground/60">
+                <button @click="resetMoreFilter('teamNames')" title="Reset" class="hover:text-foreground p-1 cursor-pointer"><RotateCcw class="w-3 h-3" /></button>
+                <button @click="removeMoreFilterRow('teamNames')" title="Remove" class="hover:text-foreground p-1 cursor-pointer"><X class="w-3 h-3" /></button>
               </div>
             </div>
 
             <!-- 4. Campaign Row -->
             <div v-if="visibleRows.campaignNames" class="flex items-center justify-between gap-4 text-xs">
-              <div class="flex items-center gap-2 w-32 text-gray-600 font-medium shrink-0">
-                <Tag class="w-3.5 h-3.5 text-gray-400" />
+              <div class="flex items-center gap-2 w-32 text-muted-foreground font-medium shrink-0">
+                <Tag class="w-3.5 h-3.5 text-muted-foreground" />
                 <span>Campaign</span>
               </div>
               <div class="flex-1 flex gap-2 items-center">
-                <span class="px-2 py-1 bg-gray-50 border border-gray-200 rounded text-gray-400 text-[11px] font-medium">is</span>
+                <span class="px-2 py-1 bg-muted/50 border border-border rounded text-muted-foreground text-[11px] font-medium">is</span>
                 <div class="flex-1 flex flex-wrap gap-1.5 items-center min-h-[34px]">
                   <span 
                     v-for="chip in filters.more.campaignNames" 
                     :key="chip"
-                    class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-gray-50 border border-gray-200 text-gray-800"
+                    class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-muted/50 border border-border text-foreground"
                   >
                     <span>{{ chip }}</span>
-                    <button @click="removeChip('campaignNames', chip)" class="p-0.5 hover:text-red-500 rounded cursor-pointer text-gray-400"><X class="w-2.5 h-2.5" /></button>
+                    <button @click="removeChip('campaignNames', chip)" class="p-0.5 hover:text-destructive rounded cursor-pointer text-muted-foreground"><X class="w-2.5 h-2.5" /></button>
                   </span>
                   
                   <!-- Add Campaign Popover Trigger -->
@@ -660,43 +660,43 @@ const handleApply = () => {
                     ref="campaignBtnRef"
                     type="button"
                     @click="toggleDropdown('campaign', $event)"
-                    class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border border-dashed border-gray-300 text-[11px] font-medium text-gray-500 hover:text-gray-800 hover:border-gray-400 hover:bg-gray-50 cursor-pointer"
+                    class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border border-dashed border-border text-[11px] font-medium text-muted-foreground hover:text-foreground hover:border-input hover:bg-muted cursor-pointer"
                   >
-                    <Plus class="w-3 h-3 text-[#23B750]" />
+                    <Plus class="w-3 h-3 text-primary" />
                     <span>Add</span>
                   </button>
                 </div>
               </div>
-              <div class="flex items-center gap-1 text-gray-300">
-                <button @click="resetMoreFilter('campaignNames')" title="Reset" class="hover:text-gray-600 p-1 cursor-pointer"><RotateCcw class="w-3 h-3" /></button>
-                <button @click="removeMoreFilterRow('campaignNames')" title="Remove" class="hover:text-gray-600 p-1 cursor-pointer"><X class="w-3 h-3" /></button>
+              <div class="flex items-center gap-1 text-muted-foreground/60">
+                <button @click="resetMoreFilter('campaignNames')" title="Reset" class="hover:text-foreground p-1 cursor-pointer"><RotateCcw class="w-3 h-3" /></button>
+                <button @click="removeMoreFilterRow('campaignNames')" title="Remove" class="hover:text-foreground p-1 cursor-pointer"><X class="w-3 h-3" /></button>
               </div>
             </div>
 
             <!-- 5. Created Date Row -->
             <div v-if="visibleRows.createdAt" class="flex items-center justify-between gap-4 text-xs">
-              <div class="flex items-center gap-2 w-32 text-gray-600 font-medium shrink-0">
-                <Clock class="w-3.5 h-3.5 text-gray-400" />
+              <div class="flex items-center gap-2 w-32 text-muted-foreground font-medium shrink-0">
+                <Clock class="w-3.5 h-3.5 text-muted-foreground" />
                 <span>Created Date</span>
               </div>
               <div class="flex-1 flex gap-2">
-                <span class="px-2 py-1.5 bg-gray-50 border border-gray-200 rounded text-gray-400 text-[11px] font-medium">is</span>
+                <span class="px-2 py-1.5 bg-muted/50 border border-border rounded text-muted-foreground text-[11px] font-medium">is</span>
                 <div class="relative flex-1">
                   <select 
                     v-model="filters.more.createdAt"
-                    class="w-full bg-white border border-gray-200 rounded px-2.5 py-1.5 text-xs text-gray-800 font-medium focus:outline-none focus:border-[#23B750] appearance-none cursor-pointer pr-8"
+                    class="w-full bg-card border border-input rounded px-2.5 py-1.5 text-xs text-foreground font-medium focus:outline-none focus:border-ring appearance-none cursor-pointer pr-8"
                   >
                     <option v-for="opt in createdAtOptions" :key="opt" :value="opt">{{ opt }}</option>
                   </select>
-                  <ChevronDown class="w-3.5 h-3.5 text-gray-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <ChevronDown class="w-3.5 h-3.5 text-muted-foreground absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                 </div>
-                <button class="px-2.5 py-1.5 border border-gray-200 bg-white hover:bg-gray-50 rounded flex items-center justify-center cursor-pointer transition-colors text-gray-500">
+                <button class="px-2.5 py-1.5 border border-border bg-card hover:bg-muted rounded flex items-center justify-center cursor-pointer transition-colors text-muted-foreground">
                   <Calendar class="w-3.5 h-3.5" />
                 </button>
               </div>
-              <div class="flex items-center gap-1 text-gray-300">
-                <button @click="resetMoreFilter('createdAt')" title="Reset" class="hover:text-gray-600 p-1 cursor-pointer"><RotateCcw class="w-3 h-3" /></button>
-                <button @click="removeMoreFilterRow('createdAt')" title="Remove" class="hover:text-gray-600 p-1 cursor-pointer"><X class="w-3 h-3" /></button>
+              <div class="flex items-center gap-1 text-muted-foreground/60">
+                <button @click="resetMoreFilter('createdAt')" title="Reset" class="hover:text-foreground p-1 cursor-pointer"><RotateCcw class="w-3 h-3" /></button>
+                <button @click="removeMoreFilterRow('createdAt')" title="Remove" class="hover:text-foreground p-1 cursor-pointer"><X class="w-3 h-3" /></button>
               </div>
             </div>
 
@@ -706,9 +706,9 @@ const handleApply = () => {
                 ref="addFilterBtnRef"
                 type="button"
                 @click="toggleDropdown('filter', $event)"
-                class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-dashed border-gray-300 text-xs font-semibold text-gray-600 hover:text-gray-900 hover:border-[#23B750] hover:bg-green-50/40 transition-colors cursor-pointer"
+                class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-dashed border-border text-xs font-semibold text-muted-foreground hover:text-foreground hover:border-primary hover:bg-primary/10 transition-colors cursor-pointer"
               >
-                <Plus class="w-3.5 h-3.5 text-[#23B750]" />
+                <Plus class="w-3.5 h-3.5 text-primary" />
                 <span>Add filter field</span>
               </button>
             </div>
@@ -719,16 +719,16 @@ const handleApply = () => {
       </div>
 
       <!-- Footer -->
-      <footer class="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-100 bg-white">
+      <footer class="flex items-center justify-end gap-3 px-6 py-4 border-t border-border bg-card">
         <button 
           @click="emit('close')" 
-          class="px-4 py-2 border border-gray-200 bg-white hover:bg-gray-50 text-xs font-medium text-gray-700 rounded-lg cursor-pointer transition-colors"
+          class="px-4 py-2 border border-border bg-card hover:bg-muted text-xs font-medium text-foreground rounded-lg cursor-pointer transition-colors"
         >
           Cancel
         </button>
         <button 
           @click="handleApply" 
-          class="px-5 py-2 bg-[#23B750] hover:bg-[#1fa346] text-xs font-bold text-white rounded-lg cursor-pointer shadow-xs active:scale-95 transition-all"
+          class="px-5 py-2 bg-primary hover:bg-primary/90 text-xs font-bold text-primary-foreground rounded-lg cursor-pointer shadow-xs active:scale-95 transition-all"
         >
           Apply Filters
         </button>
@@ -742,16 +742,16 @@ const handleApply = () => {
         v-if="isAddChannelOpen"
         ref="channelDropdownEl"
         :style="channelDropdownStyle"
-        class="fixed w-56 bg-white border border-gray-200 rounded-xl shadow-2xl z-[99999] py-1.5 animate-in fade-in zoom-in-95 duration-100 select-none"
+        class="fixed w-56 bg-popover border border-border rounded-xl shadow-2xl z-[99999] py-1.5 animate-in fade-in zoom-in-95 duration-100 select-none"
       >
-        <div class="px-2.5 pb-1.5 pt-0.5 border-b border-gray-100">
+        <div class="px-2.5 pb-1.5 pt-0.5 border-b border-border">
           <div class="relative flex items-center">
-            <Search class="w-3 h-3 text-gray-400 absolute left-2 pointer-events-none" />
+            <Search class="w-3 h-3 text-muted-foreground absolute left-2 pointer-events-none" />
             <input 
               v-model="channelSearch"
               type="text" 
               placeholder="Search channels..." 
-              class="w-full bg-gray-50 border border-gray-200 rounded-md pl-6 pr-2 py-1 text-xs text-gray-800 placeholder:text-gray-400 outline-none focus:border-[#23B750] focus:bg-white"
+              class="w-full bg-muted/50 border border-input rounded-md pl-6 pr-2 py-1 text-xs text-foreground placeholder:text-muted-foreground outline-none focus:border-ring focus:bg-card"
             />
           </div>
         </div>
@@ -760,15 +760,15 @@ const handleApply = () => {
             v-for="ch in filteredChannels" 
             :key="ch"
             @click="toggleChannel(ch)"
-            class="w-full text-left px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-50 flex items-center justify-between cursor-pointer"
+            class="w-full text-left px-3 py-1.5 text-xs text-foreground hover:bg-muted flex items-center justify-between cursor-pointer"
           >
             <div class="flex items-center gap-2">
               <PlatformIcon :platform="ch" size="xs" variant="colored" />
               <span>{{ ch }}</span>
             </div>
-            <Check v-if="filters.more.channels.includes(ch)" class="w-3.5 h-3.5 text-[#23B750]" />
+            <Check v-if="filters.more.channels.includes(ch)" class="w-3.5 h-3.5 text-primary" />
           </button>
-          <div v-if="filteredChannels.length === 0" class="px-3 py-2 text-[11px] text-gray-400 italic text-center">
+          <div v-if="filteredChannels.length === 0" class="px-3 py-2 text-[11px] text-muted-foreground italic text-center">
             No channels found
           </div>
         </div>
@@ -779,16 +779,16 @@ const handleApply = () => {
         v-if="isAddAgentOpen"
         ref="agentDropdownEl"
         :style="agentDropdownStyle"
-        class="fixed w-56 bg-white border border-gray-200 rounded-xl shadow-2xl z-[99999] py-1.5 animate-in fade-in zoom-in-95 duration-100 select-none"
+        class="fixed w-56 bg-popover border border-border rounded-xl shadow-2xl z-[99999] py-1.5 animate-in fade-in zoom-in-95 duration-100 select-none"
       >
-        <div class="px-2.5 pb-1.5 pt-0.5 border-b border-gray-100">
+        <div class="px-2.5 pb-1.5 pt-0.5 border-b border-border">
           <div class="relative flex items-center">
-            <Search class="w-3 h-3 text-gray-400 absolute left-2 pointer-events-none" />
+            <Search class="w-3 h-3 text-muted-foreground absolute left-2 pointer-events-none" />
             <input 
               v-model="agentSearch"
               type="text" 
               placeholder="Search agents..." 
-              class="w-full bg-gray-50 border border-gray-200 rounded-md pl-6 pr-2 py-1 text-xs text-gray-800 placeholder:text-gray-400 outline-none focus:border-[#23B750] focus:bg-white"
+              class="w-full bg-muted/50 border border-input rounded-md pl-6 pr-2 py-1 text-xs text-foreground placeholder:text-muted-foreground outline-none focus:border-ring focus:bg-card"
             />
           </div>
         </div>
@@ -797,15 +797,15 @@ const handleApply = () => {
             v-for="agent in filteredAgents" 
             :key="agent.id"
             @click="toggleAgent(agent.id)"
-            class="w-full text-left px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-50 flex items-center justify-between cursor-pointer"
+            class="w-full text-left px-3 py-1.5 text-xs text-foreground hover:bg-muted flex items-center justify-between cursor-pointer"
           >
             <div class="flex items-center gap-2">
-              <span class="w-4 h-4 rounded-full bg-gray-100 text-[9px] font-bold flex items-center justify-center text-gray-600">{{ agent.id.slice(0, 1) }}</span>
+              <span class="w-4 h-4 rounded-full bg-muted text-[9px] font-bold flex items-center justify-center text-muted-foreground">{{ agent.id.slice(0, 1) }}</span>
               <span>{{ agent.name }}</span>
             </div>
-            <Check v-if="filters.more.assignees.includes(agent.id)" class="w-3.5 h-3.5 text-[#23B750]" />
+            <Check v-if="filters.more.assignees.includes(agent.id)" class="w-3.5 h-3.5 text-primary" />
           </button>
-          <div v-if="filteredAgents.length === 0" class="px-3 py-2 text-[11px] text-gray-400 italic text-center">
+          <div v-if="filteredAgents.length === 0" class="px-3 py-2 text-[11px] text-muted-foreground italic text-center">
             No agents found
           </div>
         </div>
@@ -816,16 +816,16 @@ const handleApply = () => {
         v-if="isAddTeamOpen"
         ref="teamDropdownEl"
         :style="teamDropdownStyle"
-        class="fixed w-56 bg-white border border-gray-200 rounded-xl shadow-2xl z-[99999] py-1.5 animate-in fade-in zoom-in-95 duration-100 select-none"
+        class="fixed w-56 bg-popover border border-border rounded-xl shadow-2xl z-[99999] py-1.5 animate-in fade-in zoom-in-95 duration-100 select-none"
       >
-        <div class="px-2.5 pb-1.5 pt-0.5 border-b border-gray-100">
+        <div class="px-2.5 pb-1.5 pt-0.5 border-b border-border">
           <div class="relative flex items-center">
-            <Search class="w-3 h-3 text-gray-400 absolute left-2 pointer-events-none" />
+            <Search class="w-3 h-3 text-muted-foreground absolute left-2 pointer-events-none" />
             <input 
               v-model="teamSearch"
               type="text" 
               placeholder="Search teams..." 
-              class="w-full bg-gray-50 border border-gray-200 rounded-md pl-6 pr-2 py-1 text-xs text-gray-800 placeholder:text-gray-400 outline-none focus:border-[#23B750] focus:bg-white"
+              class="w-full bg-muted/50 border border-input rounded-md pl-6 pr-2 py-1 text-xs text-foreground placeholder:text-muted-foreground outline-none focus:border-ring focus:bg-card"
               @keyup.enter="addNewTeamFromSearch"
             />
           </div>
@@ -835,20 +835,20 @@ const handleApply = () => {
             v-for="team in filteredTeams" 
             :key="team"
             @click="toggleTeam(team)"
-            class="w-full text-left px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-50 flex items-center justify-between cursor-pointer"
+            class="w-full text-left px-3 py-1.5 text-xs text-foreground hover:bg-muted flex items-center justify-between cursor-pointer"
           >
             <span>{{ team }}</span>
-            <Check v-if="filters.more.teamNames.includes(team)" class="w-3.5 h-3.5 text-[#23B750]" />
+            <Check v-if="filters.more.teamNames.includes(team)" class="w-3.5 h-3.5 text-primary" />
           </button>
           <div 
             v-if="teamSearch.trim() && !allTeamOptions.some(t => t.toLowerCase() === teamSearch.trim().toLowerCase())"
             @click="addNewTeamFromSearch"
-            class="px-3 py-1.5 text-xs text-[#23B750] hover:bg-green-50/50 cursor-pointer font-medium flex items-center gap-1 border-t border-gray-100"
+            class="px-3 py-1.5 text-xs text-primary hover:bg-primary/10 cursor-pointer font-medium flex items-center gap-1 border-t border-border"
           >
             <Plus class="w-3 h-3" />
             <span>Add "{{ teamSearch.trim() }}"</span>
           </div>
-          <div v-if="filteredTeams.length === 0 && !teamSearch.trim()" class="px-3 py-2 text-[11px] text-gray-400 italic text-center">
+          <div v-if="filteredTeams.length === 0 && !teamSearch.trim()" class="px-3 py-2 text-[11px] text-muted-foreground italic text-center">
             No teams found
           </div>
         </div>
@@ -859,16 +859,16 @@ const handleApply = () => {
         v-if="isAddCampaignOpen"
         ref="campaignDropdownEl"
         :style="campaignDropdownStyle"
-        class="fixed w-56 bg-white border border-gray-200 rounded-xl shadow-2xl z-[99999] py-1.5 animate-in fade-in zoom-in-95 duration-100 select-none"
+        class="fixed w-56 bg-popover border border-border rounded-xl shadow-2xl z-[99999] py-1.5 animate-in fade-in zoom-in-95 duration-100 select-none"
       >
-        <div class="px-2.5 pb-1.5 pt-0.5 border-b border-gray-100">
+        <div class="px-2.5 pb-1.5 pt-0.5 border-b border-border">
           <div class="relative flex items-center">
-            <Search class="w-3 h-3 text-gray-400 absolute left-2 pointer-events-none" />
+            <Search class="w-3 h-3 text-muted-foreground absolute left-2 pointer-events-none" />
             <input 
               v-model="campaignSearch"
               type="text" 
               placeholder="Search campaigns..." 
-              class="w-full bg-gray-50 border border-gray-200 rounded-md pl-6 pr-2 py-1 text-xs text-gray-800 placeholder:text-gray-400 outline-none focus:border-[#23B750] focus:bg-white"
+              class="w-full bg-muted/50 border border-input rounded-md pl-6 pr-2 py-1 text-xs text-foreground placeholder:text-muted-foreground outline-none focus:border-ring focus:bg-card"
               @keyup.enter="addNewCampaignFromSearch"
             />
           </div>
@@ -878,20 +878,20 @@ const handleApply = () => {
             v-for="camp in filteredCampaigns" 
             :key="camp"
             @click="toggleCampaign(camp)"
-            class="w-full text-left px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-50 flex items-center justify-between cursor-pointer"
+            class="w-full text-left px-3 py-1.5 text-xs text-foreground hover:bg-muted flex items-center justify-between cursor-pointer"
           >
             <span>{{ camp }}</span>
-            <Check v-if="filters.more.campaignNames.includes(camp)" class="w-3.5 h-3.5 text-[#23B750]" />
+            <Check v-if="filters.more.campaignNames.includes(camp)" class="w-3.5 h-3.5 text-primary" />
           </button>
           <div 
             v-if="campaignSearch.trim() && !allCampaignOptions.some(c => c.toLowerCase() === campaignSearch.trim().toLowerCase())"
             @click="addNewCampaignFromSearch"
-            class="px-3 py-1.5 text-xs text-[#23B750] hover:bg-green-50/50 cursor-pointer font-medium flex items-center gap-1 border-t border-gray-100"
+            class="px-3 py-1.5 text-xs text-primary hover:bg-primary/10 cursor-pointer font-medium flex items-center gap-1 border-t border-border"
           >
             <Plus class="w-3 h-3" />
             <span>Add "{{ campaignSearch.trim() }}"</span>
           </div>
-          <div v-if="filteredCampaigns.length === 0 && !campaignSearch.trim()" class="px-3 py-2 text-[11px] text-gray-400 italic text-center">
+          <div v-if="filteredCampaigns.length === 0 && !campaignSearch.trim()" class="px-3 py-2 text-[11px] text-muted-foreground italic text-center">
             No campaigns found
           </div>
         </div>
@@ -902,16 +902,16 @@ const handleApply = () => {
         v-if="isAddFilterDropdownOpen"
         ref="addFilterDropdownEl"
         :style="addFilterDropdownStyle"
-        class="fixed w-52 bg-white border border-gray-200 rounded-xl shadow-2xl z-[99999] py-1.5 animate-in fade-in zoom-in-95 duration-100 select-none"
+        class="fixed w-52 bg-popover border border-border rounded-xl shadow-2xl z-[99999] py-1.5 animate-in fade-in zoom-in-95 duration-100 select-none"
       >
-        <div class="px-2.5 pb-1.5 pt-0.5 border-b border-gray-100">
+        <div class="px-2.5 pb-1.5 pt-0.5 border-b border-border">
           <div class="relative flex items-center">
-            <Search class="w-3 h-3 text-gray-400 absolute left-2 pointer-events-none" />
+            <Search class="w-3 h-3 text-muted-foreground absolute left-2 pointer-events-none" />
             <input 
               v-model="filterFieldSearch"
               type="text" 
               placeholder="Search fields..." 
-              class="w-full bg-gray-50 border border-gray-200 rounded-md pl-6 pr-2 py-1 text-xs text-gray-800 placeholder:text-gray-400 outline-none focus:border-[#23B750] focus:bg-white"
+              class="w-full bg-muted/50 border border-input rounded-md pl-6 pr-2 py-1 text-xs text-foreground placeholder:text-muted-foreground outline-none focus:border-ring focus:bg-card"
             />
           </div>
         </div>
@@ -920,12 +920,12 @@ const handleApply = () => {
             v-for="key in filteredHiddenFilterFields" 
             :key="key"
             @click="addFilterRow(key as any)"
-            class="w-full text-left px-3.5 py-1.5 text-xs text-gray-700 hover:bg-gray-50 flex items-center justify-between cursor-pointer"
+            class="w-full text-left px-3.5 py-1.5 text-xs text-foreground hover:bg-muted flex items-center justify-between cursor-pointer"
           >
             <span class="capitalize">{{ key.replace(/([A-Z])/g, ' $1') }}</span>
-            <Plus class="w-3.5 h-3.5 text-gray-400" />
+            <Plus class="w-3.5 h-3.5 text-muted-foreground" />
           </button>
-          <div v-if="filteredHiddenFilterFields.length === 0" class="px-3 py-2 text-[11px] text-gray-400 italic text-center">
+          <div v-if="filteredHiddenFilterFields.length === 0" class="px-3 py-2 text-[11px] text-muted-foreground italic text-center">
             All fields added
           </div>
         </div>

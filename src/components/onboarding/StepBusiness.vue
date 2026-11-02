@@ -2,28 +2,28 @@
   <div class="space-y-4 animate-in fade-in-50 duration-300">
     <!-- Header -->
     <div class="text-left">
-      <h2 class="text-base sm:text-lg font-bold text-gray-900 tracking-tight">Tell us about your company</h2>
-      <p class="text-xs text-gray-500 mt-0.5 leading-normal">Let's personalize your workspace to match how your team works.</p>
+      <h2 class="text-base sm:text-lg font-bold text-foreground tracking-tight">Tell us about your company</h2>
+      <p class="text-xs text-muted-foreground mt-0.5 leading-normal">Let's personalize your workspace to match how your team works.</p>
     </div>
 
     <!-- Main Form Fields -->
     <div class="space-y-3 text-left">
       <!-- Field 1: Business Name -->
       <div>
-        <label class="block text-xs font-semibold text-gray-700 mb-1">
-          Company Name <span class="text-red-500 font-normal ml-0.5">*</span>
+        <label class="block text-xs font-semibold text-foreground mb-1">
+          Company Name <span class="text-destructive font-normal ml-0.5">*</span>
         </label>
         <input
           v-model="data.businessName"
           type="text"
           placeholder="e.g. Acme Corporation"
-          class="w-full h-9 px-3 bg-gray-50/50 hover:bg-white focus:bg-white border border-gray-200 hover:border-gray-300 rounded-xl text-xs font-normal text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-3 focus:ring-[#23B750]/15 focus:border-[#23B750] transition-all shadow-2xs"
+          class="w-full h-9 px-3 bg-muted/40 hover:bg-card focus:bg-card border border-input hover:border-border rounded-xl text-xs font-normal text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary transition-all shadow-2xs"
         />
       </div>
 
       <!-- Field 2: Company Type -->
       <div>
-        <label class="block text-xs font-semibold text-gray-700 mb-1.5">Company Type</label>
+        <label class="block text-xs font-semibold text-foreground mb-1.5">Company Type</label>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
           <button
             type="button"
@@ -33,8 +33,8 @@
             :class="[
               'p-2.5 rounded-xl border text-left transition-all duration-200 flex flex-col items-start gap-1.5 relative cursor-pointer group',
               data.companyType === type.id
-                ? 'border-[#23B750] bg-emerald-50/50 ring-1 ring-[#23B750] shadow-2xs'
-                : 'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50/60'
+                ? 'border-primary bg-primary/10 ring-1 ring-primary shadow-2xs'
+                : 'border-border bg-card hover:border-border hover:bg-muted/50'
             ]"
           >
             <div class="flex items-center justify-between w-full">
@@ -42,22 +42,22 @@
                 :class="[
                   'w-7 h-7 rounded-lg flex items-center justify-center transition-colors',
                   data.companyType === type.id
-                    ? 'bg-[#23B750] text-white shadow-2xs'
-                    : 'bg-gray-100 text-gray-600 group-hover:bg-gray-200/70'
+                    ? 'bg-primary text-primary-foreground shadow-2xs'
+                    : 'bg-muted text-muted-foreground group-hover:bg-muted/80'
                 ]"
               >
                 <component :is="type.icon" class="w-3.5 h-3.5" />
               </div>
               <span
                 v-if="data.companyType === type.id"
-                class="w-4 h-4 rounded-full bg-[#23B750] text-white flex items-center justify-center text-[10px]"
+                class="w-4 h-4 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-[10px]"
               >
                 <Check class="w-2.5 h-2.5 stroke-[2.5]" />
               </span>
             </div>
             <div>
-              <div class="text-xs font-bold text-gray-900">{{ type.label }}</div>
-              <div class="text-[10px] text-gray-500 leading-tight mt-0.5">{{ type.desc }}</div>
+              <div class="text-xs font-bold text-foreground">{{ type.label }}</div>
+              <div class="text-[10px] text-muted-foreground leading-tight mt-0.5">{{ type.desc }}</div>
             </div>
           </button>
         </div>
@@ -67,13 +67,13 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <!-- Country -->
         <div>
-          <label class="block text-xs font-semibold text-gray-700 mb-1">
-            Country <span class="text-red-500 font-normal ml-0.5">*</span>
+          <label class="block text-xs font-semibold text-foreground mb-1">
+            Country <span class="text-destructive font-normal ml-0.5">*</span>
           </label>
           <div class="relative">
             <select
               v-model="data.country"
-              class="w-full h-9 px-3 pr-8 bg-gray-50/50 hover:bg-white focus:bg-white border border-gray-200 hover:border-gray-300 rounded-xl text-xs font-normal text-gray-900 focus:outline-none focus:ring-3 focus:ring-[#23B750]/15 focus:border-[#23B750] transition-all shadow-2xs appearance-none cursor-pointer"
+              class="w-full h-9 px-3 pr-8 bg-muted/40 hover:bg-card focus:bg-card border border-input hover:border-border rounded-xl text-xs font-normal text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary transition-all shadow-2xs appearance-none cursor-pointer"
             >
               <option value="Malaysia">🇲🇾 Malaysia</option>
               <option value="Singapore">🇸🇬 Singapore</option>
@@ -84,17 +84,17 @@
               <option value="United Kingdom">🇬🇧 United Kingdom</option>
               <option value="Australia">🇦🇺 Australia</option>
             </select>
-            <ChevronDown class="w-3.5 h-3.5 text-gray-400 pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2" />
+            <ChevronDown class="w-3.5 h-3.5 text-muted-foreground pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2" />
           </div>
         </div>
 
         <!-- Currency -->
         <div>
-          <label class="block text-xs font-semibold text-gray-700 mb-1">Default Currency</label>
+          <label class="block text-xs font-semibold text-foreground mb-1">Default Currency</label>
           <div class="relative">
             <select
               v-model="data.currency"
-              class="w-full h-9 px-3 pr-8 bg-gray-50/50 hover:bg-white focus:bg-white border border-gray-200 hover:border-gray-300 rounded-xl text-xs font-normal text-gray-900 focus:outline-none focus:ring-3 focus:ring-[#23B750]/15 focus:border-[#23B750] transition-all shadow-2xs appearance-none cursor-pointer"
+              class="w-full h-9 px-3 pr-8 bg-muted/40 hover:bg-card focus:bg-card border border-input hover:border-border rounded-xl text-xs font-normal text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary transition-all shadow-2xs appearance-none cursor-pointer"
             >
               <option value="MYR">MYR (RM) — Malaysian Ringgit</option>
               <option value="SGD">SGD (S$) — Singapore Dollar</option>
@@ -103,14 +103,14 @@
               <option value="THB">THB (฿) — Thai Baht</option>
               <option value="EUR">EUR (€) — Euro</option>
             </select>
-            <ChevronDown class="w-3.5 h-3.5 text-gray-400 pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2" />
+            <ChevronDown class="w-3.5 h-3.5 text-muted-foreground pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2" />
           </div>
         </div>
       </div>
 
       <!-- Field 4: Sales Team Size -->
       <div>
-        <label class="block text-xs font-semibold text-gray-700 mb-1.5">Team Size</label>
+        <label class="block text-xs font-semibold text-foreground mb-1.5">Team Size</label>
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
           <button
             type="button"
@@ -120,8 +120,8 @@
             :class="[
               'h-8 px-2.5 rounded-lg border text-xs font-medium transition-all text-center flex items-center justify-center cursor-pointer shadow-2xs',
               data.agentSize === size
-                ? 'border-[#23B750] bg-emerald-50 text-[#008236] font-semibold ring-1 ring-[#23B750]'
-                : 'border-gray-200 bg-gray-50/40 hover:bg-white hover:border-gray-300 text-gray-700'
+                ? 'border-primary bg-primary/10 text-primary font-semibold ring-1 ring-primary'
+                : 'border-border bg-muted/40 hover:bg-card hover:border-border text-foreground'
             ]"
           >
             {{ size }} people
@@ -131,7 +131,7 @@
 
       <!-- Field 5: Industry Tags -->
       <div>
-        <label class="block text-xs font-semibold text-gray-700 mb-1.5">Industry</label>
+        <label class="block text-xs font-semibold text-foreground mb-1.5">Industry</label>
         <div class="flex flex-wrap gap-1.5">
           <button
             type="button"
@@ -141,8 +141,8 @@
             :class="[
               'px-2.5 py-1 rounded-full text-[11px] font-medium border transition-all cursor-pointer flex items-center gap-1 shadow-2xs',
               data.industries.includes(ind)
-                ? 'bg-[#23B750] text-white border-[#23B750] font-semibold shadow-xs'
-                : 'bg-white text-gray-700 border-gray-200 hover:border-gray-300 hover:bg-gray-50/80'
+                ? 'bg-primary text-primary-foreground border-primary font-semibold shadow-xs'
+                : 'bg-card text-foreground border-border hover:border-border hover:bg-muted/50'
             ]"
           >
             <Check v-if="data.industries.includes(ind)" class="w-2.5 h-2.5 stroke-[2.5]" />

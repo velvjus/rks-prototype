@@ -112,9 +112,9 @@ const highlightedContent = computed(() => {
   return content.replace(/{{\s*([\w.]+)\s*}}/g, (match, token) => {
     const val = (dynamicContext.value as Record<string, string>)[token]
     if (previewMode.value === 'resolved' && val) {
-      return `<span class="bg-emerald-50 text-emerald-800 font-semibold px-1.5 py-0.5 rounded border border-emerald-200/60">${val}</span>`
+      return `<span class="bg-success/10 text-success font-semibold px-1.5 py-0.5 rounded border border-success/20">${val}</span>`
     }
-    return `<span class="bg-amber-50 text-amber-900 font-mono text-[11px] px-1.5 py-0.5 rounded border border-amber-200/70">${match}</span>`
+    return `<span class="bg-warning/10 text-warning font-mono text-[11px] px-1.5 py-0.5 rounded border border-warning/20">${match}</span>`
   })
 })
 
@@ -188,16 +188,16 @@ watch(() => props.modelValue, (isOpen) => {
   >
     <div 
       v-if="modelValue" 
-      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs select-none"
+      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm select-none"
       @click.self="emit('update:modelValue', false)"
     >
-      <div class="bg-white rounded-2xl max-w-3xl w-full h-[540px] border border-gray-200/80 shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in-98 duration-150">
+      <div class="bg-card text-card-foreground rounded-2xl max-w-3xl w-full h-[540px] border border-border shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in-98 duration-150">
         
         <!-- CALM MINIMAL HEADER WITH SEARCH & RECIPIENT -->
-        <header class="px-5 py-3 border-b border-gray-150 flex items-center justify-between gap-4 bg-white shrink-0">
+        <header class="px-5 py-3 border-b border-border flex items-center justify-between gap-4 bg-card shrink-0">
           <!-- Integrated Search -->
           <div class="relative flex-1 max-w-md">
-            <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <circle cx="11" cy="11" r="8"/>
               <line x1="21" y1="21" x2="16.65" y2="16.65"/>
             </svg>
@@ -205,13 +205,13 @@ watch(() => props.modelValue, (isOpen) => {
               v-model="searchQuery"
               type="text" 
               placeholder="Search templates or type /shortcut..." 
-              class="w-full pl-9 pr-7 py-1.5 text-xs bg-gray-50/70 hover:bg-gray-50 focus:bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#23B750] focus:border-[#23B750] font-medium text-gray-800 placeholder:text-gray-400 transition-all"
+              class="w-full pl-9 pr-7 py-1.5 text-xs bg-muted/50 hover:bg-muted focus:bg-background border border-input rounded-lg focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary font-medium text-foreground placeholder:text-muted-foreground transition-all"
               autofocus
             />
             <button 
               v-if="searchQuery" 
               @click="searchQuery = ''" 
-              class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-0.5 cursor-pointer text-xs font-bold"
+              class="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground p-0.5 cursor-pointer text-xs font-bold"
             >
               ×
             </button>
@@ -222,10 +222,10 @@ watch(() => props.modelValue, (isOpen) => {
             <button 
               type="button"
               @click="emit('manage')"
-              class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold text-gray-600 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-lg transition-colors cursor-pointer outline-none select-none"
+              class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold text-foreground hover:text-foreground bg-muted hover:bg-muted/80 border border-border rounded-lg transition-colors cursor-pointer outline-none select-none"
               title="Manage and create templates"
             >
-              <svg class="w-3.5 h-3.5 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg class="w-3.5 h-3.5 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
                 <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
               </svg>
@@ -234,7 +234,7 @@ watch(() => props.modelValue, (isOpen) => {
 
             <button 
               @click="emit('update:modelValue', false)"
-              class="w-7 h-7 rounded-lg hover:bg-gray-100 flex items-center justify-center text-gray-400 hover:text-gray-700 transition-colors cursor-pointer outline-none"
+              class="w-7 h-7 rounded-lg hover:bg-muted flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors cursor-pointer outline-none"
               title="Close (Esc)"
             >
               <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -246,7 +246,7 @@ watch(() => props.modelValue, (isOpen) => {
         </header>
 
         <!-- CATEGORIES CLEAN TAB STRIP -->
-        <div class="px-5 py-2 border-b border-gray-100 flex items-center gap-1 overflow-x-auto scrollbar-none bg-gray-50/40 shrink-0">
+        <div class="px-5 py-2 border-b border-border flex items-center gap-1 overflow-x-auto scrollbar-none bg-muted/30 shrink-0">
           <button
             v-for="cat in categories"
             :key="cat"
@@ -254,8 +254,8 @@ watch(() => props.modelValue, (isOpen) => {
             class="px-2.5 py-1 rounded-md text-xs font-semibold transition-all cursor-pointer whitespace-nowrap outline-none"
             :class="[
               selectedCategory === cat 
-                ? 'bg-white text-gray-900 shadow-2xs border border-gray-200 font-bold' 
-                : 'text-gray-500 hover:text-gray-800 hover:bg-gray-100/60'
+                ? 'bg-card text-foreground shadow-2xs border border-border font-bold' 
+                : 'text-muted-foreground hover:text-foreground hover:bg-muted'
             ]"
           >
             {{ cat === 'all' ? 'All Templates' : cat }}
@@ -266,7 +266,7 @@ watch(() => props.modelValue, (isOpen) => {
         <div class="flex-1 flex min-h-0 overflow-hidden">
           
           <!-- LEFT PANE: Distilled List -->
-          <div class="w-5/12 border-r border-gray-150 flex flex-col bg-white overflow-hidden">
+          <div class="w-5/12 border-r border-border flex flex-col bg-card overflow-hidden">
             <div class="flex-1 overflow-y-auto p-2 space-y-1 scrollbar-thin">
               <div 
                 v-for="tpl in filteredTemplates" 
@@ -275,8 +275,8 @@ watch(() => props.modelValue, (isOpen) => {
                 class="p-2.5 rounded-lg transition-all cursor-pointer flex flex-col gap-1 text-left select-none"
                 :class="[
                   selectedTemplateId === tpl.id 
-                    ? 'bg-green-50/70 border border-green-200/80 shadow-2xs' 
-                    : 'hover:bg-gray-50 border border-transparent'
+                    ? 'bg-primary/10 border border-primary/25 shadow-2xs' 
+                    : 'hover:bg-muted/50 border border-transparent'
                 ]"
               >
                 <!-- Title & Shortcut Row -->
@@ -284,61 +284,60 @@ watch(() => props.modelValue, (isOpen) => {
                   <div class="flex items-center gap-1.5 min-w-0">
                     <span 
                       v-if="tpl.isHsmApproved" 
-                      class="px-1 py-0.2 rounded text-[8px] font-bold uppercase bg-emerald-100 text-emerald-800 shrink-0"
+                      class="px-1 py-0.2 rounded text-[8px] font-bold uppercase bg-success/15 text-success shrink-0"
                     >
                       HSM
                     </span>
                     <h4 
-                      class="text-xs font-bold truncate leading-tight"
-                      :class="selectedTemplateId === tpl.id ? 'text-emerald-950' : 'text-gray-800'"
+                      class="text-xs font-bold truncate leading-tight text-foreground"
                     >
                       {{ tpl.title }}
                     </h4>
                   </div>
 
-                  <span class="text-[10px] font-mono text-gray-400 shrink-0 font-medium">
+                  <span class="text-[10px] font-mono text-muted-foreground shrink-0 font-medium">
                     {{ tpl.shortcut }}
                   </span>
                 </div>
 
                 <!-- 1-line Quiet Snippet -->
-                <p class="text-[11px] text-gray-500 line-clamp-1 leading-normal font-normal">
+                <p class="text-[11px] text-muted-foreground line-clamp-1 leading-normal font-normal">
                   {{ tpl.content }}
                 </p>
               </div>
 
-              <div v-if="filteredTemplates.length === 0" class="py-12 text-center text-gray-400 text-xs">
+              <div v-if="filteredTemplates.length === 0" class="py-12 text-center text-muted-foreground text-xs">
                 No templates matching search
               </div>
             </div>
           </div>
 
           <!-- RIGHT PANE: Clean Document Canvas -->
-          <div class="w-7/12 flex flex-col bg-white overflow-hidden">
+          <div class="w-7/12 flex flex-col bg-card overflow-hidden">
             
             <div v-if="selectedTemplate" class="flex-1 flex flex-col overflow-y-auto p-5 space-y-3.5 scrollbar-thin">
               
               <!-- Clean Title & Badges Bar -->
               <div class="flex items-center justify-between gap-2 pb-1">
                 <div class="flex items-center gap-2 min-w-0">
-                  <h3 class="text-sm font-bold text-gray-900 truncate">
+                  <h3 class="text-sm font-bold text-foreground truncate">
                     {{ selectedTemplate.title }}
                   </h3>
                 </div>
 
                 <!-- Preview Mode Segmented Switch -->
-                <div class="flex items-center bg-gray-100 p-0.5 rounded-lg border border-gray-200 text-[10px] font-bold shrink-0">
+                <div class="flex items-center bg-muted p-0.5 rounded-lg border border-border text-[10px] font-bold shrink-0">
                   <button 
                     @click="previewMode = 'resolved'"
                     class="px-2 py-0.5 rounded transition-all cursor-pointer"
-                    :class="previewMode === 'resolved' ? 'bg-white text-emerald-950 font-bold shadow-2xs' : 'text-gray-500 hover:text-gray-800'"
+                    :class="previewMode === 'resolved' ? 'bg-card text-foreground font-bold shadow-2xs' : 'text-muted-foreground hover:text-foreground'"
                   >
                     Resolved
                   </button>
                   <button 
                     @click="previewMode = 'raw'"
                     class="px-2 py-0.5 rounded transition-all cursor-pointer font-mono"
-                    :class="previewMode === 'raw' ? 'bg-white text-amber-950 font-bold shadow-2xs' : 'text-gray-500 hover:text-gray-800'"
+                    :class="previewMode === 'raw' ? 'bg-card text-foreground font-bold shadow-2xs' : 'text-muted-foreground hover:text-foreground'"
                   >
                     <span>&#123;&#123; variables &#125;&#125;</span>
                   </button>
@@ -346,14 +345,14 @@ watch(() => props.modelValue, (isOpen) => {
               </div>
 
               <!-- Subject Line if Present -->
-              <div v-if="selectedTemplate.subject" class="text-xs text-gray-600 bg-gray-50 rounded-lg px-3 py-1.5 border border-gray-150 flex items-center gap-2">
-                <span class="text-[10px] font-bold uppercase text-gray-400 shrink-0">Subject</span>
-                <span class="font-medium text-gray-800 truncate">{{ resolveContent(selectedTemplate.subject) }}</span>
+              <div v-if="selectedTemplate.subject" class="text-xs text-muted-foreground bg-muted/50 rounded-lg px-3 py-1.5 border border-border flex items-center gap-2">
+                <span class="text-[10px] font-bold uppercase text-muted-foreground shrink-0">Subject</span>
+                <span class="font-medium text-foreground truncate">{{ resolveContent(selectedTemplate.subject) }}</span>
               </div>
 
               <!-- Clean Message Canvas (No nested cards) -->
               <div 
-                class="p-4 rounded-xl bg-gray-50/70 border border-gray-200 text-xs font-normal text-gray-800 leading-relaxed whitespace-pre-line select-text"
+                class="p-4 rounded-xl bg-muted/50 border border-border text-xs font-normal text-foreground leading-relaxed whitespace-pre-line select-text"
                 v-html="highlightedContent"
               ></div>
 
@@ -361,11 +360,11 @@ watch(() => props.modelValue, (isOpen) => {
               <div class="pt-1">
                 <button 
                   @click="isVariablesExpanded = !isVariablesExpanded"
-                  class="flex items-center gap-1.5 text-xs text-gray-500 hover:text-gray-800 font-medium cursor-pointer transition-colors outline-none"
+                  class="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground font-medium cursor-pointer transition-colors outline-none"
                 >
                   <svg 
                     class="w-3.5 h-3.5 transition-transform" 
-                    :class="isVariablesExpanded ? 'rotate-90 text-[#23B750]' : 'text-gray-400'" 
+                    :class="isVariablesExpanded ? 'rotate-90 text-primary' : 'text-muted-foreground'" 
                     fill="none" 
                     viewBox="0 0 24 24" 
                     stroke="currentColor" 
@@ -377,18 +376,18 @@ watch(() => props.modelValue, (isOpen) => {
                 </button>
 
                 <!-- Expanded Variables Form -->
-                <div v-if="isVariablesExpanded" class="mt-2.5 grid grid-cols-2 gap-2 p-3 bg-gray-50 rounded-xl border border-gray-200 animate-in fade-in duration-150">
+                <div v-if="isVariablesExpanded" class="mt-2.5 grid grid-cols-2 gap-2 p-3 bg-muted/50 rounded-xl border border-border animate-in fade-in duration-150">
                   <div 
                     v-for="varName in selectedTemplate.variables" 
                     :key="varName"
                     class="flex flex-col gap-0.5"
                   >
-                    <span class="text-[10px] font-mono text-gray-400">&#123;&#123;{{ varName }}&#125;&#125;</span>
+                    <span class="text-[10px] font-mono text-muted-foreground">&#123;&#123;{{ varName }}&#125;&#125;</span>
                     <input 
                       v-model="customVariables[varName]"
                       :placeholder="(dynamicContext as Record<string, string>)[varName] || 'Default'"
                       type="text" 
-                      class="w-full text-xs px-2 py-1 bg-white border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-[#23B750] font-medium text-gray-800"
+                      class="w-full text-xs px-2 py-1 bg-background border border-input rounded focus:outline-none focus:ring-1 focus:ring-primary font-medium text-foreground"
                     />
                   </div>
                 </div>
@@ -397,10 +396,10 @@ watch(() => props.modelValue, (isOpen) => {
             </div>
 
             <!-- ACTION FOOTER BAR: Clean & Calm -->
-            <footer class="px-5 py-3 border-t border-gray-150 bg-white flex items-center justify-between gap-3 shrink-0">
+            <footer class="px-5 py-3 border-t border-border bg-card flex items-center justify-between gap-3 shrink-0">
               <button 
                 @click="copyToClipboard"
-                class="text-xs font-semibold text-gray-500 hover:text-gray-800 flex items-center gap-1.5 cursor-pointer outline-none transition-colors"
+                class="text-xs font-semibold text-muted-foreground hover:text-foreground flex items-center gap-1.5 cursor-pointer outline-none transition-colors"
                 title="Copy to clipboard"
               >
                 <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -413,14 +412,14 @@ watch(() => props.modelValue, (isOpen) => {
               <div class="flex items-center gap-2">
                 <button 
                   @click="emit('update:modelValue', false)"
-                  class="px-3 py-1.5 text-xs font-semibold text-gray-500 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer outline-none"
+                  class="px-3 py-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors cursor-pointer outline-none"
                 >
                   Cancel
                 </button>
 
                 <button 
                   @click="handleSendImmediately"
-                  class="px-3.5 py-1.5 text-xs font-semibold text-emerald-950 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-lg transition-all cursor-pointer active:scale-95 outline-none"
+                  class="px-3.5 py-1.5 text-xs font-semibold text-primary bg-primary/10 hover:bg-primary/20 border border-primary/25 rounded-lg transition-all cursor-pointer active:scale-95 outline-none"
                   title="Send directly without draft"
                 >
                   Send Immediately
@@ -428,7 +427,7 @@ watch(() => props.modelValue, (isOpen) => {
 
                 <button 
                   @click="handleInsert"
-                  class="px-4 py-1.5 text-xs font-bold text-white bg-[#23B750] hover:bg-[#1fa346] rounded-lg transition-all cursor-pointer shadow-xs active:scale-95 outline-none"
+                  class="px-4 py-1.5 text-xs font-bold text-primary-foreground bg-primary hover:bg-primary/90 rounded-lg transition-all cursor-pointer shadow-xs active:scale-95 outline-none"
                 >
                   Insert Draft
                 </button>

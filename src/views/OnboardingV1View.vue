@@ -1,27 +1,27 @@
 <template>
-  <div class="h-full bg-[#FAFAFA] flex flex-col font-sans selection:bg-[#23B750]/20 selection:text-emerald-900 overflow-hidden">
+  <div class="h-full bg-background flex flex-col font-sans selection:bg-primary/20 selection:text-primary text-foreground overflow-hidden">
     <!-- Clean, Compact Header Banner (Hidden for now) -->
-    <header v-if="showHeader" class="bg-white border-b border-gray-100 px-5 py-2.5 shrink-0 shadow-2xs">
+    <header v-if="showHeader" class="bg-card border-b border-border px-5 py-2.5 shrink-0 shadow-2xs">
       <div class="max-w-4xl mx-auto flex items-center justify-between gap-3">
         <div class="flex items-center gap-2.5">
-          <div class="w-7 h-7 rounded-lg bg-emerald-50 text-[#23B750] flex items-center justify-center font-bold text-xs shrink-0">
+          <div class="w-7 h-7 rounded-lg bg-primary/10 text-primary flex items-center justify-center font-bold text-xs shrink-0">
             <Sparkles class="w-3.5 h-3.5" />
           </div>
           <div>
-            <h1 class="text-sm sm:text-base font-bold text-gray-900 leading-tight">
+            <h1 class="text-sm sm:text-base font-bold text-foreground leading-tight">
               Welcome to RakanSales
             </h1>
-            <p class="text-[11px] text-gray-400 leading-none">Set up your workspace in just a few minutes</p>
+            <p class="text-[11px] text-muted-foreground leading-none">Set up your workspace in just a few minutes</p>
           </div>
         </div>
 
         <div class="flex items-center gap-2">
-          <span class="text-[11px] font-medium text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">
+          <span class="text-[11px] font-medium text-primary bg-primary/10 px-2 py-0.5 rounded-full border border-primary/20">
             Step {{ currentStep }} of 6
           </span>
           <router-link
             to="/omnichannel"
-            class="text-[11px] font-medium text-gray-400 hover:text-gray-700 px-2 py-1 rounded hover:bg-gray-50 transition-colors"
+            class="text-[11px] font-medium text-muted-foreground hover:text-foreground px-2 py-1 rounded hover:bg-muted transition-colors"
           >
             Skip for now →
           </router-link>
@@ -30,7 +30,7 @@
     </header>
 
     <!-- Compact Stepper Navigation -->
-    <nav aria-label="Onboarding Steps" class="bg-white border-b border-gray-100 py-2 px-4 shrink-0 overflow-x-auto">
+    <nav aria-label="Onboarding Steps" class="bg-card border-b border-border py-2 px-4 shrink-0 overflow-x-auto">
       <div class="max-w-3xl mx-auto flex items-center justify-between min-w-[480px] px-2">
         <div
           v-for="(step, idx) in steps"
@@ -41,13 +41,13 @@
           <div
             v-if="idx > 0"
             class="absolute top-3.5 -left-1/2 right-1/2 h-[2px] -translate-y-1/2 transition-colors duration-200"
-            :class="currentStep >= idx + 1 ? 'bg-[#23B750]' : 'bg-gray-100'"
+            :class="currentStep >= idx + 1 ? 'bg-primary' : 'bg-muted'"
             aria-hidden="true"
           ></div>
           <div
             v-if="idx < steps.length - 1"
             class="absolute top-3.5 left-1/2 -right-1/2 h-[2px] -translate-y-1/2 transition-colors duration-200"
-            :class="currentStep > idx + 1 ? 'bg-[#23B750]' : 'bg-gray-100'"
+            :class="currentStep > idx + 1 ? 'bg-primary' : 'bg-muted'"
             aria-hidden="true"
           ></div>
 
@@ -63,10 +63,10 @@
               :class="[
                 'w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-semibold transition-all duration-200',
                 currentStep > idx + 1
-                  ? 'bg-[#23B750] text-white shadow-2xs'
+                  ? 'bg-primary text-primary-foreground shadow-2xs'
                   : currentStep === idx + 1
-                  ? 'bg-white border-2 border-[#23B750] text-[#23B750] ring-3 ring-emerald-50 shadow-2xs'
-                  : 'bg-gray-50 border border-gray-200 text-gray-400 group-hover:border-gray-300 group-hover:text-gray-600'
+                  ? 'bg-card border-2 border-primary text-primary ring-3 ring-primary/20 shadow-2xs'
+                  : 'bg-muted/50 border border-border text-muted-foreground group-hover:border-border group-hover:text-foreground'
               ]"
             >
               <Check v-if="currentStep > idx + 1" class="w-3 h-3 stroke-[2.5]" />
@@ -78,10 +78,10 @@
               :class="[
                 'mt-1 text-[11px] transition-colors',
                 currentStep === idx + 1
-                  ? 'font-semibold text-gray-900'
+                  ? 'font-semibold text-foreground'
                   : currentStep > idx + 1
-                  ? 'font-medium text-emerald-800'
-                  : 'text-gray-400 group-hover:text-gray-600'
+                  ? 'font-medium text-primary'
+                  : 'text-muted-foreground group-hover:text-foreground'
               ]"
             >
               {{ step.title }}
@@ -93,7 +93,7 @@
 
     <!-- Main Step Card Container (Compact & Fit to View) -->
     <main class="flex-1 px-3 py-2.5 sm:px-4 sm:py-3.5 flex items-center justify-center overflow-y-auto custom-scrollbar min-h-0">
-      <div class="w-full max-w-3xl bg-white border border-gray-100 rounded-2xl shadow-xs px-5 py-4 sm:px-6 sm:py-5 flex flex-col justify-between transition-all my-auto">
+      <div class="w-full max-w-3xl bg-card border border-border rounded-2xl shadow-xs px-5 py-4 sm:px-6 sm:py-5 flex flex-col justify-between transition-all my-auto text-card-foreground">
         <!-- Step View Rendered Here -->
         <div class="flex-1">
           <StepBusiness
@@ -132,7 +132,7 @@
         <!-- Bottom Wizard Footer Controls (Steps 1-5) -->
         <footer
           v-if="currentStep < 6"
-          class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between gap-3 shrink-0"
+          class="mt-4 pt-3 border-t border-border flex items-center justify-between gap-3 shrink-0"
         >
           <!-- Back Button -->
           <button
@@ -143,7 +143,7 @@
               'h-9 px-3.5 rounded-xl text-xs font-medium transition-all flex items-center gap-1.5 cursor-pointer',
               currentStep === 1
                 ? 'opacity-0 pointer-events-none'
-                : 'bg-gray-50 hover:bg-gray-100 text-gray-600 hover:text-gray-900 border border-gray-200/80'
+                : 'bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground border border-border'
             ]"
           >
             <ArrowLeft class="w-3.5 h-3.5" />
@@ -156,7 +156,7 @@
               v-if="currentStep === 3 || currentStep === 4 || currentStep === 5"
               type="button"
               @click="nextStep"
-              class="text-xs font-medium text-gray-400 hover:text-gray-700 px-2.5 py-1.5 cursor-pointer transition-colors"
+              class="text-xs font-medium text-muted-foreground hover:text-foreground px-2.5 py-1.5 cursor-pointer transition-colors"
             >
               Skip step
             </button>
@@ -164,7 +164,7 @@
             <button
               type="button"
               @click="nextStep"
-              class="h-9 px-4.5 bg-[#23B750] hover:bg-[#1fa347] active:bg-[#1b8e3e] text-white text-xs font-semibold rounded-xl shadow-2xs hover:shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
+              class="h-9 px-4.5 bg-primary hover:bg-primary/90 active:bg-primary/80 text-primary-foreground text-xs font-semibold rounded-xl shadow-2xs hover:shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
             >
               <span>{{ currentStep === 5 ? 'Finish & Preview' : 'Continue' }}</span>
               <ArrowRight class="w-3.5 h-3.5" />
@@ -175,8 +175,8 @@
     </main>
 
     <!-- Bottom Simple Footer -->
-    <footer class="py-1.5 text-center text-[11px] text-gray-400 border-t border-gray-100 bg-white shrink-0">
-      RakanSales CRM · Need help? <a href="#" class="text-emerald-700 hover:underline">Contact support</a>
+    <footer class="py-1.5 text-center text-[11px] text-muted-foreground border-t border-border bg-card shrink-0">
+      RakanSales CRM · Need help? <a href="#" class="text-primary hover:underline">Contact support</a>
     </footer>
   </div>
 </template>

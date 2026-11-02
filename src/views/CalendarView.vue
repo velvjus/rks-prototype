@@ -286,18 +286,18 @@ const calendarDays = computed(() => {
 function getCategoryClasses(cat: CalendarEvent['category']): string {
   switch (cat) {
     case 'work':
-      return 'bg-pink-50 text-pink-700 border-pink-500 dark:bg-pink-950/20 dark:text-pink-400 dark:border-pink-850';
+      return 'bg-tag-4 text-tag-4-foreground border-tag-4';
     case 'personal':
-      return 'bg-emerald-50 text-emerald-700 border-emerald-500 dark:bg-emerald-950/20 dark:text-emerald-400 dark:border-emerald-850';
+      return 'bg-tag-2 text-tag-2-foreground border-tag-2';
     case 'design':
-      return 'bg-blue-50 text-blue-700 border-blue-500 dark:bg-blue-950/20 dark:text-blue-400 dark:border-blue-850';
+      return 'bg-tag-1 text-tag-1-foreground border-tag-1';
     case 'marketing':
-      return 'bg-purple-50 text-purple-700 border-purple-500 dark:bg-purple-950/20 dark:text-purple-400 dark:border-purple-850';
+      return 'bg-tag-6 text-tag-6-foreground border-tag-6';
     case 'client':
-      return 'bg-orange-50 text-orange-700 border-orange-500 dark:bg-orange-950/20 dark:text-orange-400 dark:border-orange-850';
+      return 'bg-tag-5 text-tag-5-foreground border-tag-5';
     case 'team':
     default:
-      return 'bg-gray-50 text-gray-700 border-gray-400 dark:bg-gray-800/40 dark:text-gray-300 dark:border-gray-600';
+      return 'bg-tag-3 text-tag-3-foreground border-tag-3';
   }
 }
 
@@ -398,33 +398,33 @@ function formatDateFriendly(dateStr?: string): string {
     <!-- Header & Search Bar -->
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
       <div>
-        <h1 class="text-3xl font-extrabold tracking-tight text-gray-900">Calendar</h1>
+        <h1 class="text-3xl font-extrabold tracking-tight text-foreground">Calendar</h1>
       </div>
       <!-- Search Input with command K shortcut visual -->
       <div class="relative w-full sm:w-72">
-        <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+        <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
         <input
           ref="searchInputRef"
           type="text"
           v-model="searchQuery"
           placeholder="Search events..."
-          class="w-full pl-9 pr-14 py-2 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white transition-all shadow-sm"
+          class="w-full pl-9 pr-14 py-2 text-sm border border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary bg-background text-foreground placeholder:text-muted-foreground transition-all shadow-xs"
         />
-        <span class="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded border border-gray-200/80 font-mono select-none">
+        <span class="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-muted-foreground bg-muted px-1.5 py-0.5 rounded border border-border font-mono select-none">
           ⌘K
         </span>
       </div>
     </div>
 
     <!-- Filter tabs -->
-    <div class="flex border-b border-gray-200 pb-px">
-      <div class="flex space-x-1 bg-gray-150 p-1 rounded-xl border border-gray-200/50">
+    <div class="flex border-b border-border pb-px">
+      <div class="flex space-x-1 bg-muted p-1 rounded-xl border border-border">
         <button
           v-for="tab in ['all', 'shared', 'public', 'archived']"
           :key="tab"
           @click="activeTab = tab"
-          class="px-4 py-1.5 text-xs font-semibold rounded-lg capitalize transition-all"
-          :class="activeTab === tab ? 'bg-white text-gray-900 shadow-sm border border-gray-200/50' : 'text-gray-500 hover:text-gray-900'"
+          class="px-4 py-1.5 text-xs font-semibold rounded-lg capitalize transition-all cursor-pointer"
+          :class="activeTab === tab ? 'bg-card text-foreground shadow-xs border border-border' : 'text-muted-foreground hover:text-foreground'"
         >
           {{ tab === 'all' ? 'All events' : tab }}
         </button>
@@ -432,17 +432,17 @@ function formatDateFriendly(dateStr?: string): string {
     </div>
 
     <!-- Calendar Card Box -->
-    <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden flex flex-col">
+    <div class="bg-card border border-border rounded-2xl shadow-xs overflow-hidden flex flex-col">
       <!-- Toolbar Header -->
-      <div class="p-5 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 border-b border-gray-100 bg-white">
+      <div class="p-5 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 border-b border-border bg-card">
         <!-- Date Badge & Labels -->
         <div class="flex items-center gap-4">
           <!-- Calendar Date Badge Widget -->
-          <div class="w-14 h-14 bg-gray-50 border border-gray-200 rounded-xl flex flex-col items-center justify-center overflow-hidden shrink-0 shadow-sm">
-            <div class="text-[9px] font-bold text-gray-400 tracking-wider pt-1 uppercase">
+          <div class="w-14 h-14 bg-muted border border-border rounded-xl flex flex-col items-center justify-center overflow-hidden shrink-0 shadow-xs">
+            <div class="text-[9px] font-bold text-muted-foreground tracking-wider pt-1 uppercase">
               {{ selectedDateMonthAbbr }}
             </div>
-            <div class="text-xl font-extrabold text-emerald-600 pb-1">
+            <div class="text-xl font-extrabold text-primary pb-1">
               {{ selectedDateDayNumber }}
             </div>
           </div>
@@ -450,12 +450,12 @@ function formatDateFriendly(dateStr?: string): string {
           <!-- Labels -->
           <div>
             <div class="flex items-center gap-2">
-              <h2 class="text-xl font-bold text-gray-900">{{ monthLabel }}</h2>
-              <span class="bg-gray-150 text-gray-600 px-2 py-0.5 rounded-full text-[10px] font-bold border border-gray-200/50">
+              <h2 class="text-xl font-bold text-foreground">{{ monthLabel }}</h2>
+              <span class="bg-muted text-muted-foreground px-2 py-0.5 rounded-full text-[10px] font-bold border border-border">
                 {{ weekLabel }}
               </span>
             </div>
-            <p class="text-xs text-gray-500 font-medium mt-0.5">
+            <p class="text-xs text-muted-foreground font-medium mt-0.5">
               {{ dateRangeLabel }}
             </p>
           </div>
@@ -465,30 +465,30 @@ function formatDateFriendly(dateStr?: string): string {
         <div class="flex flex-wrap items-center gap-2 w-full lg:w-auto justify-end">
           <button
             @click="focusSearch"
-            class="p-2 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors text-gray-500 hover:text-gray-900 shadow-sm bg-white"
+            class="p-2 border border-border rounded-xl hover:bg-muted transition-colors text-muted-foreground hover:text-foreground shadow-xs bg-card cursor-pointer"
             title="Search events"
           >
             <Search class="w-4 h-4" />
           </button>
 
           <!-- Prev/Today/Next -->
-          <div class="flex items-center border border-gray-200 rounded-xl overflow-hidden shadow-sm bg-white">
+          <div class="flex items-center border border-border rounded-xl overflow-hidden shadow-xs bg-card">
             <button
               @click="navigateMonth(-1)"
-              class="p-2 hover:bg-gray-50 transition-colors text-gray-600 border-r border-gray-200 cursor-pointer"
+              class="p-2 hover:bg-muted transition-colors text-foreground border-r border-border cursor-pointer"
               title="Previous month"
             >
               <ChevronLeft class="w-4 h-4" />
             </button>
             <button
               @click="goToToday"
-              class="px-4 py-2 text-xs font-bold hover:bg-gray-50 transition-colors text-gray-700 border-r border-gray-200 cursor-pointer"
+              class="px-4 py-2 text-xs font-bold hover:bg-muted transition-colors text-foreground border-r border-border cursor-pointer"
             >
               Today
             </button>
             <button
               @click="navigateMonth(1)"
-              class="p-2 hover:bg-gray-50 transition-colors text-gray-600 cursor-pointer"
+              class="p-2 hover:bg-muted transition-colors text-foreground cursor-pointer"
               title="Next month"
             >
               <ChevronRight class="w-4 h-4" />
@@ -497,14 +497,14 @@ function formatDateFriendly(dateStr?: string): string {
 
           <!-- Dropdown placeholder -->
           <div class="relative">
-            <button class="px-4 py-2 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors text-xs font-bold text-gray-700 flex items-center gap-2 shadow-sm bg-white">
+            <button class="px-4 py-2 border border-border rounded-xl hover:bg-muted transition-colors text-xs font-bold text-foreground flex items-center gap-2 shadow-xs bg-card">
               Month view
-              <ChevronDown class="w-3.5 h-3.5 text-gray-400" />
+              <ChevronDown class="w-3.5 h-3.5 text-muted-foreground" />
             </button>
           </div>
 
           <!-- Add Event Button -->
-          <Button variant="primary" @click="openAddModal()" class="gap-1.5 shadow-sm bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl py-2 px-4 text-xs font-semibold cursor-pointer">
+          <Button variant="primary" @click="openAddModal()" class="gap-1.5 shadow-xs bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl py-2 px-4 text-xs font-semibold cursor-pointer">
             <Plus class="w-4 h-4" />
             Add event
           </Button>
@@ -512,12 +512,12 @@ function formatDateFriendly(dateStr?: string): string {
       </div>
 
       <!-- Calendar Monthly Grid -->
-      <div class="flex-1 grid grid-cols-7 text-center select-none bg-gray-100 gap-px">
+      <div class="flex-1 grid grid-cols-7 text-center select-none bg-border gap-px">
         <!-- Weekday Labels -->
         <div
           v-for="day in ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']"
           :key="day"
-          class="bg-white py-3 text-xs font-bold text-gray-400 border-b border-gray-100"
+          class="bg-card py-3 text-xs font-bold text-muted-foreground border-b border-border"
         >
           {{ day }}
         </div>
@@ -526,10 +526,10 @@ function formatDateFriendly(dateStr?: string): string {
         <div
           v-for="(day, idx) in calendarDays"
           :key="idx"
-          class="bg-white min-h-[130px] p-2.5 flex flex-col items-stretch text-left group relative border-b border-r border-gray-100 cursor-pointer transition-all hover:bg-slate-50/50"
+          class="bg-card min-h-[130px] p-2.5 flex flex-col items-stretch text-left group relative border-b border-r border-border cursor-pointer transition-all hover:bg-muted/50"
           :class="[
-            !day.isCurrentMonth ? 'bg-gray-50/30 text-gray-300' : 'text-gray-900',
-            day.isSelected ? 'ring-1 ring-emerald-500/30 bg-emerald-50/5' : ''
+            !day.isCurrentMonth ? 'bg-muted/30 text-muted-foreground/60' : 'text-foreground',
+            day.isSelected ? 'ring-1 ring-primary/30 bg-primary/5' : ''
           ]"
           @click="selectDay(day)"
         >
@@ -540,10 +540,10 @@ function formatDateFriendly(dateStr?: string): string {
               class="text-xs font-bold w-6 h-6 flex items-center justify-center rounded-full transition-all"
               :class="[
                 day.isSelected 
-                  ? 'bg-emerald-600 text-white font-extrabold' 
+                  ? 'bg-primary text-primary-foreground font-extrabold' 
                   : day.isToday 
-                    ? 'border border-emerald-500 text-emerald-600 font-extrabold' 
-                    : 'text-gray-700 group-hover:text-gray-950'
+                    ? 'border border-primary text-primary font-extrabold' 
+                    : 'text-muted-foreground group-hover:text-foreground'
               ]"
             >
               {{ day.dayNumber }}
@@ -552,7 +552,7 @@ function formatDateFriendly(dateStr?: string): string {
             <!-- Quick Add Action shortcut -->
             <button
               @click.stop="openAddModal(day.dateString)"
-              class="opacity-0 group-hover:opacity-100 p-0.5 text-gray-400 hover:text-emerald-600 rounded hover:bg-gray-100 transition-all cursor-pointer"
+              class="opacity-0 group-hover:opacity-100 p-0.5 text-muted-foreground hover:text-primary rounded hover:bg-muted transition-all cursor-pointer"
               title="Add event to this day"
             >
               <Plus class="w-3.5 h-3.5" />
@@ -566,7 +566,7 @@ function formatDateFriendly(dateStr?: string): string {
               v-for="evt in day.events.slice(0, 3)"
               :key="evt.id"
               @click.stop="openEditModal(evt)"
-              class="px-2 py-1 rounded text-[10px] font-semibold border-l-4 leading-tight truncate transition-all hover:brightness-95 hover:translate-x-0.5 shadow-[0_1px_2px_rgba(0,0,0,0.01)] flex items-center justify-between"
+              class="px-2 py-1 rounded text-[10px] font-semibold border-l-4 leading-tight truncate transition-all hover:brightness-95 hover:translate-x-0.5 shadow-xs flex items-center justify-between"
               :class="getCategoryClasses(evt.category)"
             >
               <span class="truncate pr-1">
@@ -582,7 +582,7 @@ function formatDateFriendly(dateStr?: string): string {
             <div
               v-if="day.events.length > 3"
               @click.stop="openMoreModal(day)"
-              class="text-[10px] font-bold text-gray-500 hover:text-emerald-600 transition-colors pl-1.5 py-0.5 rounded hover:bg-gray-100 cursor-pointer font-sans"
+              class="text-[10px] font-bold text-muted-foreground hover:text-primary transition-colors pl-1.5 py-0.5 rounded hover:bg-muted cursor-pointer font-sans"
             >
               {{ day.events.length - 3 }} more...
             </div>
@@ -593,13 +593,13 @@ function formatDateFriendly(dateStr?: string): string {
 
     <!-- DIALOG 1: Add Event Modal -->
     <Dialog v-model:open="showAddModal">
-      <DialogContent class="sm:max-w-md bg-white border border-gray-200 p-6 rounded-2xl shadow-2xl animate-in fade-in zoom-in-95 duration-200">
-        <DialogHeader class="space-y-1.5 pb-3 border-b border-gray-100">
-          <DialogTitle class="text-gray-900 font-extrabold text-lg flex items-center gap-2">
-            <CalendarIcon class="w-5 h-5 text-emerald-600" />
+      <DialogContent class="sm:max-w-md bg-card text-card-foreground border border-border p-6 rounded-2xl shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+        <DialogHeader class="space-y-1.5 pb-3 border-b border-border">
+          <DialogTitle class="text-foreground font-extrabold text-lg flex items-center gap-2">
+            <CalendarIcon class="w-5 h-5 text-primary" />
             Add Event
           </DialogTitle>
-          <DialogDescription class="text-xs text-gray-500">
+          <DialogDescription class="text-xs text-muted-foreground">
             Create a new event appointment in your schedule.
           </DialogDescription>
         </DialogHeader>
@@ -607,34 +607,34 @@ function formatDateFriendly(dateStr?: string): string {
         <form @submit.prevent="handleAddEvent" class="space-y-4 py-3">
           <!-- Event Title -->
           <div class="space-y-1.5">
-            <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest block">Event Title</label>
+            <label class="text-[10px] font-bold text-muted-foreground uppercase tracking-widest block">Event Title</label>
             <input
               v-model="eventForm.title"
               type="text"
               placeholder="e.g. Weekly Design Feedback Sync"
               required
-              class="w-full px-3.5 py-2 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-gray-50/50"
+              class="w-full px-3.5 py-2 text-sm border border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary bg-background text-foreground placeholder:text-muted-foreground"
             />
           </div>
 
           <!-- Date & Time Grid -->
           <div class="grid grid-cols-2 gap-4">
             <div class="space-y-1.5">
-              <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest block">Date</label>
+              <label class="text-[10px] font-bold text-muted-foreground uppercase tracking-widest block">Date</label>
               <input
                 v-model="eventForm.date"
                 type="date"
                 required
-                class="w-full px-3.5 py-2 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-gray-50/50"
+                class="w-full px-3.5 py-2 text-sm border border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary bg-background text-foreground"
               />
             </div>
             <div class="space-y-1.5">
-              <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest block">Start Time</label>
+              <label class="text-[10px] font-bold text-muted-foreground uppercase tracking-widest block">Start Time</label>
               <input
                 v-model="eventTime24"
                 type="time"
                 required
-                class="w-full px-3.5 py-2 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-gray-50/50"
+                class="w-full px-3.5 py-2 text-sm border border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary bg-background text-foreground"
               />
             </div>
           </div>
@@ -642,10 +642,10 @@ function formatDateFriendly(dateStr?: string): string {
           <!-- Category and Sharing -->
           <div class="grid grid-cols-2 gap-4">
             <div class="space-y-1.5">
-              <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest block">Category</label>
+              <label class="text-[10px] font-bold text-muted-foreground uppercase tracking-widest block">Category</label>
               <select
                 v-model="eventForm.category"
-                class="w-full px-3.5 py-2 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white"
+                class="w-full px-3.5 py-2 text-sm border border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary bg-background text-foreground"
               >
                 <option value="work">Work (Pink)</option>
                 <option value="personal">Personal (Green)</option>
@@ -656,10 +656,10 @@ function formatDateFriendly(dateStr?: string): string {
               </select>
             </div>
             <div class="space-y-1.5">
-              <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest block">Sharing Visibility</label>
+              <label class="text-[10px] font-bold text-muted-foreground uppercase tracking-widest block">Sharing Visibility</label>
               <select
                 v-model="eventForm.sharing"
-                class="w-full px-3.5 py-2 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white"
+                class="w-full px-3.5 py-2 text-sm border border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary bg-background text-foreground"
               >
                 <option value="shared">Shared (Team)</option>
                 <option value="public">Public (Everyone)</option>
@@ -671,27 +671,27 @@ function formatDateFriendly(dateStr?: string): string {
 
           <!-- Description -->
           <div class="space-y-1.5">
-            <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest block">Description (Optional)</label>
+            <label class="text-[10px] font-bold text-muted-foreground uppercase tracking-widest block">Description (Optional)</label>
             <textarea
               v-model="eventForm.description"
               rows="3"
               placeholder="Provide a brief outline of the calendar entry..."
-              class="w-full px-3.5 py-2 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-gray-50/50"
+              class="w-full px-3.5 py-2 text-sm border border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary bg-background text-foreground placeholder:text-muted-foreground"
             ></textarea>
           </div>
 
           <!-- Buttons -->
-          <div class="flex justify-end gap-2 pt-3 border-t border-gray-100">
+          <div class="flex justify-end gap-2 pt-3 border-t border-border">
             <button
               type="button"
               @click="showAddModal = false"
-              class="px-4 py-2 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors text-xs font-bold text-gray-700 cursor-pointer"
+              class="px-4 py-2 border border-border rounded-xl hover:bg-muted transition-colors text-xs font-bold text-foreground cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
-              class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl transition-all hover:scale-[1.01] active:scale-[0.99] text-xs font-bold cursor-pointer"
+              class="px-4 py-2 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl transition-all hover:scale-[1.01] active:scale-[0.99] text-xs font-bold cursor-pointer"
             >
               Save Event
             </button>
@@ -702,13 +702,13 @@ function formatDateFriendly(dateStr?: string): string {
 
     <!-- DIALOG 2: Edit Event Modal -->
     <Dialog v-model:open="showEditModal">
-      <DialogContent class="sm:max-w-md bg-white border border-gray-200 p-6 rounded-2xl shadow-2xl animate-in fade-in zoom-in-95 duration-200">
-        <DialogHeader class="space-y-1.5 pb-3 border-b border-gray-100">
-          <DialogTitle class="text-gray-900 font-extrabold text-lg flex items-center gap-2">
-            <CalendarIcon class="w-5 h-5 text-emerald-600" />
+      <DialogContent class="sm:max-w-md bg-card border border-border p-6 rounded-2xl shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+        <DialogHeader class="space-y-1.5 pb-3 border-b border-border">
+          <DialogTitle class="text-foreground font-extrabold text-lg flex items-center gap-2">
+            <CalendarIcon class="w-5 h-5 text-primary" />
             Edit Event
           </DialogTitle>
-          <DialogDescription class="text-xs text-gray-500">
+          <DialogDescription class="text-xs text-muted-foreground">
             Update or delete this calendar entry.
           </DialogDescription>
         </DialogHeader>
@@ -716,33 +716,33 @@ function formatDateFriendly(dateStr?: string): string {
         <form @submit.prevent="handleUpdateEvent" class="space-y-4 py-3">
           <!-- Event Title -->
           <div class="space-y-1.5">
-            <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest block">Event Title</label>
+            <label class="text-[10px] font-bold text-muted-foreground uppercase tracking-widest block">Event Title</label>
             <input
               v-model="eventForm.title"
               type="text"
               required
-              class="w-full px-3.5 py-2 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-gray-50/50"
+              class="w-full px-3.5 py-2 text-sm border border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring bg-muted/30 text-foreground"
             />
           </div>
 
           <!-- Date & Time Grid -->
           <div class="grid grid-cols-2 gap-4">
             <div class="space-y-1.5">
-              <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest block">Date</label>
+              <label class="text-[10px] font-bold text-muted-foreground uppercase tracking-widest block">Date</label>
               <input
                 v-model="eventForm.date"
                 type="date"
                 required
-                class="w-full px-3.5 py-2 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-gray-50/50"
+                class="w-full px-3.5 py-2 text-sm border border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring bg-muted/30 text-foreground"
               />
             </div>
             <div class="space-y-1.5">
-              <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest block">Start Time</label>
+              <label class="text-[10px] font-bold text-muted-foreground uppercase tracking-widest block">Start Time</label>
               <input
                 v-model="eventTime24"
                 type="time"
                 required
-                class="w-full px-3.5 py-2 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-gray-50/50"
+                class="w-full px-3.5 py-2 text-sm border border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring bg-muted/30 text-foreground"
               />
             </div>
           </div>
@@ -750,10 +750,10 @@ function formatDateFriendly(dateStr?: string): string {
           <!-- Category and Sharing -->
           <div class="grid grid-cols-2 gap-4">
             <div class="space-y-1.5">
-              <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest block">Category</label>
+              <label class="text-[10px] font-bold text-muted-foreground uppercase tracking-widest block">Category</label>
               <select
                 v-model="eventForm.category"
-                class="w-full px-3.5 py-2 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white"
+                class="w-full px-3.5 py-2 text-sm border border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring bg-card text-foreground"
               >
                 <option value="work">Work (Pink)</option>
                 <option value="personal">Personal (Green)</option>
@@ -764,10 +764,10 @@ function formatDateFriendly(dateStr?: string): string {
               </select>
             </div>
             <div class="space-y-1.5">
-              <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest block">Sharing Visibility</label>
+              <label class="text-[10px] font-bold text-muted-foreground uppercase tracking-widest block">Sharing Visibility</label>
               <select
                 v-model="eventForm.sharing"
-                class="w-full px-3.5 py-2 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white"
+                class="w-full px-3.5 py-2 text-sm border border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring bg-card text-foreground"
               >
                 <option value="shared">Shared (Team)</option>
                 <option value="public">Public (Everyone)</option>
@@ -779,20 +779,20 @@ function formatDateFriendly(dateStr?: string): string {
 
           <!-- Description -->
           <div class="space-y-1.5">
-            <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest block">Description (Optional)</label>
+            <label class="text-[10px] font-bold text-muted-foreground uppercase tracking-widest block">Description (Optional)</label>
             <textarea
               v-model="eventForm.description"
               rows="3"
-              class="w-full px-3.5 py-2 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-gray-50/50"
+              class="w-full px-3.5 py-2 text-sm border border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring bg-muted/30 text-foreground"
             ></textarea>
           </div>
 
           <!-- Buttons -->
-          <div class="flex justify-between items-center pt-3 border-t border-gray-100">
+          <div class="flex justify-between items-center pt-3 border-t border-border">
             <button
               type="button"
               @click="handleDeleteEvent"
-              class="px-3.5 py-2 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-xl transition-colors text-xs font-bold flex items-center gap-1.5 border border-rose-250/20 cursor-pointer"
+              class="px-3.5 py-2 bg-destructive/10 hover:bg-destructive/20 text-destructive rounded-xl transition-colors text-xs font-bold flex items-center gap-1.5 border border-destructive/20 cursor-pointer"
             >
               <Trash2 class="w-3.5 h-3.5" />
               Delete
@@ -801,13 +801,13 @@ function formatDateFriendly(dateStr?: string): string {
               <button
                 type="button"
                 @click="showEditModal = false"
-                class="px-4 py-2 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors text-xs font-bold text-gray-700 cursor-pointer"
+                class="px-4 py-2 border border-border rounded-xl hover:bg-muted transition-colors text-xs font-bold text-foreground cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl transition-all hover:scale-[1.01] active:scale-[0.99] text-xs font-bold cursor-pointer"
+                class="px-4 py-2 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl transition-all hover:scale-[1.01] active:scale-[0.99] text-xs font-bold cursor-pointer"
               >
                 Save
               </button>
@@ -819,13 +819,13 @@ function formatDateFriendly(dateStr?: string): string {
 
     <!-- DIALOG 3: "More Events" Modal -->
     <Dialog v-model:open="showMoreModal">
-      <DialogContent class="sm:max-w-md bg-white border border-gray-200 p-6 rounded-2xl shadow-2xl animate-in fade-in zoom-in-95 duration-200">
-        <DialogHeader class="space-y-1 pb-3 border-b border-gray-100">
-          <DialogTitle class="text-gray-900 font-extrabold text-lg flex items-center gap-2">
-            <CalendarIcon class="w-5 h-5 text-emerald-600" />
+      <DialogContent class="sm:max-w-md bg-card border border-border p-6 rounded-2xl shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+        <DialogHeader class="space-y-1 pb-3 border-b border-border">
+          <DialogTitle class="text-foreground font-extrabold text-lg flex items-center gap-2">
+            <CalendarIcon class="w-5 h-5 text-primary" />
             Events for {{ formatDateFriendly(moreEventsDay?.dateString) }}
           </DialogTitle>
-          <DialogDescription class="text-xs text-gray-500">
+          <DialogDescription class="text-xs text-muted-foreground">
             Showing all scheduled entries for this day. Click any item to edit.
           </DialogDescription>
         </DialogHeader>
@@ -835,7 +835,7 @@ function formatDateFriendly(dateStr?: string): string {
             v-for="evt in moreEventsDay?.events"
             :key="evt.id"
             @click="handleMoreEventClick(evt)"
-            class="p-3.5 rounded-xl border-l-4 leading-tight cursor-pointer transition-all hover:translate-x-0.5 hover:brightness-95 shadow-sm border border-gray-150 flex items-center justify-between"
+            class="p-3.5 rounded-xl border-l-4 leading-tight cursor-pointer transition-all hover:translate-x-0.5 hover:brightness-95 shadow-sm border border-border flex items-center justify-between"
             :class="getCategoryClasses(evt.category)"
           >
             <div>
@@ -847,21 +847,21 @@ function formatDateFriendly(dateStr?: string): string {
                 {{ evt.description }}
               </p>
             </div>
-            <div class="text-[10px] font-mono shrink-0 bg-white/70 px-1.5 py-0.5 rounded border border-black/5 font-semibold">
+            <div class="text-[10px] font-mono shrink-0 bg-card/70 px-1.5 py-0.5 rounded border border-border/50 font-semibold text-foreground">
               {{ evt.time }}
             </div>
           </div>
           
-          <div v-if="!moreEventsDay?.events.length" class="text-center py-6 text-sm text-slate-400 italic">
+          <div v-if="!moreEventsDay?.events.length" class="text-center py-6 text-sm text-muted-foreground italic">
             No events scheduled.
           </div>
         </div>
 
-        <DialogFooter class="border-t border-gray-100 pt-3">
+        <DialogFooter class="border-t border-border pt-3">
           <button
             type="button"
             @click="showMoreModal = false"
-            class="w-full sm:w-auto px-4 py-2 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors text-xs font-bold text-gray-700 cursor-pointer"
+            class="w-full sm:w-auto px-4 py-2 border border-border rounded-xl hover:bg-muted transition-colors text-xs font-bold text-foreground cursor-pointer"
           >
             Close
           </button>
@@ -880,10 +880,10 @@ function formatDateFriendly(dateStr?: string): string {
   background: transparent;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #e2e8f0;
+  background: var(--border);
   border-radius: 10px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #cbd5e1;
+  background: var(--muted-foreground);
 }
 </style>

@@ -588,16 +588,16 @@ const bulkUpdateStatus = (val: Contact['status']) => {
         v-for="toast in toasts"
         :key="toast.id"
         :class="[
-          'p-4 rounded-xl shadow-lg border text-xs font-medium flex items-center gap-3 animate-slide-in pointer-events-auto bg-white/95 dark:bg-card/95 backdrop-blur-md transition-all duration-300',
-          toast.type === 'success' ? 'border-emerald-200 text-emerald-800 dark:border-emerald-900/50 dark:text-emerald-400' : '',
-          toast.type === 'info' ? 'border-blue-200 text-blue-800 dark:border-blue-900/50 dark:text-blue-400' : '',
-          toast.type === 'error' ? 'border-red-200 text-red-800 dark:border-red-900/50 dark:text-red-400' : ''
+          'p-4 rounded-xl shadow-lg border text-xs font-medium flex items-center gap-3 animate-slide-in pointer-events-auto bg-card/95 backdrop-blur-md transition-all duration-300',
+          toast.type === 'success' ? 'border-success/30 text-success' : '',
+          toast.type === 'info' ? 'border-info/30 text-info' : '',
+          toast.type === 'error' ? 'border-destructive/30 text-destructive' : ''
         ]"
       >
         <span class="w-2 h-2 rounded-full" :class="[
-          toast.type === 'success' ? 'bg-[#23B750]' : '',
-          toast.type === 'info' ? 'bg-blue-500' : '',
-          toast.type === 'error' ? 'bg-red-500' : ''
+          toast.type === 'success' ? 'bg-primary' : '',
+          toast.type === 'info' ? 'bg-info' : '',
+          toast.type === 'error' ? 'bg-destructive' : ''
         ]"></span>
         <p>{{ toast.message }}</p>
       </div>
@@ -606,7 +606,7 @@ const bulkUpdateStatus = (val: Contact['status']) => {
     <!-- Header Section -->
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
       <div>
-        <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-foreground">Contacts Database</h1>
+        <h1 class="text-2xl font-bold tracking-tight text-foreground">Contacts Database</h1>
         <p class="text-xs text-muted-foreground mt-0.5">Manage and analyze your CRM network, leads, and customer lifecycles.</p>
       </div>
       <Button variant="primary" class="gap-2 shadow-sm rounded-xl cursor-pointer hover:scale-[1.01] active:scale-[0.98] transition-all" @click="openAddDialog">
@@ -618,105 +618,105 @@ const bulkUpdateStatus = (val: Contact['status']) => {
     <!-- Statistics Dashboard (Glassmorphism Cards) -->
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
       <!-- Total Contacts Card -->
-      <div class="bg-white dark:bg-card border border-gray-200 dark:border-border p-5 rounded-2xl shadow-sm hover:shadow-md transition-all group cursor-pointer relative overflow-hidden">
+      <div class="bg-card border border-border p-5 rounded-2xl shadow-sm hover:shadow-md transition-all group cursor-pointer relative overflow-hidden">
         <div class="absolute -right-2 -bottom-2 opacity-5 text-primary group-hover:scale-110 transition-transform">
           <Building2 class="w-24 h-24" />
         </div>
         <div class="flex items-center justify-between">
           <span class="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Total Network</span>
-          <div class="p-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/20 text-[#23B750]">
+          <div class="p-1.5 rounded-lg bg-primary/10 text-primary">
             <CheckCircle class="w-4 h-4" />
           </div>
         </div>
         <div class="mt-4 flex items-baseline gap-2">
-          <span class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-foreground">{{ stats.total.toLocaleString() }}</span>
+          <span class="text-3xl font-extrabold tracking-tight text-foreground">{{ stats.total.toLocaleString() }}</span>
         </div>
         <p class="text-[10px] text-muted-foreground mt-2 flex items-center gap-1">
-          <Sparkles class="w-3 h-3 text-yellow-500" />
+          <Sparkles class="w-3 h-3 text-warning" />
           Active pipeline records
         </p>
       </div>
 
       <!-- Active Leads Card -->
-      <div class="bg-white dark:bg-card border border-gray-200 dark:border-border p-5 rounded-2xl shadow-sm hover:shadow-md transition-all group cursor-pointer relative overflow-hidden">
-        <div class="absolute -right-2 -bottom-2 opacity-5 text-purple-500 group-hover:scale-110 transition-transform">
+      <div class="bg-card border border-border p-5 rounded-2xl shadow-sm hover:shadow-md transition-all group cursor-pointer relative overflow-hidden">
+        <div class="absolute -right-2 -bottom-2 opacity-5 text-tag-4-foreground group-hover:scale-110 transition-transform">
           <Award class="w-24 h-24" />
         </div>
         <div class="flex items-center justify-between">
           <span class="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Active Leads</span>
-          <div class="p-1.5 rounded-lg bg-purple-50 dark:bg-purple-950/20 text-purple-500">
+          <div class="p-1.5 rounded-lg bg-tag-4/10 text-tag-4-foreground">
             <Sparkles class="w-4 h-4" />
           </div>
         </div>
         <div class="mt-4 flex items-baseline gap-2">
-          <span class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-foreground">{{ stats.leads.toLocaleString() }}</span>
-          <span class="text-xs font-medium text-purple-600 bg-purple-50 dark:bg-purple-950/30 px-1.5 py-0.5 rounded-md">
+          <span class="text-3xl font-extrabold tracking-tight text-foreground">{{ stats.leads.toLocaleString() }}</span>
+          <span class="text-xs font-medium text-tag-4-foreground bg-tag-4/10 px-1.5 py-0.5 rounded-md">
             {{ Math.round((stats.leads / stats.total) * 100) }}%
           </span>
         </div>
         <p class="text-[10px] text-muted-foreground mt-2 flex items-center gap-1">
-          <Clock class="w-3 h-3 text-purple-400" />
+          <Clock class="w-3 h-3 text-tag-4-foreground" />
           Nurturing lifecycle stage
         </p>
       </div>
 
       <!-- New Contacts Card -->
-      <div class="bg-white dark:bg-card border border-gray-200 dark:border-border p-5 rounded-2xl shadow-sm hover:shadow-md transition-all group cursor-pointer relative overflow-hidden">
-        <div class="absolute -right-2 -bottom-2 opacity-5 text-blue-500 group-hover:scale-110 transition-transform">
+      <div class="bg-card border border-border p-5 rounded-2xl shadow-sm hover:shadow-md transition-all group cursor-pointer relative overflow-hidden">
+        <div class="absolute -right-2 -bottom-2 opacity-5 text-info group-hover:scale-110 transition-transform">
           <Calendar class="w-24 h-24" />
         </div>
         <div class="flex items-center justify-between">
           <span class="text-xs font-semibold text-muted-foreground uppercase tracking-wider">New This Week</span>
-          <div class="p-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/20 text-blue-500">
+          <div class="p-1.5 rounded-lg bg-info/10 text-info">
             <Info class="w-4 h-4" />
           </div>
         </div>
         <div class="mt-4 flex items-baseline gap-2">
-          <span class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-foreground">+{{ stats.newThisWeek.toLocaleString() }}</span>
+          <span class="text-3xl font-extrabold tracking-tight text-foreground">+{{ stats.newThisWeek.toLocaleString() }}</span>
         </div>
         <p class="text-[10px] text-muted-foreground mt-2 flex items-center gap-1">
-          <Clock class="w-3 h-3 text-blue-400" />
+          <Clock class="w-3 h-3 text-info" />
           Onboarded within last 7 days
         </p>
       </div>
 
       <!-- Activity Rate Card -->
-      <div class="bg-white dark:bg-card border border-gray-200 dark:border-border p-5 rounded-2xl shadow-sm hover:shadow-md transition-all group cursor-pointer relative overflow-hidden">
-        <div class="absolute -right-2 -bottom-2 opacity-5 text-amber-500 group-hover:scale-110 transition-transform">
+      <div class="bg-card border border-border p-5 rounded-2xl shadow-sm hover:shadow-md transition-all group cursor-pointer relative overflow-hidden">
+        <div class="absolute -right-2 -bottom-2 opacity-5 text-warning group-hover:scale-110 transition-transform">
           <RefreshCw class="w-24 h-24" />
         </div>
         <div class="flex items-center justify-between">
           <span class="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Active Engagement</span>
-          <div class="p-1.5 rounded-lg bg-amber-50 dark:bg-amber-950/20 text-amber-500">
+          <div class="p-1.5 rounded-lg bg-warning/10 text-warning">
             <Send class="w-4 h-4" />
           </div>
         </div>
         <div class="mt-4 flex items-baseline gap-2">
-          <span class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-foreground">{{ stats.activityRate }}%</span>
+          <span class="text-3xl font-extrabold tracking-tight text-foreground">{{ stats.activityRate }}%</span>
         </div>
         <p class="text-[10px] text-muted-foreground mt-2 flex items-center gap-1">
-          <CheckCircle class="w-3 h-3 text-emerald-500" />
+          <CheckCircle class="w-3 h-3 text-success" />
           Engaged in past 30 days
         </p>
       </div>
     </div>
 
     <!-- Filters & Query Workspace (CRM Toolbar) -->
-    <div class="bg-white dark:bg-card border border-gray-200 dark:border-border p-4 rounded-2xl shadow-sm space-y-4">
+    <div class="bg-card border border-border p-4 rounded-2xl shadow-sm space-y-4">
       <div class="flex flex-col lg:flex-row gap-3 items-stretch lg:items-center justify-between">
         <!-- Search bar -->
         <div class="relative flex-1 max-w-lg">
-          <Search class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <Search class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
             v-model="searchQuery"
             type="text"
             placeholder="Search by name, email, phone, company, role..."
-            class="pl-10 pr-4 py-2 border-gray-200 dark:border-border rounded-xl focus-visible:ring-1 focus-visible:ring-primary w-full bg-gray-50/50 dark:bg-muted/30 text-sm"
+            class="pl-10 pr-4 py-2 border-border rounded-xl focus-visible:ring-1 focus-visible:ring-primary w-full bg-muted/30 text-sm"
           />
           <button
             v-if="searchQuery"
             @click="searchQuery = ''"
-            class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 rounded-full"
+            class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground rounded-full"
           >
             <XCircle class="w-4 h-4" />
           </button>
@@ -728,7 +728,7 @@ const bulkUpdateStatus = (val: Contact['status']) => {
           <div class="flex flex-col gap-1">
             <span class="text-[10px] text-muted-foreground uppercase font-bold tracking-wider px-1">Status</span>
             <Select v-model="selectedStatus">
-              <SelectTrigger class="w-[130px] rounded-xl border-gray-200 dark:border-border text-xs bg-gray-50/50 dark:bg-muted/30 h-9">
+              <SelectTrigger class="w-[130px] rounded-xl border-border text-xs bg-muted/30 h-9">
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
               <SelectContent class="rounded-xl">
@@ -745,7 +745,7 @@ const bulkUpdateStatus = (val: Contact['status']) => {
           <div class="flex flex-col gap-1">
             <span class="text-[10px] text-muted-foreground uppercase font-bold tracking-wider px-1">Stage</span>
             <Select v-model="selectedLifecycle">
-              <SelectTrigger class="w-[140px] rounded-xl border-gray-200 dark:border-border text-xs bg-gray-50/50 dark:bg-muted/30 h-9">
+              <SelectTrigger class="w-[140px] rounded-xl border-border text-xs bg-muted/30 h-9">
                 <SelectValue placeholder="Lifecycle" />
               </SelectTrigger>
               <SelectContent class="rounded-xl">
@@ -762,7 +762,7 @@ const bulkUpdateStatus = (val: Contact['status']) => {
           <div class="flex flex-col gap-1">
             <span class="text-[10px] text-muted-foreground uppercase font-bold tracking-wider px-1">Company</span>
             <Select v-model="selectedCompany">
-              <SelectTrigger class="w-[160px] rounded-xl border-gray-200 dark:border-border text-xs bg-gray-50/50 dark:bg-muted/30 h-9 truncate">
+              <SelectTrigger class="w-[160px] rounded-xl border-border text-xs bg-muted/30 h-9 truncate">
                 <SelectValue placeholder="Company" />
               </SelectTrigger>
               <SelectContent class="rounded-xl max-h-[300px]">
@@ -778,7 +778,7 @@ const bulkUpdateStatus = (val: Contact['status']) => {
           <div class="flex flex-col gap-1">
             <span class="text-[10px] text-muted-foreground uppercase font-bold tracking-wider px-1">Role</span>
             <Select v-model="selectedRole">
-              <SelectTrigger class="w-[150px] rounded-xl border-gray-200 dark:border-border text-xs bg-gray-50/50 dark:bg-muted/30 h-9 truncate">
+              <SelectTrigger class="w-[150px] rounded-xl border-border text-xs bg-muted/30 h-9 truncate">
                 <SelectValue placeholder="Role" />
               </SelectTrigger>
               <SelectContent class="rounded-xl max-h-[300px]">
@@ -796,7 +796,7 @@ const bulkUpdateStatus = (val: Contact['status']) => {
               v-if="searchQuery || selectedStatus !== 'all' || selectedLifecycle !== 'all' || selectedCompany !== 'all' || selectedRole !== 'all'"
               variant="ghost"
               size="sm"
-              class="text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/20 rounded-xl h-9"
+              class="text-destructive hover:text-destructive hover:bg-destructive/10 rounded-xl h-9"
               @click="resetFilters"
             >
               <X class="w-4 h-4 mr-1" />
@@ -809,28 +809,28 @@ const bulkUpdateStatus = (val: Contact['status']) => {
       <!-- Bulk Selection Banner (Appears when items are selected) -->
       <div
         v-if="selectedIds.length > 0"
-        class="bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-900/50 p-3.5 rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-3 animate-fade-in"
+        class="bg-primary/10 border border-primary/20 p-3.5 rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-3 animate-fade-in"
       >
-        <div class="flex items-center gap-2 text-xs text-emerald-800 dark:text-emerald-400 font-semibold">
-          <span class="flex h-5 w-5 items-center justify-center rounded-full bg-[#23B750] text-white text-[10px] font-bold">
+        <div class="flex items-center gap-2 text-xs text-primary font-semibold">
+          <span class="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-primary-foreground text-[10px] font-bold">
             {{ selectedIds.length }}
           </span>
           contacts selected.
           <button
             v-if="selectAllMode === 'page' && filteredAndSortedContacts.length > selectedIds.length"
-            class="underline text-emerald-600 dark:text-emerald-300 hover:text-emerald-800 font-bold ml-1 cursor-pointer"
+            class="underline text-primary hover:text-primary/80 font-bold ml-1 cursor-pointer"
             @click="selectAllFiltered"
           >
             Select all {{ filteredAndSortedContacts.length }} filtered contacts
           </button>
-          <span v-if="selectAllMode === 'all'" class="font-normal text-emerald-600 dark:text-emerald-300">
+          <span v-if="selectAllMode === 'all'" class="font-normal text-primary">
             (Selected all {{ filteredAndSortedContacts.length }} contacts in search)
           </span>
         </div>
 
         <div class="flex flex-wrap items-center gap-2">
           <!-- Bulk actions dropdown/buttons -->
-          <Button variant="outline" size="xs" class="text-xs border-emerald-200 hover:bg-emerald-100/50 dark:border-emerald-900 text-gray-700 dark:text-foreground cursor-pointer rounded-lg bg-white dark:bg-background" @click="bulkExport">
+          <Button variant="outline" size="xs" class="text-xs border-primary/20 hover:bg-primary/10 text-foreground cursor-pointer rounded-lg bg-card" @click="bulkExport">
             <Download class="w-3 h-3 mr-1" />
             CSV Export
           </Button>
@@ -838,7 +838,7 @@ const bulkUpdateStatus = (val: Contact['status']) => {
           <!-- Update status bulk -->
           <DropdownMenu>
             <DropdownMenuTrigger as-child>
-              <Button variant="outline" size="xs" class="text-xs border-emerald-200 hover:bg-emerald-100/50 dark:border-emerald-900 text-gray-700 dark:text-foreground cursor-pointer rounded-lg bg-white dark:bg-background">
+              <Button variant="outline" size="xs" class="text-xs border-primary/20 hover:bg-primary/10 text-foreground cursor-pointer rounded-lg bg-card">
                 Update Status
               </Button>
             </DropdownMenuTrigger>
@@ -850,12 +850,12 @@ const bulkUpdateStatus = (val: Contact['status']) => {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <Button variant="outline" size="xs" class="text-xs border-red-200 text-red-600 dark:border-red-900/50 hover:bg-red-50 dark:hover:bg-red-950/20 cursor-pointer rounded-lg bg-white dark:bg-background" @click="bulkDelete">
+          <Button variant="outline" size="xs" class="text-xs border-destructive/30 text-destructive hover:bg-destructive/10 cursor-pointer rounded-lg bg-card" @click="bulkDelete">
             <Trash2 class="w-3 h-3 mr-1" />
             Delete Selected
           </Button>
 
-          <Button variant="ghost" size="xs" class="text-xs text-gray-500 hover:text-gray-700" @click="clearSelection">
+          <Button variant="ghost" size="xs" class="text-xs text-muted-foreground hover:text-foreground" @click="clearSelection">
             Cancel
           </Button>
         </div>
@@ -863,10 +863,10 @@ const bulkUpdateStatus = (val: Contact['status']) => {
     </div>
 
     <!-- Data Table Container -->
-    <div class="bg-white dark:bg-card border border-gray-200 dark:border-border rounded-2xl shadow-sm overflow-hidden">
+    <div class="bg-card border border-border rounded-2xl shadow-sm overflow-hidden">
       <div class="overflow-x-auto min-h-[300px]">
         <Table class="w-full border-collapse">
-          <TableHeader class="bg-gray-50/50 dark:bg-muted/30 border-b border-gray-200 dark:border-border">
+          <TableHeader class="bg-muted/30 border-b border-border">
             <TableRow>
               <TableHead class="w-10 pl-4 py-3">
                 <Checkbox
@@ -875,39 +875,39 @@ const bulkUpdateStatus = (val: Contact['status']) => {
                   class="cursor-pointer"
                 />
               </TableHead>
-              <TableHead class="font-bold text-gray-700 dark:text-foreground py-3 text-xs w-[220px]">
-                <button @click="handleSort('name')" class="flex items-center gap-1 hover:text-gray-900 cursor-pointer w-full text-left">
+              <TableHead class="font-bold text-foreground py-3 text-xs w-[220px]">
+                <button @click="handleSort('name')" class="flex items-center gap-1 hover:text-foreground cursor-pointer w-full text-left">
                   Name
                   <ArrowUpDown class="w-3 h-3" />
                 </button>
               </TableHead>
-              <TableHead class="font-bold text-gray-700 dark:text-foreground py-3 text-xs">
-                <button @click="handleSort('email')" class="flex items-center gap-1 hover:text-gray-900 cursor-pointer w-full text-left">
+              <TableHead class="font-bold text-foreground py-3 text-xs">
+                <button @click="handleSort('email')" class="flex items-center gap-1 hover:text-foreground cursor-pointer w-full text-left">
                   Email
                   <ArrowUpDown class="w-3 h-3" />
                 </button>
               </TableHead>
-              <TableHead class="font-bold text-gray-700 dark:text-foreground py-3 text-xs">Phone</TableHead>
-              <TableHead class="font-bold text-gray-700 dark:text-foreground py-3 text-xs">
-                <button @click="handleSort('company')" class="flex items-center gap-1 hover:text-gray-900 cursor-pointer w-full text-left">
+              <TableHead class="font-bold text-foreground py-3 text-xs">Phone</TableHead>
+              <TableHead class="font-bold text-foreground py-3 text-xs">
+                <button @click="handleSort('company')" class="flex items-center gap-1 hover:text-foreground cursor-pointer w-full text-left">
                   Company
                   <ArrowUpDown class="w-3 h-3" />
                 </button>
               </TableHead>
-              <TableHead class="font-bold text-gray-700 dark:text-foreground py-3 text-xs">
-                <button @click="handleSort('role')" class="flex items-center gap-1 hover:text-gray-900 cursor-pointer w-full text-left">
+              <TableHead class="font-bold text-foreground py-3 text-xs">
+                <button @click="handleSort('role')" class="flex items-center gap-1 hover:text-foreground cursor-pointer w-full text-left">
                   Role
                   <ArrowUpDown class="w-3 h-3" />
                 </button>
               </TableHead>
-              <TableHead class="font-bold text-gray-700 dark:text-foreground py-3 text-xs">
-                <button @click="handleSort('status')" class="flex items-center gap-1 hover:text-gray-900 cursor-pointer w-full text-left">
+              <TableHead class="font-bold text-foreground py-3 text-xs">
+                <button @click="handleSort('status')" class="flex items-center gap-1 hover:text-foreground cursor-pointer w-full text-left">
                   Status
                   <ArrowUpDown class="w-3 h-3" />
                 </button>
               </TableHead>
-              <TableHead class="font-bold text-gray-700 dark:text-foreground py-3 text-xs">
-                <button @click="handleSort('lastContact')" class="flex items-center gap-1 hover:text-gray-900 cursor-pointer w-full text-left">
+              <TableHead class="font-bold text-foreground py-3 text-xs">
+                <button @click="handleSort('lastContact')" class="flex items-center gap-1 hover:text-foreground cursor-pointer w-full text-left">
                   Last Contact
                   <ArrowUpDown class="w-3 h-3" />
                 </button>
@@ -919,9 +919,9 @@ const bulkUpdateStatus = (val: Contact['status']) => {
             <TableRow v-if="paginatedContacts.length === 0">
               <TableCell colspan="9" class="text-center py-12 text-muted-foreground text-sm">
                 <div class="flex flex-col items-center gap-3">
-                  <XCircle class="w-8 h-8 text-gray-300" />
-                  <p class="font-medium text-gray-600 dark:text-gray-400">No contacts found matching criteria</p>
-                  <p class="text-xs text-gray-400">Try adjusting your filters or search phrase.</p>
+                  <XCircle class="w-8 h-8 text-muted-foreground" />
+                  <p class="font-medium text-muted-foreground">No contacts found matching criteria</p>
+                  <p class="text-xs text-muted-foreground">Try adjusting your filters or search phrase.</p>
                   <Button variant="outline" size="sm" @click="resetFilters" class="mt-2 rounded-xl">Clear All Filters</Button>
                 </div>
               </TableCell>
@@ -931,8 +931,8 @@ const bulkUpdateStatus = (val: Contact['status']) => {
               v-for="contact in paginatedContacts"
               :key="contact.id"
               :class="[
-                'border-b border-gray-100 dark:border-border/50 hover:bg-gray-50/50 dark:hover:bg-muted/20 transition-all duration-150 cursor-pointer group',
-                selectedIds.includes(contact.id) ? 'bg-emerald-50/30 dark:bg-emerald-950/5 hover:bg-emerald-50/40 dark:hover:bg-emerald-950/10' : ''
+                'border-b border-border/50 hover:bg-muted/20 transition-all duration-150 cursor-pointer group',
+                selectedIds.includes(contact.id) ? 'bg-primary/5 hover:bg-primary/10' : ''
               ]"
               @click="openContactDrawer(contact)"
             >
@@ -948,36 +948,36 @@ const bulkUpdateStatus = (val: Contact['status']) => {
               <!-- Profile Name & Avatar -->
               <TableCell class="py-2.5">
                 <div class="flex items-center gap-3">
-                  <div class="w-8 h-8 rounded-full bg-emerald-50 dark:bg-emerald-950/30 flex items-center justify-center text-primary text-xs font-bold border border-primary/20 flex-shrink-0">
+                  <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xs font-bold border border-primary/20 flex-shrink-0">
                     {{ contact.avatar }}
                   </div>
                   <div class="min-w-0">
-                    <span class="font-semibold text-gray-900 dark:text-foreground text-xs hover:underline truncate block max-w-[160px]">{{ contact.name }}</span>
+                    <span class="font-semibold text-foreground text-xs hover:underline truncate block max-w-[160px]">{{ contact.name }}</span>
                     <span class="text-[10px] text-muted-foreground block truncate">ID: {{ contact.id }}</span>
                   </div>
                 </div>
               </TableCell>
 
               <!-- Email -->
-              <TableCell class="py-2.5 text-xs text-gray-600 dark:text-gray-300">
+              <TableCell class="py-2.5 text-xs text-muted-foreground">
                 <div class="flex items-center gap-1.5">
-                  <Mail class="w-3.5 h-3.5 text-gray-400 flex-shrink-0" />
+                  <Mail class="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
                   <span class="truncate max-w-[150px]">{{ contact.email }}</span>
                 </div>
               </TableCell>
 
               <!-- Phone -->
-              <TableCell class="py-2.5 text-xs text-gray-600 dark:text-gray-300 font-mono">
+              <TableCell class="py-2.5 text-xs text-muted-foreground font-mono">
                 {{ contact.phone }}
               </TableCell>
 
               <!-- Company -->
-              <TableCell class="py-2.5 text-xs font-medium text-gray-800 dark:text-gray-200">
+              <TableCell class="py-2.5 text-xs font-medium text-foreground">
                 {{ contact.company }}
               </TableCell>
 
               <!-- Role -->
-              <TableCell class="py-2.5 text-xs text-gray-600 dark:text-gray-300">
+              <TableCell class="py-2.5 text-xs text-muted-foreground">
                 {{ contact.role }}
               </TableCell>
 
@@ -987,10 +987,10 @@ const bulkUpdateStatus = (val: Contact['status']) => {
                   variant="outline"
                   :class="[
                     'text-[10px] h-5 py-0 px-2 font-semibold tracking-wide rounded-full border',
-                    contact.status === 'Active' ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/30 dark:text-emerald-400 dark:border-emerald-900/50' : '',
-                    contact.status === 'Lead' ? 'bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-950/30 dark:text-purple-400 dark:border-purple-900/50' : '',
-                    contact.status === 'Pending' ? 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/30 dark:text-amber-400 dark:border-amber-900/50' : '',
-                    contact.status === 'Inactive' ? 'bg-slate-50 text-slate-700 border-slate-200 dark:bg-slate-950/30 dark:text-slate-400 dark:border-slate-900/50' : ''
+                    contact.status === 'Active' ? 'bg-success/10 text-success border-success/30' : '',
+                    contact.status === 'Lead' ? 'bg-tag-4/10 text-tag-4-foreground border-tag-4/30' : '',
+                    contact.status === 'Pending' ? 'bg-warning/10 text-warning border-warning/30' : '',
+                    contact.status === 'Inactive' ? 'bg-muted text-muted-foreground border-border' : ''
                   ]"
                 >
                   {{ contact.status }}
@@ -998,7 +998,7 @@ const bulkUpdateStatus = (val: Contact['status']) => {
               </TableCell>
 
               <!-- Last Contact -->
-              <TableCell class="py-2.5 text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">
+              <TableCell class="py-2.5 text-xs text-muted-foreground whitespace-nowrap">
                 {{ contact.lastContact }}
               </TableCell>
 
@@ -1008,7 +1008,7 @@ const bulkUpdateStatus = (val: Contact['status']) => {
                   <Button
                     variant="ghost"
                     size="xs"
-                    class="h-7 w-7 p-0 rounded-lg text-gray-500 hover:text-[#23B750] hover:bg-emerald-50 dark:hover:bg-emerald-950/20"
+                    class="h-7 w-7 p-0 rounded-lg text-muted-foreground hover:text-primary hover:bg-primary/10"
                     title="Edit Contact"
                     @click="openEditDialog(contact)"
                   >
@@ -1017,7 +1017,7 @@ const bulkUpdateStatus = (val: Contact['status']) => {
                   <Button
                     variant="ghost"
                     size="xs"
-                    class="h-7 w-7 p-0 rounded-lg text-gray-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20"
+                    class="h-7 w-7 p-0 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10"
                     title="Delete Contact"
                     @click="deleteContact(contact.id, contact.name)"
                   >
@@ -1031,12 +1031,12 @@ const bulkUpdateStatus = (val: Contact['status']) => {
       </div>
 
       <!-- Pagination Panel -->
-      <div class="bg-gray-50/50 dark:bg-muted/30 border-t border-gray-200 dark:border-border p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="bg-muted/30 border-t border-border p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
         <!-- Rows per page selector -->
         <div class="flex items-center gap-2 text-xs text-muted-foreground">
           <span>Show</span>
           <Select :model-value="String(pageSize)" @update:model-value="(val: any) => pageSize = Number(val)">
-            <SelectTrigger class="w-[70px] border-gray-200 dark:border-border rounded-xl h-8 text-xs bg-white dark:bg-background">
+            <SelectTrigger class="w-[70px] border-border rounded-xl h-8 text-xs bg-card">
               <SelectValue />
             </SelectTrigger>
             <SelectContent class="rounded-xl">
@@ -1052,15 +1052,15 @@ const bulkUpdateStatus = (val: Contact['status']) => {
         <!-- Showing info -->
         <span class="text-xs text-muted-foreground font-medium">
           Showing
-          <span class="font-bold text-gray-700 dark:text-foreground">
+          <span class="font-bold text-foreground">
             {{ filteredAndSortedContacts.length === 0 ? 0 : (currentPage - 1) * pageSize + 1 }}
           </span>
           to
-          <span class="font-bold text-gray-700 dark:text-foreground">
+          <span class="font-bold text-foreground">
             {{ Math.min(currentPage * pageSize, filteredAndSortedContacts.length) }}
           </span>
           of
-          <span class="font-bold text-gray-700 dark:text-foreground">
+          <span class="font-bold text-foreground">
             {{ filteredAndSortedContacts.length }}
           </span>
           contacts
@@ -1071,7 +1071,7 @@ const bulkUpdateStatus = (val: Contact['status']) => {
           <Button
             variant="outline"
             size="xs"
-            class="h-8 w-8 p-0 rounded-lg cursor-pointer bg-white dark:bg-background"
+            class="h-8 w-8 p-0 rounded-lg cursor-pointer bg-card"
             :disabled="currentPage === 1"
             @click="currentPage--"
           >
@@ -1085,14 +1085,14 @@ const bulkUpdateStatus = (val: Contact['status']) => {
               variant="outline"
               size="xs"
               :class="[
-                'h-8 w-8 p-0 rounded-lg font-semibold text-xs transition-all cursor-pointer bg-white dark:bg-background',
-                currentPage === page ? 'bg-[#23B750] hover:bg-[#23B750] border-[#23B750] text-white hover:text-white dark:bg-[#23B750]' : 'text-gray-700 dark:text-foreground'
+                'h-8 w-8 p-0 rounded-lg font-semibold text-xs transition-all cursor-pointer bg-card',
+                currentPage === page ? 'bg-primary hover:bg-primary border-primary text-primary-foreground hover:text-primary-foreground' : 'text-foreground'
               ]"
               @click="currentPage = page"
             >
               {{ page }}
             </Button>
-            <span v-else class="text-xs text-gray-400 px-1 font-semibold select-none">
+            <span v-else class="text-xs text-muted-foreground px-1 font-semibold select-none">
               {{ page }}
             </span>
           </template>
@@ -1100,7 +1100,7 @@ const bulkUpdateStatus = (val: Contact['status']) => {
           <Button
             variant="outline"
             size="xs"
-            class="h-8 w-8 p-0 rounded-lg cursor-pointer bg-white dark:bg-background"
+            class="h-8 w-8 p-0 rounded-lg cursor-pointer bg-card"
             :disabled="currentPage === totalPages"
             @click="currentPage++"
           >
@@ -1112,28 +1112,28 @@ const bulkUpdateStatus = (val: Contact['status']) => {
 
     <!-- Contact Quick Detail View Drawer (Sheet) -->
     <Sheet v-model:open="isDrawerOpen">
-      <SheetContent class="w-full sm:max-w-lg p-0 flex flex-col h-full rounded-l-2xl border-l border-gray-200 dark:border-border bg-white dark:bg-card">
-        <div class="h-16 flex items-center justify-between px-6 border-b border-gray-100 dark:border-border">
+      <SheetContent class="w-full sm:max-w-lg p-0 flex flex-col h-full rounded-l-2xl border-l border-border bg-card">
+        <div class="h-16 flex items-center justify-between px-6 border-b border-border">
           <SheetHeader class="text-left">
-            <SheetTitle class="text-base font-bold text-gray-900 dark:text-foreground">Contact details</SheetTitle>
+            <SheetTitle class="text-base font-bold text-foreground">Contact details</SheetTitle>
           </SheetHeader>
         </div>
 
         <div v-if="activeContact" class="flex-1 overflow-y-auto p-6 space-y-6">
           <!-- Header Hero Profiler -->
-          <div class="flex items-center gap-4 bg-gray-50/50 dark:bg-muted/10 p-4 rounded-2xl border border-gray-100 dark:border-border/30">
-            <div class="w-14 h-14 rounded-full bg-emerald-100 dark:bg-emerald-950/40 flex items-center justify-center text-primary text-lg font-bold border border-primary/30">
+          <div class="flex items-center gap-4 bg-muted/10 p-4 rounded-2xl border border-border/30">
+            <div class="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-primary text-lg font-bold border border-primary/30">
               {{ activeContact.avatar }}
             </div>
             <div class="flex-1 min-w-0">
-              <h2 class="text-base font-bold text-gray-900 dark:text-foreground truncate leading-tight">{{ activeContact.name }}</h2>
-              <p class="text-xs text-muted-foreground truncate mt-0.5">{{ activeContact.role }} at <span class="font-semibold text-gray-700 dark:text-gray-300">{{ activeContact.company }}</span></p>
+              <h2 class="text-base font-bold text-foreground truncate leading-tight">{{ activeContact.name }}</h2>
+              <p class="text-xs text-muted-foreground truncate mt-0.5">{{ activeContact.role }} at <span class="font-semibold text-foreground">{{ activeContact.company }}</span></p>
               
               <div class="flex flex-wrap gap-1.5 mt-2.5">
-                <Badge variant="outline" class="text-[10px] h-5 py-0 px-2 uppercase tracking-wide bg-white dark:bg-muted">ID: {{ activeContact.id }}</Badge>
+                <Badge variant="outline" class="text-[10px] h-5 py-0 px-2 uppercase tracking-wide bg-muted">ID: {{ activeContact.id }}</Badge>
                 <Badge
                   variant="outline"
-                  class="text-[10px] h-5 py-0 px-2 uppercase tracking-wide bg-white dark:bg-muted"
+                  class="text-[10px] h-5 py-0 px-2 uppercase tracking-wide bg-muted"
                 >
                   {{ activeContact.lifecycleStage }}
                 </Badge>
@@ -1146,7 +1146,7 @@ const bulkUpdateStatus = (val: Contact['status']) => {
             <div class="flex flex-col gap-1.5">
               <span class="text-[10px] text-muted-foreground uppercase font-bold tracking-wider px-0.5">Status</span>
               <Select :model-value="activeContact.status" @update:model-value="handleDrawerStatusChange">
-                <SelectTrigger class="w-full rounded-xl border-gray-200 dark:border-border text-xs h-9 bg-white dark:bg-background">
+                <SelectTrigger class="w-full rounded-xl border-border text-xs h-9 bg-background">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent class="rounded-xl">
@@ -1161,7 +1161,7 @@ const bulkUpdateStatus = (val: Contact['status']) => {
             <div class="flex flex-col gap-1.5">
               <span class="text-[10px] text-muted-foreground uppercase font-bold tracking-wider px-0.5">Lifecycle Stage</span>
               <Select :model-value="activeContact.lifecycleStage" @update:model-value="handleDrawerLifecycleChange">
-                <SelectTrigger class="w-full rounded-xl border-gray-200 dark:border-border text-xs h-9 bg-white dark:bg-background">
+                <SelectTrigger class="w-full rounded-xl border-border text-xs h-9 bg-background">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent class="rounded-xl">
@@ -1175,29 +1175,29 @@ const bulkUpdateStatus = (val: Contact['status']) => {
           </div>
 
           <!-- Contact Fields Details -->
-          <div class="space-y-3.5 bg-gray-50/50 dark:bg-muted/10 p-5 rounded-2xl border border-gray-100 dark:border-border/30">
-            <h3 class="text-xs font-bold text-gray-800 dark:text-foreground uppercase tracking-wide">Standard Information</h3>
+          <div class="space-y-3.5 bg-muted/10 p-5 rounded-2xl border border-border/30">
+            <h3 class="text-xs font-bold text-foreground uppercase tracking-wide">Standard Information</h3>
             
-            <div class="grid grid-cols-3 gap-2 py-1 text-xs border-b border-gray-100 dark:border-border/10">
+            <div class="grid grid-cols-3 gap-2 py-1 text-xs border-b border-border/20">
               <span class="text-muted-foreground">Email</span>
-              <span class="col-span-2 text-gray-800 dark:text-gray-200 font-medium truncate flex items-center gap-1.5">
-                <Mail class="w-3.5 h-3.5 text-gray-400" />
+              <span class="col-span-2 text-foreground font-medium truncate flex items-center gap-1.5">
+                <Mail class="w-3.5 h-3.5 text-muted-foreground" />
                 {{ activeContact.email }}
               </span>
             </div>
 
-            <div class="grid grid-cols-3 gap-2 py-1 text-xs border-b border-gray-100 dark:border-border/10">
+            <div class="grid grid-cols-3 gap-2 py-1 text-xs border-b border-border/20">
               <span class="text-muted-foreground">Phone</span>
-              <span class="col-span-2 text-gray-800 dark:text-gray-200 font-mono font-medium flex items-center gap-1.5">
-                <Phone class="w-3.5 h-3.5 text-gray-400" />
+              <span class="col-span-2 text-foreground font-mono font-medium flex items-center gap-1.5">
+                <Phone class="w-3.5 h-3.5 text-muted-foreground" />
                 {{ activeContact.phone }}
               </span>
             </div>
 
-            <div class="grid grid-cols-3 gap-2 py-1 text-xs border-b border-gray-100 dark:border-border/10">
+            <div class="grid grid-cols-3 gap-2 py-1 text-xs border-b border-border/20">
               <span class="text-muted-foreground">Date Onboarded</span>
-              <span class="col-span-2 text-gray-800 dark:text-gray-200 font-medium flex items-center gap-1.5">
-                <Calendar class="w-3.5 h-3.5 text-gray-400" />
+              <span class="col-span-2 text-foreground font-medium flex items-center gap-1.5">
+                <Calendar class="w-3.5 h-3.5 text-muted-foreground" />
                 {{ activeContact.dateAdded }}
               </span>
             </div>
@@ -1209,7 +1209,7 @@ const bulkUpdateStatus = (val: Contact['status']) => {
                   v-for="t in activeContact.tags"
                   :key="t"
                   variant="outline"
-                  class="text-[9px] h-4 py-0 px-1.5 font-normal bg-emerald-50/20 text-[#23B750] border-emerald-100 dark:border-emerald-950/20"
+                  class="text-[9px] h-4 py-0 px-1.5 font-normal bg-primary/10 text-primary border-primary/20"
                 >
                   {{ t }}
                 </Badge>
@@ -1218,23 +1218,23 @@ const bulkUpdateStatus = (val: Contact['status']) => {
           </div>
 
           <!-- Notes Card -->
-          <div class="space-y-2 bg-gray-50/50 dark:bg-muted/10 p-5 rounded-2xl border border-gray-100 dark:border-border/30">
+          <div class="space-y-2 bg-muted/10 p-5 rounded-2xl border border-border/30">
             <div class="flex justify-between items-center">
-              <h3 class="text-xs font-bold text-gray-800 dark:text-foreground uppercase tracking-wide">Communication Notes</h3>
-              <Button variant="ghost" size="xs" class="text-[10px] text-primary h-6 px-2 hover:bg-emerald-50 dark:hover:bg-emerald-950/20" @click="saveDrawerNotes">Save Notes</Button>
+              <h3 class="text-xs font-bold text-foreground uppercase tracking-wide">Communication Notes</h3>
+              <Button variant="ghost" size="xs" class="text-[10px] text-primary h-6 px-2 hover:bg-primary/10" @click="saveDrawerNotes">Save Notes</Button>
             </div>
             <Textarea
               v-model="activeContact.notes"
               placeholder="Record details about contract, requirements or general notes..."
-              class="text-xs border-gray-200 dark:border-border rounded-xl focus-visible:ring-1 focus-visible:ring-primary min-h-[90px] bg-white dark:bg-background"
+              class="text-xs border-border rounded-xl focus-visible:ring-1 focus-visible:ring-primary min-h-[90px] bg-background"
             />
           </div>
 
           <!-- Log Activity Accordion -->
-          <div class="border border-gray-200 dark:border-border rounded-2xl overflow-hidden bg-gray-50/30 dark:bg-muted/5">
+          <div class="border border-border rounded-2xl overflow-hidden bg-muted/10">
             <button
               @click="isLoggingActivity = !isLoggingActivity"
-              class="w-full px-5 py-3.5 text-left text-xs font-bold text-gray-800 dark:text-foreground flex items-center justify-between hover:bg-gray-100/50 transition-colors"
+              class="w-full px-5 py-3.5 text-left text-xs font-bold text-foreground flex items-center justify-between hover:bg-muted/50 transition-colors"
             >
               <span class="flex items-center gap-1.5">
                 <PlusCircle class="w-4 h-4 text-primary" />
@@ -1242,12 +1242,12 @@ const bulkUpdateStatus = (val: Contact['status']) => {
               </span>
               <span class="text-[10px] font-semibold text-primary uppercase">{{ isLoggingActivity ? 'Close' : 'Open' }}</span>
             </button>
-            <div v-if="isLoggingActivity" class="p-5 border-t border-gray-200 dark:border-border bg-white dark:bg-card space-y-3.5 animate-slide-in">
+            <div v-if="isLoggingActivity" class="p-5 border-t border-border bg-card space-y-3.5 animate-slide-in">
               <div class="grid grid-cols-2 gap-2.5">
                 <div class="flex flex-col gap-1">
                   <label class="text-[9px] text-muted-foreground uppercase font-bold tracking-wide">Activity Type</label>
                   <Select v-model="logActivityType">
-                    <SelectTrigger class="h-8 text-xs rounded-xl border-gray-200 dark:border-border bg-gray-50/50 dark:bg-muted/30">
+                    <SelectTrigger class="h-8 text-xs rounded-xl border-border bg-muted/30">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent class="rounded-xl">
@@ -1264,7 +1264,7 @@ const bulkUpdateStatus = (val: Contact['status']) => {
                     v-model="logActivityTitle"
                     type="text"
                     placeholder="e.g. Discovery demo"
-                    class="h-8 text-xs rounded-xl border-gray-200 dark:border-border bg-gray-50/50 dark:bg-muted/30"
+                    class="h-8 text-xs rounded-xl border-border bg-muted/30"
                   />
                 </div>
               </div>
@@ -1273,7 +1273,7 @@ const bulkUpdateStatus = (val: Contact['status']) => {
                 <Textarea
                   v-model="logActivityDesc"
                   placeholder="Record summary details..."
-                  class="text-xs min-h-[60px] rounded-xl border-gray-200 dark:border-border bg-gray-50/50 dark:bg-muted/30"
+                  class="text-xs min-h-[60px] rounded-xl border-border bg-muted/30"
                 />
               </div>
               <div class="flex justify-end gap-2">
@@ -1285,20 +1285,20 @@ const bulkUpdateStatus = (val: Contact['status']) => {
 
           <!-- Activity Timeline logs -->
           <div class="space-y-4">
-            <h3 class="text-xs font-bold text-gray-800 dark:text-foreground uppercase tracking-wide">Engagement Activity Timeline</h3>
+            <h3 class="text-xs font-bold text-foreground uppercase tracking-wide">Engagement Activity Timeline</h3>
             
-            <div class="relative pl-6 space-y-6 before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-[1.5px] before:bg-gray-200 dark:before:bg-border">
+            <div class="relative pl-6 space-y-6 before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-[1.5px] before:bg-border">
               <div
                 v-for="act in activeContact.activities"
                 :key="act.id"
                 class="relative"
               >
                 <!-- Dot Icon indicator -->
-                <div class="absolute -left-[21px] top-0.5 w-6 h-6 rounded-full flex items-center justify-center border bg-white dark:bg-card" :class="[
-                  act.type === 'call' ? 'border-emerald-200 text-emerald-600' : '',
-                  act.type === 'email' ? 'border-blue-200 text-blue-600' : '',
-                  act.type === 'meeting' ? 'border-purple-200 text-purple-600' : '',
-                  act.type === 'note' ? 'border-amber-200 text-amber-600' : ''
+                <div class="absolute -left-[21px] top-0.5 w-6 h-6 rounded-full flex items-center justify-center border bg-card" :class="[
+                  act.type === 'call' ? 'border-primary/30 text-primary' : '',
+                  act.type === 'email' ? 'border-info/30 text-info' : '',
+                  act.type === 'meeting' ? 'border-tag-4/30 text-tag-4-foreground' : '',
+                  act.type === 'note' ? 'border-warning/30 text-warning' : ''
                 ]">
                   <PhoneCall v-if="act.type === 'call'" class="w-3 h-3" />
                   <Send v-else-if="act.type === 'email'" class="w-3 h-3" />
@@ -1308,10 +1308,10 @@ const bulkUpdateStatus = (val: Contact['status']) => {
 
                 <div class="space-y-1">
                   <div class="flex items-center justify-between">
-                    <h4 class="text-xs font-bold text-gray-800 dark:text-foreground leading-none">{{ act.title }}</h4>
+                    <h4 class="text-xs font-bold text-foreground leading-none">{{ act.title }}</h4>
                     <span class="text-[10px] text-muted-foreground font-semibold">{{ act.timestamp }}</span>
                   </div>
-                  <p class="text-xs text-gray-600 dark:text-gray-300 leading-relaxed pr-2">{{ act.description }}</p>
+                  <p class="text-xs text-muted-foreground leading-relaxed pr-2">{{ act.description }}</p>
                 </div>
               </div>
             </div>
@@ -1319,8 +1319,8 @@ const bulkUpdateStatus = (val: Contact['status']) => {
         </div>
 
         <!-- Drawer Footer -->
-        <div class="p-6 border-t border-gray-100 dark:border-border flex gap-3 bg-gray-50/50 dark:bg-muted/10">
-          <Button variant="outline" class="flex-1 rounded-xl shadow-sm cursor-pointer h-10 text-xs bg-white dark:bg-background" @click="openEditDialog(activeContact!)">
+        <div class="p-6 border-t border-border flex gap-3 bg-muted/10">
+          <Button variant="outline" class="flex-1 rounded-xl shadow-sm cursor-pointer h-10 text-xs bg-background" @click="openEditDialog(activeContact!)">
             <Edit2 class="w-4 h-4 mr-1" />
             Edit Profile
           </Button>
@@ -1334,9 +1334,9 @@ const bulkUpdateStatus = (val: Contact['status']) => {
 
     <!-- Add & Edit Dialog (Popup Modal) -->
     <Dialog v-model:open="isAddEditOpen">
-      <DialogContent class="sm:max-w-[480px] p-0 rounded-2xl overflow-hidden border border-gray-200 dark:border-border bg-white dark:bg-card">
-        <DialogHeader class="px-6 pt-6 pb-4 border-b border-gray-100 dark:border-border text-left">
-          <DialogTitle class="text-base font-bold text-gray-900 dark:text-foreground">
+      <DialogContent class="sm:max-w-[480px] p-0 rounded-2xl overflow-hidden border border-border bg-card">
+        <DialogHeader class="px-6 pt-6 pb-4 border-b border-border text-left">
+          <DialogTitle class="text-base font-bold text-foreground">
             {{ isEditing ? 'Edit Contact Profile' : 'Add New Contact' }}
           </DialogTitle>
           <p class="text-[11px] text-muted-foreground mt-0.5">Enter details regarding the contact. All primary details are saved to database.</p>
@@ -1347,22 +1347,22 @@ const bulkUpdateStatus = (val: Contact['status']) => {
           <div class="grid grid-cols-2 gap-4">
             <!-- Full Name -->
             <div class="flex flex-col gap-1">
-              <label class="text-xs font-bold text-gray-700 dark:text-gray-300">Full Name *</label>
+              <label class="text-xs font-bold text-foreground">Full Name *</label>
               <Input
                 v-model="formState.name"
                 type="text"
                 placeholder="e.g. John Doe"
-                class="rounded-xl border-gray-200 dark:border-border focus-visible:ring-1 focus-visible:ring-primary text-xs h-9"
+                class="rounded-xl border-border focus-visible:ring-1 focus-visible:ring-primary text-xs h-9"
               />
             </div>
             <!-- Email -->
             <div class="flex flex-col gap-1">
-              <label class="text-xs font-bold text-gray-700 dark:text-gray-300">Email Address *</label>
+              <label class="text-xs font-bold text-foreground">Email Address *</label>
               <Input
                 v-model="formState.email"
                 type="email"
                 placeholder="e.g. john@acme.com"
-                class="rounded-xl border-gray-200 dark:border-border focus-visible:ring-1 focus-visible:ring-primary text-xs h-9"
+                class="rounded-xl border-border focus-visible:ring-1 focus-visible:ring-primary text-xs h-9"
               />
             </div>
           </div>
@@ -1370,22 +1370,22 @@ const bulkUpdateStatus = (val: Contact['status']) => {
           <div class="grid grid-cols-2 gap-4">
             <!-- Phone Number -->
             <div class="flex flex-col gap-1">
-              <label class="text-xs font-bold text-gray-700 dark:text-gray-300">Phone Number *</label>
+              <label class="text-xs font-bold text-foreground">Phone Number *</label>
               <Input
                 v-model="formState.phone"
                 type="text"
                 placeholder="e.g. +60 12-345 6789"
-                class="rounded-xl border-gray-200 dark:border-border focus-visible:ring-1 focus-visible:ring-primary text-xs h-9"
+                class="rounded-xl border-border focus-visible:ring-1 focus-visible:ring-primary text-xs h-9"
               />
             </div>
             <!-- Company -->
             <div class="flex flex-col gap-1">
-              <label class="text-xs font-bold text-gray-700 dark:text-gray-300">Company Name</label>
+              <label class="text-xs font-bold text-foreground">Company Name</label>
               <Input
                 v-model="formState.company"
                 type="text"
                 placeholder="e.g. Acme Corp"
-                class="rounded-xl border-gray-200 dark:border-border focus-visible:ring-1 focus-visible:ring-primary text-xs h-9"
+                class="rounded-xl border-border focus-visible:ring-1 focus-visible:ring-primary text-xs h-9"
               />
             </div>
           </div>
@@ -1393,22 +1393,22 @@ const bulkUpdateStatus = (val: Contact['status']) => {
           <div class="grid grid-cols-2 gap-4">
             <!-- Job Title -->
             <div class="flex flex-col gap-1">
-              <label class="text-xs font-bold text-gray-700 dark:text-gray-300">Job Title / Role</label>
+              <label class="text-xs font-bold text-foreground">Job Title / Role</label>
               <Input
                 v-model="formState.role"
                 type="text"
                 placeholder="e.g. Product Manager"
-                class="rounded-xl border-gray-200 dark:border-border focus-visible:ring-1 focus-visible:ring-primary text-xs h-9"
+                class="rounded-xl border-border focus-visible:ring-1 focus-visible:ring-primary text-xs h-9"
               />
             </div>
             <!-- Tags string -->
             <div class="flex flex-col gap-1">
-              <label class="text-xs font-bold text-gray-700 dark:text-gray-300">Tags (comma-separated)</label>
+              <label class="text-xs font-bold text-foreground">Tags (comma-separated)</label>
               <Input
                 v-model="formState.tagsString"
                 type="text"
                 placeholder="e.g. High-Value, Lead"
-                class="rounded-xl border-gray-200 dark:border-border focus-visible:ring-1 focus-visible:ring-primary text-xs h-9"
+                class="rounded-xl border-border focus-visible:ring-1 focus-visible:ring-primary text-xs h-9"
               />
             </div>
           </div>
@@ -1416,9 +1416,9 @@ const bulkUpdateStatus = (val: Contact['status']) => {
           <div class="grid grid-cols-2 gap-4">
             <!-- Status -->
             <div class="flex flex-col gap-1">
-              <label class="text-xs font-bold text-gray-700 dark:text-gray-300">Status</label>
+              <label class="text-xs font-bold text-foreground">Status</label>
               <Select v-model="formState.status">
-                <SelectTrigger class="w-full rounded-xl border-gray-200 dark:border-border text-xs h-9 bg-white dark:bg-background">
+                <SelectTrigger class="w-full rounded-xl border-border text-xs h-9 bg-background">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent class="rounded-xl">
@@ -1432,9 +1432,9 @@ const bulkUpdateStatus = (val: Contact['status']) => {
 
             <!-- Lifecycle Stage -->
             <div class="flex flex-col gap-1">
-              <label class="text-xs font-bold text-gray-700 dark:text-gray-300">Lifecycle Stage</label>
+              <label class="text-xs font-bold text-foreground">Lifecycle Stage</label>
               <Select v-model="formState.lifecycleStage">
-                <SelectTrigger class="w-full rounded-xl border-gray-200 dark:border-border text-xs h-9 bg-white dark:bg-background">
+                <SelectTrigger class="w-full rounded-xl border-border text-xs h-9 bg-background">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent class="rounded-xl">
@@ -1449,16 +1449,16 @@ const bulkUpdateStatus = (val: Contact['status']) => {
 
           <!-- Notes -->
           <div class="flex flex-col gap-1">
-            <label class="text-xs font-bold text-gray-700 dark:text-gray-300">Notes / Details</label>
+            <label class="text-xs font-bold text-foreground">Notes / Details</label>
             <Textarea
               v-model="formState.notes"
               placeholder="Enter brief description or note regarding contact onboarding..."
-              class="rounded-xl border-gray-200 dark:border-border focus-visible:ring-1 focus-visible:ring-primary text-xs min-h-[70px]"
+              class="rounded-xl border-border focus-visible:ring-1 focus-visible:ring-primary text-xs min-h-[70px]"
             />
           </div>
         </div>
 
-        <DialogFooter class="px-6 py-4 bg-gray-50/50 dark:bg-muted/10 border-t border-gray-100 dark:border-border flex justify-end gap-2.5">
+        <DialogFooter class="px-6 py-4 bg-muted/10 border-t border-border flex justify-end gap-2.5">
           <DialogClose as-child>
             <Button variant="ghost" class="rounded-xl text-xs h-9 px-4 cursor-pointer">Cancel</Button>
           </DialogClose>

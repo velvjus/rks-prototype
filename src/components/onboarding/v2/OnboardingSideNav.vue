@@ -1,12 +1,12 @@
 <template>
-  <aside class="w-full lg:w-72 bg-white border-b lg:border-b-0 lg:border-r border-gray-100 p-6 lg:p-8 flex flex-col justify-between shrink-0 h-full">
+  <aside class="w-full lg:w-72 bg-card border-b lg:border-b-0 lg:border-r border-border p-6 lg:p-8 flex flex-col justify-between shrink-0 h-full">
     <div class="space-y-8">
       <!-- Section Context Header -->
       <div>
-        <div class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">
+        <div class="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">
           Workspace Setup
         </div>
-        <h2 class="text-base font-bold text-gray-900 mt-1">
+        <h2 class="text-base font-bold text-foreground mt-1">
           {{ currentSection === 1 ? '1. Company Details' : currentSection === 2 ? '2. Choose Plan' : 'Workspace Ready' }}
         </h2>
       </div>
@@ -25,10 +25,10 @@
               :class="[
                 'w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold shrink-0 transition-all',
                 isSectionCompleted(1)
-                  ? 'bg-[#008236] text-white'
+                  ? 'bg-primary text-primary-foreground'
                   : currentSection === 1
-                  ? 'border-2 border-[#008236] text-[#008236] bg-white ring-4 ring-emerald-50'
-                  : 'border border-gray-300 text-gray-400 bg-white group-hover:border-gray-400'
+                  ? 'border-2 border-primary text-primary bg-card ring-4 ring-primary/20'
+                  : 'border border-border text-muted-foreground bg-card group-hover:border-foreground/30'
               ]"
             >
               <Check v-if="isSectionCompleted(1)" class="w-3.5 h-3.5 stroke-[2.5]" />
@@ -40,10 +40,10 @@
                 :class="[
                   'text-sm transition-colors block',
                   currentSection === 1
-                    ? 'font-bold text-gray-900'
+                    ? 'font-bold text-foreground'
                     : isSectionCompleted(1)
-                    ? 'font-medium text-gray-700'
-                    : 'text-gray-400 group-hover:text-gray-600'
+                    ? 'font-medium text-foreground'
+                    : 'text-muted-foreground group-hover:text-foreground'
                 ]"
               >
                 Company Details
@@ -63,14 +63,14 @@
                 class="flex-1 h-1.5 rounded-full transition-all duration-200 cursor-pointer focus:outline-none"
                 :class="[
                   completedSubSteps.includes(subId)
-                    ? 'bg-[#008236]'
+                    ? 'bg-primary'
                     : currentSection === 1 && currentSubStep === subId
-                    ? 'bg-[#23B750] ring-2 ring-emerald-100'
-                    : 'bg-gray-200 hover:bg-gray-300'
+                    ? 'bg-primary ring-2 ring-primary/30'
+                    : 'bg-muted hover:bg-muted-foreground/30'
                 ]"
               ></button>
             </div>
-            <div class="text-[11px] text-gray-400">
+            <div class="text-[11px] text-muted-foreground">
               <template v-if="isSectionCompleted(1)">
                 Completed (3/3)
               </template>
@@ -96,10 +96,10 @@
               :class="[
                 'w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold shrink-0 transition-all',
                 isSectionCompleted(2)
-                  ? 'bg-[#008236] text-white'
+                  ? 'bg-primary text-primary-foreground'
                   : currentSection === 2
-                  ? 'border-2 border-[#008236] text-[#008236] bg-white ring-4 ring-emerald-50'
-                  : 'border border-gray-300 text-gray-400 bg-white group-hover:border-gray-400'
+                  ? 'border-2 border-primary text-primary bg-card ring-4 ring-primary/20'
+                  : 'border border-border text-muted-foreground bg-card group-hover:border-foreground/30'
               ]"
             >
               <Check v-if="isSectionCompleted(2)" class="w-3.5 h-3.5 stroke-[2.5]" />
@@ -111,15 +111,15 @@
                 :class="[
                   'text-sm transition-colors block',
                   currentSection === 2
-                    ? 'font-bold text-gray-900'
+                    ? 'font-bold text-foreground'
                     : isSectionCompleted(2)
-                    ? 'font-medium text-gray-700'
-                    : 'text-gray-400 group-hover:text-gray-600'
+                    ? 'font-medium text-foreground'
+                    : 'text-muted-foreground group-hover:text-foreground'
                 ]"
               >
                 Choose Plan
               </span>
-              <span class="text-[11px] text-gray-400 block mt-0.5">
+              <span class="text-[11px] text-muted-foreground block mt-0.5">
                 Final Step
               </span>
             </div>
@@ -129,7 +129,7 @@
     </div>
 
     <!-- Quiet Progress Note -->
-    <div class="pt-6 border-t border-gray-100 hidden lg:block text-xs text-gray-400">
+    <div class="pt-6 border-t border-border hidden lg:block text-xs text-muted-foreground">
       {{ currentSection === 3 ? 'Setup Completed' : `Step ${currentSection} of 2` }}
     </div>
   </aside>

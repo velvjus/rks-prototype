@@ -1,0 +1,101 @@
+diff --git a/src/views/OmnichannelView.vue b/src/views/OmnichannelView.vue
+index 1479a2d..5ddc3a7 100644
+--- a/src/views/OmnichannelView.vue
++++ b/src/views/OmnichannelView.vue
+@@ -2356,7 +2356,7 @@ nextTick(() => {
+           <div v-if="pinnedConversations.length > 0" class="flex flex-col">
+             <div 
+               @click="isPinnedExpanded = !isPinnedExpanded"
+-              class="sticky top-0 z-10 flex items-center justify-between px-4 py-1.5 bg-muted/40/90 backdrop-blur-md border-b border-border/80 select-none cursor-pointer hover:bg-muted/70 transition-colors"
++              class="sticky top-0 z-10 flex items-center justify-between px-4 py-1.5 bg-muted/90 backdrop-blur-md border-b border-border/80 select-none cursor-pointer hover:bg-muted/70 transition-colors"
+             >
+               <div class="flex items-center gap-1.5">
+                 <svg class="w-3 h-3 text-muted-foreground transform transition-transform duration-200" :class="[isPinnedExpanded ? 'rotate-180' : '']" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+@@ -2397,7 +2397,7 @@ nextTick(() => {
+                 <!-- Group Header (sticky, clean typography) -->
+                 <div 
+                   @click="expandedSections[group.id] = !expandedSections[group.id]"
+-                  class="sticky top-0 z-10 flex items-center justify-between px-4 py-1.5 bg-muted/40/90 backdrop-blur-md border-b border-border/80 select-none cursor-pointer hover:bg-muted/70 transition-colors"
++                  class="sticky top-0 z-10 flex items-center justify-between px-4 py-1.5 bg-muted/90 backdrop-blur-md border-b border-border/80 select-none cursor-pointer hover:bg-muted/70 transition-colors"
+                 >
+                   <div class="flex items-center gap-1.5">
+                     <svg class="w-3 h-3 text-muted-foreground transform transition-transform duration-200" :class="[expandedSections[group.id] ? 'rotate-180' : '']" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+@@ -2448,7 +2448,7 @@ nextTick(() => {
+           <div class="flex flex-col">
+             <div 
+               @click="isPinnedExpanded = !isPinnedExpanded"
+-              class="sticky top-0 z-10 flex items-center justify-between px-4 py-1.5 bg-muted/40/95 backdrop-blur-sm border-b border-border select-none cursor-pointer hover:bg-muted/70 transition-colors"
++              class="sticky top-0 z-10 flex items-center justify-between px-4 py-1.5 bg-muted/95 backdrop-blur-sm border-b border-border select-none cursor-pointer hover:bg-muted/70 transition-colors"
+             >
+               <div class="flex items-center gap-1.5">
+                 <svg class="w-3 h-3 text-muted-foreground transform transition-transform duration-200" :class="[isPinnedExpanded ? 'rotate-180' : '']" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+@@ -2502,7 +2502,7 @@ nextTick(() => {
+             </div>
+             
+             <!-- Empty Pinned Strip View -->
+-            <div v-else class="px-4 py-3 text-center text-[11px] text-muted-foreground italic bg-muted/40/10 border-b border-border select-none">
++            <div v-else class="px-4 py-3 text-center text-[11px] text-muted-foreground italic bg-muted/30 border-b border-border select-none">
+               No pinned conversations yet. Right-click to pin.
+             </div>
+           </div>
+@@ -3020,7 +3020,7 @@ nextTick(() => {
+                   </select>
+                   
+                   <!-- Tags Selector box -->
+-                  <div class="flex flex-wrap gap-1.5 p-2.5 border border-border rounded-xl bg-muted/40/50">
++                  <div class="flex flex-wrap gap-1.5 p-2.5 border border-border rounded-xl bg-muted/50">
+                     <span v-for="tag in inlineAssignTags" :key="tag" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs border border-border bg-card font-bold text-muted-foreground shadow-none leading-none h-6 select-none">
+                       <span>{{ tag }}</span>
+                       <button @click="inlineAssignTags = inlineAssignTags.filter(t => t !== tag)" class="hover:text-destructive font-semibold cursor-pointer outline-none ml-0.5">×</button>
+@@ -3400,7 +3400,7 @@ nextTick(() => {
+               </div>
+               
+               <!-- Direct message parameters -->
+-              <div v-else class="border-b border-border px-4 py-2 text-[11px] font-bold text-muted-foreground bg-muted/40/10 flex items-center gap-1.5 select-none">
++              <div v-else class="border-b border-border px-4 py-2 text-[11px] font-bold text-muted-foreground bg-muted/30 flex items-center gap-1.5 select-none">
+                 <span>Replying as Janice Lee (+6012 3456 7890)</span>
+               </div>
+             </template>
+@@ -3502,7 +3502,7 @@ nextTick(() => {
+                   class="absolute bottom-full mb-2 left-0 right-0 sm:right-auto sm:w-[520px] bg-card border border-border rounded-2xl shadow-2xl z-50 overflow-hidden flex flex-col animate-in fade-in zoom-in-95 duration-150"
+                 >
+                   <!-- Slash Header Bar -->
+-                  <div class="px-3.5 py-2.5 bg-muted/40/90 border-b border-border flex items-center justify-between select-none shrink-0">
++                  <div class="px-3.5 py-2.5 bg-muted/90 border-b border-border flex items-center justify-between select-none shrink-0">
+                     <div class="flex items-center gap-2">
+                       <span class="w-5 h-5 rounded-md bg-[var(--primary)]/15 text-primary flex items-center justify-center font-mono font-black text-xs">/</span>
+                       <span class="text-xs font-extrabold text-foreground">CRM Template Shortcuts</span>
+@@ -3567,7 +3567,7 @@ nextTick(() => {
+                   </div>
+ 
+                   <!-- Slash Footer Bar -->
+-                  <div class="px-3.5 py-2 bg-muted/40/80 border-t border-border flex items-center justify-between text-[11px] text-muted-foreground font-semibold select-none shrink-0">
++                  <div class="px-3.5 py-2 bg-muted/80 border-t border-border flex items-center justify-between text-[11px] text-muted-foreground font-semibold select-none shrink-0">
+                     <span>↑↓ Navigate • ↵ / Tab Select • Esc Dismiss</span>
+                     <span>{{ filteredSlashTemplates.length }} templates</span>
+                   </div>
+@@ -3613,7 +3613,7 @@ nextTick(() => {
+             </div>
+ 
+             <!-- Attachment Pills List -->
+-            <div v-if="simulatedAttachments.length > 0" class="flex flex-wrap gap-2 px-3 pb-2 pt-1 border-t border-border bg-muted/40/50">
++            <div v-if="simulatedAttachments.length > 0" class="flex flex-wrap gap-2 px-3 pb-2 pt-1 border-t border-border bg-muted/50">
+               <span 
+                 v-for="file in simulatedAttachments" 
+                 :key="file.name"
+
+diff --git a/scripts/audit-tokens.cjs b/scripts/audit-tokens.cjs
+index e5562e1..bf803a9 100644
+--- a/scripts/audit-tokens.cjs
++++ b/scripts/audit-tokens.cjs
+@@ -138,6 +138,10 @@ const RULES = {
+   inlineHexStyles: {
+     name: 'Inline Hex/RGB Styles',
+     pattern: /(?:style|:style)\s*=\s*(?:"[^"]*(?:#[0-9a-fA-F]{3,8}|rgba?\([^)]+\))[^"]*"|'[^']*(?:#[0-9a-fA-F]{3,8}|rgba?\([^)]+\))[^']*')/g
++  },
++  malformedDoubleOpacity: {
++    name: 'Malformed Double-Slash Opacity Classes',
++    pattern: /\b(?:bg|text|border(?:-[trblxyse])?|ring(?:-offset)?|divide(?:-[xy])?)-[a-zA-Z0-9_-]+\/\d+\/\d+\b/g
+   }
+ };
+ 

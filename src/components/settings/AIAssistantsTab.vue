@@ -8,23 +8,23 @@
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2">
         <div>
           <div class="flex items-center gap-2">
-            <h1 class="text-xl font-bold text-gray-900 tracking-tight">AI Assistants</h1>
+            <h1 class="text-xl font-bold text-foreground tracking-tight">AI Assistants</h1>
           </div>
-          <p class="text-xs text-gray-500 mt-1 max-w-2xl leading-relaxed">
+          <p class="text-xs text-muted-foreground mt-1 max-w-2xl leading-relaxed">
             Deploy AI agents for WhatsApp support and sales qualification with isolated knowledge and routing.
           </p>
         </div>
         <div class="flex items-center gap-2.5 shrink-0">
           <button
             @click="showGuideModal = true"
-            class="inline-flex items-center gap-2 px-3.5 py-2 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 font-semibold text-xs rounded-xl cursor-pointer shadow-2xs transition-colors"
+            class="inline-flex items-center gap-2 px-3.5 py-2 bg-card border border-border hover:bg-muted text-foreground font-semibold text-xs rounded-xl cursor-pointer shadow-2xs transition-colors"
           >
-            <HelpCircle class="w-4 h-4 text-gray-500" />
+            <HelpCircle class="w-4 h-4 text-muted-foreground" />
             Guide & Playbook
           </button>
           <button
             @click="openCreateModal"
-            class="inline-flex items-center gap-1.5 px-4 py-2 bg-primary hover:bg-[#1ea446] text-white font-semibold text-xs rounded-xl cursor-pointer shadow-xs transition-colors"
+            class="inline-flex items-center gap-1.5 px-4 py-2 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs rounded-xl cursor-pointer shadow-xs transition-colors"
           >
             <Plus class="w-3.5 h-3.5 stroke-[2.5]" />
             New Assistant
@@ -33,84 +33,84 @@
       </div>
 
       <!-- Summary strip -->
-      <div class="grid grid-cols-1 sm:grid-cols-3 bg-white border border-gray-200 rounded-2xl shadow-2xs divide-y sm:divide-y-0 sm:divide-x divide-gray-100 overflow-hidden">
+      <div class="grid grid-cols-1 sm:grid-cols-3 bg-card border border-border rounded-2xl shadow-2xs divide-y sm:divide-y-0 sm:divide-x divide-border overflow-hidden">
         <div class="px-6 py-4">
-          <div class="text-xs font-medium text-gray-600">Live assistants</div>
+          <div class="text-xs font-medium text-muted-foreground">Live assistants</div>
           <div class="mt-1 flex items-baseline gap-2">
-            <span class="text-2xl font-bold text-gray-900 leading-none tabular-nums">{{ liveCount }}</span>
-            <span class="text-xs text-gray-500">of {{ assistants.length }}</span>
+            <span class="text-2xl font-bold text-foreground leading-none tabular-nums">{{ liveCount }}</span>
+            <span class="text-xs text-muted-foreground">of {{ assistants.length }}</span>
           </div>
-          <div class="mt-1.5 inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+          <div class="mt-1.5 inline-flex items-center gap-1.5 text-xs font-semibold text-success">
+            <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
             2 channels connected
           </div>
         </div>
         <div class="px-6 py-4">
-          <div class="text-xs font-medium text-gray-600">Qualified leads</div>
+          <div class="text-xs font-medium text-muted-foreground">Qualified leads</div>
           <div class="mt-1 flex items-baseline gap-2">
-            <span class="text-2xl font-bold text-gray-900 leading-none tabular-nums">142</span>
-            <span class="text-xs font-bold text-emerald-700 bg-emerald-100 px-1.5 py-0.5 rounded-md">+18.4%</span>
+            <span class="text-2xl font-bold text-foreground leading-none tabular-nums">142</span>
+            <span class="text-xs font-bold text-success bg-success/15 px-1.5 py-0.5 rounded-md">+18.4%</span>
           </div>
-          <div class="mt-1.5 text-xs text-gray-500">Synced to Deals pipeline</div>
+          <div class="mt-1.5 text-xs text-muted-foreground">Synced to Deals pipeline</div>
         </div>
         <div class="px-6 py-4">
-          <div class="text-xs font-medium text-gray-600">Auto-resolution</div>
+          <div class="text-xs font-medium text-muted-foreground">Auto-resolution</div>
           <div class="mt-1 flex items-baseline gap-2">
-            <span class="text-2xl font-bold text-gray-900 leading-none tabular-nums">86.4%</span>
-            <span class="text-xs text-gray-500">1,280 chats</span>
+            <span class="text-2xl font-bold text-foreground leading-none tabular-nums">86.4%</span>
+            <span class="text-xs text-muted-foreground">1,280 chats</span>
           </div>
-          <div class="mt-1.5 text-xs text-gray-500">13.6% escalated to reps</div>
+          <div class="mt-1.5 text-xs text-muted-foreground">13.6% escalated to reps</div>
         </div>
       </div>
 
       <!-- Search & Status Filter Row -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
         <div class="relative w-full sm:w-80">
-          <Search class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500" />
+          <Search class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
           <input
             v-model="searchQuery"
             type="text"
             placeholder="Search by name, role, or channel..."
-            class="w-full pl-10 pr-9 py-2 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary shadow-2xs transition-all"
+            class="w-full pl-10 pr-9 py-2 bg-card border border-border rounded-xl text-xs font-medium text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary shadow-2xs transition-all"
           />
           <button
             v-if="searchQuery"
             @click="searchQuery = ''"
-            class="absolute right-3 top-1/2 -translate-y-1/2 p-0.5 text-gray-500 hover:text-gray-600 rounded-full cursor-pointer"
+            class="absolute right-3 top-1/2 -translate-y-1/2 p-0.5 text-muted-foreground hover:text-muted-foreground rounded-full cursor-pointer"
             title="Clear search"
           >
             <X class="w-3.5 h-3.5" />
           </button>
         </div>
 
-        <div class="flex items-center gap-1.5 self-start sm:self-auto bg-gray-100/70 p-1 rounded-xl border border-gray-200/60">
+        <div class="flex items-center gap-1.5 self-start sm:self-auto bg-muted/70 p-1 rounded-xl border border-border/60">
           <button
             @click="statusFilter = 'all'"
             class="px-3 py-1 rounded-lg text-xs font-semibold cursor-pointer transition-all flex items-center gap-1.5"
-            :class="statusFilter === 'all' ? 'bg-white text-primary shadow-2xs font-bold' : 'text-gray-600 hover:text-gray-900'"
+            :class="statusFilter === 'all' ? 'bg-card text-primary shadow-2xs font-bold' : 'text-muted-foreground hover:text-foreground'"
           >
             <span>All</span>
-            <span class="text-[10px] px-1.5 py-0.2 rounded-full" :class="statusFilter === 'all' ? 'bg-primary/10 text-primary' : 'bg-gray-200/80 text-gray-500'">
+            <span class="text-[10px] px-1.5 py-0.2 rounded-full" :class="statusFilter === 'all' ? 'bg-primary/10 text-primary' : 'bg-muted/80 text-muted-foreground'">
               {{ assistants.length }}
             </span>
           </button>
           <button
             @click="statusFilter = 'live'"
             class="px-3 py-1 rounded-lg text-xs font-semibold cursor-pointer transition-all flex items-center gap-1.5"
-            :class="statusFilter === 'live' ? 'bg-white text-primary shadow-2xs font-bold' : 'text-gray-600 hover:text-gray-900'"
+            :class="statusFilter === 'live' ? 'bg-card text-primary shadow-2xs font-bold' : 'text-muted-foreground hover:text-foreground'"
           >
             <span>Live</span>
-            <span class="text-[10px] px-1.5 py-0.2 rounded-full" :class="statusFilter === 'live' ? 'bg-primary/10 text-primary' : 'bg-gray-200/80 text-gray-500'">
+            <span class="text-[10px] px-1.5 py-0.2 rounded-full" :class="statusFilter === 'live' ? 'bg-primary/10 text-primary' : 'bg-muted/80 text-muted-foreground'">
               {{ liveCount }}
             </span>
           </button>
           <button
             @click="statusFilter = 'draft'"
             class="px-3 py-1 rounded-lg text-xs font-semibold cursor-pointer transition-all flex items-center gap-1.5"
-            :class="statusFilter === 'draft' ? 'bg-white text-primary shadow-2xs font-bold' : 'text-gray-600 hover:text-gray-900'"
+            :class="statusFilter === 'draft' ? 'bg-card text-primary shadow-2xs font-bold' : 'text-muted-foreground hover:text-foreground'"
           >
             <span>Draft</span>
-            <span class="text-[10px] px-1.5 py-0.2 rounded-full" :class="statusFilter === 'draft' ? 'bg-primary/10 text-primary' : 'bg-gray-200/80 text-gray-500'">
+            <span class="text-[10px] px-1.5 py-0.2 rounded-full" :class="statusFilter === 'draft' ? 'bg-primary/10 text-primary' : 'bg-muted/80 text-muted-foreground'">
               {{ draftCount }}
             </span>
           </button>
@@ -123,34 +123,34 @@
           v-for="ast in filteredAssistants"
           :key="ast.id"
           @click="openAssistantDetail(ast)"
-          class="bg-white border border-gray-200 hover:border-primary/60 rounded-2xl p-5 shadow-2xs hover:shadow-md transition-all cursor-pointer group flex flex-col md:flex-row md:items-center justify-between gap-4"
+          class="bg-card border border-border hover:border-primary/60 rounded-2xl p-5 shadow-2xs hover:shadow-md transition-all cursor-pointer group flex flex-col md:flex-row md:items-center justify-between gap-4"
         >
           <div class="flex items-center gap-4 min-w-0">
-            <div class="w-11 h-11 rounded-xl bg-primary flex items-center justify-center text-white shrink-0 shadow-sm">
+            <div class="w-11 h-11 rounded-xl bg-primary flex items-center justify-center text-primary-foreground shrink-0 shadow-sm">
               <Bot class="w-5 h-5" />
             </div>
 
             <div class="min-w-0 space-y-1">
               <div class="flex flex-wrap items-center gap-2.5">
-                <span class="font-bold text-sm text-gray-900 group-hover:text-primary transition-colors truncate">
+                <span class="font-bold text-sm text-foreground group-hover:text-primary transition-colors truncate">
                   {{ ast.name }}
                 </span>
                 <span
                   class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-semibold"
                   :class="getStatusBadgeClass(ast.status)"
                 >
-                  <span class="w-1.5 h-1.5 rounded-full" :class="ast.status === 'live' ? 'bg-emerald-500' : 'bg-slate-400'"></span>
+                  <span class="w-1.5 h-1.5 rounded-full" :class="ast.status === 'live' ? 'bg-primary' : 'bg-muted-foreground/40'"></span>
                   {{ ast.status === 'live' ? 'Live' : 'Draft' }}
                 </span>
               </div>
 
-              <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-600">
+              <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
                 <span class="inline-flex items-center gap-1.5">
-                  <Phone class="w-3.5 h-3.5 text-emerald-600" />
+                  <Phone class="w-3.5 h-3.5 text-success" />
                   {{ ast.connectedPhone }}
                 </span>
                 <span class="inline-flex items-center gap-1.5">
-                  <BookOpen class="w-3.5 h-3.5 text-sky-600" />
+                  <BookOpen class="w-3.5 h-3.5 text-info" />
                   {{ ast.docsCount }} knowledge docs
                 </span>
               </div>
@@ -159,13 +159,13 @@
 
           <div class="flex items-center gap-3 self-end md:self-auto shrink-0" @click.stop>
             <div class="text-right hidden sm:block">
-              <div class="text-sm font-bold text-gray-900 tabular-nums">{{ ast.resolutionRate }}</div>
-              <div class="text-[11px] text-gray-500">auto-resolved</div>
+              <div class="text-sm font-bold text-foreground tabular-nums">{{ ast.resolutionRate }}</div>
+              <div class="text-[11px] text-muted-foreground">auto-resolved</div>
             </div>
 
             <button
               @click.stop="openTestDrawer(ast)"
-              class="px-3 py-1.5 bg-primary hover:bg-[#1ea446] text-white font-semibold text-xs rounded-xl cursor-pointer shadow-xs transition-colors inline-flex items-center gap-1.5 whitespace-nowrap"
+              class="px-3 py-1.5 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs rounded-xl cursor-pointer shadow-xs transition-colors inline-flex items-center gap-1.5 whitespace-nowrap"
             >
               <Play class="w-3.5 h-3.5 fill-current" />
               Test chat
@@ -175,7 +175,7 @@
             <div class="relative">
               <button
                 @click.stop="toggleMenu(ast.id)"
-                class="p-2 hover:bg-gray-100 text-gray-500 hover:text-gray-800 rounded-xl cursor-pointer transition-colors"
+                class="p-2 hover:bg-muted text-muted-foreground hover:text-foreground rounded-xl cursor-pointer transition-colors"
                 title="Options"
               >
                 <MoreVertical class="w-4 h-4" />
@@ -183,39 +183,39 @@
 
               <div
                 v-if="openMenuId === ast.id"
-                class="absolute right-0 top-full mt-1 w-48 bg-white border border-gray-200 rounded-xl shadow-lg py-1 z-30 animate-fade-in"
+                class="absolute right-0 top-full mt-1 w-48 bg-card border border-border rounded-xl shadow-lg py-1 z-30 animate-fade-in"
               >
                 <button
                   @click="openAssistantDetail(ast); openMenuId = null"
-                  class="w-full text-left px-3.5 py-2 text-xs text-gray-700 hover:bg-gray-50 flex items-center gap-2 cursor-pointer font-medium"
+                  class="w-full text-left px-3.5 py-2 text-xs text-foreground hover:bg-muted flex items-center gap-2 cursor-pointer font-medium"
                 >
-                  <Pencil class="w-3.5 h-3.5 text-gray-500" /> Edit configuration
+                  <Pencil class="w-3.5 h-3.5 text-muted-foreground" /> Edit configuration
                 </button>
                 <button
                   @click="openTestDrawer(ast); openMenuId = null"
-                  class="w-full text-left px-3.5 py-2 text-xs text-gray-700 hover:bg-gray-50 flex items-center gap-2 cursor-pointer font-medium"
+                  class="w-full text-left px-3.5 py-2 text-xs text-foreground hover:bg-muted flex items-center gap-2 cursor-pointer font-medium"
                 >
-                  <MessageSquare class="w-3.5 h-3.5 text-emerald-600" /> Test conversations
+                  <MessageSquare class="w-3.5 h-3.5 text-success" /> Test conversations
                 </button>
                 <button
                   @click="requestStatusToggle(ast); openMenuId = null"
-                  class="w-full text-left px-3.5 py-2 text-xs text-gray-700 hover:bg-gray-50 flex items-center gap-2 cursor-pointer font-medium"
+                  class="w-full text-left px-3.5 py-2 text-xs text-foreground hover:bg-muted flex items-center gap-2 cursor-pointer font-medium"
                 >
-                  <CheckCircle2 class="w-3.5 h-3.5 text-gray-500" />
+                  <CheckCircle2 class="w-3.5 h-3.5 text-muted-foreground" />
                   {{ ast.status === 'live' ? 'Switch to draft' : 'Pre-flight & publish' }}
                 </button>
                 <button
                   @click="duplicateAssistant(ast); openMenuId = null"
-                  class="w-full text-left px-3.5 py-2 text-xs text-gray-700 hover:bg-gray-50 flex items-center gap-2 cursor-pointer font-medium"
+                  class="w-full text-left px-3.5 py-2 text-xs text-foreground hover:bg-muted flex items-center gap-2 cursor-pointer font-medium"
                 >
-                  <Copy class="w-3.5 h-3.5 text-gray-500" /> Duplicate
+                  <Copy class="w-3.5 h-3.5 text-muted-foreground" /> Duplicate
                 </button>
-                <div class="border-t border-gray-100 my-1"></div>
+                <div class="border-t border-border my-1"></div>
                 <button
                   @click="promptDeleteAssistant(ast); openMenuId = null"
-                  class="w-full text-left px-3.5 py-2 text-xs text-red-600 hover:bg-red-50 flex items-center gap-2 cursor-pointer font-medium"
+                  class="w-full text-left px-3.5 py-2 text-xs text-destructive hover:bg-destructive/10 flex items-center gap-2 cursor-pointer font-medium"
                 >
-                  <Trash2 class="w-3.5 h-3.5 text-red-500" /> Delete assistant
+                  <Trash2 class="w-3.5 h-3.5 text-destructive" /> Delete assistant
                 </button>
               </div>
             </div>
@@ -224,17 +224,17 @@
       </div>
 
       <!-- Zero Search Results Empty State -->
-      <div v-else class="bg-white border border-gray-200 rounded-2xl p-12 text-center space-y-3 shadow-2xs">
-        <div class="w-12 h-12 rounded-2xl bg-gray-100 flex items-center justify-center text-gray-500 mx-auto">
+      <div v-else class="bg-card border border-border rounded-2xl p-12 text-center space-y-3 shadow-2xs">
+        <div class="w-12 h-12 rounded-2xl bg-muted flex items-center justify-center text-muted-foreground mx-auto">
           <Search class="w-6 h-6" />
         </div>
-        <h3 class="text-sm font-bold text-gray-900">No assistants match "{{ searchQuery }}"</h3>
-        <p class="text-xs text-gray-500 max-w-sm mx-auto">
+        <h3 class="text-sm font-bold text-foreground">No assistants match "{{ searchQuery }}"</h3>
+        <p class="text-xs text-muted-foreground max-w-sm mx-auto">
           Try adjusting your search terms or filter by status above.
         </p>
         <button
           @click="searchQuery = ''; statusFilter = 'all'"
-          class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold text-xs rounded-xl cursor-pointer transition-colors"
+          class="px-4 py-2 bg-muted hover:bg-muted text-foreground font-semibold text-xs rounded-xl cursor-pointer transition-colors"
         >
           Clear filters
         </button>
@@ -246,21 +246,21 @@
     ════════════════════════════════════════════════════════════════ -->
     <div v-else-if="viewMode === 'detail' && currentAssistant" class="space-y-6 animate-fade-in">
       <!-- Detail Top Header Bar with Live Indicator & Test CTA -->
-      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-gray-200 pb-4">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-border pb-4">
         <div class="flex items-center gap-3 min-w-0">
           <button
             @click="backToList"
-            class="p-2 hover:bg-gray-100 text-gray-500 hover:text-gray-900 rounded-xl cursor-pointer transition-colors shrink-0"
+            class="p-2 hover:bg-muted text-muted-foreground hover:text-foreground rounded-xl cursor-pointer transition-colors shrink-0"
             title="Back to AI Assistants list"
           >
             <ArrowLeft class="w-4 h-4" />
           </button>
-          <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white shrink-0 shadow-sm">
+          <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-primary-foreground shrink-0 shadow-sm">
             <Bot class="w-5 h-5" />
           </div>
           <div class="min-w-0">
-            <h2 class="text-base font-bold text-gray-900 tracking-tight truncate">{{ currentAssistant.name }}</h2>
-            <div class="text-[11px] text-gray-500 font-medium mt-0.5 truncate">
+            <h2 class="text-base font-bold text-foreground tracking-tight truncate">{{ currentAssistant.name }}</h2>
+            <div class="text-[11px] text-muted-foreground font-medium mt-0.5 truncate">
               Fallback: {{ currentAssistant.fallbackRep }}
             </div>
           </div>
@@ -270,14 +270,14 @@
           <!-- In-Situ Test Simulator CTA -->
           <button
             @click="openTestDrawer(currentAssistant)"
-            class="px-3.5 py-2 bg-primary hover:bg-[#1ea446] text-white text-xs font-semibold rounded-xl cursor-pointer shadow-xs transition-colors inline-flex items-center gap-1.5 whitespace-nowrap shrink-0"
+            class="px-3.5 py-2 bg-primary hover:bg-primary/90 text-primary-foreground text-xs font-semibold rounded-xl cursor-pointer shadow-xs transition-colors inline-flex items-center gap-1.5 whitespace-nowrap shrink-0"
           >
             <MessageSquare class="w-3.5 h-3.5 shrink-0" />
             <span>Test Live Conversations</span>
           </button>
           <button
             @click="requestStatusToggle(currentAssistant)"
-            class="px-3.5 py-2 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 text-xs font-semibold rounded-xl cursor-pointer shadow-2xs transition-colors whitespace-nowrap shrink-0"
+            class="px-3.5 py-2 bg-card border border-border hover:bg-muted text-foreground text-xs font-semibold rounded-xl cursor-pointer shadow-2xs transition-colors whitespace-nowrap shrink-0"
           >
             <span>{{ currentAssistant.status === 'live' ? 'Switch to Draft' : 'Pre-flight & Publish' }}</span>
           </button>
@@ -287,8 +287,8 @@
       <!-- Inner High-Efficiency 3-Tab Workspace -->
       <div class="flex flex-col lg:flex-row gap-6 items-start">
         <!-- Inner Sub-Navigation (Grouped by Configuration vs Evaluation) -->
-        <div class="w-full lg:w-56 shrink-0 bg-white border border-gray-200 rounded-2xl p-2 shadow-2xs space-y-1 select-none">
-          <div class="px-3 pt-2 pb-1 text-[11px] font-semibold text-gray-500">
+        <div class="w-full lg:w-56 shrink-0 bg-card border border-border rounded-2xl p-2 shadow-2xs space-y-1 select-none">
+          <div class="px-3 pt-2 pb-1 text-[11px] font-semibold text-muted-foreground">
             Configuration
           </div>
 
@@ -299,7 +299,7 @@
             :class="getSetupTabClass('identity')"
           >
             <div class="flex items-center gap-2.5">
-              <User class="w-4 h-4" :class="activeDetailTab === 'identity' ? 'text-white' : 'text-violet-500'" />
+              <User class="w-4 h-4" :class="activeDetailTab === 'identity' ? 'text-primary-foreground' : 'text-tag-1'" />
               <span>Identity</span>
             </div>
           </button>
@@ -311,10 +311,10 @@
             :class="getSetupTabClass('knowledge')"
           >
             <div class="flex items-center gap-2.5">
-              <BookOpen class="w-4 h-4" :class="activeDetailTab === 'knowledge' ? 'text-white' : 'text-sky-500'" />
+              <BookOpen class="w-4 h-4" :class="activeDetailTab === 'knowledge' ? 'text-primary-foreground' : 'text-info'" />
               <span>Knowledge</span>
             </div>
-            <span class="text-[10px] bg-gray-100 text-gray-700 font-bold px-1.5 py-0.5 rounded-full tabular-nums">
+            <span class="text-[10px] bg-muted text-foreground font-bold px-1.5 py-0.5 rounded-full tabular-nums">
               {{ knowledgeDocs.length }}
             </span>
           </button>
@@ -326,10 +326,10 @@
             :class="getSetupTabClass('behavior')"
           >
             <div class="flex items-center gap-2.5">
-              <Shield class="w-4 h-4" :class="activeDetailTab === 'behavior' ? 'text-white' : 'text-rose-500'" />
+              <Shield class="w-4 h-4" :class="activeDetailTab === 'behavior' ? 'text-primary-foreground' : 'text-destructive'" />
               <span>Behavior</span>
             </div>
-            <span class="text-[10px] bg-gray-100 text-gray-700 font-bold px-1.5 py-0.5 rounded-full tabular-nums">
+            <span class="text-[10px] bg-muted text-foreground font-bold px-1.5 py-0.5 rounded-full tabular-nums">
               {{ guardrailRules.length + scenarioRules.length }}
             </span>
           </button>
@@ -341,10 +341,10 @@
             :class="getSetupTabClass('tools')"
           >
             <div class="flex items-center gap-2.5">
-              <Wrench class="w-4 h-4" :class="activeDetailTab === 'tools' ? 'text-white' : 'text-amber-500'" />
+              <Wrench class="w-4 h-4" :class="activeDetailTab === 'tools' ? 'text-primary-foreground' : 'text-warning'" />
               <span>Tools</span>
             </div>
-            <span class="text-[10px] bg-gray-100 text-gray-700 font-bold px-1.5 py-0.5 rounded-full tabular-nums">
+            <span class="text-[10px] bg-muted text-foreground font-bold px-1.5 py-0.5 rounded-full tabular-nums">
               {{ customTools.length }}
             </span>
           </button>
@@ -356,15 +356,15 @@
             :class="getSetupTabClass('connect')"
           >
             <div class="flex items-center gap-2.5">
-              <Zap class="w-4 h-4" :class="activeDetailTab === 'connect' || activeDetailTab === 'channels' ? 'text-white' : 'text-emerald-500'" />
+              <Zap class="w-4 h-4" :class="activeDetailTab === 'connect' || activeDetailTab === 'channels' ? 'text-primary-foreground' : 'text-success'" />
               <span>Connect</span>
             </div>
-            <span class="text-[10px] bg-gray-100 text-gray-700 font-bold px-1.5 py-0.5 rounded-full tabular-nums">
+            <span class="text-[10px] bg-muted text-foreground font-bold px-1.5 py-0.5 rounded-full tabular-nums">
               {{ connectedInboxes.length }}
             </span>
           </button>
 
-          <div class="pt-3 pb-1 px-3 text-[11px] font-semibold text-gray-500 border-t border-gray-100 mt-2">
+          <div class="pt-3 pb-1 px-3 text-[11px] font-semibold text-muted-foreground border-t border-border mt-2">
             Test & Monitor
           </div>
 
@@ -375,7 +375,7 @@
             :class="getSetupTabClass('playground')"
           >
             <div class="flex items-center gap-2.5">
-              <Play class="w-4 h-4" :class="activeDetailTab === 'playground' ? 'text-white' : 'text-indigo-500'" />
+              <Play class="w-4 h-4" :class="activeDetailTab === 'playground' ? 'text-primary-foreground' : 'text-primary'" />
               <span>Playground</span>
             </div>
           </button>
@@ -387,7 +387,7 @@
             :class="getSetupTabClass('report')"
           >
             <div class="flex items-center gap-2.5">
-              <BarChart2 class="w-4 h-4" :class="activeDetailTab === 'report' ? 'text-white' : 'text-teal-500'" />
+              <BarChart2 class="w-4 h-4" :class="activeDetailTab === 'report' ? 'text-primary-foreground' : 'text-tag-2'" />
               <span>Report</span>
             </div>
           </button>
@@ -399,10 +399,10 @@
           <!-- ══════════════ TAB 1: IDENTITY & SALES PERSONA ══════════════ -->
           <div v-if="activeDetailTab === 'identity'" class="space-y-6 animate-fade-in">
             <!-- Card 1: Basic Identity & Sales Persona -->
-            <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-2xs space-y-5">
+            <div class="bg-card border border-border rounded-2xl p-6 shadow-2xs space-y-5">
               <div class="space-y-1">
-                <h3 class="text-sm font-bold text-gray-900">Identity & Persona</h3>
-                <p class="text-xs text-gray-500">Configure how the assistant introduces itself, frames answers, and communicates.</p>
+                <h3 class="text-sm font-bold text-foreground">Identity & Persona</h3>
+                <p class="text-xs text-muted-foreground">Configure how the assistant introduces itself, frames answers, and communicates.</p>
               </div>
 
               <!-- Form Inputs -->
@@ -410,19 +410,19 @@
                 <!-- Row 1: Name & Product Name -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div class="space-y-1.5">
-                    <label class="block text-xs font-semibold text-gray-700">Assistant Name</label>
+                    <label class="block text-xs font-semibold text-foreground">Assistant Name</label>
                     <input
                       v-model="editForm.name"
                       type="text"
-                      class="w-full px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-800 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary shadow-2xs transition-all"
+                      class="w-full px-3.5 py-2.5 bg-card border border-border rounded-xl text-xs font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary shadow-2xs transition-all"
                     />
                   </div>
                   <div class="space-y-1.5">
-                    <label class="block text-xs font-semibold text-gray-700">Supported Product / Service</label>
+                    <label class="block text-xs font-semibold text-foreground">Supported Product / Service</label>
                     <input
                       v-model="editForm.productName"
                       type="text"
-                      class="w-full px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-800 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary shadow-2xs transition-all"
+                      class="w-full px-3.5 py-2.5 bg-card border border-border rounded-xl text-xs font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary shadow-2xs transition-all"
                     />
                   </div>
                 </div>
@@ -430,10 +430,10 @@
                 <!-- Row 2: Tone of Voice & Sales Objective -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div class="space-y-1.5">
-                    <label class="block text-xs font-semibold text-gray-700">Tone of Voice</label>
+                    <label class="block text-xs font-semibold text-foreground">Tone of Voice</label>
                     <select
                       v-model="editForm.tone"
-                      class="w-full px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-800 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary shadow-2xs cursor-pointer"
+                      class="w-full px-3.5 py-2.5 bg-card border border-border rounded-xl text-xs font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary shadow-2xs cursor-pointer"
                     >
                       <option value="Consultative & Helpful">Consultative & Helpful (Recommended for B2B)</option>
                       <option value="Energetic & Friendly">Energetic & Friendly (Best for WhatsApp E-Commerce)</option>
@@ -441,10 +441,10 @@
                     </select>
                   </div>
                   <div class="space-y-1.5">
-                    <label class="block text-xs font-semibold text-gray-700">Primary Commercial Goal</label>
+                    <label class="block text-xs font-semibold text-foreground">Primary Commercial Goal</label>
                     <select
                       v-model="editForm.commercialGoal"
-                      class="w-full px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-800 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary shadow-2xs cursor-pointer"
+                      class="w-full px-3.5 py-2.5 bg-card border border-border rounded-xl text-xs font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary shadow-2xs cursor-pointer"
                     >
                       <option value="Qualify Leads & Book Demo">Qualify Inbound Leads & Book Sales Demo</option>
                       <option value="Answer Inquiries & Send Quotation">Answer Technical Inquiries & Offer Pricing</option>
@@ -455,15 +455,15 @@
 
                 <!-- Row 3: Description -->
                 <div class="space-y-1.5">
-                  <label class="block text-xs font-semibold text-gray-700">Internal Description / Scope</label>
+                  <label class="block text-xs font-semibold text-foreground">Internal Description / Scope</label>
                   <div class="relative">
                     <textarea
                       v-model="editForm.description"
                       rows="2"
                       maxlength="300"
-                      class="w-full px-3.5 py-2.5 pb-6 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-800 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary shadow-2xs resize-none transition-all"
+                      class="w-full px-3.5 py-2.5 pb-6 bg-card border border-border rounded-xl text-xs font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary shadow-2xs resize-none transition-all"
                     ></textarea>
-                    <span class="absolute right-3 bottom-2 text-[10px] text-gray-500 font-mono">
+                    <span class="absolute right-3 bottom-2 text-[10px] text-muted-foreground font-mono">
                       {{ editForm.description.length }} / 300
                     </span>
                   </div>
@@ -471,30 +471,30 @@
 
                 <!-- Row 4: Identity Response -->
                 <div class="space-y-1.5">
-                  <label class="block text-xs font-semibold text-gray-700">AI Identity Disclosure Statement</label>
+                  <label class="block text-xs font-semibold text-foreground">AI Identity Disclosure Statement</label>
                   <input
                     v-model="editForm.identityResponse"
                     type="text"
                     placeholder="e.g. Hi! I am Golden Harvest F&B AI, here to assist with wholesale foodservice orders and dairy price lists."
-                    class="w-full px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary shadow-2xs transition-all"
+                    class="w-full px-3.5 py-2.5 bg-card border border-border rounded-xl text-xs font-medium text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary shadow-2xs transition-all"
                   />
-                  <p class="text-[11px] text-gray-500 italic">
-                    Default response: <span class="text-gray-700 font-normal">"I am {{ editForm.name || 'an AI Assistant' }} from {{ editForm.productName || 'the team' }}."</span>
+                  <p class="text-[11px] text-muted-foreground italic">
+                    Default response: <span class="text-foreground font-normal">"I am {{ editForm.name || 'an AI Assistant' }} from {{ editForm.productName || 'the team' }}."</span>
                   </p>
                 </div>
               </div>
 
               <!-- Card Actions -->
-              <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-gray-100">
+              <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-border">
                 <button
                   @click="resetIdentityForm"
-                  class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold text-xs rounded-xl cursor-pointer transition-colors"
+                  class="px-4 py-2 bg-muted hover:bg-muted text-foreground font-semibold text-xs rounded-xl cursor-pointer transition-colors"
                 >
                   Discard
                 </button>
                 <button
                   @click="saveIdentityChanges"
-                  class="px-5 py-2 bg-primary hover:bg-[#1ea446] text-white font-semibold text-xs rounded-xl cursor-pointer shadow-xs transition-colors"
+                  class="px-5 py-2 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs rounded-xl cursor-pointer shadow-xs transition-colors"
                 >
                   Save changes
                 </button>
@@ -502,19 +502,19 @@
             </div>
 
             <!-- Card 2: CRM Memory & Feedback Features -->
-            <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-2xs space-y-5">
+            <div class="bg-card border border-border rounded-2xl p-6 shadow-2xs space-y-5">
               <div class="space-y-1">
-                <h3 class="text-sm font-bold text-gray-900">CRM Memory & Intelligence</h3>
-                <p class="text-xs text-gray-500">Autonomous capture of lead facts, preferences, and recurring FAQ drafts.</p>
+                <h3 class="text-sm font-bold text-foreground">CRM Memory & Intelligence</h3>
+                <p class="text-xs text-muted-foreground">Autonomous capture of lead facts, preferences, and recurring FAQ drafts.</p>
               </div>
 
               <!-- Switch Rows -->
-              <div class="space-y-4 divide-y divide-gray-100 pt-1">
+              <div class="space-y-4 divide-y divide-border pt-1">
                 <!-- Switch 1: FAQs -->
                 <div class="flex items-start justify-between gap-4 pt-3 first:pt-0">
                   <div class="space-y-0.5">
-                    <div class="text-xs font-bold text-gray-900">Turn resolved conversations into FAQs</div>
-                    <div class="text-[11px] text-gray-500 leading-relaxed max-w-xl">
+                    <div class="text-xs font-bold text-foreground">Turn resolved conversations into FAQs</div>
+                    <div class="text-[11px] text-muted-foreground leading-relaxed max-w-xl">
                       Drafts a verified FAQ card when similar customer questions repeat 3+ times. Requires your approval before going live.
                     </div>
                   </div>
@@ -524,10 +524,10 @@
                     :aria-checked="editForm.features.faqGeneration"
                     @click="editForm.features.faqGeneration = !editForm.features.faqGeneration"
                     class="relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none"
-                    :class="editForm.features.faqGeneration ? 'bg-primary' : 'bg-gray-200'"
+                    :class="editForm.features.faqGeneration ? 'bg-primary' : 'bg-muted'"
                   >
                     <span
-                      class="pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                      class="pointer-events-none inline-block h-4 w-4 transform rounded-full bg-card shadow ring-0 transition duration-200 ease-in-out"
                       :class="editForm.features.faqGeneration ? 'translate-x-4' : 'translate-x-0'"
                     ></span>
                   </button>
@@ -536,8 +536,8 @@
                 <!-- Switch 2: Memory -->
                 <div class="flex items-start justify-between gap-4 pt-4">
                   <div class="space-y-0.5">
-                    <div class="text-xs font-bold text-gray-900">Remember customer details & preferences (PDPA Compliant)</div>
-                    <div class="text-[11px] text-gray-500 leading-relaxed max-w-xl">
+                    <div class="text-xs font-bold text-foreground">Remember customer details & preferences (PDPA Compliant)</div>
+                    <div class="text-[11px] text-muted-foreground leading-relaxed max-w-xl">
                       Extracts company size, budget tier, and preferred language directly to the Contact Drawer in RakanSales CRM.
                     </div>
                   </div>
@@ -547,10 +547,10 @@
                     :aria-checked="editForm.features.rememberDetails"
                     @click="editForm.features.rememberDetails = !editForm.features.rememberDetails"
                     class="relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none"
-                    :class="editForm.features.rememberDetails ? 'bg-primary' : 'bg-gray-200'"
+                    :class="editForm.features.rememberDetails ? 'bg-primary' : 'bg-muted'"
                   >
                     <span
-                      class="pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                      class="pointer-events-none inline-block h-4 w-4 transform rounded-full bg-card shadow ring-0 transition duration-200 ease-in-out"
                       :class="editForm.features.rememberDetails ? 'translate-x-4' : 'translate-x-0'"
                     ></span>
                   </button>
@@ -559,8 +559,8 @@
                 <!-- Switch 3: Source citations -->
                 <div class="flex items-start justify-between gap-4 pt-4">
                   <div class="space-y-0.5">
-                    <div class="text-xs font-bold text-gray-900">Include source document citations</div>
-                    <div class="text-[11px] text-gray-500 leading-relaxed max-w-xl">
+                    <div class="text-xs font-bold text-foreground">Include source document citations</div>
+                    <div class="text-[11px] text-muted-foreground leading-relaxed max-w-xl">
                       Appends a source citation under responses (e.g. *Source: 2026 Pricing Guide.pdf*). Essential for internal sales teams; recommended off on WhatsApp.
                     </div>
                   </div>
@@ -570,10 +570,10 @@
                     :aria-checked="editForm.features.sourceCitations"
                     @click="editForm.features.sourceCitations = !editForm.features.sourceCitations"
                     class="relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none"
-                    :class="editForm.features.sourceCitations ? 'bg-primary' : 'bg-gray-200'"
+                    :class="editForm.features.sourceCitations ? 'bg-primary' : 'bg-muted'"
                   >
                     <span
-                      class="pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                      class="pointer-events-none inline-block h-4 w-4 transform rounded-full bg-card shadow ring-0 transition duration-200 ease-in-out"
                       :class="editForm.features.sourceCitations ? 'translate-x-4' : 'translate-x-0'"
                     ></span>
                   </button>
@@ -585,7 +585,7 @@
           <!-- ══════════════ TAB 2: BEHAVIOR & RULES ══════════════ -->
           <div v-else-if="activeDetailTab === 'behavior'" class="space-y-6 animate-fade-in">
             <!-- Sub-tab Navigation Bar -->
-            <div class="bg-white border border-gray-200 rounded-2xl p-1.5 shadow-2xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div class="bg-card border border-border rounded-2xl p-1.5 shadow-2xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <div class="flex items-center gap-1.5 flex-wrap">
                 <button
                   @click="activeBehaviorSubTab = 'guardrails'"
@@ -638,21 +638,21 @@
                 <button
                   v-if="activeBehaviorSubTab === 'guardrails'"
                   @click="showAddGuardrailModal = true"
-                  class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary hover:bg-[#1ea446] text-white font-semibold text-xs rounded-xl cursor-pointer shadow-xs transition-colors"
+                  class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs rounded-xl cursor-pointer shadow-xs transition-colors"
                 >
                   <Plus class="w-3.5 h-3.5" /> Add Guardrail
                 </button>
                 <button
                   v-else-if="activeBehaviorSubTab === 'scenarios'"
                   @click="showAddScenarioModal = true"
-                  class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary hover:bg-[#1ea446] text-white font-semibold text-xs rounded-xl cursor-pointer shadow-xs transition-colors"
+                  class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs rounded-xl cursor-pointer shadow-xs transition-colors"
                 >
                   <Plus class="w-3.5 h-3.5" /> Add Scenario
                 </button>
                 <button
                   v-else-if="activeBehaviorSubTab === 'guidelines'"
                   @click="showAddGuidelineModal = true"
-                  class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary hover:bg-[#1ea446] text-white font-semibold text-xs rounded-xl cursor-pointer shadow-xs transition-colors"
+                  class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs rounded-xl cursor-pointer shadow-xs transition-colors"
                 >
                   <Plus class="w-3.5 h-3.5" /> Add Guideline
                 </button>
@@ -662,17 +662,17 @@
             <!-- ─── SUB-TAB 1: GUARDRAILS ─── -->
             <div v-if="activeBehaviorSubTab === 'guardrails'" class="space-y-6">
               <!-- Description Header Card -->
-              <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-2xs space-y-4">
+              <div class="bg-card border border-border rounded-2xl p-6 shadow-2xs space-y-4">
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                   <div class="space-y-1">
-                    <h3 class="text-sm font-bold text-gray-900">Safety Guardrails</h3>
-                    <p class="text-xs text-gray-500">
+                    <h3 class="text-sm font-bold text-foreground">Safety Guardrails</h3>
+                    <p class="text-xs text-muted-foreground">
                       Prevent unauthorized discounts, enforce Halal compliance, and protect customer privacy.
                     </p>
                   </div>
                   <button
                     @click="showGuardrailExamples = !showGuardrailExamples"
-                    class="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 hover:text-emerald-800 cursor-pointer self-start sm:self-auto"
+                    class="inline-flex items-center gap-1.5 text-xs font-semibold text-success hover:text-success/90 cursor-pointer self-start sm:self-auto"
                   >
                     <span>{{ showGuardrailExamples ? 'Hide Examples' : 'Show Example Presets' }}</span>
                     <component :is="showGuardrailExamples ? ChevronUp : ChevronDown" class="w-3.5 h-3.5" />
@@ -680,61 +680,61 @@
                 </div>
 
                 <!-- Collapsible Example Presets Card -->
-                <div v-if="showGuardrailExamples" class="p-4 bg-gray-50 rounded-xl border border-gray-200 space-y-3">
+                <div v-if="showGuardrailExamples" class="p-4 bg-muted/50 rounded-xl border border-border space-y-3">
                   <div class="flex items-center justify-between">
-                    <div class="text-xs font-bold text-gray-800 flex items-center gap-2">
-                      <Sparkles class="w-3.5 h-3.5 text-emerald-600" />
+                    <div class="text-xs font-bold text-foreground flex items-center gap-2">
+                      <Sparkles class="w-3.5 h-3.5 text-success" />
                       Recommended B2B Presets
                     </div>
                     <button
                       @click="adoptAllExampleGuardrails"
-                      class="text-[11px] font-bold text-emerald-700 hover:text-emerald-800 hover:underline cursor-pointer"
+                      class="text-[11px] font-bold text-success hover:text-success/90 hover:underline cursor-pointer"
                     >
                       Adopt All (3)
                     </button>
                   </div>
 
                   <div class="space-y-2">
-                    <div class="p-3 bg-white border border-gray-200 rounded-lg flex items-center justify-between gap-3">
+                    <div class="p-3 bg-card border border-border rounded-lg flex items-center justify-between gap-3">
                       <div class="min-w-0">
-                        <div class="text-xs font-medium text-gray-800">
+                        <div class="text-xs font-medium text-foreground">
                           Block queries that share or request sensitive personal information (phone numbers, passwords, bank OTPs).
                         </div>
-                        <div class="text-[10px] text-gray-500 mt-0.5">Category: Safety & PII • Action: Block & Deflect</div>
+                        <div class="text-[10px] text-muted-foreground mt-0.5">Category: Safety & PII • Action: Block & Deflect</div>
                       </div>
                       <button
                         @click="adoptExampleGuardrail({ name: 'Block queries that request sensitive financial credentials', category: 'Safety & PII', action: 'Block & Deflect', description: 'Block queries that share or request passwords, bank accounts, or OTPs.' })"
-                        class="px-2.5 py-1 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 hover:text-emerald-900 text-xs font-semibold rounded-lg cursor-pointer shrink-0 transition-colors"
+                        class="px-2.5 py-1 bg-success/15 hover:bg-success/20 text-success hover:text-success text-xs font-semibold rounded-lg cursor-pointer shrink-0 transition-colors"
                       >
                         Adopt this
                       </button>
                     </div>
 
-                    <div class="p-3 bg-white border border-gray-200 rounded-lg flex items-center justify-between gap-3">
+                    <div class="p-3 bg-card border border-border rounded-lg flex items-center justify-between gap-3">
                       <div class="min-w-0">
-                        <div class="text-xs font-medium text-gray-800">
+                        <div class="text-xs font-medium text-foreground">
                           Reject queries that include offensive, discriminatory, or competitor-disparaging language.
                         </div>
-                        <div class="text-[10px] text-gray-500 mt-0.5">Category: Scope & Conduct • Action: Block & Deflect</div>
+                        <div class="text-[10px] text-muted-foreground mt-0.5">Category: Scope & Conduct • Action: Block & Deflect</div>
                       </div>
                       <button
                         @click="adoptExampleGuardrail({ name: 'Reject abusive, discriminatory or threatening language', category: 'Scope & Conduct', action: 'Block & Deflect', description: 'Reject queries that include offensive or aggressive language.' })"
-                        class="px-2.5 py-1 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 hover:text-emerald-900 text-xs font-semibold rounded-lg cursor-pointer shrink-0 transition-colors"
+                        class="px-2.5 py-1 bg-success/15 hover:bg-success/20 text-success hover:text-success text-xs font-semibold rounded-lg cursor-pointer shrink-0 transition-colors"
                       >
                         Adopt this
                       </button>
                     </div>
 
-                    <div class="p-3 bg-white border border-gray-200 rounded-lg flex items-center justify-between gap-3">
+                    <div class="p-3 bg-card border border-border rounded-lg flex items-center justify-between gap-3">
                       <div class="min-w-0">
-                        <div class="text-xs font-medium text-gray-800">
+                        <div class="text-xs font-medium text-foreground">
                           Deflect when the assistant is asked for legal guarantees or medical/dietary health diagnoses.
                         </div>
-                        <div class="text-[10px] text-gray-500 mt-0.5">Category: Compliance & Halal • Action: Block & Deflect</div>
+                        <div class="text-[10px] text-muted-foreground mt-0.5">Category: Compliance & Halal • Action: Block & Deflect</div>
                       </div>
                       <button
                         @click="adoptExampleGuardrail({ name: 'Deflect legal claims or medical diagnosis queries', category: 'Compliance & Halal', action: 'Block & Deflect', description: 'Deflect when the assistant is asked for formal legal claims or medical diagnosis.' })"
-                        class="px-2.5 py-1 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 hover:text-emerald-900 text-xs font-semibold rounded-lg cursor-pointer shrink-0 transition-colors"
+                        class="px-2.5 py-1 bg-success/15 hover:bg-success/20 text-success hover:text-success text-xs font-semibold rounded-lg cursor-pointer shrink-0 transition-colors"
                       >
                         Adopt this
                       </button>
@@ -744,53 +744,53 @@
 
                 <!-- Active Guardrails Table Card -->
                 <div class="pt-2">
-                  <div class="flex items-center justify-between gap-3 pb-3 border-b border-gray-100">
+                  <div class="flex items-center justify-between gap-3 pb-3 border-b border-border">
                     <div class="flex items-center gap-2">
-                      <h4 class="text-xs font-bold text-gray-900">Enforced Rules</h4>
-                      <span class="text-[10px] font-bold bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full">
+                      <h4 class="text-xs font-bold text-foreground">Enforced Rules</h4>
+                      <span class="text-[10px] font-bold bg-success/15 text-success px-2 py-0.5 rounded-full">
                         {{ filteredGuardrails.length }} Active
                       </span>
                     </div>
 
                     <div class="relative w-48 sm:w-64">
-                      <Search class="w-3.5 h-3.5 text-gray-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                      <Search class="w-3.5 h-3.5 text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2" />
                       <input
                         v-model="guardrailSearchQuery"
                         type="text"
                         placeholder="Search guardrails..."
-                        class="w-full pl-8 pr-3 py-1.5 bg-gray-50 hover:bg-white focus:bg-white border border-gray-200 rounded-xl text-xs text-gray-800 focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs transition-all"
+                        class="w-full pl-8 pr-3 py-1.5 bg-muted/50 hover:bg-card focus:bg-card border border-border rounded-xl text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs transition-all"
                       />
                     </div>
                   </div>
 
                   <!-- Guardrails Rows -->
-                  <div v-if="filteredGuardrails.length > 0" class="divide-y divide-gray-100">
+                  <div v-if="filteredGuardrails.length > 0" class="divide-y divide-border">
                     <div
                       v-for="rule in filteredGuardrails"
                       :key="rule.id"
                       class="py-3.5 flex items-start justify-between gap-4 group"
                     >
                       <div class="flex items-start gap-3 min-w-0">
-                        <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0 border border-emerald-100/80 mt-0.5">
+                        <div class="w-8 h-8 rounded-xl bg-success/10 text-success flex items-center justify-center shrink-0 border border-success/20 mt-0.5">
                           <Shield class="w-4 h-4" />
                         </div>
                         <div class="space-y-1 min-w-0">
                           <div class="flex flex-wrap items-center gap-2">
-                            <span class="text-xs font-bold text-gray-900 group-hover:text-primary transition-colors">
+                            <span class="text-xs font-bold text-foreground group-hover:text-primary transition-colors">
                               {{ rule.name }}
                             </span>
                             <span class="px-2 py-0.5 rounded-full text-[9px] font-bold" :class="getGuardrailCategoryBadge(rule.category)">
                               {{ rule.category }}
                             </span>
-                            <span class="px-2 py-0.5 rounded-md text-[9px] font-bold bg-gray-100 text-gray-700">
+                            <span class="px-2 py-0.5 rounded-md text-[9px] font-bold bg-muted text-foreground">
                               {{ rule.action }}
                             </span>
                           </div>
-                          <p class="text-xs text-gray-600 leading-relaxed">
+                          <p class="text-xs text-muted-foreground leading-relaxed">
                             {{ rule.description }}
                           </p>
-                          <div class="text-[10px] text-gray-500 flex items-center gap-1.5 font-mono">
-                            <CheckCircle2 class="w-3 h-3 text-emerald-500" />
+                          <div class="text-[10px] text-muted-foreground flex items-center gap-1.5 font-mono">
+                            <CheckCircle2 class="w-3 h-3 text-primary" />
                             <span>{{ rule.triggersCount }} triggers handled</span>
                           </div>
                         </div>
@@ -803,16 +803,16 @@
                           :aria-checked="rule.enabled"
                           @click="rule.enabled = !rule.enabled"
                           class="relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none"
-                          :class="rule.enabled ? 'bg-primary' : 'bg-gray-200'"
+                          :class="rule.enabled ? 'bg-primary' : 'bg-muted'"
                         >
                           <span
-                            class="pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                            class="pointer-events-none inline-block h-4 w-4 transform rounded-full bg-card shadow ring-0 transition duration-200 ease-in-out"
                             :class="rule.enabled ? 'translate-x-4' : 'translate-x-0'"
                           ></span>
                         </button>
                         <button
                           @click="deleteGuardrail(rule)"
-                          class="p-1.5 text-red-500/70 hover:text-red-700 hover:bg-red-50 rounded-lg cursor-pointer transition-colors"
+                          class="p-1.5 text-destructive/70 hover:text-destructive hover:bg-destructive/10 rounded-lg cursor-pointer transition-colors"
                           title="Remove guardrail"
                         >
                           <Trash2 class="w-3.5 h-3.5" />
@@ -823,22 +823,22 @@
 
                   <!-- Empty state -->
                   <div v-else class="py-10 text-center space-y-2">
-                    <p class="text-xs text-gray-500">No guardrails matched your search. Add one of the presets above, or type below.</p>
+                    <p class="text-xs text-muted-foreground">No guardrails matched your search. Add one of the presets above, or type below.</p>
                   </div>
                 </div>
 
                 <!-- Quick Inline Guardrail Input -->
-                <div class="pt-4 border-t border-gray-100 flex items-center gap-2">
+                <div class="pt-4 border-t border-border flex items-center gap-2">
                   <input
                     v-model="quickGuardrailText"
                     type="text"
                     placeholder="Type in another guardrail (e.g. Reject requests for unverified Halal certification status)..."
-                    class="flex-1 px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs"
+                    class="flex-1 px-3.5 py-2.5 bg-card border border-border rounded-xl text-xs font-medium text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs"
                     @keydown.enter="submitQuickGuardrail"
                   />
                   <button
                     @click="submitQuickGuardrail"
-                    class="px-4 py-2.5 bg-primary hover:bg-[#1ea446] text-white font-semibold text-xs rounded-xl cursor-pointer shadow-xs transition-colors shrink-0"
+                    class="px-4 py-2.5 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs rounded-xl cursor-pointer shadow-xs transition-colors shrink-0"
                   >
                     Add Guardrail
                   </button>
@@ -849,17 +849,17 @@
             <!-- ─── SUB-TAB 2: SCENARIOS & SOPS ─── -->
             <div v-else-if="activeBehaviorSubTab === 'scenarios'" class="space-y-6">
               <!-- Header Card -->
-              <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-2xs space-y-4">
+              <div class="bg-card border border-border rounded-2xl p-6 shadow-2xs space-y-4">
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                   <div class="space-y-1">
-                    <h3 class="text-sm font-bold text-gray-900">Scenarios & SOPs</h3>
-                    <p class="text-xs text-gray-500">
+                    <h3 class="text-sm font-bold text-foreground">Scenarios & SOPs</h3>
+                    <p class="text-xs text-muted-foreground">
                       Structured playbooks for lead qualification, payment verification, and delivery coordination.
                     </p>
                   </div>
                   <button
                     @click="showScenarioExamples = !showScenarioExamples"
-                    class="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 hover:text-emerald-800 cursor-pointer self-start sm:self-auto"
+                    class="inline-flex items-center gap-1.5 text-xs font-semibold text-success hover:text-success/90 cursor-pointer self-start sm:self-auto"
                   >
                     <span>{{ showScenarioExamples ? 'Hide Examples' : 'Show Example Presets' }}</span>
                     <component :is="showScenarioExamples ? ChevronUp : ChevronDown" class="w-3.5 h-3.5" />
@@ -867,49 +867,49 @@
                 </div>
 
                 <!-- Example Scenarios Banner -->
-                <div v-if="showScenarioExamples" class="p-4 bg-gray-50 rounded-xl border border-gray-200 space-y-3">
+                <div v-if="showScenarioExamples" class="p-4 bg-muted/50 rounded-xl border border-border space-y-3">
                   <div class="flex items-center justify-between">
-                    <div class="text-xs font-bold text-gray-800 flex items-center gap-2">
-                      <Sparkles class="w-3.5 h-3.5 text-emerald-600" />
+                    <div class="text-xs font-bold text-foreground flex items-center gap-2">
+                      <Sparkles class="w-3.5 h-3.5 text-success" />
                       Example Scenario: Prospective Buyer Qualification
                     </div>
                     <button
                       @click="showAddScenarioModal = true"
-                      class="text-[11px] font-bold text-emerald-700 hover:text-emerald-800 hover:underline cursor-pointer"
+                      class="text-[11px] font-bold text-success hover:text-success/90 hover:underline cursor-pointer"
                     >
                       Customize in Builder
                     </button>
                   </div>
 
-                  <div class="p-3.5 bg-white border border-gray-200 rounded-xl text-xs space-y-2">
-                    <div class="font-bold text-gray-900">Prospective Buyer (B2B Foodservice)</div>
-                    <p class="text-gray-600">
+                  <div class="p-3.5 bg-card border border-border rounded-xl text-xs space-y-2">
+                    <div class="font-bold text-foreground">Prospective Buyer (B2B Foodservice)</div>
+                    <p class="text-muted-foreground">
                       Handle customers showing interest in wholesale ingredient purchases or opening restaurant credit lines.
                     </p>
                     <div class="flex flex-wrap items-center gap-2 pt-1">
-                      <span class="text-[10px] font-semibold text-gray-500">Bound CRM Tools:</span>
-                      <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-50 text-amber-800 border border-amber-200/60">@add_private_note</span>
-                      <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-50 text-emerald-800">@add_label</span>
-                      <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-sky-50 text-sky-800 border border-sky-200/60">@handoff</span>
+                      <span class="text-[10px] font-semibold text-muted-foreground">Bound CRM Tools:</span>
+                      <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-warning/10 text-warning border border-warning/30">@add_private_note</span>
+                      <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-success/10 text-success">@add_label</span>
+                      <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-info/10 text-info border border-info/30">@handoff</span>
                     </div>
                   </div>
                 </div>
 
                 <!-- Scenarios Search & Filter Toolbar -->
-                <div class="pt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-gray-100 pb-3">
+                <div class="pt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-border pb-3">
                   <div class="flex items-center gap-2 flex-wrap">
                     <div class="relative w-48 sm:w-64">
-                      <Search class="w-3.5 h-3.5 text-gray-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                      <Search class="w-3.5 h-3.5 text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2" />
                       <input
                         v-model="scenarioSearchQuery"
                         type="text"
                         placeholder="Search scenarios..."
-                        class="w-full pl-8 pr-3 py-1.5 bg-gray-50 hover:bg-white focus:bg-white border border-gray-200 rounded-xl text-xs text-gray-800 focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs transition-all"
+                        class="w-full pl-8 pr-3 py-1.5 bg-muted/50 hover:bg-card focus:bg-card border border-border rounded-xl text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs transition-all"
                       />
                     </div>
                     <select
                       v-model="scenarioCategoryFilter"
-                      class="px-3 py-1.5 bg-gray-50 hover:bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-700 cursor-pointer shadow-2xs"
+                      class="px-3 py-1.5 bg-muted/50 hover:bg-card border border-border rounded-xl text-xs font-medium text-foreground cursor-pointer shadow-2xs"
                     >
                       <option value="all">All Categories</option>
                       <option value="Lead Qualification">Lead Qualification</option>
@@ -920,7 +920,7 @@
 
                   <button
                     @click="showAddScenarioModal = true"
-                    class="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-semibold text-xs rounded-xl cursor-pointer inline-flex items-center gap-1.5"
+                    class="px-3 py-1.5 bg-success/10 hover:bg-success/15 text-success font-semibold text-xs rounded-xl cursor-pointer inline-flex items-center gap-1.5"
                   >
                     <Plus class="w-3.5 h-3.5" />
                     New Playbook
@@ -932,15 +932,15 @@
                   <div
                     v-for="sc in filteredScenarios"
                     :key="sc.id"
-                    class="p-5 border border-gray-200 rounded-2xl bg-white hover:border-emerald-300 transition-all space-y-4 shadow-2xs group"
+                    class="p-5 border border-border rounded-2xl bg-card hover:border-success/40 transition-all space-y-4 shadow-2xs group"
                   >
                     <!-- Card Header -->
                     <div class="flex items-start justify-between gap-3">
                       <div class="flex items-center gap-2.5">
-                        <GripVertical class="w-4 h-4 text-gray-300 group-hover:text-gray-500 cursor-grab" />
+                        <GripVertical class="w-4 h-4 text-muted-foreground/60 group-hover:text-muted-foreground cursor-grab" />
                         <div>
                           <div class="flex items-center gap-2">
-                            <span class="text-sm font-bold text-gray-900 group-hover:text-primary transition-colors">
+                            <span class="text-sm font-bold text-foreground group-hover:text-primary transition-colors">
                               {{ sc.title }}
                             </span>
                             <span class="px-2 py-0.5 rounded-full text-[9px] font-bold" :class="getScenarioCategoryBadge(sc.category)">
@@ -957,16 +957,16 @@
                           :aria-checked="sc.enabled"
                           @click="sc.enabled = !sc.enabled"
                           class="relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none"
-                          :class="sc.enabled ? 'bg-primary' : 'bg-gray-200'"
+                          :class="sc.enabled ? 'bg-primary' : 'bg-muted'"
                         >
                           <span
-                            class="pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                            class="pointer-events-none inline-block h-4 w-4 transform rounded-full bg-card shadow ring-0 transition duration-200 ease-in-out"
                             :class="sc.enabled ? 'translate-x-4' : 'translate-x-0'"
                           ></span>
                         </button>
                         <button
                           @click="deleteScenario(sc)"
-                          class="p-1.5 text-red-500/70 hover:text-red-700 hover:bg-red-50 rounded-lg cursor-pointer transition-colors"
+                          class="p-1.5 text-destructive/70 hover:text-destructive hover:bg-destructive/10 rounded-lg cursor-pointer transition-colors"
                           title="Remove scenario"
                         >
                           <Trash2 class="w-3.5 h-3.5" />
@@ -975,17 +975,17 @@
                     </div>
 
                     <!-- Trigger condition box -->
-                    <div class="p-3 bg-gray-50 rounded-xl border border-gray-100 space-y-1">
-                      <div class="text-[11px] font-semibold text-gray-500">Trigger Condition</div>
-                      <div class="text-xs text-gray-800 font-medium leading-relaxed">
+                    <div class="p-3 bg-muted/50 rounded-xl border border-border space-y-1">
+                      <div class="text-[11px] font-semibold text-muted-foreground">Trigger Condition</div>
+                      <div class="text-xs text-foreground font-medium leading-relaxed">
                         {{ sc.triggerPrompt }}
                       </div>
                     </div>
 
                     <!-- Steps List -->
                     <div class="space-y-1.5">
-                      <div class="text-[11px] font-semibold text-gray-500">Qualifying Steps & Actions</div>
-                      <ol class="space-y-1 text-xs text-gray-700 list-decimal list-inside pl-1">
+                      <div class="text-[11px] font-semibold text-muted-foreground">Qualifying Steps & Actions</div>
+                      <ol class="space-y-1 text-xs text-foreground list-decimal list-inside pl-1">
                         <li v-for="(step, idx) in sc.qualifyingSteps" :key="idx" class="leading-relaxed">
                           {{ step }}
                         </li>
@@ -993,9 +993,9 @@
                     </div>
 
                     <!-- Tool Chips & Footer -->
-                    <div class="pt-3 border-t border-gray-100 flex flex-wrap items-center justify-between gap-3 text-xs">
+                    <div class="pt-3 border-t border-border flex flex-wrap items-center justify-between gap-3 text-xs">
                       <div class="flex flex-wrap items-center gap-1.5">
-                        <span class="text-[11px] font-medium text-gray-500 mr-1">Tools:</span>
+                        <span class="text-[11px] font-medium text-muted-foreground mr-1">Tools:</span>
                         <span
                           v-for="tool in sc.toolsUsed"
                           :key="tool"
@@ -1005,8 +1005,8 @@
                           {{ tool }}
                         </span>
                       </div>
-                      <div class="text-[11px] text-gray-500 font-mono flex items-center gap-1.5">
-                        <CheckCircle2 class="w-3.5 h-3.5 text-emerald-500" />
+                      <div class="text-[11px] text-muted-foreground font-mono flex items-center gap-1.5">
+                        <CheckCircle2 class="w-3.5 h-3.5 text-primary" />
                         <span>Executed {{ sc.executionsCount }} times • 98% resolution</span>
                       </div>
                     </div>
@@ -1015,7 +1015,7 @@
 
                 <!-- Empty state -->
                 <div v-else class="py-12 text-center space-y-2">
-                  <p class="text-xs text-gray-500">No scenarios matched your query. Click "+ Add Scenario" above to build a playbook.</p>
+                  <p class="text-xs text-muted-foreground">No scenarios matched your query. Click "+ Add Scenario" above to build a playbook.</p>
                 </div>
               </div>
             </div>
@@ -1023,17 +1023,17 @@
             <!-- ─── SUB-TAB 3: RESPONSE GUIDELINES ─── -->
             <div v-if="activeBehaviorSubTab === 'guidelines'" class="space-y-6">
               <!-- Header Card -->
-              <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-2xs space-y-4">
+              <div class="bg-card border border-border rounded-2xl p-6 shadow-2xs space-y-4">
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                   <div class="space-y-1">
-                    <h3 class="text-sm font-bold text-gray-900">Response Guidelines</h3>
-                    <p class="text-xs text-gray-500">
+                    <h3 class="text-sm font-bold text-foreground">Response Guidelines</h3>
+                    <p class="text-xs text-muted-foreground">
                       Tone, language matching, and SST quote format guidelines.
                     </p>
                   </div>
                   <button
                     @click="showGuidelineExamples = !showGuidelineExamples"
-                    class="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 hover:text-emerald-800 cursor-pointer self-start sm:self-auto"
+                    class="inline-flex items-center gap-1.5 text-xs font-semibold text-success hover:text-success/90 cursor-pointer self-start sm:self-auto"
                   >
                     <span>{{ showGuidelineExamples ? 'Hide Quick Presets' : 'Show Quick Presets' }}</span>
                     <component :is="showGuidelineExamples ? ChevronUp : ChevronDown" class="w-3.5 h-3.5" />
@@ -1041,33 +1041,33 @@
                 </div>
 
                 <!-- Quick Presets Bar -->
-                <div v-if="showGuidelineExamples" class="p-4 bg-gray-50 rounded-xl border border-gray-200 space-y-2.5">
-                  <div class="text-xs font-bold text-gray-800 flex items-center gap-2">
-                    <Sparkles class="w-3.5 h-3.5 text-emerald-600" />
+                <div v-if="showGuidelineExamples" class="p-4 bg-muted/50 rounded-xl border border-border space-y-2.5">
+                  <div class="text-xs font-bold text-foreground flex items-center gap-2">
+                    <Sparkles class="w-3.5 h-3.5 text-success" />
                     Recommended Guidelines (Click to Adopt)
                   </div>
                   <div class="flex flex-wrap gap-2">
                     <button
                       @click="adoptExampleGuideline('Keep replies under 3 sentences unless customer asks for more detail.', 'Length & Format')"
-                      class="px-2.5 py-1.5 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 hover:text-emerald-900 rounded-lg text-xs font-semibold cursor-pointer transition-colors"
+                      class="px-2.5 py-1.5 bg-success/15 hover:bg-success/20 text-success hover:text-success rounded-lg text-xs font-semibold cursor-pointer transition-colors"
                     >
                       + Keep under 3 sentences
                     </button>
                     <button
                       @click="adoptExampleGuideline('Always reply in the exact language the customer used to write in (EN/MY).', 'Language & Locale')"
-                      class="px-2.5 py-1.5 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 hover:text-emerald-900 rounded-lg text-xs font-semibold cursor-pointer transition-colors"
+                      class="px-2.5 py-1.5 bg-success/15 hover:bg-success/20 text-success hover:text-success rounded-lg text-xs font-semibold cursor-pointer transition-colors"
                     >
                       + Match language (EN/MY)
                     </button>
                     <button
                       @click="adoptExampleGuideline('Use a warm, consultative B2B wholesale tone — never overly casual, never robotic.', 'Tone & Voice')"
-                      class="px-2.5 py-1.5 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 hover:text-emerald-900 rounded-lg text-xs font-semibold cursor-pointer transition-colors"
+                      class="px-2.5 py-1.5 bg-success/15 hover:bg-success/20 text-success hover:text-success rounded-lg text-xs font-semibold cursor-pointer transition-colors"
                     >
                       + Warm consultative tone
                     </button>
                     <button
                       @click="adoptExampleGuideline('Always quote wholesale prices with standard SST disclosures and state minimum order quantities clearly.', 'Pricing Policy')"
-                      class="px-2.5 py-1.5 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 hover:text-emerald-900 rounded-lg text-xs font-semibold cursor-pointer transition-colors"
+                      class="px-2.5 py-1.5 bg-success/15 hover:bg-success/20 text-success hover:text-success rounded-lg text-xs font-semibold cursor-pointer transition-colors"
                     >
                       + SST & MOQ disclosures
                     </button>
@@ -1075,19 +1075,19 @@
                 </div>
 
                 <!-- Active Guidelines List -->
-                <div class="pt-2 divide-y divide-gray-100">
+                <div class="pt-2 divide-y divide-border">
                   <div
                     v-for="g in guidelineRules"
                     :key="g.id"
                     class="py-3 flex items-start justify-between gap-4 group"
                   >
                     <div class="flex items-start gap-3 min-w-0">
-                      <div class="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0 mt-0.5">
+                      <div class="w-7 h-7 rounded-lg bg-success/10 text-success flex items-center justify-center shrink-0 mt-0.5">
                         <Check class="w-3.5 h-3.5" />
                       </div>
                       <div class="space-y-1 min-w-0">
                         <div class="flex items-center gap-2">
-                          <span class="text-xs font-bold text-gray-900 group-hover:text-primary transition-colors">
+                          <span class="text-xs font-bold text-foreground group-hover:text-primary transition-colors">
                             {{ g.rule }}
                           </span>
                           <span class="px-2 py-0.5 rounded-full text-[9px] font-bold" :class="getGuidelineCategoryBadge(g.category)">
@@ -1104,16 +1104,16 @@
                         :aria-checked="g.enabled"
                         @click="g.enabled = !g.enabled"
                         class="relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none"
-                        :class="g.enabled ? 'bg-primary' : 'bg-gray-200'"
+                        :class="g.enabled ? 'bg-primary' : 'bg-muted'"
                       >
                         <span
-                          class="pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                          class="pointer-events-none inline-block h-4 w-4 transform rounded-full bg-card shadow ring-0 transition duration-200 ease-in-out"
                           :class="g.enabled ? 'translate-x-4' : 'translate-x-0'"
                         ></span>
                       </button>
                       <button
                         @click="deleteGuideline(g)"
-                        class="p-1.5 text-red-500/70 hover:text-red-700 hover:bg-red-50 rounded-lg cursor-pointer transition-colors"
+                        class="p-1.5 text-destructive/70 hover:text-destructive hover:bg-destructive/10 rounded-lg cursor-pointer transition-colors"
                         title="Remove guideline"
                       >
                         <Trash2 class="w-3.5 h-3.5" />
@@ -1123,17 +1123,17 @@
                 </div>
 
                 <!-- Quick Add Guideline Input -->
-                <div class="pt-4 border-t border-gray-100 flex items-center gap-2">
+                <div class="pt-4 border-t border-border flex items-center gap-2">
                   <input
                     v-model="quickGuidelineText"
                     type="text"
                     placeholder="Type a response guideline and press Enter..."
-                    class="flex-1 px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs"
+                    class="flex-1 px-3.5 py-2.5 bg-card border border-border rounded-xl text-xs font-medium text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs"
                     @keydown.enter="submitQuickGuideline"
                   />
                   <button
                     @click="submitQuickGuideline"
-                    class="px-4 py-2.5 bg-primary hover:bg-[#1ea446] text-white font-semibold text-xs rounded-xl cursor-pointer shadow-xs transition-colors shrink-0"
+                    class="px-4 py-2.5 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs rounded-xl cursor-pointer shadow-xs transition-colors shrink-0"
                   >
                     Add Guideline
                   </button>
@@ -1144,10 +1144,10 @@
             <!-- ─── SUB-TAB 4: HANDOFF & ENGINE SETTINGS ─── -->
             <div v-else-if="activeBehaviorSubTab === 'handoff'" class="space-y-6">
               <!-- Handoff & Escalation Card -->
-              <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-2xs space-y-5">
+              <div class="bg-card border border-border rounded-2xl p-6 shadow-2xs space-y-5">
                 <div class="space-y-1">
-                  <h3 class="text-sm font-bold text-gray-900">Handoff & Closing Messages</h3>
-                  <p class="text-xs text-gray-500">
+                  <h3 class="text-sm font-bold text-foreground">Handoff & Closing Messages</h3>
+                  <p class="text-xs text-muted-foreground">
                     Automated messages sent during human agent transfers and ticket closures.
                   </p>
                 </div>
@@ -1155,8 +1155,8 @@
                 <!-- Handoff Message -->
                 <div class="space-y-2 pt-1">
                   <div class="flex items-center justify-between">
-                    <label class="block text-xs font-semibold text-gray-700">Handoff Message (When passing to human)</label>
-                    <div class="flex items-center gap-1 text-[11px] text-gray-500">
+                    <label class="block text-xs font-semibold text-foreground">Handoff Message (When passing to human)</label>
+                    <div class="flex items-center gap-1 text-[11px] text-muted-foreground">
                       <span class="font-mono">{{ handoffSettings.handoffMessage.length }}</span>
                       <span>/ 400</span>
                     </div>
@@ -1164,28 +1164,28 @@
 
                   <!-- Variable tokens chips -->
                   <div class="flex flex-wrap items-center gap-1.5 pb-1">
-                    <span class="text-[11px] font-medium text-gray-500 mr-1">Variables:</span>
+                    <span class="text-[11px] font-medium text-muted-foreground mr-1">Variables:</span>
                     <button
                       @click="insertHandoffVariable('{rep_name}')"
-                      class="px-2 py-0.5 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 hover:text-emerald-900 text-[10px] font-mono font-semibold rounded-md cursor-pointer transition-colors"
+                      class="px-2 py-0.5 bg-success/15 hover:bg-success/20 text-success hover:text-success text-[10px] font-mono font-semibold rounded-md cursor-pointer transition-colors"
                     >
                       {rep_name}
                     </button>
                     <button
                       @click="insertHandoffVariable('{team_name}')"
-                      class="px-2 py-0.5 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 hover:text-emerald-900 text-[10px] font-mono font-semibold rounded-md cursor-pointer transition-colors"
+                      class="px-2 py-0.5 bg-success/15 hover:bg-success/20 text-success hover:text-success text-[10px] font-mono font-semibold rounded-md cursor-pointer transition-colors"
                     >
                       {team_name}
                     </button>
                     <button
                       @click="insertHandoffVariable('{wait_time}')"
-                      class="px-2 py-0.5 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 hover:text-emerald-900 text-[10px] font-mono font-semibold rounded-md cursor-pointer transition-colors"
+                      class="px-2 py-0.5 bg-success/15 hover:bg-success/20 text-success hover:text-success text-[10px] font-mono font-semibold rounded-md cursor-pointer transition-colors"
                     >
                       {wait_time}
                     </button>
                     <button
                       @click="insertHandoffVariable('{customer_name}')"
-                      class="px-2 py-0.5 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 hover:text-emerald-900 text-[10px] font-mono font-semibold rounded-md cursor-pointer transition-colors"
+                      class="px-2 py-0.5 bg-success/15 hover:bg-success/20 text-success hover:text-success text-[10px] font-mono font-semibold rounded-md cursor-pointer transition-colors"
                     >
                       {customer_name}
                     </button>
@@ -1195,17 +1195,17 @@
                     v-model="handoffSettings.handoffMessage"
                     rows="3"
                     maxlength="400"
-                    class="w-full px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-800 focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs resize-none"
+                    class="w-full px-3.5 py-2.5 bg-card border border-border rounded-xl text-xs font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs resize-none"
                   ></textarea>
 
                   <!-- Live WhatsApp Simulation bubble -->
-                  <div class="p-3 bg-emerald-50/40 rounded-xl border border-emerald-100 flex items-start gap-2.5">
-                    <div class="w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">
+                  <div class="p-3 bg-success/10 rounded-xl border border-success/20 flex items-start gap-2.5">
+                    <div class="w-6 h-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">
                       WA
                     </div>
                     <div class="min-w-0">
-                      <div class="text-[11px] font-semibold text-emerald-800">Preview in WhatsApp:</div>
-                      <div class="text-xs text-gray-800 italic mt-0.5">
+                      <div class="text-[11px] font-semibold text-success">Preview in WhatsApp:</div>
+                      <div class="text-xs text-foreground italic mt-0.5">
                         "{{ handoffSettings.handoffMessage.replace('{rep_name}', 'Hafiz Rahman').replace('{team_name}', 'HoReCa Sales').replace('{wait_time}', 'under 5 minutes').replace('{customer_name}', 'Valued Customer') }}"
                       </div>
                     </div>
@@ -1215,8 +1215,8 @@
                 <!-- Resolution Message -->
                 <div class="space-y-2 pt-2">
                   <div class="flex items-center justify-between">
-                    <label class="block text-xs font-semibold text-gray-700">Resolution & Ticket Closing Message</label>
-                    <div class="flex items-center gap-1 text-[11px] text-gray-500">
+                    <label class="block text-xs font-semibold text-foreground">Resolution & Ticket Closing Message</label>
+                    <div class="flex items-center gap-1 text-[11px] text-muted-foreground">
                       <span class="font-mono">{{ handoffSettings.resolutionMessage.length }}</span>
                       <span>/ 400</span>
                     </div>
@@ -1224,16 +1224,16 @@
 
                   <!-- Variable tokens chips -->
                   <div class="flex flex-wrap items-center gap-1.5 pb-1">
-                    <span class="text-[11px] font-medium text-gray-500 mr-1">Variables:</span>
+                    <span class="text-[11px] font-medium text-muted-foreground mr-1">Variables:</span>
                     <button
                       @click="insertResolutionVariable('{customer_name}')"
-                      class="px-2 py-0.5 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 hover:text-emerald-900 text-[10px] font-mono font-semibold rounded-md cursor-pointer transition-colors"
+                      class="px-2 py-0.5 bg-success/15 hover:bg-success/20 text-success hover:text-success text-[10px] font-mono font-semibold rounded-md cursor-pointer transition-colors"
                     >
                       {customer_name}
                     </button>
                     <button
                       @click="insertResolutionVariable('{company_name}')"
-                      class="px-2 py-0.5 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 hover:text-emerald-900 text-[10px] font-mono font-semibold rounded-md cursor-pointer transition-colors"
+                      class="px-2 py-0.5 bg-success/15 hover:bg-success/20 text-success hover:text-success text-[10px] font-mono font-semibold rounded-md cursor-pointer transition-colors"
                     >
                       {company_name}
                     </button>
@@ -1243,35 +1243,35 @@
                     v-model="handoffSettings.resolutionMessage"
                     rows="2"
                     maxlength="400"
-                    class="w-full px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-800 focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs resize-none"
+                    class="w-full px-3.5 py-2.5 bg-card border border-border rounded-xl text-xs font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs resize-none"
                   ></textarea>
                 </div>
               </div>
 
               <!-- AI Engine Parameters Card -->
-              <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-2xs space-y-6">
+              <div class="bg-card border border-border rounded-2xl p-6 shadow-2xs space-y-6">
                 <div class="space-y-1">
-                  <h3 class="text-sm font-bold text-gray-900">Engine Calibration</h3>
-                  <p class="text-xs text-gray-500">
+                  <h3 class="text-sm font-bold text-foreground">Engine Calibration</h3>
+                  <p class="text-xs text-muted-foreground">
                     Configure response precision, confidence thresholds, and typing cadence.
                   </p>
                 </div>
 
                 <!-- 1. Qualitative Temperature Tiers -->
                 <div class="space-y-2">
-                  <label class="block text-xs font-semibold text-gray-700">Response Behavior (Creativity & Precision)</label>
+                  <label class="block text-xs font-semibold text-foreground">Response Behavior (Creativity & Precision)</label>
                   <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <button
                       type="button"
                       @click="handoffSettings.temperatureTier = 'strict'; handoffSettings.temperatureValue = 0.2"
                       class="p-3.5 rounded-xl border text-left cursor-pointer transition-all"
-                      :class="handoffSettings.temperatureTier === 'strict' ? 'border-primary bg-emerald-50/50 ring-1 ring-primary' : 'border-gray-200 hover:bg-gray-50'"
+                      :class="handoffSettings.temperatureTier === 'strict' ? 'border-primary bg-success/10 ring-1 ring-primary' : 'border-border hover:bg-muted'"
                     >
-                      <div class="text-xs font-bold text-gray-900 flex items-center justify-between">
+                      <div class="text-xs font-bold text-foreground flex items-center justify-between">
                         <span>Strict & Factual</span>
-                        <span class="text-[10px] font-mono text-gray-500">0.2</span>
+                        <span class="text-[10px] font-mono text-muted-foreground">0.2</span>
                       </div>
-                      <p class="text-[11px] text-gray-500 mt-1 leading-relaxed">
+                      <p class="text-[11px] text-muted-foreground mt-1 leading-relaxed">
                         Deterministic. Strictly follows price matrices and product specs.
                       </p>
                     </button>
@@ -1280,13 +1280,13 @@
                       type="button"
                       @click="handoffSettings.temperatureTier = 'balanced'; handoffSettings.temperatureValue = 0.35"
                       class="p-3.5 rounded-xl border text-left cursor-pointer transition-all"
-                      :class="handoffSettings.temperatureTier === 'balanced' ? 'border-primary bg-emerald-50/50 ring-1 ring-primary' : 'border-gray-200 hover:bg-gray-50'"
+                      :class="handoffSettings.temperatureTier === 'balanced' ? 'border-primary bg-success/10 ring-1 ring-primary' : 'border-border hover:bg-muted'"
                     >
-                      <div class="text-xs font-bold text-gray-900 flex items-center justify-between">
+                      <div class="text-xs font-bold text-foreground flex items-center justify-between">
                         <span>Balanced B2B (Recommended)</span>
-                        <span class="text-[10px] font-mono text-gray-500">0.35</span>
+                        <span class="text-[10px] font-mono text-muted-foreground">0.35</span>
                       </div>
-                      <p class="text-[11px] text-gray-500 mt-1 leading-relaxed">
+                      <p class="text-[11px] text-muted-foreground mt-1 leading-relaxed">
                         Natural sales dialogue grounded in verified knowledge base files.
                       </p>
                     </button>
@@ -1295,13 +1295,13 @@
                       type="button"
                       @click="handoffSettings.temperatureTier = 'creative'; handoffSettings.temperatureValue = 0.65"
                       class="p-3.5 rounded-xl border text-left cursor-pointer transition-all"
-                      :class="handoffSettings.temperatureTier === 'creative' ? 'border-primary bg-emerald-50/50 ring-1 ring-primary' : 'border-gray-200 hover:bg-gray-50'"
+                      :class="handoffSettings.temperatureTier === 'creative' ? 'border-primary bg-success/10 ring-1 ring-primary' : 'border-border hover:bg-muted'"
                     >
-                      <div class="text-xs font-bold text-gray-900 flex items-center justify-between">
+                      <div class="text-xs font-bold text-foreground flex items-center justify-between">
                         <span>Dynamic / Marketing</span>
-                        <span class="text-[10px] font-mono text-gray-500">0.65</span>
+                        <span class="text-[10px] font-mono text-muted-foreground">0.65</span>
                       </div>
-                      <p class="text-[11px] text-gray-500 mt-1 leading-relaxed">
+                      <p class="text-[11px] text-muted-foreground mt-1 leading-relaxed">
                         More phrasing variety. Best for open-ended marketing conversations.
                       </p>
                     </button>
@@ -1310,19 +1310,19 @@
 
                 <!-- 2. Qualitative Strictness Tiers -->
                 <div class="space-y-2">
-                  <label class="block text-xs font-semibold text-gray-700">Knowledge Base Confidence Threshold</label>
+                  <label class="block text-xs font-semibold text-foreground">Knowledge Base Confidence Threshold</label>
                   <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <button
                       type="button"
                       @click="handoffSettings.strictnessTier = 'high'; handoffSettings.strictnessValue = 0.85"
                       class="p-3.5 rounded-xl border text-left cursor-pointer transition-all"
-                      :class="handoffSettings.strictnessTier === 'high' ? 'border-primary bg-emerald-50/50 ring-1 ring-primary' : 'border-gray-200 hover:bg-gray-50'"
+                      :class="handoffSettings.strictnessTier === 'high' ? 'border-primary bg-success/10 ring-1 ring-primary' : 'border-border hover:bg-muted'"
                     >
-                      <div class="text-xs font-bold text-gray-900 flex items-center justify-between">
+                      <div class="text-xs font-bold text-foreground flex items-center justify-between">
                         <span>High Precision (85%+)</span>
-                        <span class="text-[10px] font-mono text-gray-500">Strict</span>
+                        <span class="text-[10px] font-mono text-muted-foreground">Strict</span>
                       </div>
-                      <p class="text-[11px] text-gray-500 mt-1 leading-relaxed">
+                      <p class="text-[11px] text-muted-foreground mt-1 leading-relaxed">
                         Escalates to human rep if match confidence is below 85%. Lowest hallucination risk.
                       </p>
                     </button>
@@ -1331,13 +1331,13 @@
                       type="button"
                       @click="handoffSettings.strictnessTier = 'standard'; handoffSettings.strictnessValue = 0.70"
                       class="p-3.5 rounded-xl border text-left cursor-pointer transition-all"
-                      :class="handoffSettings.strictnessTier === 'standard' ? 'border-primary bg-emerald-50/50 ring-1 ring-primary' : 'border-gray-200 hover:bg-gray-50'"
+                      :class="handoffSettings.strictnessTier === 'standard' ? 'border-primary bg-success/10 ring-1 ring-primary' : 'border-border hover:bg-muted'"
                     >
-                      <div class="text-xs font-bold text-gray-900 flex items-center justify-between">
+                      <div class="text-xs font-bold text-foreground flex items-center justify-between">
                         <span>Standard Matching (70%)</span>
-                        <span class="text-[10px] font-mono text-gray-500">Balanced</span>
+                        <span class="text-[10px] font-mono text-muted-foreground">Balanced</span>
                       </div>
-                      <p class="text-[11px] text-gray-500 mt-1 leading-relaxed">
+                      <p class="text-[11px] text-muted-foreground mt-1 leading-relaxed">
                         Balanced semantic retrieval across all 8 indexed wholesale documents.
                       </p>
                     </button>
@@ -1346,13 +1346,13 @@
                       type="button"
                       @click="handoffSettings.strictnessTier = 'broad'; handoffSettings.strictnessValue = 0.55"
                       class="p-3.5 rounded-xl border text-left cursor-pointer transition-all"
-                      :class="handoffSettings.strictnessTier === 'broad' ? 'border-primary bg-emerald-50/50 ring-1 ring-primary' : 'border-gray-200 hover:bg-gray-50'"
+                      :class="handoffSettings.strictnessTier === 'broad' ? 'border-primary bg-success/10 ring-1 ring-primary' : 'border-border hover:bg-muted'"
                     >
-                      <div class="text-xs font-bold text-gray-900 flex items-center justify-between">
+                      <div class="text-xs font-bold text-foreground flex items-center justify-between">
                         <span>Broad Semantic (55%)</span>
-                        <span class="text-[10px] font-mono text-gray-500">Broad</span>
+                        <span class="text-[10px] font-mono text-muted-foreground">Broad</span>
                       </div>
-                      <p class="text-[11px] text-gray-500 mt-1 leading-relaxed">
+                      <p class="text-[11px] text-muted-foreground mt-1 leading-relaxed">
                         Matches looser phrasing and informal restaurant abbreviations.
                       </p>
                     </button>
@@ -1361,29 +1361,29 @@
 
                 <!-- 3. Human Typing Cadence & Reply Delay -->
                 <div class="space-y-1.5">
-                  <label class="block text-xs font-semibold text-gray-700">Human Typing Simulation & Reply Delay</label>
+                  <label class="block text-xs font-semibold text-foreground">Human Typing Simulation & Reply Delay</label>
                   <div class="flex items-center gap-3">
                     <div class="flex items-center gap-2">
-                      <span class="text-xs text-gray-500">Wait between</span>
+                      <span class="text-xs text-muted-foreground">Wait between</span>
                       <input
                         v-model.number="handoffSettings.replyDelayMin"
                         type="number"
                         min="0"
                         max="10"
-                        class="w-16 px-2.5 py-1.5 bg-white border border-gray-200 rounded-lg text-xs font-mono text-center font-bold text-gray-800"
+                        class="w-16 px-2.5 py-1.5 bg-card border border-border rounded-lg text-xs font-mono text-center font-bold text-foreground"
                       />
-                      <span class="text-xs text-gray-500">to</span>
+                      <span class="text-xs text-muted-foreground">to</span>
                       <input
                         v-model.number="handoffSettings.replyDelayMax"
                         type="number"
                         min="0"
                         max="10"
-                        class="w-16 px-2.5 py-1.5 bg-white border border-gray-200 rounded-lg text-xs font-mono text-center font-bold text-gray-800"
+                        class="w-16 px-2.5 py-1.5 bg-card border border-border rounded-lg text-xs font-mono text-center font-bold text-foreground"
                       />
-                      <span class="text-xs text-gray-500">seconds before replying on WhatsApp.</span>
+                      <span class="text-xs text-muted-foreground">seconds before replying on WhatsApp.</span>
                     </div>
                   </div>
-                  <p class="text-[11px] text-gray-500 pt-0.5">
+                  <p class="text-[11px] text-muted-foreground pt-0.5">
                     Simulates natural reading and typing cadence. Prevents the "robotic instant response" drop-off on WhatsApp. Set both to 0 for instant responses.
                   </p>
                 </div>
@@ -1393,13 +1393,13 @@
               <div class="flex items-center justify-end gap-2.5">
                 <button
                   @click="emitToast('Discarded', 'Reverted handoff settings to default.', 'info')"
-                  class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold text-xs rounded-xl cursor-pointer transition-colors"
+                  class="px-4 py-2 bg-muted hover:bg-muted text-foreground font-semibold text-xs rounded-xl cursor-pointer transition-colors"
                 >
                   Discard
                 </button>
                 <button
                   @click="saveHandoffSettings"
-                  class="px-5 py-2 bg-primary hover:bg-[#1ea446] text-white font-semibold text-xs rounded-xl cursor-pointer shadow-xs transition-colors"
+                  class="px-5 py-2 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs rounded-xl cursor-pointer shadow-xs transition-colors"
                 >
                   Save Handoff Settings
                 </button>
@@ -1410,32 +1410,32 @@
           <!-- ══════════════ TAB 2: KNOWLEDGE & DOCUMENTS ══════════════ -->
           <div v-else-if="activeDetailTab === 'knowledge'" class="space-y-6 animate-fade-in">
             <!-- Knowledge Hub Card -->
-            <div class="bg-white border border-gray-200 rounded-2xl shadow-2xs overflow-hidden">
+            <div class="bg-card border border-border rounded-2xl shadow-2xs overflow-hidden">
               <!-- Distilled Header -->
-              <div class="p-5 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div class="p-5 border-b border-border flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
                   <div class="flex items-center gap-2.5">
-                    <h3 class="text-sm font-bold text-gray-900">Knowledge Base</h3>
-                    <span class="text-[11px] font-semibold text-gray-600 bg-gray-100 px-2 py-0.5 rounded-full">
+                    <h3 class="text-sm font-bold text-foreground">Knowledge Base</h3>
+                    <span class="text-[11px] font-semibold text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
                       {{ knowledgeDocs.length }} sources
                     </span>
                   </div>
-                  <p class="text-xs text-gray-500 mt-0.5">Documents and URLs indexed for AI-grounded sales answers.</p>
+                  <p class="text-xs text-muted-foreground mt-0.5">Documents and URLs indexed for AI-grounded sales answers.</p>
                 </div>
 
                 <div class="flex items-center gap-2">
                   <button
                     @click="syncAllDocs"
-                    class="px-3 py-1.5 bg-gray-50 hover:bg-gray-100 text-gray-700 text-xs font-semibold rounded-xl cursor-pointer transition-colors border border-gray-200 inline-flex items-center gap-1.5 shadow-2xs"
+                    class="px-3 py-1.5 bg-muted/50 hover:bg-muted text-foreground text-xs font-semibold rounded-xl cursor-pointer transition-colors border border-border inline-flex items-center gap-1.5 shadow-2xs"
                     :class="{ 'pointer-events-none': isSyncing }"
                     title="Re-index all documents"
                   >
-                    <RefreshCw class="w-3.5 h-3.5 text-gray-500" :class="{ 'animate-spin': isSyncing }" />
+                    <RefreshCw class="w-3.5 h-3.5 text-muted-foreground" :class="{ 'animate-spin': isSyncing }" />
                     <span>Sync Index</span>
                   </button>
                   <button
                     @click="showAddDocModal = true"
-                    class="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-primary hover:bg-[#1ea446] text-white font-semibold text-xs rounded-xl cursor-pointer shadow-xs transition-colors"
+                    class="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs rounded-xl cursor-pointer shadow-xs transition-colors"
                   >
                     <Plus class="w-3.5 h-3.5" />
                     <span>Add Source</span>
@@ -1444,7 +1444,7 @@
               </div>
 
               <!-- Distilled Filter & Search Bar (Replaces redundant upload banner) -->
-              <div class="px-5 py-3 bg-gray-50/60 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div class="px-5 py-3 bg-muted/50 border-b border-border flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div class="flex items-center gap-1.5 flex-wrap">
                   <button
                     v-for="filter in [
@@ -1457,29 +1457,29 @@
                     :key="filter.id"
                     @click="knowledgeTypeFilter = filter.id as any"
                     class="px-2.5 py-1 rounded-lg text-xs font-medium cursor-pointer transition-colors"
-                    :class="knowledgeTypeFilter === filter.id ? 'bg-white text-emerald-800 font-bold shadow-2xs border border-gray-200/80' : 'text-gray-500 hover:text-gray-800 hover:bg-gray-100'"
+                    :class="knowledgeTypeFilter === filter.id ? 'bg-card text-success font-bold shadow-2xs border border-border/80' : 'text-muted-foreground hover:text-foreground hover:bg-muted'"
                   >
                     {{ filter.label }} <span class="text-[10px] opacity-75">({{ filter.count }})</span>
                   </button>
                 </div>
 
                 <div class="relative w-full sm:w-64">
-                  <Search class="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+                  <Search class="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
                   <input
                     v-model="knowledgeSearch"
                     type="text"
                     placeholder="Filter knowledge sources..."
-                    class="w-full pl-8 pr-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs"
+                    class="w-full pl-8 pr-3 py-1.5 bg-card border border-border rounded-xl text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs"
                   />
                 </div>
               </div>
 
               <!-- Documents List -->
-              <div v-if="filteredKnowledgeDocs.length > 0" class="divide-y divide-gray-100">
+              <div v-if="filteredKnowledgeDocs.length > 0" class="divide-y divide-border">
                 <div
                   v-for="doc in filteredKnowledgeDocs"
                   :key="doc.id"
-                  class="p-4 flex items-center justify-between hover:bg-gray-50/60 transition-colors group"
+                  class="p-4 flex items-center justify-between hover:bg-muted/60 transition-colors group"
                 >
                   <div class="flex items-center gap-3.5 min-w-0">
                     <div
@@ -1493,17 +1493,17 @@
                     </div>
                     <div class="min-w-0">
                       <div class="flex items-center gap-2">
-                        <span class="text-xs font-semibold text-gray-900 group-hover:text-primary transition-colors truncate">
+                        <span class="text-xs font-semibold text-foreground group-hover:text-primary transition-colors truncate">
                           {{ doc.title }}
                         </span>
                       </div>
-                      <div class="text-[11px] text-gray-500 mt-0.5 truncate flex items-center gap-2">
-                        <span class="font-bold text-gray-600 uppercase text-[10px] tracking-wider">{{ doc.type }}</span>
+                      <div class="text-[11px] text-muted-foreground mt-0.5 truncate flex items-center gap-2">
+                        <span class="font-bold text-muted-foreground uppercase text-[10px] tracking-wider">{{ doc.type }}</span>
                         <span v-if="doc.size">• {{ doc.size }}</span>
-                        <span v-else-if="doc.type === 'url'" class="font-mono text-gray-500">• {{ doc.url }}</span>
+                        <span v-else-if="doc.type === 'url'" class="font-mono text-muted-foreground">• {{ doc.url }}</span>
                         <span>•</span>
-                        <span class="text-emerald-700 font-medium flex items-center gap-1">
-                          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                        <span class="text-success font-medium flex items-center gap-1">
+                          <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
                           {{ doc.status || 'Indexed' }}
                         </span>
                         <span>•</span>
@@ -1515,7 +1515,7 @@
                   <div class="flex items-center gap-2 shrink-0">
                     <button
                       @click="promptDeleteDoc(doc)"
-                      class="p-1.5 text-red-600/70 hover:text-red-700 hover:bg-red-50 rounded-lg cursor-pointer transition-colors opacity-70 group-hover:opacity-100"
+                      class="p-1.5 text-destructive/70 hover:text-destructive hover:bg-destructive/10 rounded-lg cursor-pointer transition-colors opacity-70 group-hover:opacity-100"
                       title="Remove document"
                     >
                       <Trash2 class="w-3.5 h-3.5" />
@@ -1526,17 +1526,17 @@
 
               <!-- Empty Knowledge State -->
               <div v-else class="p-12 text-center space-y-3">
-                <BookOpen class="w-8 h-8 text-gray-300 mx-auto" />
-                <div class="text-xs font-semibold text-gray-800">
+                <BookOpen class="w-8 h-8 text-muted-foreground/60 mx-auto" />
+                <div class="text-xs font-semibold text-foreground">
                   {{ knowledgeSearch ? 'No sources match your filter' : 'No knowledge sources attached' }}
                 </div>
-                <p class="text-xs text-gray-500 max-w-sm mx-auto">
+                <p class="text-xs text-muted-foreground max-w-sm mx-auto">
                   {{ knowledgeSearch ? 'Try a different keyword or switch to All.' : 'Add PDFs, price matrices, or web links to ground the assistant in verified facts.' }}
                 </p>
                 <button
                   v-if="!knowledgeSearch"
                   @click="showAddDocModal = true"
-                  class="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-primary hover:bg-[#1ea446] text-white font-semibold text-xs rounded-xl cursor-pointer shadow-xs transition-colors"
+                  class="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs rounded-xl cursor-pointer shadow-xs transition-colors"
                 >
                   <Plus class="w-3.5 h-3.5" />
                   Add Source
@@ -1548,16 +1548,16 @@
           <!-- ══════════════ TAB 4: TOOLS & EXTERNAL APIS ══════════════ -->
           <div v-else-if="activeDetailTab === 'tools'" class="space-y-6 animate-fade-in">
             <!-- Tools Hub Card (matching media_1790915514472.png) -->
-            <div class="bg-white border border-gray-200 rounded-2xl shadow-2xs overflow-hidden">
-              <div class="p-5 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div class="bg-card border border-border rounded-2xl shadow-2xs overflow-hidden">
+              <div class="p-5 border-b border-border flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
                   <div class="flex items-center gap-2">
-                    <h3 class="text-sm font-bold text-gray-900">API Tools</h3>
-                    <span class="text-[10px] font-bold bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full">
+                    <h3 class="text-sm font-bold text-foreground">API Tools</h3>
+                    <span class="text-[10px] font-bold bg-success/15 text-success px-2 py-0.5 rounded-full">
                       {{ customTools.length }} Active
                     </span>
                   </div>
-                  <p class="text-xs text-gray-500 mt-0.5">
+                  <p class="text-xs text-muted-foreground mt-0.5">
                     Connect external APIs so the assistant can query live ERP and warehouse data.
                   </p>
                 </div>
@@ -1565,7 +1565,7 @@
                 <div class="flex items-center gap-2">
                   <button
                     @click="showCreateToolModal = true"
-                    class="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-primary hover:bg-[#1ea446] text-white font-semibold text-xs rounded-xl cursor-pointer shadow-xs transition-colors"
+                    class="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs rounded-xl cursor-pointer shadow-xs transition-colors"
                   >
                     <Plus class="w-3.5 h-3.5" />
                     Create a new tool
@@ -1574,36 +1574,36 @@
               </div>
 
               <!-- When has tools -->
-              <div v-if="customTools.length > 0" class="divide-y divide-gray-100">
+              <div v-if="customTools.length > 0" class="divide-y divide-border">
                 <div
                   v-for="tool in customTools"
                   :key="tool.id"
-                  class="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-gray-50/50 transition-colors group"
+                  class="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-muted/50 transition-colors group"
                 >
                   <div class="flex items-start gap-3.5 min-w-0">
-                    <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0 mt-0.5 border border-emerald-100">
+                    <div class="w-10 h-10 rounded-xl bg-success/10 text-success flex items-center justify-center shrink-0 mt-0.5 border border-success/20">
                       <Wrench class="w-5 h-5" />
                     </div>
                     <div class="space-y-1 min-w-0">
                       <div class="flex items-center gap-2.5 flex-wrap">
-                        <span class="text-xs font-bold text-gray-900 group-hover:text-primary transition-colors">
+                        <span class="text-xs font-bold text-foreground group-hover:text-primary transition-colors">
                           {{ tool.name }}
                         </span>
                         <span
                           class="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold"
-                          :class="tool.method === 'GET' ? 'bg-sky-50 text-sky-800 border border-sky-200/60' : 'bg-emerald-50 text-emerald-900'"
+                          :class="tool.method === 'GET' ? 'bg-info/10 text-info border border-info/30' : 'bg-success/10 text-success'"
                         >
                           {{ tool.method }}
                         </span>
-                        <span class="text-[10px] text-gray-500 flex items-center gap-1 font-mono">
-                          <Lock class="w-3 h-3 text-gray-500" />
+                        <span class="text-[10px] text-muted-foreground flex items-center gap-1 font-mono">
+                          <Lock class="w-3 h-3 text-muted-foreground" />
                           {{ tool.authType }}
                         </span>
                       </div>
-                      <div class="text-[11px] font-mono text-gray-500 truncate max-w-lg">
+                      <div class="text-[11px] font-mono text-muted-foreground truncate max-w-lg">
                         {{ tool.endpoint }}
                       </div>
-                      <div class="text-xs text-gray-600 line-clamp-1">
+                      <div class="text-xs text-muted-foreground line-clamp-1">
                         {{ tool.description }}
                       </div>
                     </div>
@@ -1612,13 +1612,13 @@
                   <div class="flex items-center gap-2.5 shrink-0 self-end sm:self-center">
                     <button
                       @click="testToolConnection(tool)"
-                      class="px-2.5 py-1 text-[11px] font-medium text-emerald-800 bg-emerald-50 hover:bg-emerald-100 rounded-lg cursor-pointer transition-colors inline-flex items-center gap-1 shadow-2xs"
+                      class="px-2.5 py-1 text-[11px] font-medium text-success bg-success/10 hover:bg-success/15 rounded-lg cursor-pointer transition-colors inline-flex items-center gap-1 shadow-2xs"
                       title="Test live API endpoint connection"
                     >
-                      <Zap class="w-3 h-3 text-emerald-600" />
+                      <Zap class="w-3 h-3 text-success" />
                       Test Ping
                     </button>
-                    <span class="text-[10px] font-semibold text-gray-500 bg-gray-100 px-2 py-1 rounded-lg">
+                    <span class="text-[10px] font-semibold text-muted-foreground bg-muted px-2 py-1 rounded-lg">
                       {{ tool.callsCount }} calls
                     </span>
                     <button
@@ -1627,16 +1627,16 @@
                       :aria-checked="tool.enabled"
                       @click="tool.enabled = !tool.enabled"
                       class="relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none"
-                      :class="tool.enabled ? 'bg-primary' : 'bg-gray-200'"
+                      :class="tool.enabled ? 'bg-primary' : 'bg-muted'"
                     >
                       <span
-                        class="pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                        class="pointer-events-none inline-block h-4 w-4 transform rounded-full bg-card shadow ring-0 transition duration-200 ease-in-out"
                         :class="tool.enabled ? 'translate-x-4' : 'translate-x-0'"
                       ></span>
                     </button>
                     <button
                       @click="promptDeleteTool(tool)"
-                      class="p-1.5 text-red-500/70 hover:text-red-700 hover:bg-red-50 rounded-lg cursor-pointer transition-colors"
+                      class="p-1.5 text-destructive/70 hover:text-destructive hover:bg-destructive/10 rounded-lg cursor-pointer transition-colors"
                       title="Delete tool"
                     >
                       <Trash2 class="w-3.5 h-3.5" />
@@ -1649,47 +1649,47 @@
               <div v-else class="relative p-8 overflow-hidden min-h-[320px] flex items-center justify-center">
                 <!-- Ghosted background mock tools -->
                 <div class="absolute inset-0 p-6 space-y-3 opacity-25 filter blur-[0.5px] select-none pointer-events-none">
-                  <div class="p-4 bg-gray-50 rounded-xl border border-gray-200 flex items-center justify-between">
+                  <div class="p-4 bg-muted/50 rounded-xl border border-border flex items-center justify-between">
                     <div class="flex items-center gap-3">
-                      <div class="w-8 h-8 rounded-lg bg-gray-200 flex items-center justify-center text-gray-500"><Wrench class="w-4 h-4" /></div>
+                      <div class="w-8 h-8 rounded-lg bg-muted flex items-center justify-center text-muted-foreground"><Wrench class="w-4 h-4" /></div>
                       <div>
-                        <div class="text-xs font-bold text-gray-800">Order Lookup</div>
-                        <div class="text-[10px] font-mono text-gray-500">GET https://api.goldenharvest.com.my/v1/orders/{order_id}</div>
+                        <div class="text-xs font-bold text-foreground">Order Lookup</div>
+                        <div class="text-[10px] font-mono text-muted-foreground">GET https://api.goldenharvest.com.my/v1/orders/{order_id}</div>
                       </div>
                     </div>
-                    <div class="text-[10px] text-gray-500 font-mono">Bearer Token</div>
+                    <div class="text-[10px] text-muted-foreground font-mono">Bearer Token</div>
                   </div>
-                  <div class="p-4 bg-gray-50 rounded-xl border border-gray-200 flex items-center justify-between">
+                  <div class="p-4 bg-muted/50 rounded-xl border border-border flex items-center justify-between">
                     <div class="flex items-center gap-3">
-                      <div class="w-8 h-8 rounded-lg bg-gray-200 flex items-center justify-center text-gray-500"><Wrench class="w-4 h-4" /></div>
+                      <div class="w-8 h-8 rounded-lg bg-muted flex items-center justify-center text-muted-foreground"><Wrench class="w-4 h-4" /></div>
                       <div>
-                        <div class="text-xs font-bold text-gray-800">Account Status</div>
-                        <div class="text-[10px] font-mono text-gray-500">GET https://api.goldenharvest.com.my/v1/accounts/{account_id}/status</div>
+                        <div class="text-xs font-bold text-foreground">Account Status</div>
+                        <div class="text-[10px] font-mono text-muted-foreground">GET https://api.goldenharvest.com.my/v1/accounts/{account_id}/status</div>
                       </div>
                     </div>
-                    <div class="text-[10px] text-gray-500 font-mono">API Key</div>
+                    <div class="text-[10px] text-muted-foreground font-mono">API Key</div>
                   </div>
-                  <div class="p-4 bg-gray-50 rounded-xl border border-gray-200 flex items-center justify-between">
+                  <div class="p-4 bg-muted/50 rounded-xl border border-border flex items-center justify-between">
                     <div class="flex items-center gap-3">
-                      <div class="w-8 h-8 rounded-lg bg-gray-200 flex items-center justify-center text-gray-500"><Wrench class="w-4 h-4" /></div>
+                      <div class="w-8 h-8 rounded-lg bg-muted flex items-center justify-center text-muted-foreground"><Wrench class="w-4 h-4" /></div>
                       <div>
-                        <div class="text-xs font-bold text-gray-800">Shipment Tracker</div>
-                        <div class="text-[10px] font-mono text-gray-500">GET https://api.goldenharvest.com.my/v1/shipments/{tracking_id}</div>
+                        <div class="text-xs font-bold text-foreground">Shipment Tracker</div>
+                        <div class="text-[10px] font-mono text-muted-foreground">GET https://api.goldenharvest.com.my/v1/shipments/{tracking_id}</div>
                       </div>
                     </div>
-                    <div class="text-[10px] text-gray-500 font-mono">Bearer Token</div>
+                    <div class="text-[10px] text-muted-foreground font-mono">Bearer Token</div>
                   </div>
                 </div>
 
                 <!-- Foreground callout -->
-                <div class="relative z-10 text-center space-y-3 max-w-sm mx-auto bg-white/90 backdrop-blur-xs p-6 rounded-2xl border border-gray-200/80 shadow-lg">
-                  <h4 class="text-sm font-bold text-gray-900">No custom tools available</h4>
-                  <p class="text-xs text-gray-500">
+                <div class="relative z-10 text-center space-y-3 max-w-sm mx-auto bg-card/90 backdrop-blur-xs p-6 rounded-2xl border border-border/80 shadow-lg">
+                  <h4 class="text-sm font-bold text-foreground">No custom tools available</h4>
+                  <p class="text-xs text-muted-foreground">
                     No custom tools yet — most assistants work fine without one.
                   </p>
                   <button
                     @click="showCreateToolModal = true"
-                    class="inline-flex items-center gap-1.5 px-4 py-2 bg-primary hover:bg-[#1ea446] text-white font-semibold text-xs rounded-xl cursor-pointer shadow-xs transition-colors"
+                    class="inline-flex items-center gap-1.5 px-4 py-2 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs rounded-xl cursor-pointer shadow-xs transition-colors"
                   >
                     <Plus class="w-3.5 h-3.5" />
                     Create a new tool
@@ -1699,47 +1699,47 @@
             </div>
 
             <!-- Quick-start templates Card (matching media_1790915514472.png) -->
-            <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-2xs space-y-4">
+            <div class="bg-card border border-border rounded-2xl p-6 shadow-2xs space-y-4">
               <div class="space-y-1">
-                <h3 class="text-sm font-bold text-gray-900">Quick-start templates</h3>
-                <p class="text-xs text-gray-500">Adopt pre-configured API tool actions tailored for Malaysian foodservice wholesale.</p>
+                <h3 class="text-sm font-bold text-foreground">Quick-start templates</h3>
+                <p class="text-xs text-muted-foreground">Adopt pre-configured API tool actions tailored for Malaysian foodservice wholesale.</p>
               </div>
 
               <div class="space-y-3">
-                <div class="p-4 bg-gray-50 border border-gray-200/80 rounded-xl flex items-center justify-between gap-4">
+                <div class="p-4 bg-muted/50 border border-border/80 rounded-xl flex items-center justify-between gap-4">
                   <div>
-                    <div class="text-xs font-bold text-gray-900">Order Lookup</div>
-                    <div class="text-[11px] text-gray-500 mt-0.5">Looks up live delivery status and item packing details by order ID.</div>
+                    <div class="text-xs font-bold text-foreground">Order Lookup</div>
+                    <div class="text-[11px] text-muted-foreground mt-0.5">Looks up live delivery status and item packing details by order ID.</div>
                   </div>
                   <button
                     @click="adoptTemplateTool('Order Lookup')"
-                    class="px-3.5 py-1.5 bg-white hover:bg-gray-100 text-gray-700 hover:text-gray-900 font-semibold text-xs rounded-xl border border-gray-200 cursor-pointer shadow-2xs transition-colors shrink-0"
+                    class="px-3.5 py-1.5 bg-card hover:bg-muted text-foreground hover:text-foreground font-semibold text-xs rounded-xl border border-border cursor-pointer shadow-2xs transition-colors shrink-0"
                   >
                     Use template
                   </button>
                 </div>
 
-                <div class="p-4 bg-gray-50 border border-gray-200/80 rounded-xl flex items-center justify-between gap-4">
+                <div class="p-4 bg-muted/50 border border-border/80 rounded-xl flex items-center justify-between gap-4">
                   <div>
-                    <div class="text-xs font-bold text-gray-900">Account Status & Net Credit Limit</div>
-                    <div class="text-[11px] text-gray-500 mt-0.5">Checks customer 30-day net credit facility balance and invoice status.</div>
+                    <div class="text-xs font-bold text-foreground">Account Status & Net Credit Limit</div>
+                    <div class="text-[11px] text-muted-foreground mt-0.5">Checks customer 30-day net credit facility balance and invoice status.</div>
                   </div>
                   <button
                     @click="adoptTemplateTool('Account Status')"
-                    class="px-3.5 py-1.5 bg-white hover:bg-gray-100 text-gray-700 hover:text-gray-900 font-semibold text-xs rounded-xl border border-gray-200 cursor-pointer shadow-2xs transition-colors shrink-0"
+                    class="px-3.5 py-1.5 bg-card hover:bg-muted text-foreground hover:text-foreground font-semibold text-xs rounded-xl border border-border cursor-pointer shadow-2xs transition-colors shrink-0"
                   >
                     Use template
                   </button>
                 </div>
 
-                <div class="p-4 bg-gray-50 border border-gray-200/80 rounded-xl flex items-center justify-between gap-4">
+                <div class="p-4 bg-muted/50 border border-border/80 rounded-xl flex items-center justify-between gap-4">
                   <div>
-                    <div class="text-xs font-bold text-gray-900">Cold-Chain Reefer Route ETA</div>
-                    <div class="text-[11px] text-gray-500 mt-0.5">Checks daily morning reefer truck ETA (-18°C / +4°C) by postal code.</div>
+                    <div class="text-xs font-bold text-foreground">Cold-Chain Reefer Route ETA</div>
+                    <div class="text-[11px] text-muted-foreground mt-0.5">Checks daily morning reefer truck ETA (-18°C / +4°C) by postal code.</div>
                   </div>
                   <button
                     @click="adoptTemplateTool('Cold-Chain Reefer Route ETA')"
-                    class="px-3.5 py-1.5 bg-white hover:bg-gray-100 text-gray-700 hover:text-gray-900 font-semibold text-xs rounded-xl border border-gray-200 cursor-pointer shadow-2xs transition-colors shrink-0"
+                    class="px-3.5 py-1.5 bg-card hover:bg-muted text-foreground hover:text-foreground font-semibold text-xs rounded-xl border border-border cursor-pointer shadow-2xs transition-colors shrink-0"
                   >
                     Use template
                   </button>
@@ -1752,24 +1752,24 @@
           <div v-else-if="activeDetailTab === 'playground'" class="space-y-6 animate-fade-in">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
               <!-- Left Column: Interactive Chat Canvas (8 cols, matching media_1790915520373.png) -->
-              <div class="lg:col-span-8 bg-white border border-gray-200 rounded-2xl shadow-2xs overflow-hidden flex flex-col h-[620px]">
+              <div class="lg:col-span-8 bg-card border border-border rounded-2xl shadow-2xs overflow-hidden flex flex-col h-[620px]">
                 <!-- Header -->
-                <div class="p-5 border-b border-gray-100 flex items-center justify-between gap-4">
+                <div class="p-5 border-b border-border flex items-center justify-between gap-4">
                   <div>
                     <div class="flex items-center gap-2">
-                      <h3 class="text-sm font-bold text-gray-900">Playground</h3>
-                      <span class="text-[10px] font-bold bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full">
+                      <h3 class="text-sm font-bold text-foreground">Playground</h3>
+                      <span class="text-[10px] font-bold bg-success/15 text-success px-2 py-0.5 rounded-full">
                         Live Model
                       </span>
                     </div>
-                    <p class="text-xs text-gray-500 mt-0.5">
+                    <p class="text-xs text-muted-foreground mt-0.5">
                       Test prompts and preview live responses before customer deployment.
                     </p>
                   </div>
 
                   <button
                     @click="resetPlayground"
-                    class="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-xl cursor-pointer transition-colors"
+                    class="p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-xl cursor-pointer transition-colors"
                     title="Reset conversation"
                   >
                     <RefreshCw class="w-4 h-4" />
@@ -1777,7 +1777,7 @@
                 </div>
 
                 <!-- Messages stream -->
-                <div class="flex-1 p-5 overflow-y-auto space-y-3.5 bg-gray-50">
+                <div class="flex-1 p-5 overflow-y-auto space-y-3.5 bg-muted/50">
                   <div
                     v-for="(msg, idx) in playgroundMessages"
                     :key="idx"
@@ -1786,98 +1786,98 @@
                   >
                     <div
                       class="max-w-[85%] rounded-2xl p-3.5 text-xs leading-relaxed shadow-2xs"
-                      :class="msg.sender === 'user' ? 'bg-primary text-white rounded-br-xs' : 'bg-white border border-gray-200 text-gray-800 rounded-bl-xs'"
+                      :class="msg.sender === 'user' ? 'bg-primary text-primary-foreground rounded-br-xs' : 'bg-card border border-border text-foreground rounded-bl-xs'"
                     >
-                      <div v-if="msg.sender === 'bot'" class="flex items-center gap-1.5 pb-1 text-[10px] font-bold text-emerald-700">
+                      <div v-if="msg.sender === 'bot'" class="flex items-center gap-1.5 pb-1 text-[10px] font-bold text-success">
                         <Bot class="w-3 h-3" />
                         <span>Golden Harvest F&B AI</span>
                       </div>
                       {{ msg.text }}
                     </div>
-                    <span class="text-[9px] text-gray-500 px-1 pt-1">{{ msg.time }}</span>
+                    <span class="text-[9px] text-muted-foreground px-1 pt-1">{{ msg.time }}</span>
                   </div>
                 </div>
 
                 <!-- Quick Test Prompts -->
-                <div class="px-4 py-2 border-t border-gray-100 bg-white flex items-center gap-1.5 overflow-x-auto">
+                <div class="px-4 py-2 border-t border-border bg-card flex items-center gap-1.5 overflow-x-auto">
                   <button
                     v-for="chip in quickTestPrompts"
                     :key="chip"
                     @click="sendPlaygroundMessage(chip)"
-                    class="whitespace-nowrap px-2.5 py-1 bg-gray-100 hover:bg-gray-200 text-[10px] font-semibold text-gray-700 rounded-lg cursor-pointer transition-colors"
+                    class="whitespace-nowrap px-2.5 py-1 bg-muted hover:bg-muted text-[10px] font-semibold text-foreground rounded-lg cursor-pointer transition-colors"
                   >
                     {{ chip }}
                   </button>
                 </div>
 
                 <!-- Input area -->
-                <div class="p-3.5 border-t border-gray-200 bg-white space-y-1.5">
+                <div class="p-3.5 border-t border-border bg-card space-y-1.5">
                   <div class="flex items-center gap-2">
                     <input
                       v-model="playgroundInput"
                       type="text"
                       placeholder="Type your message..."
-                      class="flex-1 px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary focus:bg-white"
+                      class="flex-1 px-3.5 py-2.5 bg-muted/50 border border-border rounded-xl text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary focus:bg-card"
                       @keydown.enter="sendPlaygroundMessage()"
                     />
                     <button
                       @click="sendPlaygroundMessage()"
-                      class="p-2.5 bg-primary hover:bg-[#1ea446] text-white rounded-xl cursor-pointer shadow-xs transition-colors shrink-0"
+                      class="p-2.5 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl cursor-pointer shadow-xs transition-colors shrink-0"
                     >
                       <Send class="w-4 h-4" />
                     </button>
                   </div>
-                  <p class="text-[10px] text-gray-500 text-center">
+                  <p class="text-[10px] text-muted-foreground text-center">
                     Messages sent here will count toward your AI Assistant credits.
                   </p>
                 </div>
               </div>
 
               <!-- Right Column: Go-Live Checklist (4 cols, matching media_1790915520373.png) -->
-              <div class="lg:col-span-4 bg-white border border-gray-200 rounded-2xl p-6 shadow-2xs space-y-5">
+              <div class="lg:col-span-4 bg-card border border-border rounded-2xl p-6 shadow-2xs space-y-5">
                 <div class="space-y-1">
-                  <h3 class="text-sm font-bold text-gray-900">Go-Live Checklist</h3>
-                  <p class="text-xs text-gray-500">Essential verification steps before connecting live channels.</p>
+                  <h3 class="text-sm font-bold text-foreground">Go-Live Checklist</h3>
+                  <p class="text-xs text-muted-foreground">Essential verification steps before connecting live channels.</p>
                 </div>
 
                 <div class="space-y-3.5">
                   <div class="flex items-start gap-2.5">
-                    <div class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0 mt-0.5">
+                    <div class="w-5 h-5 rounded-full bg-success/15 text-success flex items-center justify-center shrink-0 mt-0.5">
                       <Check class="w-3 h-3 stroke-[2.5]" />
                     </div>
                     <div>
-                      <div class="text-xs font-semibold text-gray-900">Assistant named</div>
-                      <div class="text-[11px] text-gray-500">Golden Harvest F&B AI</div>
+                      <div class="text-xs font-semibold text-foreground">Assistant named</div>
+                      <div class="text-[11px] text-muted-foreground">Golden Harvest F&B AI</div>
                     </div>
                   </div>
 
                   <div class="flex items-start gap-2.5">
-                    <div class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0 mt-0.5">
+                    <div class="w-5 h-5 rounded-full bg-success/15 text-success flex items-center justify-center shrink-0 mt-0.5">
                       <Check class="w-3 h-3 stroke-[2.5]" />
                     </div>
                     <div>
-                      <div class="text-xs font-semibold text-gray-900">Knowledge added</div>
-                      <div class="text-[11px] text-gray-500">{{ knowledgeDocs.length }} documents indexed</div>
+                      <div class="text-xs font-semibold text-foreground">Knowledge added</div>
+                      <div class="text-[11px] text-muted-foreground">{{ knowledgeDocs.length }} documents indexed</div>
                     </div>
                   </div>
 
                   <div class="flex items-start gap-2.5">
-                    <div class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0 mt-0.5">
+                    <div class="w-5 h-5 rounded-full bg-success/15 text-success flex items-center justify-center shrink-0 mt-0.5">
                       <Check class="w-3 h-3 stroke-[2.5]" />
                     </div>
                     <div>
-                      <div class="text-xs font-semibold text-gray-900">At least 1 guardrail set</div>
-                      <div class="text-[11px] text-gray-500">{{ guardrailRules.length }} guardrails active</div>
+                      <div class="text-xs font-semibold text-foreground">At least 1 guardrail set</div>
+                      <div class="text-[11px] text-muted-foreground">{{ guardrailRules.length }} guardrails active</div>
                     </div>
                   </div>
 
                   <div class="flex items-start gap-2.5">
-                    <div class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0 mt-0.5">
+                    <div class="w-5 h-5 rounded-full bg-success/15 text-success flex items-center justify-center shrink-0 mt-0.5">
                       <Check class="w-3 h-3 stroke-[2.5]" />
                     </div>
                     <div>
-                      <div class="text-xs font-semibold text-gray-900">Response guidelines set</div>
-                      <div class="text-[11px] text-gray-500">{{ guidelineRules.length }} rules active</div>
+                      <div class="text-xs font-semibold text-foreground">Response guidelines set</div>
+                      <div class="text-[11px] text-muted-foreground">{{ guidelineRules.length }} rules active</div>
                     </div>
                   </div>
 
@@ -1889,28 +1889,28 @@
                       <Check class="w-3 h-3 stroke-[2.5]" />
                     </div>
                     <div>
-                      <div class="text-xs font-semibold text-gray-900">Tested in Playground</div>
-                      <div class="text-[11px] text-gray-500">
+                      <div class="text-xs font-semibold text-foreground">Tested in Playground</div>
+                      <div class="text-[11px] text-muted-foreground">
                         {{ hasTestedInPlayground ? 'Verified conversational flow' : 'Send a test message to complete' }}
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <div class="pt-4 border-t border-gray-100 space-y-3">
-                  <div class="p-3 bg-emerald-50/70 border border-emerald-100 rounded-xl space-y-1">
-                    <div class="text-xs font-bold text-emerald-800 flex items-center gap-1.5">
+                <div class="pt-4 border-t border-border space-y-3">
+                  <div class="p-3 bg-success/10 border border-success/20 rounded-xl space-y-1">
+                    <div class="text-xs font-bold text-success flex items-center gap-1.5">
                       <Sparkles class="w-3.5 h-3.5" />
                       100% Launch Ready
                     </div>
-                    <p class="text-[11px] text-emerald-900/80 leading-relaxed">
+                    <p class="text-[11px] text-success/80 leading-relaxed">
                       All quality checks passed. This assistant is ready for live WhatsApp customer traffic.
                     </p>
                   </div>
 
                   <button
                     @click="showPreflightModal = true"
-                    class="w-full py-2.5 bg-primary hover:bg-[#1ea446] text-white font-semibold text-xs rounded-xl cursor-pointer shadow-xs transition-colors flex items-center justify-center gap-2"
+                    class="w-full py-2.5 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs rounded-xl cursor-pointer shadow-xs transition-colors flex items-center justify-center gap-2"
                   >
                     <span>Deploy Assistant Live</span>
                     <ArrowRight class="w-3.5 h-3.5" />
@@ -1923,16 +1923,16 @@
           <!-- ══════════════ TAB 6: CONNECT (INBOXES) ══════════════ -->
           <div v-else-if="activeDetailTab === 'connect' || activeDetailTab === 'channels'" class="space-y-6 animate-fade-in">
             <!-- Connected inboxes Card (matching media_1790915526728.png) -->
-            <div class="bg-white border border-gray-200 rounded-2xl shadow-2xs overflow-hidden">
-              <div class="p-5 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div class="bg-card border border-border rounded-2xl shadow-2xs overflow-hidden">
+              <div class="p-5 border-b border-border flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                  <h3 class="text-sm font-bold text-gray-900">Connected Inboxes</h3>
-                  <p class="text-xs text-gray-500 mt-0.5">Manage active communication channels and WhatsApp accounts.</p>
+                  <h3 class="text-sm font-bold text-foreground">Connected Inboxes</h3>
+                  <p class="text-xs text-muted-foreground mt-0.5">Manage active communication channels and WhatsApp accounts.</p>
                 </div>
 
                 <button
                   @click="showConnectInboxModal = true"
-                  class="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-primary hover:bg-[#1ea446] text-white font-semibold text-xs rounded-xl cursor-pointer shadow-xs transition-colors"
+                  class="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs rounded-xl cursor-pointer shadow-xs transition-colors"
                 >
                   <Plus class="w-3.5 h-3.5" />
                   Connect a new inbox
@@ -1940,38 +1940,38 @@
               </div>
 
               <!-- List of inboxes -->
-              <div class="divide-y divide-gray-100">
+              <div class="divide-y divide-border">
                 <div
                   v-for="inbox in connectedInboxes"
                   :key="inbox.id"
-                  class="p-4 sm:p-5 flex items-center justify-between gap-4 hover:bg-gray-50/50 transition-colors"
+                  class="p-4 sm:p-5 flex items-center justify-between gap-4 hover:bg-muted/50 transition-colors"
                 >
                   <div class="flex items-center gap-3.5 min-w-0">
                     <div
                       class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border"
-                      :class="inbox.type === 'whatsapp' ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : 'bg-sky-50 text-sky-700 border-sky-100'"
+                      :class="inbox.type === 'whatsapp' ? 'bg-success/10 text-success border-success/20' : 'bg-info/10 text-info border-info/20'"
                     >
                       <component :is="inbox.type === 'whatsapp' ? Phone : Globe" class="w-5 h-5" />
                     </div>
                     <div class="min-w-0">
-                      <div class="text-xs font-bold text-gray-900 flex items-center gap-2">
+                      <div class="text-xs font-bold text-foreground flex items-center gap-2">
                         <span>{{ inbox.name }}</span>
-                        <span class="text-[11px] font-mono text-gray-500">({{ inbox.identifier }})</span>
+                        <span class="text-[11px] font-mono text-muted-foreground">({{ inbox.identifier }})</span>
                       </div>
-                      <div class="text-[10px] text-gray-500 mt-0.5">
+                      <div class="text-[10px] text-muted-foreground mt-0.5">
                         {{ inbox.connectedAt }} • {{ inbox.todayChats }} conversations today
                       </div>
                     </div>
                   </div>
 
                   <div class="flex items-center gap-3 shrink-0">
-                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800">
-                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-success/10 text-success">
+                      <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
                       Active
                     </span>
                     <button
                       @click="promptDeleteInbox(inbox)"
-                      class="p-1.5 text-red-500/70 hover:text-red-700 hover:bg-red-50 rounded-lg cursor-pointer transition-colors"
+                      class="p-1.5 text-destructive/70 hover:text-destructive hover:bg-destructive/10 rounded-lg cursor-pointer transition-colors"
                       title="Disconnect inbox"
                     >
                       <Trash2 class="w-3.5 h-3.5" />
@@ -1982,18 +1982,18 @@
             </div>
 
             <!-- Escalation & Routing Card -->
-            <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-2xs space-y-4">
+            <div class="bg-card border border-border rounded-2xl p-6 shadow-2xs space-y-4">
               <div class="space-y-1">
-                <h3 class="text-sm font-bold text-gray-900">Human Handoff Assignment</h3>
-                <p class="text-xs text-gray-500">Route conversation to this desk when handoff rules or keyword triggers fire.</p>
+                <h3 class="text-sm font-bold text-foreground">Human Handoff Assignment</h3>
+                <p class="text-xs text-muted-foreground">Route conversation to this desk when handoff rules or keyword triggers fire.</p>
               </div>
 
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
                 <div class="space-y-1.5">
-                  <label class="block text-xs font-semibold text-gray-700">Designated Sales Rep / Desk</label>
+                  <label class="block text-xs font-semibold text-foreground">Designated Sales Rep / Desk</label>
                   <select
                     v-model="editForm.fallbackRep"
-                    class="w-full px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-800 focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs cursor-pointer"
+                    class="w-full px-3.5 py-2.5 bg-card border border-border rounded-xl text-xs font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs cursor-pointer"
                   >
                     <option value="Hafiz Rahman (Key Account Manager)">Hafiz Rahman (Key Account Manager - HoReCa)</option>
                     <option value="Sarah Tan (Commercial Director)">Sarah Tan (Commercial Director - Chains & Hotels)</option>
@@ -2002,20 +2002,20 @@
                 </div>
                 <div class="space-y-1.5">
                   <div class="flex items-center justify-between">
-                    <label class="block text-xs font-semibold text-gray-700">High-Priority Keyword Triggers</label>
-                    <span class="text-[10px] text-gray-500 font-medium">{{ escalationKeywords.length }} triggers</span>
+                    <label class="block text-xs font-semibold text-foreground">High-Priority Keyword Triggers</label>
+                    <span class="text-[10px] text-muted-foreground font-medium">{{ escalationKeywords.length }} triggers</span>
                   </div>
-                  <div class="p-2 bg-gray-50 border border-gray-200 rounded-xl min-h-[44px] flex items-center gap-1.5 flex-wrap">
+                  <div class="p-2 bg-muted/50 border border-border rounded-xl min-h-[44px] flex items-center gap-1.5 flex-wrap">
                     <span
                       v-for="(kw, idx) in escalationKeywords"
                       :key="kw"
-                      class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white border border-gray-200 text-gray-800 rounded-lg text-xs font-medium shadow-2xs group"
+                      class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-card border border-border text-foreground rounded-lg text-xs font-medium shadow-2xs group"
                     >
                       <span>{{ kw }}</span>
                       <button
                         @click="removeKeyword(idx)"
                         type="button"
-                        class="text-gray-500 hover:text-red-500 cursor-pointer transition-colors"
+                        class="text-muted-foreground hover:text-destructive cursor-pointer transition-colors"
                         title="Remove trigger"
                       >
                         <X class="w-3 h-3" />
@@ -2025,10 +2025,10 @@
                       v-model="newKeywordInput"
                       @keydown.enter.prevent="addKeyword"
                       placeholder="+ Type keyword & press Enter"
-                      class="px-2 py-1 text-xs bg-transparent border-none text-gray-800 placeholder-gray-400 focus:outline-none min-w-[160px] flex-1"
+                      class="px-2 py-1 text-xs bg-transparent border-none text-foreground placeholder:text-muted-foreground focus:outline-none min-w-[160px] flex-1"
                     />
                   </div>
-                  <p class="text-[10px] text-gray-500 leading-normal">
+                  <p class="text-[10px] text-muted-foreground leading-normal">
                     When customer WhatsApp messages contain any of these triggers, conversation immediately transfers to designated rep.
                   </p>
                 </div>
@@ -2041,21 +2041,21 @@
             <!-- Top Controls Header (matching media_1790915536296.png) -->
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
-                <h3 class="text-sm font-bold text-gray-900">Performance Report</h3>
-                <div class="text-xs font-medium text-gray-500 mt-0.5">
+                <h3 class="text-sm font-bold text-foreground">Performance Report</h3>
+                <div class="text-xs font-medium text-muted-foreground mt-0.5">
                   26 Sep – 2 Oct 2026 • Compared with previous 7 days
                 </div>
               </div>
 
               <div class="flex items-center gap-2 flex-wrap">
                 <!-- Date range filter pills -->
-                <div class="bg-gray-100 p-1 rounded-xl flex items-center gap-1">
+                <div class="bg-muted p-1 rounded-xl flex items-center gap-1">
                   <button
                     v-for="range in ['24h', '7d', '30d', '90d']"
                     :key="range"
                     @click="reportDateRange = range as any"
                     class="px-3 py-1 rounded-lg text-xs font-semibold cursor-pointer transition-colors"
-                    :class="reportDateRange === range ? 'bg-white text-emerald-800 font-bold shadow-2xs' : 'text-gray-600 hover:text-gray-900'"
+                    :class="reportDateRange === range ? 'bg-card text-success font-bold shadow-2xs' : 'text-muted-foreground hover:text-foreground'"
                   >
                     {{ range }}
                   </button>
@@ -2064,7 +2064,7 @@
                 <!-- Channel dropdown -->
                 <select
                   v-model="reportChannelFilter"
-                  class="px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-700 focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs cursor-pointer"
+                  class="px-3 py-1.5 bg-card border border-border rounded-xl text-xs font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs cursor-pointer"
                 >
                   <option value="all">All channels</option>
                   <option value="whatsapp">WhatsApp Business</option>
@@ -2074,7 +2074,7 @@
                 <!-- Export CSV button -->
                 <button
                   @click="emitToast('Report Exported', 'Downloaded assistant-analytics-7d.csv', 'success')"
-                  class="px-3 py-1.5 bg-white hover:bg-gray-50 text-gray-700 text-xs font-semibold rounded-xl border border-gray-200 cursor-pointer shadow-2xs inline-flex items-center gap-1.5 transition-colors"
+                  class="px-3 py-1.5 bg-card hover:bg-muted text-foreground text-xs font-semibold rounded-xl border border-border cursor-pointer shadow-2xs inline-flex items-center gap-1.5 transition-colors"
                 >
                   <Download class="w-3.5 h-3.5" />
                   <span>Export CSV</span>
@@ -2083,8 +2083,8 @@
             </div>
 
             <!-- Provisional Alert Banner (matching media_1790915536296.png) -->
-            <div class="p-3 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-2.5 text-xs text-amber-900">
-              <Info class="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+            <div class="p-3 bg-warning/10 border border-warning/30 rounded-xl flex items-start gap-2.5 text-xs text-warning">
+              <Info class="w-4 h-4 text-warning shrink-0 mt-0.5" />
               <span>
                 The last 3 days are provisional. Conversations reopening within 72 hours are excluded from resolved metrics.
               </span>
@@ -2093,10 +2093,10 @@
             <!-- Empty State View (natural fallback when no inboxes connected) -->
             <div
               v-if="connectedInboxes.length === 0"
-              class="py-24 text-center bg-white border border-gray-200 rounded-2xl shadow-2xs space-y-2"
+              class="py-24 text-center bg-card border border-border rounded-2xl shadow-2xs space-y-2"
             >
-              <BarChart2 class="w-8 h-8 text-gray-300 mx-auto" />
-              <div class="text-xs font-medium text-gray-500">
+              <BarChart2 class="w-8 h-8 text-muted-foreground/60 mx-auto" />
+              <div class="text-xs font-medium text-muted-foreground">
                 Not enough data yet for this period. Connect an inbox to start receiving conversations.
               </div>
             </div>
@@ -2105,36 +2105,36 @@
             <div v-else class="space-y-6">
               <!-- KPI Cards Row -->
               <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="p-4 bg-white border border-gray-200 rounded-2xl shadow-2xs space-y-1">
-                  <div class="text-[11px] font-semibold text-gray-500">Total Conversations</div>
-                  <div class="text-xl font-bold text-gray-900 tracking-tight">1,428</div>
-                  <div class="text-[10px] text-emerald-600 font-semibold flex items-center gap-1">
+                <div class="p-4 bg-card border border-border rounded-2xl shadow-2xs space-y-1">
+                  <div class="text-[11px] font-semibold text-muted-foreground">Total Conversations</div>
+                  <div class="text-xl font-bold text-foreground tracking-tight">1,428</div>
+                  <div class="text-[10px] text-success font-semibold flex items-center gap-1">
                     <span>↑ +18.4%</span>
-                    <span class="text-gray-500 font-normal">vs prev 7 days</span>
+                    <span class="text-muted-foreground font-normal">vs prev 7 days</span>
                   </div>
                 </div>
 
-                <div class="p-4 bg-white border border-gray-200 rounded-2xl shadow-2xs space-y-1">
-                  <div class="text-[11px] font-semibold text-gray-500">Auto-Resolution Rate</div>
-                  <div class="text-xl font-bold text-emerald-600 tracking-tight">91.8%</div>
-                  <div class="text-[10px] text-emerald-600 font-semibold flex items-center gap-1">
+                <div class="p-4 bg-card border border-border rounded-2xl shadow-2xs space-y-1">
+                  <div class="text-[11px] font-semibold text-muted-foreground">Auto-Resolution Rate</div>
+                  <div class="text-xl font-bold text-success tracking-tight">91.8%</div>
+                  <div class="text-[10px] text-success font-semibold flex items-center gap-1">
                     <span>↑ +3.2%</span>
-                    <span class="text-gray-500 font-normal">contained by AI</span>
+                    <span class="text-muted-foreground font-normal">contained by AI</span>
                   </div>
                 </div>
 
-                <div class="p-4 bg-white border border-gray-200 rounded-2xl shadow-2xs space-y-1">
-                  <div class="text-[11px] font-semibold text-gray-500">Escalated to Reps</div>
-                  <div class="text-xl font-bold text-gray-900 tracking-tight">117</div>
-                  <div class="text-[10px] text-gray-500 font-medium">
+                <div class="p-4 bg-card border border-border rounded-2xl shadow-2xs space-y-1">
+                  <div class="text-[11px] font-semibold text-muted-foreground">Escalated to Reps</div>
+                  <div class="text-xl font-bold text-foreground tracking-tight">117</div>
+                  <div class="text-[10px] text-muted-foreground font-medium">
                     8.2% transferred to Hafiz R.
                   </div>
                 </div>
 
-                <div class="p-4 bg-white border border-gray-200 rounded-2xl shadow-2xs space-y-1">
-                  <div class="text-[11px] font-semibold text-gray-500">Avg Response Speed</div>
-                  <div class="text-xl font-bold text-gray-900 tracking-tight">1.2s</div>
-                  <div class="text-[10px] text-emerald-600 font-semibold">
+                <div class="p-4 bg-card border border-border rounded-2xl shadow-2xs space-y-1">
+                  <div class="text-[11px] font-semibold text-muted-foreground">Avg Response Speed</div>
+                  <div class="text-xl font-bold text-foreground tracking-tight">1.2s</div>
+                  <div class="text-[10px] text-success font-semibold">
                     -0.4s faster with RAG cache
                   </div>
                 </div>
@@ -2143,20 +2143,20 @@
               <!-- Two-Column Analytics Charts -->
               <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
                 <!-- Left: Daily Volume & Containment Trend (7 cols) -->
-                <div class="lg:col-span-7 bg-white border border-gray-200 rounded-2xl p-5 shadow-2xs space-y-4">
+                <div class="lg:col-span-7 bg-card border border-border rounded-2xl p-5 shadow-2xs space-y-4">
                   <div class="flex items-center justify-between">
                     <div>
-                      <h4 class="text-xs font-bold text-gray-900">Daily Conversation Volume & Containment</h4>
-                      <p class="text-[11px] text-gray-500">Resolved chats vs human escalations</p>
+                      <h4 class="text-xs font-bold text-foreground">Daily Conversation Volume & Containment</h4>
+                      <p class="text-[11px] text-muted-foreground">Resolved chats vs human escalations</p>
                     </div>
                     <div class="flex items-center gap-3 text-[11px]">
-                      <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-emerald-500"></span> AI Resolved</span>
-                      <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-slate-300"></span> Escalated</span>
+                      <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-primary"></span> AI Resolved</span>
+                      <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm bg-muted-foreground/30"></span> Escalated</span>
                     </div>
                   </div>
 
                   <!-- SVG Bar Chart -->
-                  <div class="pt-4 h-48 flex items-end justify-between gap-3 px-2 border-b border-gray-100 pb-2">
+                  <div class="pt-4 h-48 flex items-end justify-between gap-3 px-2 border-b border-border pb-2">
                     <div
                       v-for="(day, dIdx) in [
                         { day: 'Sat (26)', total: 180, res: 165, esc: 15 },
@@ -2170,14 +2170,14 @@
                       :key="dIdx"
                       class="flex-1 flex flex-col items-center gap-1.5 group cursor-pointer"
                     >
-                      <div class="text-[10px] font-mono text-gray-500 group-hover:text-gray-700 transition-colors">
+                      <div class="text-[10px] font-mono text-muted-foreground group-hover:text-foreground transition-colors">
                         {{ day.total }}
                       </div>
-                      <div class="w-full max-w-[28px] flex flex-col rounded-t-md overflow-hidden bg-gray-100" style="height: 120px; justify-content: flex-end;">
-                        <div class="bg-slate-300 w-full" :style="{ height: `${(day.esc / 260) * 120}px` }" title="Escalated"></div>
-                        <div class="bg-emerald-500 w-full" :style="{ height: `${(day.res / 260) * 120}px` }" title="AI Resolved"></div>
+                      <div class="w-full max-w-[28px] flex flex-col rounded-t-md overflow-hidden bg-muted" style="height: 120px; justify-content: flex-end;">
+                        <div class="bg-muted-foreground/30 w-full" :style="{ height: `${(day.esc / 260) * 120}px` }" title="Escalated"></div>
+                        <div class="bg-primary w-full" :style="{ height: `${(day.res / 260) * 120}px` }" title="AI Resolved"></div>
                       </div>
-                      <div class="text-[10px] font-medium text-gray-500 group-hover:text-gray-900 transition-colors">
+                      <div class="text-[10px] font-medium text-muted-foreground group-hover:text-foreground transition-colors">
                         {{ day.day }}
                       </div>
                     </div>
@@ -2185,50 +2185,50 @@
                 </div>
 
                 <!-- Right: Top Inquired Customer Intents (5 cols) -->
-                <div class="lg:col-span-5 bg-white border border-gray-200 rounded-2xl p-5 shadow-2xs space-y-4">
+                <div class="lg:col-span-5 bg-card border border-border rounded-2xl p-5 shadow-2xs space-y-4">
                   <div>
-                    <h4 class="text-xs font-bold text-gray-900">Top Foodservice Inquiries</h4>
-                    <p class="text-[11px] text-gray-500">Distribution of customer questions on WhatsApp</p>
+                    <h4 class="text-xs font-bold text-foreground">Top Foodservice Inquiries</h4>
+                    <p class="text-[11px] text-muted-foreground">Distribution of customer questions on WhatsApp</p>
                   </div>
 
                   <div class="space-y-3 pt-1">
                     <div class="space-y-1">
                       <div class="flex items-center justify-between text-xs font-medium">
-                        <span class="text-gray-800">JAKIM Halal & Import Certs</span>
-                        <span class="text-gray-500 font-mono">34% (485)</span>
+                        <span class="text-foreground">JAKIM Halal & Import Certs</span>
+                        <span class="text-muted-foreground font-mono">34% (485)</span>
                       </div>
-                      <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-                        <div class="h-full bg-emerald-500 rounded-full" style="width: 34%"></div>
-                      </div>
-                    </div>
-
-                    <div class="space-y-1">
-                      <div class="flex items-center justify-between text-xs font-medium">
-                        <span class="text-gray-800">Wholesale MOQ & Volume Pricing</span>
-                        <span class="text-gray-500 font-mono">28% (400)</span>
-                      </div>
-                      <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-                        <div class="h-full bg-emerald-500 rounded-full" style="width: 28%"></div>
+                      <div class="w-full h-2 bg-muted rounded-full overflow-hidden">
+                        <div class="h-full bg-primary rounded-full" style="width: 34%"></div>
                       </div>
                     </div>
 
                     <div class="space-y-1">
                       <div class="flex items-center justify-between text-xs font-medium">
-                        <span class="text-gray-800">Cold-Chain Reefer Schedule</span>
-                        <span class="text-gray-500 font-mono">22% (314)</span>
+                        <span class="text-foreground">Wholesale MOQ & Volume Pricing</span>
+                        <span class="text-muted-foreground font-mono">28% (400)</span>
                       </div>
-                      <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-                        <div class="h-full bg-emerald-500 rounded-full" style="width: 22%"></div>
+                      <div class="w-full h-2 bg-muted rounded-full overflow-hidden">
+                        <div class="h-full bg-primary rounded-full" style="width: 28%"></div>
                       </div>
                     </div>
 
                     <div class="space-y-1">
                       <div class="flex items-center justify-between text-xs font-medium">
-                        <span class="text-gray-800">Net-30 Credit Terms Application</span>
-                        <span class="text-gray-500 font-mono">16% (229)</span>
+                        <span class="text-foreground">Cold-Chain Reefer Schedule</span>
+                        <span class="text-muted-foreground font-mono">22% (314)</span>
                       </div>
-                      <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-                        <div class="h-full bg-emerald-500 rounded-full" style="width: 16%"></div>
+                      <div class="w-full h-2 bg-muted rounded-full overflow-hidden">
+                        <div class="h-full bg-primary rounded-full" style="width: 22%"></div>
+                      </div>
+                    </div>
+
+                    <div class="space-y-1">
+                      <div class="flex items-center justify-between text-xs font-medium">
+                        <span class="text-foreground">Net-30 Credit Terms Application</span>
+                        <span class="text-muted-foreground font-mono">16% (229)</span>
+                      </div>
+                      <div class="w-full h-2 bg-muted rounded-full overflow-hidden">
+                        <div class="h-full bg-primary rounded-full" style="width: 16%"></div>
                       </div>
                     </div>
                   </div>
@@ -2246,34 +2246,34 @@
     ════════════════════════════════════════════════════════════════ -->
     <div
       v-if="showTestDrawer"
-      class="fixed inset-0 z-50 flex justify-end bg-gray-950/40 backdrop-blur-xs animate-fade-in"
+      class="fixed inset-0 z-50 flex justify-end bg-background/80 backdrop-blur-xs animate-fade-in"
       @click.self="showTestDrawer = false"
     >
-      <div class="bg-white w-full max-w-md h-full shadow-2xl flex flex-col justify-between border-l border-gray-200 animate-slide-left">
+      <div class="bg-card w-full max-w-md h-full shadow-2xl flex flex-col justify-between border-l border-border animate-slide-left">
         <!-- Drawer Header -->
-        <div class="p-4 border-b border-gray-200 flex items-center justify-between bg-gray-50">
+        <div class="p-4 border-b border-border flex items-center justify-between bg-muted/50">
           <div class="flex items-center gap-2.5">
-            <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+            <div class="w-8 h-8 rounded-xl bg-success/10 text-success flex items-center justify-center shrink-0">
               <Bot class="w-4 h-4" />
             </div>
             <div>
-              <div class="text-xs font-bold text-gray-900">{{ currentTestAssistant?.name || 'AI Assistant' }} (Live Sandbox)</div>
-              <div class="text-[10px] text-emerald-600 font-semibold flex items-center gap-1">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              <div class="text-xs font-bold text-foreground">{{ currentTestAssistant?.name || 'AI Assistant' }} (Live Sandbox)</div>
+              <div class="text-[10px] text-success font-semibold flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
                 Testing against {{ knowledgeDocs.length }} documents
               </div>
             </div>
           </div>
           <button
             @click="showTestDrawer = false"
-            class="p-1 text-gray-500 hover:text-gray-700 rounded-lg cursor-pointer"
+            class="p-1 text-muted-foreground hover:text-foreground rounded-lg cursor-pointer"
           >
             <X class="w-4 h-4" />
           </button>
         </div>
 
         <!-- Chat Message Canvas -->
-        <div class="flex-1 p-4 overflow-y-auto space-y-3 bg-gray-50/30">
+        <div class="flex-1 p-4 overflow-y-auto space-y-3 bg-muted/50">
           <div
             v-for="(msg, index) in testChatMessages"
             :key="index"
@@ -2282,38 +2282,38 @@
           >
             <div
               class="max-w-[85%] rounded-2xl p-3 text-xs leading-relaxed shadow-2xs"
-              :class="msg.sender === 'user' ? 'bg-primary text-white rounded-br-xs' : 'bg-white border border-gray-200 text-gray-800 rounded-bl-xs'"
+              :class="msg.sender === 'user' ? 'bg-primary text-primary-foreground rounded-br-xs' : 'bg-card border border-border text-foreground rounded-bl-xs'"
             >
               {{ msg.text }}
             </div>
-            <span class="text-[9px] text-gray-500 px-1 pt-1">{{ msg.time }}</span>
+            <span class="text-[9px] text-muted-foreground px-1 pt-1">{{ msg.time }}</span>
           </div>
         </div>
 
         <!-- Pre-built Quick Prompt Chips -->
-        <div class="px-4 py-2 border-t border-gray-100 bg-white flex items-center gap-1.5 overflow-x-auto">
+        <div class="px-4 py-2 border-t border-border bg-card flex items-center gap-1.5 overflow-x-auto">
           <button
             v-for="chip in quickTestPrompts"
             :key="chip"
             @click="sendTestMessage(chip)"
-            class="whitespace-nowrap px-2.5 py-1 bg-gray-100 hover:bg-gray-200 text-[10px] font-semibold text-gray-700 rounded-lg cursor-pointer transition-colors"
+            class="whitespace-nowrap px-2.5 py-1 bg-muted hover:bg-muted text-[10px] font-semibold text-foreground rounded-lg cursor-pointer transition-colors"
           >
             {{ chip }}
           </button>
         </div>
 
         <!-- Drawer Input Composer -->
-        <div class="p-3 border-t border-gray-200 bg-white flex items-center gap-2">
+        <div class="p-3 border-t border-border bg-card flex items-center gap-2">
           <input
             v-model="testInputText"
             type="text"
             placeholder="Type a test customer message..."
-            class="flex-1 px-3.5 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:bg-white"
+            class="flex-1 px-3.5 py-2 bg-muted/50 border border-border rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:bg-card"
             @keydown.enter="sendTestMessage(testInputText)"
           />
           <button
             @click="sendTestMessage(testInputText)"
-            class="p-2 bg-primary hover:bg-[#1ea446] text-white rounded-xl cursor-pointer shadow-xs transition-colors"
+            class="p-2 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl cursor-pointer shadow-xs transition-colors"
           >
             <Send class="w-4 h-4" />
           </button>
@@ -2326,67 +2326,67 @@
     ════════════════════════════════════════════════════════════════ -->
     <div
       v-if="showCreateModal"
-      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-950/50 backdrop-blur-xs animate-fade-in"
+      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-xs animate-fade-in"
       @click.self="showCreateModal = false"
       @keydown.esc="showCreateModal = false"
     >
-      <div class="bg-white rounded-2xl w-full max-w-md shadow-2xl border border-gray-100 p-6 space-y-5 animate-scale-up">
+      <div class="bg-card rounded-2xl w-full max-w-md shadow-2xl border border-border p-6 space-y-5 animate-scale-up">
         <div class="space-y-1">
-          <h2 class="text-base font-bold text-gray-900 tracking-tight">Create an assistant</h2>
-          <p class="text-xs text-gray-500 leading-relaxed">
+          <h2 class="text-base font-bold text-foreground tracking-tight">Create an assistant</h2>
+          <p class="text-xs text-muted-foreground leading-relaxed">
             Fill out the details below to configure your sales or support agent.
           </p>
         </div>
 
         <div class="space-y-4">
           <div class="space-y-1.5">
-            <label class="block text-xs font-semibold text-gray-700">Name</label>
+            <label class="block text-xs font-semibold text-foreground">Name</label>
             <input
               v-model="createForm.name"
               type="text"
               placeholder="e.g. F&B Wholesale Assistant"
-              class="w-full px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary shadow-2xs"
+              class="w-full px-3.5 py-2.5 bg-card border border-border rounded-xl text-xs font-medium text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary shadow-2xs"
               v-focus
             />
           </div>
 
           <div class="space-y-1.5">
-            <label class="block text-xs font-semibold text-gray-700">Product / Service Line</label>
+            <label class="block text-xs font-semibold text-foreground">Product / Service Line</label>
             <input
               v-model="createForm.productName"
               type="text"
               placeholder="e.g. Golden Harvest Foodservice"
-              class="w-full px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary shadow-2xs"
+              class="w-full px-3.5 py-2.5 bg-card border border-border rounded-xl text-xs font-medium text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary shadow-2xs"
             />
           </div>
 
           <div class="space-y-1.5">
-            <label class="block text-xs font-semibold text-gray-700">Description</label>
+            <label class="block text-xs font-semibold text-foreground">Description</label>
             <div class="relative">
               <textarea
                 v-model="createForm.description"
                 rows="3"
                 maxlength="200"
                 placeholder="Describe this assistant's primary goal..."
-                class="w-full px-3.5 py-2.5 pb-6 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary shadow-2xs resize-none"
+                class="w-full px-3.5 py-2.5 pb-6 bg-card border border-border rounded-xl text-xs font-medium text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary shadow-2xs resize-none"
               ></textarea>
-              <span class="absolute right-3 bottom-2 text-[10px] text-gray-500 font-mono">
+              <span class="absolute right-3 bottom-2 text-[10px] text-muted-foreground font-mono">
                 {{ createForm.description.length }} / 200
               </span>
             </div>
           </div>
         </div>
 
-        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-gray-100">
+        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-border">
           <button
             @click="showCreateModal = false"
-            class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold text-xs rounded-xl cursor-pointer transition-colors"
+            class="px-4 py-2 bg-muted hover:bg-muted text-foreground font-semibold text-xs rounded-xl cursor-pointer transition-colors"
           >
             Cancel
           </button>
           <button
             @click="submitCreateAssistant"
-            class="px-5 py-2 bg-primary hover:bg-[#1ea446] text-white font-semibold text-xs rounded-xl cursor-pointer shadow-xs transition-colors"
+            class="px-5 py-2 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs rounded-xl cursor-pointer shadow-xs transition-colors"
           >
             Create Assistant
           </button>
@@ -2399,19 +2399,19 @@
     ════════════════════════════════════════════════════════════════ -->
     <div
       v-if="showDeleteModal"
-      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-950/50 backdrop-blur-xs animate-fade-in"
+      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-xs animate-fade-in"
       @click.self="showDeleteModal = false"
       @keydown.esc="showDeleteModal = false"
     >
-      <div class="bg-white rounded-2xl w-full max-w-sm shadow-2xl border border-gray-100 p-6 space-y-4 animate-scale-up">
-        <div class="w-10 h-10 rounded-xl bg-red-50 text-red-600 flex items-center justify-center">
+      <div class="bg-card rounded-2xl w-full max-w-sm shadow-2xl border border-border p-6 space-y-4 animate-scale-up">
+        <div class="w-10 h-10 rounded-xl bg-destructive/10 text-destructive flex items-center justify-center">
           <AlertTriangle class="w-5 h-5" />
         </div>
         <div class="space-y-1">
-          <h3 class="text-sm font-bold text-gray-900">
+          <h3 class="text-sm font-bold text-foreground">
             {{ deleteTargetType === 'inbox' ? `Disconnect "${deleteTargetName}"?` : `Delete "${deleteTargetName}"?` }}
           </h3>
-          <p class="text-xs text-gray-500 leading-relaxed">
+          <p class="text-xs text-muted-foreground leading-relaxed">
             <template v-if="deleteTargetType === 'assistant'">
               This will permanently delete this assistant, all configured behavioral guardrails, documents, and historical analytics.
             </template>
@@ -2429,13 +2429,13 @@
         <div class="flex items-center justify-end gap-2.5 pt-2">
           <button
             @click="showDeleteModal = false"
-            class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold text-xs rounded-xl cursor-pointer"
+            class="px-4 py-2 bg-muted hover:bg-muted text-foreground font-semibold text-xs rounded-xl cursor-pointer"
           >
             Cancel
           </button>
           <button
             @click="executeConfirmedDelete"
-            class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold text-xs rounded-xl cursor-pointer shadow-xs"
+            class="px-4 py-2 bg-destructive hover:bg-destructive/90 text-destructive-foreground font-semibold text-xs rounded-xl cursor-pointer shadow-xs"
           >
             {{ deleteTargetType === 'inbox' ? 'Disconnect Inbox' : 'Confirm Delete' }}
           </button>
@@ -2448,43 +2448,43 @@
     ════════════════════════════════════════════════════════════════ -->
     <div
       v-if="showPreflightModal"
-      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-950/50 backdrop-blur-xs animate-fade-in"
+      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-xs animate-fade-in"
       @click.self="showPreflightModal = false"
       @keydown.esc="showPreflightModal = false"
     >
-      <div class="bg-white rounded-2xl w-full max-w-md shadow-2xl border border-gray-100 p-6 space-y-5 animate-scale-up">
+      <div class="bg-card rounded-2xl w-full max-w-md shadow-2xl border border-border p-6 space-y-5 animate-scale-up">
         <div class="space-y-1">
-          <h3 class="text-base font-bold text-gray-900 tracking-tight">Pre-Flight Live Checklist</h3>
-          <p class="text-xs text-gray-500">
+          <h3 class="text-base font-bold text-foreground tracking-tight">Pre-Flight Live Checklist</h3>
+          <p class="text-xs text-muted-foreground">
             Verify readiness before activating this assistant on live WhatsApp customer conversations.
           </p>
         </div>
 
         <div class="space-y-3">
-          <div class="p-3 rounded-xl border border-emerald-200/80 bg-emerald-50/50 flex items-center gap-3 text-xs text-emerald-950 font-medium">
-            <CheckCircle2 class="w-4 h-4 text-emerald-600 shrink-0" />
+          <div class="p-3 rounded-xl border border-success/30 bg-success/10 flex items-center gap-3 text-xs text-success font-medium">
+            <CheckCircle2 class="w-4 h-4 text-success shrink-0" />
             <span>{{ knowledgeDocs.length }} Knowledge documents indexed and verified.</span>
           </div>
-          <div class="p-3 rounded-xl border border-emerald-200/80 bg-emerald-50/50 flex items-center gap-3 text-xs text-emerald-950 font-medium">
-            <CheckCircle2 class="w-4 h-4 text-emerald-600 shrink-0" />
+          <div class="p-3 rounded-xl border border-success/30 bg-success/10 flex items-center gap-3 text-xs text-success font-medium">
+            <CheckCircle2 class="w-4 h-4 text-success shrink-0" />
             <span>WhatsApp Business channel connected (+6013-882 1928).</span>
           </div>
-          <div class="p-3 rounded-xl border border-emerald-200/80 bg-emerald-50/50 flex items-center gap-3 text-xs text-emerald-950 font-medium">
-            <CheckCircle2 class="w-4 h-4 text-emerald-600 shrink-0" />
+          <div class="p-3 rounded-xl border border-success/30 bg-success/10 flex items-center gap-3 text-xs text-success font-medium">
+            <CheckCircle2 class="w-4 h-4 text-success shrink-0" />
             <span>Human escalation fallback assigned to Hafiz Rahman (Key Account Manager).</span>
           </div>
         </div>
 
-        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-gray-100">
+        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-border">
           <button
             @click="showPreflightModal = false"
-            class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold text-xs rounded-xl cursor-pointer"
+            class="px-4 py-2 bg-muted hover:bg-muted text-foreground font-semibold text-xs rounded-xl cursor-pointer"
           >
             Keep in Draft
           </button>
           <button
             @click="confirmPublishLive"
-            class="px-5 py-2 bg-primary hover:bg-[#1ea446] text-white font-semibold text-xs rounded-xl cursor-pointer shadow-xs"
+            class="px-5 py-2 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs rounded-xl cursor-pointer shadow-xs"
           >
             Publish Live Now
           </button>
@@ -2497,34 +2497,34 @@
     ════════════════════════════════════════════════════════════════ -->
     <div
       v-if="showAddGuardrailModal"
-      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-950/50 backdrop-blur-xs animate-fade-in"
+      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-xs animate-fade-in"
       @click.self="showAddGuardrailModal = false"
       @keydown.esc="showAddGuardrailModal = false"
     >
-      <div class="bg-white rounded-2xl w-full max-w-md shadow-2xl border border-gray-100 p-6 space-y-4 animate-scale-up">
+      <div class="bg-card rounded-2xl w-full max-w-md shadow-2xl border border-border p-6 space-y-4 animate-scale-up">
         <div class="space-y-1">
-          <h2 class="text-base font-bold text-gray-900 tracking-tight">Add Safety Guardrail</h2>
-          <p class="text-xs text-gray-500">Define a topic refusal, PII block, or commercial authorization limit.</p>
+          <h2 class="text-base font-bold text-foreground tracking-tight">Add Safety Guardrail</h2>
+          <p class="text-xs text-muted-foreground">Define a topic refusal, PII block, or commercial authorization limit.</p>
         </div>
 
         <div class="space-y-3 pt-1">
           <div class="space-y-1.5">
-            <label class="block text-xs font-semibold text-gray-700">Rule Name</label>
+            <label class="block text-xs font-semibold text-foreground">Rule Name</label>
             <input
               v-model="newGuardrailForm.name"
               type="text"
               placeholder="e.g. Prevent Unapproved Volume Discounts"
-              class="w-full px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs"
+              class="w-full px-3.5 py-2.5 bg-card border border-border rounded-xl text-xs font-medium text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs"
               v-focus
             />
           </div>
 
           <div class="grid grid-cols-2 gap-3">
             <div class="space-y-1.5">
-              <label class="block text-xs font-semibold text-gray-700">Category</label>
+              <label class="block text-xs font-semibold text-foreground">Category</label>
               <select
                 v-model="newGuardrailForm.category"
-                class="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-800 focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs cursor-pointer"
+                class="w-full px-3 py-2 bg-card border border-border rounded-xl text-xs font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs cursor-pointer"
               >
                 <option value="Commercial & Pricing">Commercial & Pricing</option>
                 <option value="Safety & PII">Safety & PII</option>
@@ -2534,10 +2534,10 @@
             </div>
 
             <div class="space-y-1.5">
-              <label class="block text-xs font-semibold text-gray-700">Action On Trigger</label>
+              <label class="block text-xs font-semibold text-foreground">Action On Trigger</label>
               <select
                 v-model="newGuardrailForm.action"
-                class="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-800 focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs cursor-pointer"
+                class="w-full px-3 py-2 bg-card border border-border rounded-xl text-xs font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs cursor-pointer"
               >
                 <option value="Block & Deflect">Block & Deflect</option>
                 <option value="Warn & Rephrase">Warn & Rephrase</option>
@@ -2547,26 +2547,26 @@
           </div>
 
           <div class="space-y-1.5">
-            <label class="block text-xs font-semibold text-gray-700">Rule Instructions / Scope</label>
+            <label class="block text-xs font-semibold text-foreground">Rule Instructions / Scope</label>
             <textarea
               v-model="newGuardrailForm.description"
               rows="3"
               placeholder="Describe what to detect and how the bot should deflect..."
-              class="w-full px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs resize-none"
+              class="w-full px-3.5 py-2.5 bg-card border border-border rounded-xl text-xs font-medium text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs resize-none"
             ></textarea>
           </div>
         </div>
 
-        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-gray-100">
+        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-border">
           <button
             @click="showAddGuardrailModal = false"
-            class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold text-xs rounded-xl cursor-pointer"
+            class="px-4 py-2 bg-muted hover:bg-muted text-foreground font-semibold text-xs rounded-xl cursor-pointer"
           >
             Cancel
           </button>
           <button
             @click="submitAddGuardrail"
-            class="px-5 py-2 bg-primary hover:bg-[#1ea446] text-white font-semibold text-xs rounded-xl cursor-pointer shadow-xs"
+            class="px-5 py-2 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs rounded-xl cursor-pointer shadow-xs"
           >
             Save Guardrail
           </button>
@@ -2579,33 +2579,33 @@
     ════════════════════════════════════════════════════════════════ -->
     <div
       v-if="showAddScenarioModal"
-      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-950/50 backdrop-blur-xs animate-fade-in"
+      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-xs animate-fade-in"
       @click.self="showAddScenarioModal = false"
       @keydown.esc="showAddScenarioModal = false"
     >
-      <div class="bg-white rounded-2xl w-full max-w-lg shadow-2xl border border-gray-100 p-6 space-y-4 animate-scale-up max-h-[90vh] overflow-y-auto">
+      <div class="bg-card rounded-2xl w-full max-w-lg shadow-2xl border border-border p-6 space-y-4 animate-scale-up max-h-[90vh] overflow-y-auto">
         <div class="space-y-1">
-          <h2 class="text-base font-bold text-gray-900 tracking-tight">Create Scenario Playbook</h2>
-          <p class="text-xs text-gray-500">Configure trigger conditions, required questions, and automated CRM tools.</p>
+          <h2 class="text-base font-bold text-foreground tracking-tight">Create Scenario Playbook</h2>
+          <p class="text-xs text-muted-foreground">Configure trigger conditions, required questions, and automated CRM tools.</p>
         </div>
 
         <div class="space-y-3 pt-1">
           <div class="space-y-1.5">
-            <label class="block text-xs font-semibold text-gray-700">Scenario Title</label>
+            <label class="block text-xs font-semibold text-foreground">Scenario Title</label>
             <input
               v-model="newScenarioForm.title"
               type="text"
               placeholder="e.g. Catering & Event Bulk Order Inquiries"
-              class="w-full px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs"
+              class="w-full px-3.5 py-2.5 bg-card border border-border rounded-xl text-xs font-medium text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs"
               v-focus
             />
           </div>
 
           <div class="space-y-1.5">
-            <label class="block text-xs font-semibold text-gray-700">Category</label>
+            <label class="block text-xs font-semibold text-foreground">Category</label>
             <select
               v-model="newScenarioForm.category"
-              class="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-800 focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs cursor-pointer"
+              class="w-full px-3 py-2 bg-card border border-border rounded-xl text-xs font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs cursor-pointer"
             >
               <option value="Lead Qualification">Lead Qualification</option>
               <option value="Billing & Payment">Billing & Payment</option>
@@ -2615,57 +2615,57 @@
           </div>
 
           <div class="space-y-1.5">
-            <label class="block text-xs font-semibold text-gray-700">Trigger Condition (When to execute)</label>
+            <label class="block text-xs font-semibold text-foreground">Trigger Condition (When to execute)</label>
             <textarea
               v-model="newScenarioForm.triggerPrompt"
               rows="2"
               placeholder="e.g. When customer asks for custom catering quote or orders above RM15,000..."
-              class="w-full px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs resize-none"
+              class="w-full px-3.5 py-2.5 bg-card border border-border rounded-xl text-xs font-medium text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs resize-none"
             ></textarea>
           </div>
 
           <div class="space-y-2">
-            <label class="block text-xs font-semibold text-gray-700">Qualifying Steps (Required Questions)</label>
+            <label class="block text-xs font-semibold text-foreground">Qualifying Steps (Required Questions)</label>
             <input
               v-model="newScenarioForm.step1"
               type="text"
               placeholder="Step 1: Ask for event date and outlet branch..."
-              class="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-xs text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs"
+              class="w-full px-3 py-2 bg-card border border-border rounded-xl text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs"
             />
             <input
               v-model="newScenarioForm.step2"
               type="text"
               placeholder="Step 2: Collect itemized ingredient requirements..."
-              class="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-xs text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs"
+              class="w-full px-3 py-2 bg-card border border-border rounded-xl text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs"
             />
             <input
               v-model="newScenarioForm.step3"
               type="text"
               placeholder="Step 3 (Optional): Check temperature storage capability..."
-              class="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-xs text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs"
+              class="w-full px-3 py-2 bg-card border border-border rounded-xl text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs"
             />
           </div>
 
           <div class="space-y-1.5">
-            <label class="block text-xs font-semibold text-gray-700">Bind CRM Automated Tools</label>
+            <label class="block text-xs font-semibold text-foreground">Bind CRM Automated Tools</label>
             <div class="flex flex-wrap gap-2 pt-1">
-              <span class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-amber-50 text-amber-800 border border-amber-200/60">@add_private_note</span>
-              <span class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-emerald-50 text-emerald-800">@add_label</span>
-              <span class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-sky-50 text-sky-800 border border-sky-200/60">@handoff</span>
+              <span class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-warning/10 text-warning border border-warning/30">@add_private_note</span>
+              <span class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-success/10 text-success">@add_label</span>
+              <span class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-info/10 text-info border border-info/30">@handoff</span>
             </div>
           </div>
         </div>
 
-        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-gray-100">
+        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-border">
           <button
             @click="showAddScenarioModal = false"
-            class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold text-xs rounded-xl cursor-pointer"
+            class="px-4 py-2 bg-muted hover:bg-muted text-foreground font-semibold text-xs rounded-xl cursor-pointer"
           >
             Cancel
           </button>
           <button
             @click="submitAddScenario"
-            class="px-5 py-2 bg-primary hover:bg-[#1ea446] text-white font-semibold text-xs rounded-xl cursor-pointer shadow-xs"
+            class="px-5 py-2 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs rounded-xl cursor-pointer shadow-xs"
           >
             Create Playbook
           </button>
@@ -2678,22 +2678,22 @@
     ════════════════════════════════════════════════════════════════ -->
     <div
       v-if="showAddGuidelineModal"
-      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-950/50 backdrop-blur-xs animate-fade-in"
+      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-xs animate-fade-in"
       @click.self="showAddGuidelineModal = false"
       @keydown.esc="showAddGuidelineModal = false"
     >
-      <div class="bg-white rounded-2xl w-full max-w-md shadow-2xl border border-gray-100 p-6 space-y-4 animate-scale-up">
+      <div class="bg-card rounded-2xl w-full max-w-md shadow-2xl border border-border p-6 space-y-4 animate-scale-up">
         <div class="space-y-1">
-          <h2 class="text-base font-bold text-gray-900 tracking-tight">Add Response Guideline</h2>
-          <p class="text-xs text-gray-500">Add a tone, language, or length standard for assistant responses.</p>
+          <h2 class="text-base font-bold text-foreground tracking-tight">Add Response Guideline</h2>
+          <p class="text-xs text-muted-foreground">Add a tone, language, or length standard for assistant responses.</p>
         </div>
 
         <div class="space-y-3 pt-1">
           <div class="space-y-1.5">
-            <label class="block text-xs font-semibold text-gray-700">Category</label>
+            <label class="block text-xs font-semibold text-foreground">Category</label>
             <select
               v-model="newGuidelineForm.category"
-              class="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-800 focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs cursor-pointer"
+              class="w-full px-3 py-2 bg-card border border-border rounded-xl text-xs font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs cursor-pointer"
             >
               <option value="Length & Format">Length & Format</option>
               <option value="Language & Locale">Language & Locale</option>
@@ -2703,27 +2703,27 @@
           </div>
 
           <div class="space-y-1.5">
-            <label class="block text-xs font-semibold text-gray-700">Guideline Rule</label>
+            <label class="block text-xs font-semibold text-foreground">Guideline Rule</label>
             <textarea
               v-model="newGuidelineForm.rule"
               rows="3"
               placeholder="e.g. Always structure itemized price lists with bullet points..."
-              class="w-full px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs resize-none"
+              class="w-full px-3.5 py-2.5 bg-card border border-border rounded-xl text-xs font-medium text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs resize-none"
               v-focus
             ></textarea>
           </div>
         </div>
 
-        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-gray-100">
+        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-border">
           <button
             @click="showAddGuidelineModal = false"
-            class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold text-xs rounded-xl cursor-pointer"
+            class="px-4 py-2 bg-muted hover:bg-muted text-foreground font-semibold text-xs rounded-xl cursor-pointer"
           >
             Cancel
           </button>
           <button
             @click="guidelineRules.unshift({ id: Date.now(), rule: newGuidelineForm.rule.trim(), category: newGuidelineForm.category, enabled: true }); showAddGuidelineModal = false; emitToast('Guideline Saved', 'New rule active.', 'success')"
-            class="px-5 py-2 bg-primary hover:bg-[#1ea446] text-white font-semibold text-xs rounded-xl cursor-pointer shadow-xs"
+            class="px-5 py-2 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs rounded-xl cursor-pointer shadow-xs"
           >
             Save Guideline
           </button>
@@ -2736,33 +2736,33 @@
     ════════════════════════════════════════════════════════════════ -->
     <div
       v-if="showAddDocModal"
-      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-950/50 backdrop-blur-xs animate-fade-in"
+      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-xs animate-fade-in"
       @click.self="showAddDocModal = false"
       @keydown.esc="showAddDocModal = false"
     >
-      <div class="bg-white rounded-2xl w-full max-w-md shadow-2xl border border-gray-100 p-6 space-y-4 animate-scale-up">
+      <div class="bg-card rounded-2xl w-full max-w-md shadow-2xl border border-border p-6 space-y-4 animate-scale-up">
         <div class="space-y-1">
-          <h2 class="text-base font-bold text-gray-900 tracking-tight">Add Knowledge Document</h2>
-          <p class="text-xs text-gray-500">Provide a PDF catalog, website link, CSV sheet, or DOCX SOP for vector indexing.</p>
+          <h2 class="text-base font-bold text-foreground tracking-tight">Add Knowledge Document</h2>
+          <p class="text-xs text-muted-foreground">Provide a PDF catalog, website link, CSV sheet, or DOCX SOP for vector indexing.</p>
         </div>
 
         <div class="space-y-3 pt-1">
           <div class="space-y-1.5">
-            <label class="block text-xs font-semibold text-gray-700">Document Title</label>
+            <label class="block text-xs font-semibold text-foreground">Document Title</label>
             <input
               v-model="newDocTitle"
               type="text"
               placeholder="e.g. 2026 Bakery & Dairy Wholesale Catalog.pdf"
-              class="w-full px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs"
+              class="w-full px-3.5 py-2.5 bg-card border border-border rounded-xl text-xs font-medium text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs"
               v-focus
             />
           </div>
 
           <div class="space-y-1.5">
-            <label class="block text-xs font-semibold text-gray-700">Source Type</label>
+            <label class="block text-xs font-semibold text-foreground">Source Type</label>
             <select
               v-model="newDocType"
-              class="w-full px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-800 focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs cursor-pointer"
+              class="w-full px-3.5 py-2.5 bg-card border border-border rounded-xl text-xs font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs cursor-pointer"
             >
               <option value="pdf">PDF Document / Wholesale Catalog (.PDF)</option>
               <option value="url">Website URL / B2B Webpage (Link)</option>
@@ -2772,28 +2772,28 @@
           </div>
 
           <div class="space-y-1.5">
-            <label class="block text-xs font-semibold text-gray-700">
+            <label class="block text-xs font-semibold text-foreground">
               {{ newDocType === 'url' ? 'Webpage URL' : 'File Name / Reference Path' }}
             </label>
             <input
               v-model="newDocUrl"
               type="text"
               :placeholder="getDocPlaceholder(newDocType)"
-              class="w-full px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs font-mono"
+              class="w-full px-3.5 py-2.5 bg-card border border-border rounded-xl text-xs font-medium text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs font-mono"
             />
           </div>
         </div>
 
-        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-gray-100">
+        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-border">
           <button
             @click="showAddDocModal = false"
-            class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold text-xs rounded-xl cursor-pointer"
+            class="px-4 py-2 bg-muted hover:bg-muted text-foreground font-semibold text-xs rounded-xl cursor-pointer"
           >
             Cancel
           </button>
           <button
             @click="submitAddDocument"
-            class="px-5 py-2 bg-primary hover:bg-[#1ea446] text-white font-semibold text-xs rounded-xl cursor-pointer shadow-xs"
+            class="px-5 py-2 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs rounded-xl cursor-pointer shadow-xs"
           >
             Add & Index Document
           </button>
@@ -2806,22 +2806,22 @@
     ════════════════════════════════════════════════════════════════ -->
     <div
       v-if="showGuideModal"
-      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-950/50 backdrop-blur-xs animate-fade-in"
+      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-xs animate-fade-in"
       @click.self="showGuideModal = false"
       @keydown.esc="showGuideModal = false"
     >
-      <div class="bg-white rounded-2xl w-full max-w-lg shadow-2xl border border-gray-100 p-6 space-y-4">
+      <div class="bg-card rounded-2xl w-full max-w-lg shadow-2xl border border-border p-6 space-y-4">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+          <div class="w-10 h-10 rounded-xl bg-success/10 text-success flex items-center justify-center shrink-0">
             <HelpCircle class="w-5 h-5" />
           </div>
           <div>
-            <h2 class="text-base font-bold text-gray-900 tracking-tight">AI Assistants Playbook</h2>
-            <p class="text-xs text-gray-500">Best practices for high-conversion WhatsApp sales automation.</p>
+            <h2 class="text-base font-bold text-foreground tracking-tight">AI Assistants Playbook</h2>
+            <p class="text-xs text-muted-foreground">Best practices for high-conversion WhatsApp sales automation.</p>
           </div>
         </div>
 
-        <div class="text-xs text-gray-600 space-y-3 leading-relaxed">
+        <div class="text-xs text-muted-foreground space-y-3 leading-relaxed">
           <p>
             <strong>1. Commercial Lead Qualification:</strong> Configure your assistant's primary goal to collect customer requirements and estimate budget before escalating to sales reps.
           </p>
@@ -2833,10 +2833,10 @@
           </p>
         </div>
 
-        <div class="flex justify-end pt-3 border-t border-gray-100">
+        <div class="flex justify-end pt-3 border-t border-border">
           <button
             @click="showGuideModal = false"
-            class="px-4 py-2 bg-primary hover:bg-[#1ea446] text-white font-semibold text-xs rounded-xl cursor-pointer shadow-xs transition-colors"
+            class="px-4 py-2 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs rounded-xl cursor-pointer shadow-xs transition-colors"
           >
             Got it
           </button>
@@ -2849,44 +2849,44 @@
     ════════════════════════════════════════════════════════════════ -->
     <div
       v-if="showCreateToolModal"
-      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-950/50 backdrop-blur-xs animate-fade-in"
+      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-xs animate-fade-in"
       @click.self="showCreateToolModal = false"
       @keydown.esc="showCreateToolModal = false"
     >
-      <div class="bg-white rounded-2xl w-full max-w-md shadow-2xl border border-gray-100 p-6 space-y-4 animate-scale-up">
+      <div class="bg-card rounded-2xl w-full max-w-md shadow-2xl border border-border p-6 space-y-4 animate-scale-up">
         <div class="space-y-1">
-          <h2 class="text-base font-bold text-gray-900 tracking-tight">Create External API Tool</h2>
-          <p class="text-xs text-gray-500">Connect a REST API endpoint so the AI assistant can fetch real-time operational data.</p>
+          <h2 class="text-base font-bold text-foreground tracking-tight">Create External API Tool</h2>
+          <p class="text-xs text-muted-foreground">Connect a REST API endpoint so the AI assistant can fetch real-time operational data.</p>
         </div>
 
         <div class="space-y-3 pt-1">
           <div class="space-y-1.5">
-            <label class="block text-xs font-semibold text-gray-700">Tool Name</label>
+            <label class="block text-xs font-semibold text-foreground">Tool Name</label>
             <input
               v-model="newToolForm.name"
               type="text"
               placeholder="e.g. Order Lookup"
-              class="w-full px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs"
+              class="w-full px-3.5 py-2.5 bg-card border border-border rounded-xl text-xs font-medium text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs"
               v-focus
             />
           </div>
 
           <div class="grid grid-cols-3 gap-3">
             <div class="space-y-1.5 col-span-1">
-              <label class="block text-xs font-semibold text-gray-700">Method</label>
+              <label class="block text-xs font-semibold text-foreground">Method</label>
               <select
                 v-model="newToolForm.method"
-                class="w-full px-3 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-800 focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs cursor-pointer font-mono"
+                class="w-full px-3 py-2.5 bg-card border border-border rounded-xl text-xs font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs cursor-pointer font-mono"
               >
                 <option value="GET">GET</option>
                 <option value="POST">POST</option>
               </select>
             </div>
             <div class="space-y-1.5 col-span-2">
-              <label class="block text-xs font-semibold text-gray-700">Authentication</label>
+              <label class="block text-xs font-semibold text-foreground">Authentication</label>
               <select
                 v-model="newToolForm.authType"
-                class="w-full px-3 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-800 focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs cursor-pointer"
+                class="w-full px-3 py-2.5 bg-card border border-border rounded-xl text-xs font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs cursor-pointer"
               >
                 <option value="Bearer Token">Bearer Token</option>
                 <option value="API Key">API Key Header</option>
@@ -2896,36 +2896,36 @@
           </div>
 
           <div class="space-y-1.5">
-            <label class="block text-xs font-semibold text-gray-700">Endpoint URL</label>
+            <label class="block text-xs font-semibold text-foreground">Endpoint URL</label>
             <input
               v-model="newToolForm.endpoint"
               type="text"
               placeholder="https://api.goldenharvest.com.my/v1/orders/{order_id}"
-              class="w-full px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-mono text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs"
+              class="w-full px-3.5 py-2.5 bg-card border border-border rounded-xl text-xs font-mono text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs"
             />
           </div>
 
           <div class="space-y-1.5">
-            <label class="block text-xs font-semibold text-gray-700">Description for Assistant</label>
+            <label class="block text-xs font-semibold text-foreground">Description for Assistant</label>
             <textarea
               v-model="newToolForm.description"
               rows="2"
               placeholder="Tell the model when to execute this tool (e.g. Call when customer asks for order status)..."
-              class="w-full px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs resize-none"
+              class="w-full px-3.5 py-2.5 bg-card border border-border rounded-xl text-xs font-medium text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs resize-none"
             ></textarea>
           </div>
         </div>
 
-        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-gray-100">
+        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-border">
           <button
             @click="showCreateToolModal = false"
-            class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold text-xs rounded-xl cursor-pointer"
+            class="px-4 py-2 bg-muted hover:bg-muted text-foreground font-semibold text-xs rounded-xl cursor-pointer"
           >
             Cancel
           </button>
           <button
             @click="submitCreateTool"
-            class="px-5 py-2 bg-primary hover:bg-[#1ea446] text-white font-semibold text-xs rounded-xl cursor-pointer shadow-xs"
+            class="px-5 py-2 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs rounded-xl cursor-pointer shadow-xs"
           >
             Create Tool
           </button>
@@ -2938,22 +2938,22 @@
     ════════════════════════════════════════════════════════════════ -->
     <div
       v-if="showConnectInboxModal"
-      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-950/50 backdrop-blur-xs animate-fade-in"
+      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-xs animate-fade-in"
       @click.self="showConnectInboxModal = false"
       @keydown.esc="showConnectInboxModal = false"
     >
-      <div class="bg-white rounded-2xl w-full max-w-md shadow-2xl border border-gray-100 p-6 space-y-4 animate-scale-up">
+      <div class="bg-card rounded-2xl w-full max-w-md shadow-2xl border border-border p-6 space-y-4 animate-scale-up">
         <div class="space-y-1">
-          <h2 class="text-base font-bold text-gray-900 tracking-tight">Connect Communication Inbox</h2>
-          <p class="text-xs text-gray-500">Deploy this assistant to automatically respond across WhatsApp or Web Chat.</p>
+          <h2 class="text-base font-bold text-foreground tracking-tight">Connect Communication Inbox</h2>
+          <p class="text-xs text-muted-foreground">Deploy this assistant to automatically respond across WhatsApp or Web Chat.</p>
         </div>
 
         <div class="space-y-3 pt-1">
           <div class="space-y-1.5">
-            <label class="block text-xs font-semibold text-gray-700">Channel Type</label>
+            <label class="block text-xs font-semibold text-foreground">Channel Type</label>
             <select
               v-model="newInboxForm.type"
-              class="w-full px-3 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-800 focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs cursor-pointer"
+              class="w-full px-3 py-2.5 bg-card border border-border rounded-xl text-xs font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs cursor-pointer"
             >
               <option value="whatsapp">WhatsApp Business API (Official)</option>
               <option value="webchat">Website Chat Widget</option>
@@ -2962,37 +2962,37 @@
           </div>
 
           <div class="space-y-1.5">
-            <label class="block text-xs font-semibold text-gray-700">Inbox Display Label</label>
+            <label class="block text-xs font-semibold text-foreground">Inbox Display Label</label>
             <input
               v-model="newInboxForm.name"
               type="text"
               placeholder="e.g. HoReCa Wholesale Inbound"
-              class="w-full px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs"
+              class="w-full px-3.5 py-2.5 bg-card border border-border rounded-xl text-xs font-medium text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs"
               v-focus
             />
           </div>
 
           <div class="space-y-1.5">
-            <label class="block text-xs font-semibold text-gray-700">Phone Number or Endpoint ID</label>
+            <label class="block text-xs font-semibold text-foreground">Phone Number or Endpoint ID</label>
             <input
               v-model="newInboxForm.phone"
               type="text"
               placeholder="e.g. +6013-882 1928"
-              class="w-full px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-mono text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs"
+              class="w-full px-3.5 py-2.5 bg-card border border-border rounded-xl text-xs font-mono text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-2xs"
             />
           </div>
         </div>
 
-        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-gray-100">
+        <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-border">
           <button
             @click="showConnectInboxModal = false"
-            class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold text-xs rounded-xl cursor-pointer"
+            class="px-4 py-2 bg-muted hover:bg-muted text-foreground font-semibold text-xs rounded-xl cursor-pointer"
           >
             Cancel
           </button>
           <button
             @click="submitConnectInbox"
-            class="px-5 py-2 bg-primary hover:bg-[#1ea446] text-white font-semibold text-xs rounded-xl cursor-pointer shadow-xs"
+            class="px-5 py-2 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs rounded-xl cursor-pointer shadow-xs"
           >
             Link Inbox
           </button>
@@ -3034,37 +3034,37 @@ const activeBehaviorSubTab = ref<'guardrails' | 'scenarios' | 'guidelines' | 'ha
 
 function getStatusBadgeClass(status: 'live' | 'draft') {
   return status === 'live'
-    ? 'bg-emerald-100 text-emerald-700'
-    : 'bg-slate-100 text-slate-600';
+    ? 'bg-success/15 text-success'
+    : 'bg-muted text-muted-foreground';
 }
 
 function getDocBadgeBg(type: 'pdf' | 'url' | 'csv' | 'docx') {
   switch (type) {
     case 'pdf':
-      return 'bg-red-50 text-red-600 border-red-100';
+      return 'bg-destructive/10 text-destructive border-destructive/20';
     case 'url':
-      return 'bg-sky-50 text-sky-600 border-sky-100';
+      return 'bg-info/10 text-info border-info/20';
     case 'csv':
-      return 'bg-emerald-50 text-emerald-600 border-emerald-100';
+      return 'bg-success/10 text-success border-success/20';
     case 'docx':
-      return 'bg-indigo-50 text-indigo-600 border-indigo-100';
+      return 'bg-tag-1/10 text-tag-1 border-tag-1/20';
     default:
-      return 'bg-gray-50 text-gray-600 border-gray-200';
+      return 'bg-muted text-muted-foreground border-border';
   }
 }
 
 function getDocTypePillClass(type: 'pdf' | 'url' | 'csv' | 'docx') {
   switch (type) {
     case 'pdf':
-      return 'bg-red-100 text-red-800';
+      return 'bg-destructive/15 text-destructive';
     case 'url':
-      return 'bg-sky-100 text-sky-800';
+      return 'bg-info/15 text-info';
     case 'csv':
-      return 'bg-emerald-100 text-emerald-800';
+      return 'bg-success/15 text-success';
     case 'docx':
-      return 'bg-indigo-100 text-indigo-800';
+      return 'bg-tag-1/15 text-tag-1';
     default:
-      return 'bg-gray-100 text-gray-800';
+      return 'bg-muted text-foreground';
   }
 }
 
@@ -3086,27 +3086,27 @@ function getDocPlaceholder(type: 'pdf' | 'url' | 'csv' | 'docx') {
 function getSetupTabClass(tab: 'identity' | 'knowledge' | 'behavior' | 'tools' | 'playground' | 'connect' | 'channels' | 'report') {
   const isMatch = activeDetailTab.value === tab || (tab === 'connect' && activeDetailTab.value === 'channels');
   return isMatch
-    ? 'bg-primary text-white font-bold shadow-xs'
-    : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900';
+    ? 'bg-primary text-primary-foreground font-bold shadow-xs'
+    : 'text-muted-foreground hover:bg-muted hover:text-foreground';
 }
 
 function getBehaviorSubTabClass(subTab: 'guardrails' | 'scenarios' | 'guidelines' | 'handoff') {
   return activeBehaviorSubTab.value === subTab
-    ? 'bg-primary text-white font-bold shadow-xs'
-    : 'text-gray-700 hover:text-gray-900 hover:bg-gray-100';
+    ? 'bg-primary text-primary-foreground font-bold shadow-xs'
+    : 'text-muted-foreground hover:text-foreground hover:bg-muted';
 }
 
 function getBehaviorBadgeClass(subTab: 'guardrails' | 'scenarios' | 'guidelines' | 'handoff') {
   return activeBehaviorSubTab.value === subTab
-    ? 'bg-white text-primary'
-    : 'bg-gray-100 text-gray-700';
+    ? 'bg-card text-primary'
+    : 'bg-muted text-muted-foreground';
 }
 
 function getPlaygroundCheckmarkClass() {
   if (hasTestedInPlayground.value) {
-    return 'bg-emerald-100 text-emerald-800';
+    return 'bg-success/15 text-success';
   }
-  return 'bg-gray-100 text-gray-500';
+  return 'bg-muted text-muted-foreground';
 }
 
 // ═══════════════════ STATE: ASSISTANTS DATA ═══════════════════
@@ -3464,39 +3464,39 @@ const handoffSettings = ref<HandoffSettings>({
 
 function getGuardrailCategoryBadge(cat: GuardrailItem['category']) {
   switch (cat) {
-    case 'Safety & PII': return 'bg-rose-100 text-rose-700';
-    case 'Compliance & Halal': return 'bg-emerald-100 text-emerald-700';
-    case 'Commercial & Pricing': return 'bg-amber-100 text-amber-800';
-    case 'Scope & Conduct': return 'bg-violet-100 text-violet-700';
-    default: return 'bg-slate-100 text-slate-700';
+    case 'Safety & PII': return 'bg-destructive/15 text-destructive';
+    case 'Compliance & Halal': return 'bg-success/15 text-success';
+    case 'Commercial & Pricing': return 'bg-warning/15 text-warning';
+    case 'Scope & Conduct': return 'bg-tag-1/15 text-tag-1';
+    default: return 'bg-muted text-muted-foreground';
   }
 }
 
 function getScenarioCategoryBadge(cat: ScenarioItem['category']) {
   switch (cat) {
-    case 'Lead Qualification': return 'bg-emerald-100 text-emerald-700';
-    case 'Billing & Payment': return 'bg-violet-100 text-violet-700';
-    case 'Cold-Chain Delivery': return 'bg-sky-100 text-sky-700';
-    case 'Damaged Goods & Return': return 'bg-amber-100 text-amber-800';
-    default: return 'bg-slate-100 text-slate-700';
+    case 'Lead Qualification': return 'bg-success/15 text-success';
+    case 'Billing & Payment': return 'bg-tag-1/15 text-tag-1';
+    case 'Cold-Chain Delivery': return 'bg-info/15 text-info';
+    case 'Damaged Goods & Return': return 'bg-warning/15 text-warning';
+    default: return 'bg-muted text-muted-foreground';
   }
 }
 
 function getGuidelineCategoryBadge(cat: ResponseGuidelineItem['category']) {
   switch (cat) {
-    case 'Tone & Voice': return 'bg-violet-100 text-violet-700';
-    case 'Length & Format': return 'bg-sky-100 text-sky-700';
-    case 'Language & Locale': return 'bg-emerald-100 text-emerald-700';
-    case 'Pricing Policy': return 'bg-amber-100 text-amber-800';
-    default: return 'bg-slate-100 text-slate-700';
+    case 'Tone & Voice': return 'bg-tag-1/15 text-tag-1';
+    case 'Length & Format': return 'bg-info/15 text-info';
+    case 'Language & Locale': return 'bg-success/15 text-success';
+    case 'Pricing Policy': return 'bg-warning/15 text-warning';
+    default: return 'bg-muted text-muted-foreground';
   }
 }
 
 function getToolBadgeClass(tool: string) {
-  if (tool.includes('note')) return 'bg-amber-100 text-amber-800';
-  if (tool.includes('label')) return 'bg-emerald-100 text-emerald-700';
-  if (tool.includes('handoff')) return 'bg-sky-100 text-sky-700';
-  return 'bg-violet-100 text-violet-700';
+  if (tool.includes('note')) return 'bg-warning/15 text-warning';
+  if (tool.includes('label')) return 'bg-success/15 text-success';
+  if (tool.includes('handoff')) return 'bg-info/15 text-info';
+  return 'bg-tag-1/15 text-tag-1';
 }
 
 const filteredGuardrails = computed(() => {

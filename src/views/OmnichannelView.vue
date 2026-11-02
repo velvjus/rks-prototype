@@ -171,7 +171,7 @@ const handleInlineAssignSave = () => {
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       type: 'system-log',
       logIcon: 'user',
-      logClass: 'bg-green-50 text-green-700 border-green-200'
+      logClass: 'bg-success/10 text-success border-success/20'
     })
     
     addToast(`Lead assigned to ${inlineAssignAgent.value} and tagged with ${inlineAssignTags.value.join(', ')}`, 'success')
@@ -448,7 +448,7 @@ const isAiCasualResponseBannerOpen = ref(true)
 const isBoldActive = ref(false)
 const isItalicActive = ref(false)
 const isUnderlineActive = ref(false)
-const activeTextColor = ref('#1E293B')
+const activeTextColor = ref('var(--foreground)')
 const activeTextAlign = ref('left')
 const isColorDropdownOpen = ref(false)
 
@@ -510,7 +510,7 @@ const handleAcknowledgeAiReply = () => {
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       type: 'system-log',
       logIcon: 'sparkles',
-      logClass: 'text-emerald-800 font-semibold bg-emerald-50/90 border-emerald-200 shadow-2xs'
+      logClass: 'text-success font-semibold bg-success/10 border-success/30 shadow-xs'
     })
   }
   addToast('AI Automated Reply Acknowledged!', 'success')
@@ -770,7 +770,7 @@ const scheduleComposerMeeting = () => {
     time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     type: 'system-log',
     logIcon: 'clock',
-    logClass: 'bg-blue-50/90 text-blue-700 border-blue-200 shadow-2xs'
+    logClass: 'bg-info/10 text-info border-info/30 shadow-xs'
   })
   
   isComposerMeetingOpen.value = false
@@ -1197,7 +1197,7 @@ const chatMessages = ref<Record<string, TimelineNode[]>>({
       time: '',
       type: 'system-log',
       logIcon: 'bell',
-      logClass: 'bg-rose-50 text-rose-700 border-rose-200 font-bold select-none m3_unread_divider_el shadow-2xs'
+      logClass: 'bg-destructive/10 text-destructive border-destructive/30 font-bold select-none m3_unread_divider_el shadow-xs'
     },
     {
       id: 'm3_failed',
@@ -1260,7 +1260,7 @@ const chatMessages = ref<Record<string, TimelineNode[]>>({
       time: '11:43 AM',
       type: 'system-log',
       logIcon: 'check',
-      logClass: 'bg-green-50 text-green-700 border-green-200'
+      logClass: 'bg-success/10 text-success border-success/20'
     },
     {
       id: 'm3_log2',
@@ -1279,7 +1279,7 @@ const chatMessages = ref<Record<string, TimelineNode[]>>({
       time: '11:44 AM',
       type: 'system-log',
       logIcon: 'sparkles',
-      logClass: 'text-green-600 font-medium'
+      logClass: 'text-success font-medium'
     },
     {
       id: 'm3_log4',
@@ -1316,7 +1316,7 @@ const chatMessages = ref<Record<string, TimelineNode[]>>({
       time: '11:46 AM',
       type: 'system-log',
       logIcon: 'clock',
-      logClass: 'bg-gray-100 text-gray-700 border-gray-200'
+      logClass: 'bg-muted text-muted-foreground border-border'
     }
   ],
   'conv-4': [
@@ -1827,7 +1827,7 @@ const reassignActiveConversation = (agent: string) => {
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       type: 'system-log',
       logIcon: 'user',
-      logClass: 'bg-green-50 text-green-700 border-green-200'
+      logClass: 'bg-success/10 text-success border-success/20'
     })
   }
   isHeaderAssignDropdownOpen.value = false
@@ -1937,7 +1937,7 @@ nextTick(() => {
 </script>
 
 <template>
-  <div class="flex h-full w-full bg-white overflow-hidden text-sm relative">
+  <div class="flex h-full w-full bg-card overflow-hidden text-sm relative">
 
     <!-- TOAST ALERTS OVERLAY -->
     <ToastNotifications :toasts="toasts" />
@@ -1948,44 +1948,44 @@ nextTick(() => {
     <!-- LEFT PANEL: Conversation List Sidebar (Resizable) -->
     <aside 
       :style="{ width: sidebarWidth + 'px', maxWidth: sidebarWidth + 'px', minWidth: '300px' }"
-      class="border-r border-gray-200 flex flex-col bg-white h-full shrink-0 select-none relative z-10"
+      class="border-r border-border flex flex-col bg-card h-full shrink-0 select-none relative z-10"
     >
       <!-- Resizer Handle -->
       <div 
         @mousedown="startResize" 
-        class="absolute top-0 right-0 w-[4px] h-full cursor-col-resize hover:bg-[#23B750]/40 active:bg-[#23B750]/60 transition-all select-none z-30 group/resizer"
+        class="absolute top-0 right-0 w-[4px] h-full cursor-col-resize hover:bg-primary/40 active:bg-primary/60 transition-all select-none z-30 group/resizer"
       >
-        <div class="w-[1.5px] h-10 bg-gray-300 absolute top-1/2 -translate-y-1/2 right-[1px] rounded opacity-0 group-hover/resizer:opacity-100 transition-opacity"></div>
+        <div class="w-[1.5px] h-10 bg-border absolute top-1/2 -translate-y-1/2 right-[1px] rounded opacity-0 group-hover/resizer:opacity-100 transition-opacity"></div>
       </div>
       
       <!-- Conversations Header -->
       <div class="px-4 pt-4 pb-3 flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <h1 class="text-xl font-bold text-gray-900 tracking-tight">Conversations</h1>
+          <h1 class="text-xl font-bold text-foreground tracking-tight">Conversations</h1>
           <!-- Dynamic Count Badging Pill -->
           <!-- Counter pill with tooltip -->
           <div class="relative group">
-            <div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-gray-100 text-xs font-semibold text-gray-500 cursor-default">
+            <div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-muted text-xs font-semibold text-muted-foreground cursor-default">
               <span>{{ conversationsList.filter(c => c.section !== 'Resolved').length }}</span>
-              <span class="text-gray-300 font-normal select-none">•</span>
-              <span class="text-red-500 font-bold">{{ conversationsList.filter(c => c.unreadCount > 0 && c.section !== 'Resolved').length }}</span>
+              <span class="text-muted-foreground/60 font-normal select-none">•</span>
+              <span class="text-destructive font-bold">{{ conversationsList.filter(c => c.unreadCount > 0 && c.section !== 'Resolved').length }}</span>
             </div>
             <!-- Tooltip -->
             <div class="absolute left-1/2 -translate-x-1/2 top-full mt-2 z-[9999] pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-150">
-              <div class="bg-gray-900 text-white text-[11px] leading-snug rounded-lg px-3 py-2 shadow-xl whitespace-nowrap flex flex-col gap-1">
+              <div class="bg-popover text-popover-foreground border border-border text-[11px] leading-snug rounded-lg px-3 py-2 shadow-xl whitespace-nowrap flex flex-col gap-1">
                 <div class="flex items-center gap-2">
-                  <span class="inline-block w-2 h-2 rounded-full bg-gray-400"></span>
-                  <span class="text-gray-300">Total active:</span>
-                  <span class="font-semibold text-white">{{ conversationsList.filter(c => c.section !== 'Resolved').length }}</span>
+                  <span class="inline-block w-2 h-2 rounded-full bg-muted-foreground"></span>
+                  <span class="text-muted-foreground/60">Total active:</span>
+                  <span class="font-semibold text-primary-foreground">{{ conversationsList.filter(c => c.section !== 'Resolved').length }}</span>
                 </div>
                 <div class="flex items-center gap-2">
-                  <span class="inline-block w-2 h-2 rounded-full bg-red-400"></span>
-                  <span class="text-gray-300">Unread:</span>
-                  <span class="font-semibold text-red-400">{{ conversationsList.filter(c => c.unreadCount > 0 && c.section !== 'Resolved').length }}</span>
+                  <span class="inline-block w-2 h-2 rounded-full bg-destructive"></span>
+                  <span class="text-muted-foreground/60">Unread:</span>
+                  <span class="font-semibold text-destructive">{{ conversationsList.filter(c => c.unreadCount > 0 && c.section !== 'Resolved').length }}</span>
                 </div>
               </div>
               <!-- Arrow -->
-              <div class="absolute left-1/2 -translate-x-1/2 -top-1 w-2 h-2 bg-gray-900 rotate-45 rounded-sm"></div>
+              <div class="absolute left-1/2 -translate-x-1/2 -top-1 w-2 h-2 bg-popover rotate-45 rounded-sm"></div>
             </div>
           </div>
 
@@ -1993,7 +1993,7 @@ nextTick(() => {
           <button
             @click="isTutorialOpen = true"
             title="How to Use — Omnichannel Guide"
-            class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full border border-gray-200 bg-white text-[11px] font-semibold text-gray-400 hover:text-[#23B750] hover:border-[#23B750]/40 hover:bg-[#23B750]/5 transition-all cursor-pointer select-none"
+            class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full border border-border bg-card text-[11px] font-semibold text-muted-foreground hover:text-primary hover:border-[var(--primary)]/40 hover:bg-[var(--primary)]/5 transition-all cursor-pointer select-none"
           >
             <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="12" cy="12" r="10"/>
@@ -2007,7 +2007,7 @@ nextTick(() => {
         <!-- Compose action button triggers custom modal -->
         <button 
           @click="isComposeOpen = true"
-          class="p-1.5 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-md transition-colors border border-gray-200 bg-white cursor-pointer"
+          class="p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted rounded-md transition-colors border border-border bg-card cursor-pointer"
         >
           <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 20h9"/>
@@ -2019,12 +2019,12 @@ nextTick(() => {
       <!-- Search Bar and Action Controls -->
       <div class="px-4 pb-3 flex items-center gap-2">
         <div class="relative flex-1">
-          <Search class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <Search class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
           <input 
             v-model="searchQuery"
             type="text" 
             placeholder="Search Conversations" 
-            class="w-full pl-9 pr-3 py-1.5 text-xs bg-white border border-gray-250 rounded-md focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all placeholder:text-gray-400 font-medium"
+            class="w-full pl-9 pr-3 py-1.5 text-xs bg-card border border-input rounded-md focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all placeholder:text-muted-foreground font-medium"
           />
         </div>
         
@@ -2034,7 +2034,7 @@ nextTick(() => {
             type="button"
             @click.stop="isSortDropdownOpen = !isSortDropdownOpen"
             title="Sort conversations"
-            class="p-1.5 rounded-md transition-all border border-gray-200 bg-white text-gray-500 hover:text-gray-800 hover:bg-gray-50 cursor-pointer outline-none hover:scale-105 active:scale-95 flex items-center justify-center shrink-0"
+            class="p-1.5 rounded-md transition-all border border-border bg-card text-muted-foreground hover:text-foreground hover:bg-muted cursor-pointer outline-none hover:scale-105 active:scale-95 flex items-center justify-center shrink-0"
           >
             <!-- Sort icon -->
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -2048,48 +2048,48 @@ nextTick(() => {
           <!-- Sorting Options Dropdown overlay -->
           <div 
             v-if="isSortDropdownOpen"
-            class="absolute right-0 mt-1.5 w-40 bg-white border border-gray-200 rounded-xl shadow-lg z-[100] py-1 select-none font-semibold text-[11px]"
+            class="absolute right-0 mt-1.5 w-40 bg-card border border-border rounded-xl shadow-lg z-[100] py-1 select-none font-semibold text-[11px]"
           >
-            <div class="px-3 py-1 text-[9px] font-bold text-gray-400 uppercase tracking-wider">Sort by</div>
+            <div class="px-3 py-1 text-[9px] font-bold text-muted-foreground uppercase tracking-wider">Sort by</div>
             
             <button 
               type="button"
               @click="activeSort = 'newest'; isSortDropdownOpen = false"
               class="w-full text-left px-3 py-2 flex items-center justify-between cursor-pointer rounded-md transition-colors"
-              :class="[activeSort === 'newest' ? 'bg-[#23B750] text-white font-bold' : 'text-slate-700 hover:bg-slate-50']"
+              :class="[activeSort === 'newest' ? 'bg-primary text-primary-foreground font-bold' : 'text-foreground hover:bg-muted/50']"
             >
               <span>Newest Message</span>
-              <svg v-if="activeSort === 'newest'" class="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <svg v-if="activeSort === 'newest'" class="w-3.5 h-3.5 text-primary-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
             </button>
 
             <button 
               type="button"
               @click="activeSort = 'oldest'; isSortDropdownOpen = false"
               class="w-full text-left px-3 py-2 flex items-center justify-between cursor-pointer rounded-md transition-colors"
-              :class="[activeSort === 'oldest' ? 'bg-[#23B750] text-white font-bold' : 'text-slate-700 hover:bg-slate-50']"
+              :class="[activeSort === 'oldest' ? 'bg-primary text-primary-foreground font-bold' : 'text-foreground hover:bg-muted/50']"
             >
               <span>Oldest Message</span>
-              <svg v-if="activeSort === 'oldest'" class="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <svg v-if="activeSort === 'oldest'" class="w-3.5 h-3.5 text-primary-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
             </button>
 
             <button 
               type="button"
               @click="activeSort = 'unread'; isSortDropdownOpen = false"
               class="w-full text-left px-3 py-2 flex items-center justify-between cursor-pointer rounded-md transition-colors"
-              :class="[activeSort === 'unread' ? 'bg-[#23B750] text-white font-bold' : 'text-slate-700 hover:bg-slate-50']"
+              :class="[activeSort === 'unread' ? 'bg-primary text-primary-foreground font-bold' : 'text-foreground hover:bg-muted/50']"
             >
               <span>Unread Count</span>
-              <svg v-if="activeSort === 'unread'" class="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <svg v-if="activeSort === 'unread'" class="w-3.5 h-3.5 text-primary-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
             </button>
 
             <button 
               type="button"
               @click="activeSort = 'platform'; isSortDropdownOpen = false"
               class="w-full text-left px-3 py-2 flex items-center justify-between cursor-pointer rounded-md transition-colors"
-              :class="[activeSort === 'platform' ? 'bg-[#23B750] text-white font-bold' : 'text-slate-700 hover:bg-slate-50']"
+              :class="[activeSort === 'platform' ? 'bg-primary text-primary-foreground font-bold' : 'text-foreground hover:bg-muted/50']"
             >
               <span>Platform Name</span>
-              <svg v-if="activeSort === 'platform'" class="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <svg v-if="activeSort === 'platform'" class="w-3.5 h-3.5 text-primary-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
             </button>
           </div>
         </div>
@@ -2098,17 +2098,17 @@ nextTick(() => {
         <button 
           @click="isFiltersModalOpen = true"
           title="Open Filters"
-          class="relative p-1.5 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-md transition-colors border border-gray-200 bg-white cursor-pointer"
+          class="relative p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted rounded-md transition-colors border border-border bg-card cursor-pointer"
         >
           <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
           </svg>
-          <span class="absolute -top-1 -right-1 w-4 h-4 bg-[#23B750] text-white rounded-full text-[9px] font-bold flex items-center justify-center border border-white">3</span>
+          <span class="absolute -top-1 -right-1 w-4 h-4 bg-primary text-primary-foreground rounded-full text-[9px] font-bold flex items-center justify-center border border-card">3</span>
         </button>
       </div>
 
       <!-- Filters and Actions Header Row (Dynamic Transition) -->
-      <div class="px-4 pb-3 min-h-[40px] flex items-center select-none overflow-visible relative z-30 bg-white">
+      <div class="px-4 pb-3 min-h-[40px] flex items-center select-none overflow-visible relative z-30 bg-card">
         <transition
           enter-active-class="transition ease-out duration-200"
           enter-from-class="opacity-0 -translate-y-1"
@@ -2125,13 +2125,13 @@ nextTick(() => {
               <!-- Green active checkbox -->
               <div 
                 @click="toggleSelectAllEvents"
-                class="w-6 h-6 rounded-md bg-[#23B750] text-white flex items-center justify-center cursor-pointer shadow-none hover:bg-[#1f9f45] transition-all hover:scale-105 active:scale-95"
+                class="w-6 h-6 rounded-md bg-primary text-primary-foreground flex items-center justify-center cursor-pointer shadow-none hover:bg-[var(--primary)] transition-all hover:scale-105 active:scale-95"
               >
                 <svg class="w-4 h-4 stroke-current stroke-[3.5]" fill="none" viewBox="0 0 24 24">
                   <polyline points="20 6 9 17 4 12" />
                 </svg>
               </div>
-              <span class="text-[13px] font-bold text-gray-800 tracking-tight leading-none">
+              <span class="text-[13px] font-bold text-foreground tracking-tight leading-none">
                 {{ checkedCount }} Selected
               </span>
             </div>
@@ -2142,7 +2142,7 @@ nextTick(() => {
               <button 
                 @click="bulkMarkRead"
                 title="Mark as Read"
-                class="w-9 h-9 rounded-xl border border-gray-200 bg-white flex items-center justify-center hover:bg-gray-50 text-gray-400 hover:text-gray-700 transition-all hover:scale-105 active:scale-95 cursor-pointer shadow-none"
+                class="w-9 h-9 rounded-xl border border-border bg-card flex items-center justify-center hover:bg-muted/40 text-muted-foreground hover:text-foreground transition-all hover:scale-105 active:scale-95 cursor-pointer shadow-none"
               >
                 <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
@@ -2154,7 +2154,7 @@ nextTick(() => {
               <button 
                 @click="bulkManageTags"
                 title="Add Tag"
-                class="w-9 h-9 rounded-xl border border-gray-200 bg-white flex items-center justify-center hover:bg-gray-50 text-gray-400 hover:text-gray-700 transition-all hover:scale-105 active:scale-95 cursor-pointer shadow-none"
+                class="w-9 h-9 rounded-xl border border-border bg-card flex items-center justify-center hover:bg-muted/40 text-muted-foreground hover:text-foreground transition-all hover:scale-105 active:scale-95 cursor-pointer shadow-none"
               >
                 <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
@@ -2166,7 +2166,7 @@ nextTick(() => {
               <button 
                 @click="bulkSync"
                 title="Snooze / Toggle Waiting"
-                class="w-9 h-9 rounded-xl border border-gray-200 bg-white flex items-center justify-center hover:bg-gray-50 text-gray-400 hover:text-gray-700 transition-all hover:scale-105 active:scale-95 cursor-pointer shadow-none"
+                class="w-9 h-9 rounded-xl border border-border bg-card flex items-center justify-center hover:bg-muted/40 text-muted-foreground hover:text-foreground transition-all hover:scale-105 active:scale-95 cursor-pointer shadow-none"
               >
                 <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
@@ -2177,7 +2177,7 @@ nextTick(() => {
               <button 
                 @click="bulkAssignAgent"
                 title="Assign to Me"
-                class="w-9 h-9 rounded-xl border border-gray-200 bg-white flex items-center justify-center hover:bg-gray-50 text-gray-400 hover:text-gray-700 transition-all hover:scale-105 active:scale-95 cursor-pointer shadow-none"
+                class="w-9 h-9 rounded-xl border border-border bg-card flex items-center justify-center hover:bg-muted/40 text-muted-foreground hover:text-foreground transition-all hover:scale-105 active:scale-95 cursor-pointer shadow-none"
               >
                 <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
@@ -2189,7 +2189,7 @@ nextTick(() => {
               <button 
                 @click="bulkDelete"
                 title="Delete Conversations"
-                class="w-9 h-9 rounded-xl border border-gray-200 bg-white flex items-center justify-center hover:bg-gray-50 text-red-400 hover:text-red-600 hover:border-red-200 transition-all hover:scale-105 active:scale-95 cursor-pointer shadow-none"
+                class="w-9 h-9 rounded-xl border border-border bg-card flex items-center justify-center hover:bg-muted/40 text-destructive hover:text-destructive hover:border-destructive/30 transition-all hover:scale-105 active:scale-95 cursor-pointer shadow-none"
               >
                 <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <polyline points="3 6 5 6 21 6"/>
@@ -2215,11 +2215,11 @@ nextTick(() => {
                 leave-from-class="opacity-100 translate-x-0"
                 leave-to-class="opacity-0 translate-x-[-4px]"
               >
-                <div v-if="showLeftArrow" class="absolute left-0 top-0 bottom-0 flex items-center justify-start w-16 bg-gradient-to-r from-white via-white/90 to-transparent z-30 pointer-events-none">
+                <div v-if="showLeftArrow" class="absolute left-0 top-0 bottom-0 flex items-center justify-start w-16 bg-gradient-to-r from-card via-card/90 to-transparent z-30 pointer-events-none">
                   <button 
                     type="button"
                     @click="scrollContainer('left')"
-                    class="w-5 h-5 rounded-full border border-gray-200 bg-white shadow-none flex items-center justify-center text-gray-500 hover:text-gray-800 transition-all hover:scale-110 active:scale-95 cursor-pointer ml-0.5 pointer-events-auto"
+                    class="w-5 h-5 rounded-full border border-border bg-card shadow-none flex items-center justify-center text-muted-foreground hover:text-foreground transition-all hover:scale-110 active:scale-95 cursor-pointer ml-0.5 pointer-events-auto"
                   >
                     <svg class="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                       <polyline points="15 18 9 12 15 6"/>
@@ -2248,11 +2248,11 @@ nextTick(() => {
                     :class="[
                       'px-3.5 py-1 text-[11px] font-medium transition-all duration-200 flex-shrink-0 cursor-pointer rounded-full border shadow-none outline-none h-7 flex items-center justify-center',
                       activeFilter === 'late-reply'
-                        ? 'border-green-200 bg-green-50 text-[#23B750]'
-                        : 'border-gray-200 bg-gray-50 text-gray-600 hover:bg-gray-100/70 hover:text-gray-900 hover:border-gray-300'
+                        ? 'border-success/30 bg-success/10 text-primary'
+                        : 'border-border bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground hover:border-border'
                     ]"
                   >
-                    Late <span class="text-gray-300 font-normal select-none mx-0.5">•</span> {{ conversationsList.filter(c => c.section !== 'Resolved' && (c.rightBadge === 'Late' || c.rightBadge === 'Late Reply' || isSlaBreached(c))).length }}
+                    Late <span class="text-muted-foreground/60 font-normal select-none mx-0.5">•</span> {{ conversationsList.filter(c => c.section !== 'Resolved' && (c.rightBadge === 'Late' || c.rightBadge === 'Late Reply' || isSlaBreached(c))).length }}
                   </button>
                   
                   <button 
@@ -2260,11 +2260,11 @@ nextTick(() => {
                     :class="[
                       'px-3.5 py-1 text-[11px] font-medium transition-all duration-200 flex-shrink-0 cursor-pointer rounded-full border shadow-none outline-none h-7 flex items-center justify-center',
                       activeFilter === 'focus'
-                        ? 'border-green-200 bg-green-50 text-[#23B750]'
-                        : 'border-gray-200 bg-gray-50 text-gray-600 hover:bg-gray-100/70 hover:text-gray-900 hover:border-gray-300'
+                        ? 'border-tag-1-foreground/30 bg-tag-1 text-tag-1-foreground'
+                        : 'border-border bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground hover:border-border'
                     ]"
                   >
-                    Focus <span class="text-gray-300 font-normal select-none mx-0.5">•</span> {{ conversationsList.filter(c => c.section !== 'Resolved' && c.isFocus).length }}
+                    Focus <span class="text-muted-foreground/60 font-normal select-none mx-0.5">•</span> {{ conversationsList.filter(c => c.section !== 'Resolved' && c.isFocus).length }}
                   </button>
 
                   <button 
@@ -2272,11 +2272,11 @@ nextTick(() => {
                     :class="[
                       'px-3.5 py-1 text-[11px] font-medium transition-all duration-200 flex-shrink-0 cursor-pointer rounded-full border shadow-none outline-none h-7 flex items-center justify-center',
                       activeFilter === 'unread'
-                        ? 'border-green-200 bg-green-50 text-[#23B750]'
-                        : 'border-gray-200 bg-gray-50 text-gray-600 hover:bg-gray-100/70 hover:text-gray-900 hover:border-gray-300'
+                        ? 'border-success/30 bg-success/10 text-primary'
+                        : 'border-border bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground hover:border-border'
                     ]"
                   >
-                    Unread <span class="text-gray-300 font-normal select-none mx-0.5">•</span> {{ conversationsList.filter(c => c.section !== 'Resolved' && c.unreadCount > 0).length }}
+                    Unread <span class="text-muted-foreground/60 font-normal select-none mx-0.5">•</span> {{ conversationsList.filter(c => c.section !== 'Resolved' && c.unreadCount > 0).length }}
                   </button>
                 </template>
 
@@ -2287,11 +2287,11 @@ nextTick(() => {
                     :class="[
                       'px-3.5 py-1 text-[11px] font-medium transition-all duration-200 flex-shrink-0 cursor-pointer rounded-full border shadow-none outline-none h-7 flex items-center justify-center',
                       activeFilter === 'late-reply'
-                        ? 'border-green-200 bg-green-50 text-[#23B750]'
-                        : 'border-gray-255 bg-gray-50 text-gray-600 hover:bg-gray-100/70 hover:text-gray-900 hover:border-gray-300'
+                        ? 'border-success/30 bg-success/10 text-primary'
+                        : 'border-border bg-muted/40 text-muted-foreground hover:bg-muted/70 hover:text-foreground hover:border-border'
                     ]"
                   >
-                    Late <span class="text-gray-300 font-normal select-none mx-0.5">•</span> {{ conversationsList.filter(c => c.section !== 'Resolved' && (c.rightBadge === 'Late' || c.rightBadge === 'Late Reply' || isSlaBreached(c))).length }}
+                    Late <span class="text-muted-foreground/60 font-normal select-none mx-0.5">•</span> {{ conversationsList.filter(c => c.section !== 'Resolved' && (c.rightBadge === 'Late' || c.rightBadge === 'Late Reply' || isSlaBreached(c))).length }}
                   </button>
 
                   <button 
@@ -2299,11 +2299,11 @@ nextTick(() => {
                     :class="[
                       'px-3.5 py-1 text-[11px] font-medium transition-all duration-200 flex-shrink-0 cursor-pointer rounded-full border shadow-none outline-none h-7 flex items-center justify-center',
                       activeFilter === 'focus'
-                        ? 'border-green-200 bg-green-50 text-[#23B750]'
-                        : 'border-gray-255 bg-gray-50 text-gray-600 hover:bg-gray-100/70 hover:text-gray-900 hover:border-gray-300'
+                        ? 'border-tag-1-foreground/30 bg-tag-1 text-tag-1-foreground'
+                        : 'border-border bg-muted/40 text-muted-foreground hover:bg-muted/70 hover:text-foreground hover:border-border'
                     ]"
                   >
-                    Focus <span class="text-gray-300 font-normal select-none mx-0.5">•</span> {{ conversationsList.filter(c => c.section !== 'Resolved' && c.isFocus).length }}
+                    Focus <span class="text-muted-foreground/60 font-normal select-none mx-0.5">•</span> {{ conversationsList.filter(c => c.section !== 'Resolved' && c.isFocus).length }}
                   </button>
 
                   <button 
@@ -2311,11 +2311,11 @@ nextTick(() => {
                     :class="[
                       'px-3.5 py-1 text-[11px] font-medium transition-all duration-200 flex-shrink-0 cursor-pointer rounded-full border shadow-none outline-none h-7 flex items-center justify-center',
                       activeFilter === 'unread'
-                        ? 'border-green-200 bg-green-50 text-[#23B750]'
-                        : 'border-gray-255 bg-gray-50 text-gray-600 hover:bg-gray-100/70 hover:text-gray-900 hover:border-gray-300'
+                        ? 'border-success/30 bg-success/10 text-primary'
+                        : 'border-border bg-muted/40 text-muted-foreground hover:bg-muted/70 hover:text-foreground hover:border-border'
                     ]"
                   >
-                    Unread <span class="text-gray-300 font-normal select-none mx-0.5">•</span> {{ conversationsList.filter(c => c.section !== 'Resolved' && c.unreadCount > 0).length }}
+                    Unread <span class="text-muted-foreground/60 font-normal select-none mx-0.5">•</span> {{ conversationsList.filter(c => c.section !== 'Resolved' && c.unreadCount > 0).length }}
                   </button>
                 </template>
               </div>
@@ -2329,11 +2329,11 @@ nextTick(() => {
                 leave-from-class="opacity-100 translate-x-0"
                 leave-to-class="opacity-0 translate-x-[4px]"
               >
-                <div v-if="showRightArrow" class="absolute right-0 top-0 bottom-0 flex items-center justify-end w-16 bg-gradient-to-l from-white via-white/90 to-transparent z-30 pointer-events-none">
+                <div v-if="showRightArrow" class="absolute right-0 top-0 bottom-0 flex items-center justify-end w-16 bg-gradient-to-l from-card via-card/90 to-transparent z-30 pointer-events-none">
                   <button 
                     type="button"
                     @click="scrollContainer('right')"
-                    class="w-5 h-5 rounded-full border border-gray-200 bg-white shadow-none flex items-center justify-center text-gray-500 hover:text-gray-800 transition-all hover:scale-110 active:scale-95 cursor-pointer mr-0.5 pointer-events-auto"
+                    class="w-5 h-5 rounded-full border border-border bg-card shadow-none flex items-center justify-center text-muted-foreground hover:text-foreground transition-all hover:scale-110 active:scale-95 cursor-pointer mr-0.5 pointer-events-auto"
                   >
                     <svg class="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                       <polyline points="9 18 15 12 9 6"/>
@@ -2348,7 +2348,7 @@ nextTick(() => {
       </div>
 
       <!-- Scrollable Message List Canvas (Supports Chrono & Work Queue ViewStyles) -->
-      <div class="flex-1 overflow-y-auto min-h-0 border-t border-gray-100 divide-y divide-gray-100 scrollbar-thin">
+      <div class="flex-1 overflow-y-auto min-h-0 border-t border-border divide-y divide-border scrollbar-thin">
         
         <!-- ================= CHRONO VIEW STYLE ================= -->
         <template v-if="viewStyle === 'chrono'">
@@ -2356,15 +2356,15 @@ nextTick(() => {
           <div v-if="pinnedConversations.length > 0" class="flex flex-col">
             <div 
               @click="isPinnedExpanded = !isPinnedExpanded"
-              class="sticky top-0 z-10 flex items-center justify-between px-4 py-1.5 bg-gray-50/90 backdrop-blur-md border-b border-gray-150/80 select-none cursor-pointer hover:bg-gray-100/70 transition-colors"
+              class="sticky top-0 z-10 flex items-center justify-between px-4 py-1.5 bg-muted/90 backdrop-blur-md border-b border-border/80 select-none cursor-pointer hover:bg-muted/70 transition-colors"
             >
               <div class="flex items-center gap-1.5">
-                <svg class="w-3 h-3 text-gray-400 transform transition-transform duration-200" :class="[isPinnedExpanded ? 'rotate-180' : '']" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <svg class="w-3 h-3 text-muted-foreground transform transition-transform duration-200" :class="[isPinnedExpanded ? 'rotate-180' : '']" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                   <polyline points="6 9 12 15 18 9"/>
                 </svg>
-                <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Pinned</span>
+                <span class="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Pinned</span>
               </div>
-              <span class="text-[10px] font-semibold text-gray-500 bg-white border border-gray-200/80 px-2 py-0.5 rounded-full font-mono shadow-2xs leading-none">{{ pinnedConversations.length }} / 10</span>
+              <span class="text-[10px] font-semibold text-muted-foreground bg-card border border-border/80 px-2 py-0.5 rounded-full font-mono shadow-2xs leading-none">{{ pinnedConversations.length }} / 10</span>
             </div>
             
             <div v-if="isPinnedExpanded" class="flex flex-col">
@@ -2397,15 +2397,15 @@ nextTick(() => {
                 <!-- Group Header (sticky, clean typography) -->
                 <div 
                   @click="expandedSections[group.id] = !expandedSections[group.id]"
-                  class="sticky top-0 z-10 flex items-center justify-between px-4 py-1.5 bg-gray-50/90 backdrop-blur-md border-b border-gray-150/80 select-none cursor-pointer hover:bg-gray-100/70 transition-colors"
+                  class="sticky top-0 z-10 flex items-center justify-between px-4 py-1.5 bg-muted/90 backdrop-blur-md border-b border-border/80 select-none cursor-pointer hover:bg-muted/70 transition-colors"
                 >
                   <div class="flex items-center gap-1.5">
-                    <svg class="w-3 h-3 text-gray-400 transform transition-transform duration-200" :class="[expandedSections[group.id] ? 'rotate-180' : '']" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <svg class="w-3 h-3 text-muted-foreground transform transition-transform duration-200" :class="[expandedSections[group.id] ? 'rotate-180' : '']" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                       <polyline points="6 9 12 15 18 9"/>
                     </svg>
-                    <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">{{ group.title }}</span>
+                    <span class="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{{ group.title }}</span>
                   </div>
-                  <span class="text-[10px] font-semibold text-gray-500 bg-white border border-gray-200/80 px-2 py-0.5 rounded-full font-mono shadow-2xs leading-none">{{ group.items.length }}</span>
+                  <span class="text-[10px] font-semibold text-muted-foreground bg-card border border-border/80 px-2 py-0.5 rounded-full font-mono shadow-2xs leading-none">{{ group.items.length }}</span>
                 </div>
                 <!-- Group Items -->
                 <template v-if="expandedSections[group.id]">
@@ -2428,14 +2428,14 @@ nextTick(() => {
             </div>
             
             <!-- Premium Empty State when no conversations are present -->
-            <div v-else class="flex flex-col items-center justify-center py-14 px-6 text-center bg-white select-none animate-fade-in">
-              <div class="w-12 h-12 rounded-2xl bg-gray-50 flex items-center justify-center text-gray-300 border border-gray-100 mb-3.5 shadow-sm">
+            <div v-else class="flex flex-col items-center justify-center py-14 px-6 text-center bg-card select-none animate-fade-in">
+              <div class="w-12 h-12 rounded-2xl bg-muted/40 flex items-center justify-center text-muted-foreground/60 border border-border mb-3.5 shadow-sm">
                 <svg class="w-6 h-6 stroke-[1.8]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M8.684 10.742h.01m3.985 0h.01m3.985 0h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                 </svg>
               </div>
-              <h3 class="text-xs font-bold text-gray-800 mb-1">No Active Threads</h3>
-              <p class="text-[11px] text-gray-400 font-medium max-w-[200px] leading-relaxed">
+              <h3 class="text-xs font-bold text-foreground mb-1">No Active Threads</h3>
+              <p class="text-[11px] text-muted-foreground font-medium max-w-[200px] leading-relaxed">
                 All conversations are caught up. Check other filters or assignments.
               </p>
             </div>
@@ -2448,19 +2448,19 @@ nextTick(() => {
           <div class="flex flex-col">
             <div 
               @click="isPinnedExpanded = !isPinnedExpanded"
-              class="sticky top-0 z-10 flex items-center justify-between px-4 py-1.5 bg-gray-50/95 backdrop-blur-sm border-b border-gray-150 select-none cursor-pointer hover:bg-gray-100/70 transition-colors"
+              class="sticky top-0 z-10 flex items-center justify-between px-4 py-1.5 bg-muted/95 backdrop-blur-sm border-b border-border select-none cursor-pointer hover:bg-muted/70 transition-colors"
             >
               <div class="flex items-center gap-1.5">
-                <svg class="w-3 h-3 text-gray-400 transform transition-transform duration-200" :class="[isPinnedExpanded ? 'rotate-180' : '']" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <svg class="w-3 h-3 text-muted-foreground transform transition-transform duration-200" :class="[isPinnedExpanded ? 'rotate-180' : '']" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                   <polyline points="6 9 12 15 18 9"/>
                 </svg>
-                <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Pinned</span>
+                <span class="text-[9px] font-bold text-muted-foreground uppercase tracking-wider">Pinned</span>
               </div>
-              <span class="text-[9px] font-semibold text-gray-400 bg-white border border-gray-200/50 px-1.5 py-0.2 rounded-full">{{ pinnedConversations.length }} / 10</span>
+              <span class="text-[9px] font-semibold text-muted-foreground bg-card border border-border/50 px-1.5 py-0.2 rounded-full">{{ pinnedConversations.length }} / 10</span>
             </div>
 
             <!-- Collapsed Strip: Avatar bubbles list -->
-            <div v-if="!isPinnedExpanded && pinnedConversations.length > 0" class="flex items-center gap-3.5 px-4 py-3 border-b border-gray-100 overflow-x-auto scrollbar-none bg-gray-50/20 select-none">
+            <div v-if="!isPinnedExpanded && pinnedConversations.length > 0" class="flex items-center gap-3.5 px-4 py-3 border-b border-border overflow-x-auto scrollbar-none bg-muted/30 select-none">
               <div 
                 v-for="item in pinnedConversations" 
                 :key="item.id" 
@@ -2470,13 +2470,13 @@ nextTick(() => {
               >
                 <img 
                   :src="item.avatar" 
-                  class="w-10 h-10 rounded-full object-cover border border-gray-100 transition-all hover:scale-105"
-                  :class="[item.selected ? 'ring-2 ring-[#23B750] ring-offset-2' : '']"
+                  class="w-10 h-10 rounded-full object-cover border border-border transition-all hover:scale-105"
+                  :class="[item.selected ? 'ring-2 ring-[var(--primary)] ring-offset-2' : '']"
                 />
                 <!-- Unread counter badge overlay -->
                 <span 
                   v-if="item.unreadCount > 0" 
-                  class="absolute -top-1 -right-1 min-w-[16px] h-4 px-1 rounded-full bg-[#EF4444] text-white text-[9px] font-extrabold flex items-center justify-center border border-white leading-none font-mono"
+                  class="absolute -top-1 -right-1 min-w-[16px] h-4 px-1 rounded-full bg-destructive text-primary-foreground text-[9px] font-extrabold flex items-center justify-center border border-card leading-none font-mono"
                 >
                   {{ item.unreadCount }}
                 </span>
@@ -2484,7 +2484,7 @@ nextTick(() => {
             </div>
             
             <!-- Expanded Strip: Full conversation rows list -->
-            <div v-else-if="isPinnedExpanded && pinnedConversations.length > 0" class="flex flex-col border-b border-gray-100">
+            <div v-else-if="isPinnedExpanded && pinnedConversations.length > 0" class="flex flex-col border-b border-border">
               <ConversationItem 
                 v-for="item in pinnedConversations"
                 :key="item.id"
@@ -2502,7 +2502,7 @@ nextTick(() => {
             </div>
             
             <!-- Empty Pinned Strip View -->
-            <div v-else class="px-4 py-3 text-center text-[11px] text-gray-400 italic bg-gray-50/10 border-b border-gray-100 select-none">
+            <div v-else class="px-4 py-3 text-center text-[11px] text-muted-foreground italic bg-muted/30 border-b border-border select-none">
               No pinned conversations yet. Right-click to pin.
             </div>
           </div>
@@ -2510,14 +2510,14 @@ nextTick(() => {
           <!-- SECTION 1: REPLY REQUIRED -->
           <div class="flex flex-col">
             <!-- Section Header -->
-            <div class="flex items-center justify-between px-4 py-2.5 bg-gray-50 border-b border-gray-150 select-none">
-              <div class="flex items-center gap-2 text-[10px] font-extrabold text-gray-400 uppercase tracking-widest leading-none">
+            <div class="flex items-center justify-between px-4 py-2.5 bg-muted/40 border-b border-border select-none">
+              <div class="flex items-center gap-2 text-[10px] font-extrabold text-muted-foreground uppercase tracking-widest leading-none">
                 <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
                 </svg>
                 Reply Required
               </div>
-              <span class="text-[10px] font-bold text-gray-450">{{ replyRequiredConversations.length }}</span>
+              <span class="text-[10px] font-bold text-muted-foreground">{{ replyRequiredConversations.length }}</span>
             </div>
 
             <!-- Section Items -->
@@ -2540,15 +2540,15 @@ nextTick(() => {
           <!-- SECTION 2: WAITING & SNOOZED -->
           <div class="flex flex-col">
             <!-- Section Header -->
-            <div class="flex items-center justify-between px-4 py-2.5 bg-gray-50 border-b border-gray-150 select-none">
-              <div class="flex items-center gap-2 text-[10px] font-extrabold text-gray-400 uppercase tracking-widest leading-none">
+            <div class="flex items-center justify-between px-4 py-2.5 bg-muted/40 border-b border-border select-none">
+              <div class="flex items-center gap-2 text-[10px] font-extrabold text-muted-foreground uppercase tracking-widest leading-none">
                 <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                   <circle cx="12" cy="12" r="10"/>
                   <polyline points="12 6 12 12 16 14"/>
                 </svg>
                 Waiting & Snoozed
               </div>
-              <span class="text-[10px] font-bold text-gray-455">{{ waitingConversations.length }}</span>
+              <span class="text-[10px] font-bold text-muted-foreground">{{ waitingConversations.length }}</span>
             </div>
 
             <!-- Section Items -->
@@ -2570,11 +2570,11 @@ nextTick(() => {
         </template>
 
         <!-- Reached the end footer -->
-        <div v-if="filteredConversations.length > 0" class="pt-8 pb-16 px-4 flex flex-col items-center justify-center select-none bg-gray-50/20 border-t border-gray-100/50">
+        <div v-if="filteredConversations.length > 0" class="pt-8 pb-16 px-4 flex flex-col items-center justify-center select-none bg-muted/30 border-t border-border/50">
           <div class="flex items-center gap-2.5">
-            <div class="h-[1px] w-8 bg-gray-200"></div>
-            <span class="text-[10px] font-bold text-gray-400 tracking-wider uppercase">You're all caught up</span>
-            <div class="h-[1px] w-8 bg-gray-200"></div>
+            <div class="h-[1px] w-8 bg-muted"></div>
+            <span class="text-[10px] font-bold text-muted-foreground tracking-wider uppercase">You're all caught up</span>
+            <div class="h-[1px] w-8 bg-muted"></div>
           </div>
         </div>
 
@@ -2585,15 +2585,15 @@ nextTick(() => {
       <!-- Floating Switcher — hidden by default, appears on hover near the bottom -->
       <div class="absolute bottom-0 left-0 right-0 h-14 z-30 group/switcher flex items-end justify-center pb-3 pointer-events-auto">
         <!-- The switcher pill itself: invisible until parent hover -->
-        <div class="bg-white/90 backdrop-blur-md border border-gray-200 shadow-sm rounded-full p-1 flex gap-1 items-center select-none transition-all duration-250 ease-out opacity-0 translate-y-2 pointer-events-none group-hover/switcher:opacity-100 group-hover/switcher:translate-y-0 group-hover/switcher:pointer-events-auto">
+        <div class="bg-card/90 backdrop-blur-md border border-border shadow-sm rounded-full p-1 flex gap-1 items-center select-none transition-all duration-250 ease-out opacity-0 translate-y-2 pointer-events-none group-hover/switcher:opacity-100 group-hover/switcher:translate-y-0 group-hover/switcher:pointer-events-auto">
           <button 
             type="button"
             @click="viewMode = 'sales'" 
             :class="[
               'px-3 py-1.5 rounded-full text-[10px] font-extrabold tracking-wider uppercase transition-all duration-200 flex items-center gap-1 cursor-pointer outline-none',
               viewMode === 'sales'
-                ? 'bg-[#23B750] text-white shadow-none'
-                : 'text-gray-500 hover:text-gray-800 hover:bg-gray-50'
+                ? 'bg-primary text-primary-foreground shadow-none'
+                : 'text-muted-foreground hover:text-foreground hover:bg-muted/40'
             ]"
           >
             <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -2607,8 +2607,8 @@ nextTick(() => {
             :class="[
               'px-3 py-1.5 rounded-full text-[10px] font-extrabold tracking-wider uppercase transition-all duration-200 flex items-center gap-1 cursor-pointer outline-none',
               viewMode === 'admin'
-                ? 'bg-[#23B750] text-white shadow-none'
-                : 'text-gray-500 hover:text-gray-800 hover:bg-gray-50'
+                ? 'bg-primary text-primary-foreground shadow-none'
+                : 'text-muted-foreground hover:text-foreground hover:bg-muted/40'
             ]"
           >
             <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -2622,66 +2622,66 @@ nextTick(() => {
     </aside>
 
     <!-- MIDDLE PANEL: Active Conversation Details View -->
-    <main class="flex-1 h-full min-w-0 bg-gray-50 flex flex-col relative">
+    <main class="flex-1 h-full min-w-0 bg-muted/40 flex flex-col relative">
       
       <!-- Top header bar -->
-      <header class="min-h-16 bg-white border-b border-gray-200 flex flex-nowrap items-center justify-between px-6 py-2.5 md:py-0 gap-3 flex-shrink-0 select-none relative z-10">
+      <header class="min-h-16 bg-card border-b border-border flex flex-nowrap items-center justify-between px-6 py-2.5 md:py-0 gap-3 flex-shrink-0 select-none relative z-10">
         <div class="flex items-center gap-3 max-w-full min-w-0">
           <!-- Avatar with online status -->
           <div class="relative shrink-0">
             <img :src="activeConversation.avatar" class="w-10 h-10 rounded-full object-cover border" alt="Active avatar" />
-            <span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2 border-white bg-[#23B750] animate-pulse-glow" title="Active now (Last active 2m ago)"></span>
+            <span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2 border-card bg-primary animate-pulse-glow" title="Active now (Last active 2m ago)"></span>
           </div>
           <div class="min-w-0 flex flex-col justify-center gap-0.5">
             <div class="flex items-center gap-1.5 min-w-0">
-              <h2 class="font-bold text-gray-800 text-[15px] leading-tight truncate shrink-0">
+              <h2 class="font-bold text-foreground text-[15px] leading-tight truncate shrink-0">
                 {{ activeConversation.sender }}
               </h2>
-              <span v-if="activeConversation.icons?.includes('crown')" title="VIP Contact" class="inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded-full text-[9px] font-extrabold border border-purple-200 bg-purple-50 text-purple-700 leading-none shrink-0 select-none">
-                <svg viewBox="0 0 24 24" class="w-2.5 h-2.5 fill-current text-[#9F5CF8]"><path d="M5 16L3 5L8.5 10L12 4L15.5 10L21 5L19 16H5ZM19 19C19 19.55 18.55 20 18 20H6C5.45 20 5 19.55 5 19V18H19V19Z"/></svg>
+              <span v-if="activeConversation.icons?.includes('crown')" title="VIP Contact" class="inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded-full text-[9px] font-extrabold border border-accent-purple/30 bg-accent-purple/10 text-accent-purple leading-none shrink-0 select-none">
+                <svg viewBox="0 0 24 24" class="w-2.5 h-2.5 fill-current text-accent-purple"><path d="M5 16L3 5L8.5 10L12 4L15.5 10L21 5L19 16H5ZM19 19C19 19.55 18.55 20 18 20H6C5.45 20 5 19.55 5 19V18H19V19Z"/></svg>
                 <span>VIP</span>
               </span>
               <!-- Red Late SLA Badge if breached -->
               <span 
                 v-if="isSlaBreached(activeConversation)" 
                 title="SLA response threshold exceeded"
-                class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold border border-[#FDE8E8] bg-[#FDF2F2] text-[#B91C1C] leading-none shrink-0 select-none"
+                class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold border border-destructive/20 bg-destructive/10 text-destructive leading-none shrink-0 select-none"
               >
-                <span class="w-1.5 h-1.5 rounded-full bg-[#B91C1C] animate-pulse"></span>
+                <span class="w-1.5 h-1.5 rounded-full bg-destructive animate-pulse"></span>
                 <span>Late</span>
               </span>
             </div>
-            <div class="flex items-center gap-x-1.5 text-xs text-gray-500 font-medium whitespace-nowrap select-none">
-              <span class="bg-gray-100 px-1.5 py-0.5 rounded text-gray-600 flex items-center justify-center shrink-0">
+            <div class="flex items-center gap-x-1.5 text-xs text-muted-foreground font-medium whitespace-nowrap select-none">
+              <span class="bg-muted px-1.5 py-0.5 rounded text-muted-foreground flex items-center justify-center shrink-0">
                 <PlatformIcon :platform="activeConversation.platform" size="sm" variant="colored" />
               </span>
-              <span class="text-gray-300 font-normal select-none">•</span>
+              <span class="text-muted-foreground/60 font-normal select-none">•</span>
               <!-- Clickable Assign Agent Dropdown in Header with Search -->
               <div ref="headerAssignDropdownRef" class="relative inline-block shrink-0">
                 <button 
                   @click="isHeaderAssignDropdownOpen = !isHeaderAssignDropdownOpen"
-                  class="hover:underline cursor-pointer flex items-center gap-1 font-semibold text-gray-700 hover:text-gray-900 transition-colors select-none"
+                  class="hover:underline cursor-pointer flex items-center gap-1 font-semibold text-foreground hover:text-foreground transition-colors select-none"
                   title="Click to reassign agent"
                 >
-                  <span>Assigned to <span class="font-bold text-gray-900">{{ activeConversation.assignedTo === 'Liv' ? 'Olivia' : (activeConversation.assignedTo === 'Unassigned' ? 'Unassigned' : activeConversation.assignedTo) }}</span></span>
-                  <svg class="w-2.5 h-2.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M19 9l-7 7-7-7"/></svg>
+                  <span>Assigned to <span class="font-bold text-foreground">{{ activeConversation.assignedTo === 'Liv' ? 'Olivia' : (activeConversation.assignedTo === 'Unassigned' ? 'Unassigned' : activeConversation.assignedTo) }}</span></span>
+                  <svg class="w-2.5 h-2.5 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M19 9l-7 7-7-7"/></svg>
                 </button>
 
                 <!-- Searchable Dropdown Menu -->
                 <div 
                   v-if="isHeaderAssignDropdownOpen" 
                   @click.stop 
-                  class="absolute left-0 mt-1.5 w-52 bg-white border border-gray-200 rounded-xl shadow-lg z-30 p-1.5 flex flex-col gap-1 focus:outline-none select-none"
+                  class="absolute left-0 mt-1.5 w-52 bg-card border border-border rounded-xl shadow-lg z-30 p-1.5 flex flex-col gap-1 focus:outline-none select-none"
                 >
                   <div class="px-2 py-0.5 flex items-center justify-between">
-                    <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Assign Agent</span>
-                    <span class="text-[9px] text-gray-400 font-medium font-mono">{{ headerFilteredAgents.length }}</span>
+                    <span class="text-[9px] font-bold text-muted-foreground uppercase tracking-wider">Assign Agent</span>
+                    <span class="text-[9px] text-muted-foreground font-medium font-mono">{{ headerFilteredAgents.length }}</span>
                   </div>
                   
                   <!-- Agent Search Bar -->
                   <div class="px-1 py-0.5">
                     <div class="relative">
-                      <svg class="w-3.5 h-3.5 absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <svg class="w-3.5 h-3.5 absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <circle cx="11" cy="11" r="8"/>
                         <line x1="21" y1="21" x2="16.65" y2="16.65"/>
                       </svg>
@@ -2689,13 +2689,13 @@ nextTick(() => {
                         v-model="headerAgentSearchQuery"
                         type="text" 
                         placeholder="Search agent..." 
-                        class="w-full pl-7 pr-5 py-1 text-[11px] bg-gray-50 border border-gray-200 rounded-md focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#23B750] focus:border-[#23B750] transition-all placeholder:text-gray-400 font-medium"
+                        class="w-full pl-7 pr-5 py-1 text-[11px] bg-muted/40 border border-border rounded-md focus:bg-card focus:outline-none focus:ring-1 focus:ring-[var(--primary)] focus:border-primary transition-all placeholder:text-muted-foreground font-medium"
                       />
                       <button 
                         v-if="headerAgentSearchQuery"
                         type="button"
                         @click="headerAgentSearchQuery = ''"
-                        class="absolute right-1.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-0.5 cursor-pointer"
+                        class="absolute right-1.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-muted-foreground p-0.5 cursor-pointer"
                       >
                         <svg class="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
                           <line x1="18" y1="6" x2="6" y2="18"/>
@@ -2712,23 +2712,23 @@ nextTick(() => {
                       :key="agent.value"
                       type="button"
                       @click="reassignActiveConversation(agent.value)"
-                      class="flex items-center justify-between w-full px-2 py-1.5 rounded-md hover:bg-gray-50 transition-colors text-left cursor-pointer outline-none border border-transparent"
-                      :class="activeConversation.assignedTo === agent.value ? 'bg-green-50/50 border-green-100 text-emerald-950 font-semibold' : 'text-[#334155]'"
+                      class="flex items-center justify-between w-full px-2 py-1.5 rounded-md hover:bg-muted/40 transition-colors text-left cursor-pointer outline-none border border-transparent"
+                      :class="activeConversation.assignedTo === agent.value ? 'bg-success/10 border-success/30 text-success font-semibold' : 'text-[var(--foreground)]'"
                     >
                       <div class="flex items-center gap-2 min-w-0">
-                        <div class="w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center font-bold text-[9px] text-gray-600 border border-gray-200 shrink-0">
+                        <div class="w-5 h-5 rounded-full bg-muted flex items-center justify-center font-bold text-[9px] text-muted-foreground border border-border shrink-0">
                           {{ agent.avatar }}
                         </div>
                         <div class="flex flex-col min-w-0">
                           <span class="text-[11px] font-bold truncate leading-tight">{{ agent.label }}</span>
-                          <span v-if="agent.role" class="text-[9px] text-gray-400 font-normal leading-tight truncate">{{ agent.role }}</span>
+                          <span v-if="agent.role" class="text-[9px] text-muted-foreground font-normal leading-tight truncate">{{ agent.role }}</span>
                         </div>
                       </div>
-                      <svg v-if="activeConversation.assignedTo === agent.value" class="w-3 h-3 text-[#23B750] stroke-current stroke-[3] shrink-0" viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg>
+                      <svg v-if="activeConversation.assignedTo === agent.value" class="w-3 h-3 text-primary stroke-current stroke-[3] shrink-0" viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg>
                     </button>
 
-                    <div v-if="headerFilteredAgents.length === 0" class="py-3 text-center text-[10px] text-gray-400 select-none">
-                      No agents matching "<span class="font-semibold text-gray-600">{{ headerAgentSearchQuery }}</span>"
+                    <div v-if="headerFilteredAgents.length === 0" class="py-3 text-center text-[10px] text-muted-foreground select-none">
+                      No agents matching "<span class="font-semibold text-muted-foreground">{{ headerAgentSearchQuery }}</span>"
                     </div>
                   </div>
                 </div>
@@ -2742,7 +2742,7 @@ nextTick(() => {
           <button
             v-if="activeConversation.section !== 'Resolved' && activeConversation.lifecycleState !== 'closed' && activeConversation.lifecycleState !== 'archived'"
             @click="resolveActiveConversation"
-            class="inline-flex items-center justify-center gap-1.5 px-3.5 h-8.5 rounded-lg bg-[#23B750] hover:bg-[#1fa346] text-white text-xs font-bold shadow-2xs cursor-pointer active:scale-95 transition-all outline-none select-none shrink-0"
+            class="inline-flex items-center justify-center gap-1.5 px-3.5 h-8.5 rounded-lg bg-primary hover:bg-[var(--primary)] text-primary-foreground text-xs font-bold shadow-2xs cursor-pointer active:scale-95 transition-all outline-none select-none shrink-0"
             title="Mark conversation as resolved"
           >
             <svg class="w-3.5 h-3.5 stroke-current stroke-[3]" fill="none" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
@@ -2751,7 +2751,7 @@ nextTick(() => {
           <button
             v-else
             @click="reopenActiveConversation"
-            class="inline-flex items-center justify-center gap-1.5 px-3.5 h-8.5 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 text-gray-700 text-xs font-bold shadow-2xs cursor-pointer active:scale-95 transition-all outline-none select-none shrink-0"
+            class="inline-flex items-center justify-center gap-1.5 px-3.5 h-8.5 rounded-lg border border-border bg-card hover:bg-muted/40 text-foreground text-xs font-bold shadow-2xs cursor-pointer active:scale-95 transition-all outline-none select-none shrink-0"
             title="Reopen conversation to active"
           >
             <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
@@ -2762,51 +2762,51 @@ nextTick(() => {
           <div ref="headerLifecycleDropdownRef" class="relative flex-shrink-0">
             <button
               @click="isLifecycleDropdownOpen = !isLifecycleDropdownOpen"
-              class="inline-flex items-center justify-center gap-2 px-3 h-8.5 rounded-lg border border-gray-200 bg-white hover:bg-gray-50 text-xs font-semibold text-gray-700 cursor-pointer shadow-2xs outline-none select-none"
+              class="inline-flex items-center justify-center gap-2 px-3 h-8.5 rounded-lg border border-border bg-card hover:bg-muted/40 text-xs font-semibold text-foreground cursor-pointer shadow-2xs outline-none select-none"
             >
-              <span class="w-2 h-2 rounded-full shrink-0" :class="[ activeConversation.lifecycleState === 'open' ? 'bg-[#23B750]' : activeConversation.lifecycleState === 'closed' ? 'bg-gray-400' : 'bg-amber-400' ]"></span>
-              <span class="font-bold text-gray-800">{{ activeConversation.lifecycleState === 'open' ? 'Active' : activeConversation.lifecycleState === 'closed' ? 'Resolved' : 'Archived' }}</span>
-              <svg class="w-3 h-3 text-gray-400 transition-transform" :class="[isLifecycleDropdownOpen ? 'rotate-180' : '']" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+              <span class="w-2 h-2 rounded-full shrink-0" :class="[ activeConversation.lifecycleState === 'open' ? 'bg-primary' : activeConversation.lifecycleState === 'closed' ? 'bg-muted-foreground' : 'bg-warning' ]"></span>
+              <span class="font-bold text-foreground">{{ activeConversation.lifecycleState === 'open' ? 'Active' : activeConversation.lifecycleState === 'closed' ? 'Resolved' : 'Archived' }}</span>
+              <svg class="w-3 h-3 text-muted-foreground transition-transform" :class="[isLifecycleDropdownOpen ? 'rotate-180' : '']" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
             
             <div 
               v-if="isLifecycleDropdownOpen"
-              class="absolute right-0 mt-1.5 w-36 bg-white border border-gray-200 rounded-xl shadow-lg z-40 py-1.5 focus:outline-none"
+              class="absolute right-0 mt-1.5 w-36 bg-card border border-border rounded-xl shadow-lg z-40 py-1.5 focus:outline-none"
             >
               <button
                 @click="changeActiveLifecycleState('open')"
-                class="w-full text-left px-3 py-1.5 text-xs flex items-center justify-between hover:bg-gray-50 transition-colors text-gray-700 cursor-pointer"
-                :class="[activeConversation.lifecycleState === 'open' ? 'bg-green-50/40 text-emerald-800 font-semibold' : '']"
+                class="w-full text-left px-3 py-1.5 text-xs flex items-center justify-between hover:bg-muted/40 transition-colors text-foreground cursor-pointer"
+                :class="[activeConversation.lifecycleState === 'open' ? 'bg-success/10 text-success font-semibold' : '']"
               >
                 <div class="flex items-center gap-1.5">
-                  <span class="w-2 h-2 rounded-full bg-[#23B750]"></span>
+                  <span class="w-2 h-2 rounded-full bg-primary"></span>
                   <span>Active</span>
                 </div>
-                <svg v-if="activeConversation.lifecycleState === 'open'" class="w-3.5 h-3.5 text-[#23B750]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <svg v-if="activeConversation.lifecycleState === 'open'" class="w-3.5 h-3.5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
               </button>
               
               <button
                 @click="changeActiveLifecycleState('closed')"
-                class="w-full text-left px-3 py-1.5 text-xs flex items-center justify-between hover:bg-gray-50 transition-colors text-gray-700 cursor-pointer"
-                :class="[activeConversation.lifecycleState === 'closed' ? 'bg-gray-100 text-gray-900 font-semibold' : '']"
+                class="w-full text-left px-3 py-1.5 text-xs flex items-center justify-between hover:bg-muted/40 transition-colors text-foreground cursor-pointer"
+                :class="[activeConversation.lifecycleState === 'closed' ? 'bg-muted text-foreground font-semibold' : '']"
               >
                 <div class="flex items-center gap-1.5">
-                  <span class="w-2 h-2 rounded-full bg-gray-400"></span>
+                  <span class="w-2 h-2 rounded-full bg-muted-foreground"></span>
                   <span>Resolved</span>
                 </div>
-                <svg v-if="activeConversation.lifecycleState === 'closed'" class="w-3.5 h-3.5 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <svg v-if="activeConversation.lifecycleState === 'closed'" class="w-3.5 h-3.5 text-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
               </button>
 
               <button
                 @click="changeActiveLifecycleState('archived')"
-                class="w-full text-left px-3 py-1.5 text-xs flex items-center justify-between hover:bg-gray-50 transition-colors text-gray-700 cursor-pointer"
-                :class="[activeConversation.lifecycleState === 'archived' ? 'bg-amber-50 text-amber-900 font-semibold' : '']"
+                class="w-full text-left px-3 py-1.5 text-xs flex items-center justify-between hover:bg-muted/40 transition-colors text-foreground cursor-pointer"
+                :class="[activeConversation.lifecycleState === 'archived' ? 'bg-warning/10 text-warning-foreground font-semibold' : '']"
               >
                 <div class="flex items-center gap-1.5">
-                  <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+                  <span class="w-2 h-2 rounded-full bg-warning"></span>
                   <span>Archived</span>
                 </div>
-                <svg v-if="activeConversation.lifecycleState === 'archived'" class="w-3.5 h-3.5 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <svg v-if="activeConversation.lifecycleState === 'archived'" class="w-3.5 h-3.5 text-warning" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
               </button>
             </div>
           </div>
@@ -2815,8 +2815,8 @@ nextTick(() => {
           <button 
             @click="isRightDrawerOpen = !isRightDrawerOpen"
             title="Toggle Details Drawer"
-            class="h-8.5 w-8.5 flex items-center justify-center text-gray-500 hover:text-gray-700 hover:bg-gray-100 border border-gray-200 rounded-lg bg-white cursor-pointer transition-colors shrink-0 shadow-2xs"
-            :class="[isRightDrawerOpen ? 'bg-gray-100 text-gray-800' : '']"
+            class="h-8.5 w-8.5 flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted border border-border rounded-lg bg-card cursor-pointer transition-colors shrink-0 shadow-2xs"
+            :class="[isRightDrawerOpen ? 'bg-muted text-foreground' : '']"
           >
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
@@ -2831,7 +2831,7 @@ nextTick(() => {
         <!-- Scrollable Message Canvas with Custom Visual Chat Bubbles -->
         <div 
           ref="chatMessagesContainer"
-          class="flex-1 p-6 bg-gray-50 flex flex-col gap-5 overflow-y-auto min-h-0 scrollbar-thin"
+          class="flex-1 p-6 bg-muted/40 flex flex-col gap-5 overflow-y-auto min-h-0 scrollbar-thin"
           @scroll="handleChatScroll"
         >
           <template v-for="msg in activeChatMessages" :key="msg.id">
@@ -2839,44 +2839,44 @@ nextTick(() => {
             <div v-if="msg.type === 'system-log'" class="w-full flex items-center justify-center py-2 select-none animate-in fade-in duration-200">
               <div 
                 class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] border font-bold max-w-[90%] shadow-none"
-                :class="msg.logClass || 'bg-gray-100/50 border-gray-200 text-gray-500'"
+                :class="msg.logClass || 'bg-muted/50 border-border text-muted-foreground'"
               >
                 <!-- Dynamic system log icon -->
-                <svg v-if="msg.logIcon === 'check'" class="w-3 h-3 text-[#23B750]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg>
-                <svg v-else-if="msg.logIcon === 'user'" class="w-3 h-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                <svg v-else-if="msg.logIcon === 'sparkles'" class="w-3.5 h-3.5 text-[#2563EB]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9.813 15.904L9 21l-.813-5.096L3.096 15 8.187 14.187 9 9l.813 5.187L14.904 15z"/></svg>
-                <svg v-else-if="msg.logIcon === 'mail'" class="w-3 h-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-                <svg v-else-if="msg.logIcon === 'bell'" class="w-3 h-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-                <svg v-else-if="msg.logIcon === 'unlock'" class="w-3.5 h-3.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>
-                <svg v-else-if="msg.logIcon === 'clock'" class="w-3 h-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <svg v-if="msg.logIcon === 'check'" class="w-3 h-3 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <svg v-else-if="msg.logIcon === 'user'" class="w-3 h-3 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <svg v-else-if="msg.logIcon === 'sparkles'" class="w-3.5 h-3.5 text-[var(--info)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9.813 15.904L9 21l-.813-5.096L3.096 15 8.187 14.187 9 9l.813 5.187L14.904 15z"/></svg>
+                <svg v-else-if="msg.logIcon === 'mail'" class="w-3 h-3 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                <svg v-else-if="msg.logIcon === 'bell'" class="w-3 h-3 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                <svg v-else-if="msg.logIcon === 'unlock'" class="w-3.5 h-3.5 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>
+                <svg v-else-if="msg.logIcon === 'clock'" class="w-3 h-3 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                 <span>{{ msg.text }}</span>
               </div>
             </div>
 
             <!-- 2. CRM Match States Cards -->
             <div v-else-if="msg.type === 'crm-match'" class="w-full flex items-center justify-center py-3 select-none animate-in fade-in duration-200">
-              <div class="w-full max-w-[85%] bg-white border border-gray-200 rounded-2xl p-5 shadow-sm flex flex-col items-center text-center gap-4 relative">
+              <div class="w-full max-w-[85%] bg-card border border-border rounded-2xl p-5 shadow-sm flex flex-col items-center text-center gap-4 relative">
                 
                 <!-- State A: Unknown Sender -->
                 <template v-if="crmCardState === 'unknown'">
                   <div class="relative w-12 h-12 select-none">
-                    <img :src="activeConversation.avatar" class="w-12 h-12 rounded-full object-cover border border-gray-150" />
-                    <span class="absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white bg-gray-400"></span>
+                    <img :src="activeConversation.avatar" class="w-12 h-12 rounded-full object-cover border border-border" />
+                    <span class="absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-card bg-muted-foreground"></span>
                   </div>
-                  <span class="text-[10px] font-extrabold uppercase bg-gray-100 text-gray-500 px-2.5 py-0.5 rounded-full -mt-2">Unknown Sender</span>
-                  <div class="flex items-center gap-1.5 text-gray-800 font-bold text-sm">
-                    <svg viewBox="0 0 24 24" class="w-4 h-4 fill-current text-[#25D366]"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.262 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.713-1.455L0 24zm6.59-4.846c1.66.986 3.298 1.504 5.353 1.505 5.503 0 9.977-4.477 9.98-9.983.002-2.667-1.031-5.176-2.909-7.054C17.195 1.745 14.69 .713 12.012.713c-5.51 0-9.985 4.479-9.988 9.987-.001 2.148.567 4.24 1.644 6.1 l-.995 3.635 3.737-.981zm11.393-7.513c-.3-.15-1.77-.874-2.043-.974-.275-.1-.475-.15-.675.15-.2.3-.775.974-.95 1.174-.175.2-.35.225-.65.075-1.02-.513-1.695-.97-2.368-2.128-.176-.3-.176-.5-.075-.65.09-.137.2-.238.3-.35.1-.1.125-.2.187-.3.063-.1.031-.2-.013-.3-.044-.1-.4-.974-.55-1.324-.145-.35-.29-.303-.4-.308-.104-.005-.224-.005-.344-.005-.12 0-.315.04-.48.22-.165.18-.63.616-.63 1.503 0 .887.645 1.744.735 1.87.09.124 1.27 1.94 3.076 2.718.428.188.764.3 1.024.384.43.137.82.117 1.13.07.34-.05.177-.874.243-1.124.066-.25-.09-.387-.29-.537z"/></svg>
+                  <span class="text-[10px] font-extrabold uppercase bg-muted text-muted-foreground px-2.5 py-0.5 rounded-full -mt-2">Unknown Sender</span>
+                  <div class="flex items-center gap-1.5 text-foreground font-bold text-sm">
+                    <svg viewBox="0 0 24 24" class="w-4 h-4 fill-current text-[var(--success)]"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.262 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.713-1.455L0 24zm6.59-4.846c1.66.986 3.298 1.504 5.353 1.505 5.503 0 9.977-4.477 9.98-9.983.002-2.667-1.031-5.176-2.909-7.054C17.195 1.745 14.69 .713 12.012.713c-5.51 0-9.985 4.479-9.988 9.987-.001 2.148.567 4.24 1.644 6.1 l-.995 3.635 3.737-.981zm11.393-7.513c-.3-.15-1.77-.874-2.043-.974-.275-.1-.475-.15-.675.15-.2.3-.775.974-.95 1.174-.175.2-.35.225-.65.075-1.02-.513-1.695-.97-2.368-2.128-.176-.3-.176-.5-.075-.65.09-.137.2-.238.3-.35.1-.1.125-.2.187-.3.063-.1.031-.2-.013-.3-.044-.1-.4-.974-.55-1.324-.145-.35-.29-.303-.4-.308-.104-.005-.224-.005-.344-.005-.12 0-.315.04-.48.22-.165.18-.63.616-.63 1.503 0 .887.645 1.744.735 1.87.09.124 1.27 1.94 3.076 2.718.428.188.764.3 1.024.384.43.137.82.117 1.13.07.34-.05.177-.874.243-1.124.066-.25-.09-.387-.29-.537z"/></svg>
                     <span>+6012 3456 7890</span>
                   </div>
-                  <div class="text-xs text-gray-500 font-semibold -mt-2">~Mel Wong • No email captured</div>
-                  <div class="w-full bg-gray-50 border border-gray-150 rounded-xl py-2.5 px-4 text-xs font-bold text-gray-500">
+                  <div class="text-xs text-muted-foreground font-semibold -mt-2">~Mel Wong • No email captured</div>
+                  <div class="w-full bg-muted/40 border border-border rounded-xl py-2.5 px-4 text-xs font-bold text-muted-foreground">
                     Not saved in CRM / only channel profile available
                   </div>
                   <div class="w-full grid grid-cols-2 gap-3 mt-1">
-                    <button @click="addToast('Sender block listed', 'warning')" class="py-2 border border-red-200 text-red-500 hover:bg-red-50 rounded-xl text-xs font-extrabold transition-colors cursor-pointer select-none">
+                    <button @click="addToast('Sender block listed', 'warning')" class="py-2 border border-destructive/30 text-destructive hover:bg-destructive/10 rounded-xl text-xs font-extrabold transition-colors cursor-pointer select-none">
                       🚫 Block / Spam
                     </button>
-                    <button @click="handleCrmCreateContact" class="py-2 border border-green-200 text-[#23B750] hover:bg-green-50 rounded-xl text-xs font-extrabold transition-colors cursor-pointer select-none">
+                    <button @click="handleCrmCreateContact" class="py-2 border border-success/30 text-primary hover:bg-success/10 rounded-xl text-xs font-extrabold transition-colors cursor-pointer select-none">
                       👤 Create New Contact
                     </button>
                   </div>
@@ -2885,24 +2885,24 @@ nextTick(() => {
                 <!-- State B: Potential Contact -->
                 <template v-else-if="crmCardState === 'potential'">
                   <div class="relative w-12 h-12 select-none">
-                    <img :src="activeConversation.avatar" class="w-12 h-12 rounded-full object-cover border border-gray-150" />
-                    <span class="absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white bg-[#23B750]"></span>
+                    <img :src="activeConversation.avatar" class="w-12 h-12 rounded-full object-cover border border-border" />
+                    <span class="absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-card bg-primary"></span>
                   </div>
-                  <span class="text-[10px] font-extrabold uppercase bg-orange-100 text-orange-600 px-2.5 py-0.5 rounded-full -mt-2">Potential Contact</span>
-                  <div class="flex items-center gap-1.5 text-gray-800 font-bold text-sm">
-                    <svg viewBox="0 0 24 24" class="w-4 h-4 fill-current text-[#25D366]"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.262 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.713-1.455L0 24zm6.59-4.846c1.66.986 3.298 1.504 5.353 1.505 5.503 0 9.977-4.477 9.98-9.983.002-2.667-1.031-5.176-2.909-7.054C17.195 1.745 14.69 .713 12.012.713c-5.51 0-9.985 4.479-9.988 9.987-.001 2.148.567 4.24 1.644 6.1 l-.995 3.635 3.737-.981zm11.393-7.513c-.3-.15-1.77-.874-2.043-.974-.275-.1-.475-.15-.675.15-.2.3-.775.974-.95 1.174-.175.2-.35.225-.65.075-1.02-.513-1.695-.97-2.368-2.128-.176-.3-.176-.5-.075-.65.09-.137.2-.238.3-.35.1-.1.125-.2.187-.3.063-.1.031-.2-.013-.3-.044-.1-.4-.974-.55-1.324-.145-.35-.29-.303-.4-.308-.104-.005-.224-.005-.344-.005-.12 0-.315.04-.48.22-.165.18-.63.616-.63 1.503 0 .887.645 1.744.735 1.87.09.124 1.27 1.94 3.076 2.718.428.188.764.3 1.024.384.43.137.82.117 1.13.07.34-.05.177-.874.243-1.124.066-.25-.09-.387-.29-.537z"/></svg>
+                  <span class="text-[10px] font-extrabold uppercase bg-warning/20 text-warning px-2.5 py-0.5 rounded-full -mt-2">Potential Contact</span>
+                  <div class="flex items-center gap-1.5 text-foreground font-bold text-sm">
+                    <svg viewBox="0 0 24 24" class="w-4 h-4 fill-current text-[var(--success)]"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.262 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.713-1.455L0 24zm6.59-4.846c1.66.986 3.298 1.504 5.353 1.505 5.503 0 9.977-4.477 9.98-9.983.002-2.667-1.031-5.176-2.909-7.054C17.195 1.745 14.69 .713 12.012.713c-5.51 0-9.985 4.479-9.988 9.987-.001 2.148.567 4.24 1.644 6.1 l-.995 3.635 3.737-.981zm11.393-7.513c-.3-.15-1.77-.874-2.043-.974-.275-.1-.475-.15-.675.15-.2.3-.775.974-.95 1.174-.175.2-.35.225-.65.075-1.02-.513-1.695-.97-2.368-2.128-.176-.3-.176-.5-.075-.65.09-.137.2-.238.3-.35.1-.1.125-.2.187-.3.063-.1.031-.2-.013-.3-.044-.1-.4-.974-.55-1.324-.145-.35-.29-.303-.4-.308-.104-.005-.224-.005-.344-.005-.12 0-.315.04-.48.22-.165.18-.63.616-.63 1.503 0 .887.645 1.744.735 1.87.09.124 1.27 1.94 3.076 2.718.428.188.764.3 1.024.384.43.137.82.117 1.13.07.34-.05.177-.874.243-1.124.066-.25-.09-.387-.29-.537z"/></svg>
                     <span>+6012 3456 7890</span>
                   </div>
-                  <div class="text-xs text-gray-500 font-semibold -mt-2">~Mel Wong • Not saved in CRM</div>
-                  <div class="text-[10px] text-gray-400 font-semibold -mt-2">WhatsApp business account • Joined Oct 2025</div>
-                  <div class="w-full bg-gray-50 border border-gray-150 rounded-xl py-2.5 px-4 text-xs font-bold text-gray-500">
+                  <div class="text-xs text-muted-foreground font-semibold -mt-2">~Mel Wong • Not saved in CRM</div>
+                  <div class="text-[10px] text-muted-foreground font-semibold -mt-2">WhatsApp business account • Joined Oct 2025</div>
+                  <div class="w-full bg-muted/40 border border-border rounded-xl py-2.5 px-4 text-xs font-bold text-muted-foreground">
                     Enough profile details to create contact
                   </div>
                   <div class="w-full grid grid-cols-2 gap-3 mt-1">
-                    <button @click="addToast('Sender block listed', 'warning')" class="py-2 border border-red-200 text-red-500 hover:bg-red-50 rounded-xl text-xs font-extrabold transition-colors cursor-pointer select-none">
+                    <button @click="addToast('Sender block listed', 'warning')" class="py-2 border border-destructive/30 text-destructive hover:bg-destructive/10 rounded-xl text-xs font-extrabold transition-colors cursor-pointer select-none">
                       🚫 Block / Spam
                     </button>
-                    <button @click="handleCrmReviewMatch" class="py-2 border border-green-200 text-[#23B750] hover:bg-green-50 rounded-xl text-xs font-extrabold transition-colors cursor-pointer select-none">
+                    <button @click="handleCrmReviewMatch" class="py-2 border border-success/30 text-primary hover:bg-success/10 rounded-xl text-xs font-extrabold transition-colors cursor-pointer select-none">
                       👤 Create New Contact
                     </button>
                   </div>
@@ -2911,42 +2911,42 @@ nextTick(() => {
                 <!-- State C: Possible Match Found -->
                 <template v-else-if="crmCardState === 'match-found'">
                   <div class="relative w-12 h-12 select-none">
-                    <img :src="activeConversation.avatar" class="w-12 h-12 rounded-full object-cover border border-gray-150" />
-                    <span class="absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white bg-gray-400"></span>
+                    <img :src="activeConversation.avatar" class="w-12 h-12 rounded-full object-cover border border-border" />
+                    <span class="absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-card bg-muted-foreground"></span>
                   </div>
-                  <span class="text-[10px] font-extrabold uppercase bg-amber-100 text-amber-700 px-2.5 py-0.5 rounded-full -mt-2">Possible Match Found</span>
-                  <div class="flex items-center gap-1.5 text-gray-800 font-bold text-sm">
-                    <svg viewBox="0 0 24 24" class="w-4 h-4 fill-current text-[#EA4335]"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                  <span class="text-[10px] font-extrabold uppercase bg-warning/20 text-warning px-2.5 py-0.5 rounded-full -mt-2">Possible Match Found</span>
+                  <div class="flex items-center gap-1.5 text-foreground font-bold text-sm">
+                    <svg viewBox="0 0 24 24" class="w-4 h-4 fill-current text-[var(--destructive)]"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
                     <span>Mel Wong</span>
                   </div>
-                  <div class="text-xs text-gray-500 font-semibold -mt-2">melwong@kksteel.com • ~+6012 3456 7890</div>
-                  <div class="text-[10px] text-gray-400 font-semibold -mt-2">KK Steel Sdn Bhd • kksteel.com.my</div>
+                  <div class="text-xs text-muted-foreground font-semibold -mt-2">melwong@kksteel.com • ~+6012 3456 7890</div>
+                  <div class="text-[10px] text-muted-foreground font-semibold -mt-2">KK Steel Sdn Bhd • kksteel.com.my</div>
                   
-                  <div class="w-full bg-amber-50/20 border border-amber-150 rounded-2xl p-3.5 flex flex-col gap-2 text-left">
-                    <span class="text-[10px] font-extrabold uppercase text-amber-700 bg-amber-100 px-2.5 py-0.5 rounded-full self-start leading-none">Strong Match</span>
-                    <p class="text-[11px] text-gray-500 font-bold leading-normal">Email signature contains this contact's phone number.</p>
+                  <div class="w-full bg-warning/10 border border-warning/30 rounded-2xl p-3.5 flex flex-col gap-2 text-left">
+                    <span class="text-[10px] font-extrabold uppercase text-warning bg-warning/20 px-2.5 py-0.5 rounded-full self-start leading-none">Strong Match</span>
+                    <p class="text-[11px] text-muted-foreground font-bold leading-normal">Email signature contains this contact's phone number.</p>
                     
-                    <div class="flex items-center justify-between border border-gray-150 rounded-xl p-2.5 bg-white">
+                    <div class="flex items-center justify-between border border-border rounded-xl p-2.5 bg-card">
                       <div class="flex items-center gap-2.5 min-w-0">
                         <img :src="activeConversation.avatar" class="w-8 h-8 rounded-full object-cover" />
                         <div class="min-w-0 flex flex-col">
                           <div class="flex items-center gap-1">
-                            <span class="font-bold text-xs text-gray-800 truncate">Mel Wong</span>
-                            <svg viewBox="0 0 24 24" class="w-3 h-3 fill-[#9F5CF8] shrink-0"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5z"/><path d="M19 19H5v-1h14v1z"/></svg>
+                            <span class="font-bold text-xs text-foreground truncate">Mel Wong</span>
+                            <svg viewBox="0 0 24 24" class="w-3 h-3 fill-[var(--tag-6-foreground)] shrink-0"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5z"/><path d="M19 19H5v-1h14v1z"/></svg>
                           </div>
-                          <span class="text-[10px] text-gray-400 font-semibold truncate">+6012 3456 7890</span>
-                          <span class="text-[10px] text-gray-400 font-semibold truncate">melwong@kksteel.com</span>
+                          <span class="text-[10px] text-muted-foreground font-semibold truncate">+6012 3456 7890</span>
+                          <span class="text-[10px] text-muted-foreground font-semibold truncate">melwong@kksteel.com</span>
                         </div>
                       </div>
-                      <button class="p-1 hover:bg-gray-100 rounded text-gray-400"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/><circle cx="5" cy="12" r="1.5"/></svg></button>
+                      <button class="p-1 hover:bg-muted rounded text-muted-foreground"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/><circle cx="5" cy="12" r="1.5"/></svg></button>
                     </div>
                   </div>
                   
                   <div class="w-full grid grid-cols-2 gap-3 mt-1">
-                    <button @click="handleCrmReviewMatch" class="py-2 border border-orange-200 text-orange-600 hover:bg-orange-50 rounded-xl text-xs font-extrabold transition-colors cursor-pointer select-none">
+                    <button @click="handleCrmReviewMatch" class="py-2 border border-warning/30 text-warning hover:bg-warning/10 rounded-xl text-xs font-extrabold transition-colors cursor-pointer select-none">
                       🔍 Review Match
                     </button>
-                    <button @click="handleCrmCreateContact" class="py-2 border border-green-200 text-[#23B750] hover:bg-green-50 rounded-xl text-xs font-extrabold transition-colors cursor-pointer select-none">
+                    <button @click="handleCrmCreateContact" class="py-2 border border-success/30 text-primary hover:bg-success/10 rounded-xl text-xs font-extrabold transition-colors cursor-pointer select-none">
                       👤 Create New Contact
                     </button>
                   </div>
@@ -2955,49 +2955,49 @@ nextTick(() => {
                 <!-- State E: Existing Contact, New Channel -->
                 <template v-else-if="crmCardState === 'new-channel'">
                   <div class="relative w-12 h-12 select-none">
-                    <img :src="activeConversation.avatar" class="w-12 h-12 rounded-full object-cover border border-gray-150" />
-                    <span class="absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white bg-[#23B750]"></span>
+                    <img :src="activeConversation.avatar" class="w-12 h-12 rounded-full object-cover border border-border" />
+                    <span class="absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-card bg-primary"></span>
                   </div>
-                  <span class="text-[10px] font-extrabold uppercase bg-green-100 text-green-700 px-2.5 py-0.5 rounded-full -mt-2">Existing Contact, New Channel</span>
-                  <div class="flex items-center gap-1.5 text-gray-800 font-bold text-sm">
-                    <svg viewBox="0 0 24 24" class="w-4 h-4 fill-current text-[#EA4335]"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                  <span class="text-[10px] font-extrabold uppercase bg-success/20 text-success px-2.5 py-0.5 rounded-full -mt-2">Existing Contact, New Channel</span>
+                  <div class="flex items-center gap-1.5 text-foreground font-bold text-sm">
+                    <svg viewBox="0 0 24 24" class="w-4 h-4 fill-current text-[var(--destructive)]"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
                     <span>Mel Wong</span>
                   </div>
-                  <div class="text-xs text-gray-500 font-semibold -mt-2">melwong@kksteel.com</div>
-                  <div class="text-[10px] text-gray-400 font-semibold -mt-2">KK Steel Sdn Bhd • kksteel.com.my</div>
+                  <div class="text-xs text-muted-foreground font-semibold -mt-2">melwong@kksteel.com</div>
+                  <div class="text-[10px] text-muted-foreground font-semibold -mt-2">KK Steel Sdn Bhd • kksteel.com.my</div>
                   
-                  <div class="w-full bg-green-50/20 border border-green-150 rounded-2xl p-3.5 flex flex-col gap-2 text-left">
-                    <span class="text-[10px] font-extrabold uppercase text-green-700 bg-green-100 px-2.5 py-0.5 rounded-full self-start leading-none">New email channel detected</span>
-                    <p class="text-[11px] text-gray-500 font-bold leading-normal">This email can be linked to an existing contact.</p>
+                  <div class="w-full bg-success/10 border border-success/30 rounded-2xl p-3.5 flex flex-col gap-2 text-left">
+                    <span class="text-[10px] font-extrabold uppercase text-success bg-success/20 px-2.5 py-0.5 rounded-full self-start leading-none">New email channel detected</span>
+                    <p class="text-[11px] text-muted-foreground font-bold leading-normal">This email can be linked to an existing contact.</p>
                     
-                    <div class="flex items-center justify-between border border-gray-150 rounded-xl p-2.5 bg-white">
+                    <div class="flex items-center justify-between border border-border rounded-xl p-2.5 bg-card">
                       <div class="flex items-center gap-2.5 min-w-0">
                         <img :src="activeConversation.avatar" class="w-8 h-8 rounded-full object-cover" />
                         <div class="min-w-0 flex flex-col">
                           <div class="flex items-center gap-1">
-                            <span class="font-bold text-xs text-gray-800 truncate">Mel Wong</span>
-                            <svg viewBox="0 0 24 24" class="w-3 h-3 fill-[#9F5CF8] shrink-0"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5z"/><path d="M19 19H5v-1h14v1z"/></svg>
+                            <span class="font-bold text-xs text-foreground truncate">Mel Wong</span>
+                            <svg viewBox="0 0 24 24" class="w-3 h-3 fill-[var(--tag-6-foreground)] shrink-0"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5z"/><path d="M19 19H5v-1h14v1z"/></svg>
                           </div>
-                          <span class="text-[10px] text-gray-400 font-semibold truncate">+6012 3456 7890</span>
-                          <span class="text-[10px] text-gray-400 font-semibold truncate">melwong@kksteel.com</span>
+                          <span class="text-[10px] text-muted-foreground font-semibold truncate">+6012 3456 7890</span>
+                          <span class="text-[10px] text-muted-foreground font-semibold truncate">melwong@kksteel.com</span>
                         </div>
                       </div>
-                      <button class="p-1 hover:bg-gray-100 rounded text-gray-400"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/><circle cx="5" cy="12" r="1.5"/></svg></button>
+                      <button class="p-1 hover:bg-muted rounded text-muted-foreground"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/><circle cx="5" cy="12" r="1.5"/></svg></button>
                     </div>
                   </div>
                   
                   <div class="w-full grid grid-cols-2 gap-3 mt-1">
-                    <button @click="addToast('Opening contact profile drawer...', 'info')" class="py-2 border border-gray-250 text-gray-650 hover:bg-gray-50 rounded-xl text-xs font-extrabold transition-colors cursor-pointer select-none">
+                    <button @click="addToast('Opening contact profile drawer...', 'info')" class="py-2 border border-input text-muted-foreground hover:bg-muted/40 rounded-xl text-xs font-extrabold transition-colors cursor-pointer select-none">
                       View Contact
                     </button>
-                    <button @click="handleCrmLinkEmail" class="py-2 border border-green-200 text-[#23B750] hover:bg-green-50 rounded-xl text-xs font-extrabold transition-colors cursor-pointer select-none">
+                    <button @click="handleCrmLinkEmail" class="py-2 border border-success/30 text-primary hover:bg-success/10 rounded-xl text-xs font-extrabold transition-colors cursor-pointer select-none">
                       ✉️ Link Email
                     </button>
                   </div>
                 </template>
                 
                 <!-- State Switch Helper Icon -->
-                <button @click="crmCardState = crmCardState === 'unknown' ? 'potential' : crmCardState === 'potential' ? 'match-found' : crmCardState === 'match-found' ? 'new-channel' : 'unknown'" class="absolute top-3 right-3 w-6 h-6 rounded-full hover:bg-gray-50 flex items-center justify-center text-gray-400 transition-colors border border-gray-100" title="Cycle through match states demo">
+                <button @click="crmCardState = crmCardState === 'unknown' ? 'potential' : crmCardState === 'potential' ? 'match-found' : crmCardState === 'match-found' ? 'new-channel' : 'unknown'" class="absolute top-3 right-3 w-6 h-6 rounded-full hover:bg-muted/40 flex items-center justify-center text-muted-foreground transition-colors border border-border" title="Cycle through match states demo">
                   <svg class="w-3.5 h-3.5 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
                 </button>
 
@@ -3006,11 +3006,11 @@ nextTick(() => {
 
             <!-- 3. Assign Lead inline card -->
             <div v-else-if="msg.type === 'assign-lead'" class="w-full flex items-center justify-center py-3 select-none animate-in fade-in duration-200">
-              <div class="w-full max-w-[85%] bg-white border border-gray-200 rounded-2xl p-5 shadow-sm flex flex-col gap-4">
-                <span class="text-xs font-bold text-gray-700">Assign Lead</span>
+              <div class="w-full max-w-[85%] bg-card border border-border rounded-2xl p-5 shadow-sm flex flex-col gap-4">
+                <span class="text-xs font-bold text-foreground">Assign Lead</span>
                 
                 <div class="flex flex-col gap-3">
-                  <select v-model="inlineAssignAgent" class="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-xs bg-white text-gray-700 font-bold focus:outline-none focus:border-green-200">
+                  <select v-model="inlineAssignAgent" class="w-full border border-border rounded-xl px-3 py-2.5 text-xs bg-card text-foreground font-bold focus:outline-none focus:border-success/30">
                     <option>Ahmad Faizal</option>
                     <option>Siti Nur Aisyah</option>
                     <option>Rajesh Kumar</option>
@@ -3020,16 +3020,16 @@ nextTick(() => {
                   </select>
                   
                   <!-- Tags Selector box -->
-                  <div class="flex flex-wrap gap-1.5 p-2.5 border border-gray-150 rounded-xl bg-gray-50/50">
-                    <span v-for="tag in inlineAssignTags" :key="tag" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs border border-gray-200 bg-white font-bold text-gray-600 shadow-none leading-none h-6 select-none">
+                  <div class="flex flex-wrap gap-1.5 p-2.5 border border-border rounded-xl bg-muted/50">
+                    <span v-for="tag in inlineAssignTags" :key="tag" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs border border-border bg-card font-bold text-muted-foreground shadow-none leading-none h-6 select-none">
                       <span>{{ tag }}</span>
-                      <button @click="inlineAssignTags = inlineAssignTags.filter(t => t !== tag)" class="hover:text-red-500 font-semibold cursor-pointer outline-none ml-0.5">×</button>
+                      <button @click="inlineAssignTags = inlineAssignTags.filter(t => t !== tag)" class="hover:text-destructive font-semibold cursor-pointer outline-none ml-0.5">×</button>
                     </span>
-                    <input @keyup.enter="(e) => { const val = (e.target as HTMLInputElement).value.trim(); if(val && !inlineAssignTags.includes(val)) { inlineAssignTags.push(val); (e.target as HTMLInputElement).value = ''; } }" placeholder="+ Tag..." class="text-xs bg-transparent focus:outline-none px-1 py-0.5 w-16 text-gray-600 font-semibold placeholder:text-gray-400" />
+                    <input @keyup.enter="(e) => { const val = (e.target as HTMLInputElement).value.trim(); if(val && !inlineAssignTags.includes(val)) { inlineAssignTags.push(val); (e.target as HTMLInputElement).value = ''; } }" placeholder="+ Tag..." class="text-xs bg-transparent focus:outline-none px-1 py-0.5 w-16 text-muted-foreground font-semibold placeholder:text-muted-foreground" />
                   </div>
                 </div>
                 
-                <button @click="handleInlineAssignSave" class="w-full py-2.5 bg-[#23B750] hover:bg-[#1f9f45] text-white rounded-xl text-xs font-bold transition-all cursor-pointer select-none">
+                <button @click="handleInlineAssignSave" class="w-full py-2.5 bg-primary hover:bg-[var(--primary)] text-primary-foreground rounded-xl text-xs font-bold transition-all cursor-pointer select-none">
                   Save
                 </button>
               </div>
@@ -3037,31 +3037,31 @@ nextTick(() => {
 
             <!-- 4. WhatsApp Session Expired selector card -->
             <div v-else-if="msg.type === 'session-expired'" class="w-full flex items-center justify-center py-3 select-none animate-in fade-in duration-200">
-              <div class="w-full max-w-[85%] bg-white border border-gray-200 rounded-2xl p-5 shadow-sm flex flex-col gap-4">
+              <div class="w-full max-w-[85%] bg-card border border-border rounded-2xl p-5 shadow-sm flex flex-col gap-4">
                 <div class="flex items-start gap-2.5">
-                  <div class="w-8 h-8 rounded-full bg-red-50 flex items-center justify-center text-red-500 shrink-0">
+                  <div class="w-8 h-8 rounded-full bg-destructive/10 flex items-center justify-center text-destructive shrink-0">
                     <svg class="w-4.5 h-4.5 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
                   </div>
                   <div class="flex-1 flex flex-col min-w-0">
-                    <h4 class="text-xs font-bold text-gray-900 leading-tight">WhatsApp Session Expired | Template Required</h4>
-                    <p class="text-[11px] text-gray-400 font-semibold leading-normal mt-1">Message failed: 24-hour WhatsApp window expired.</p>
+                    <h4 class="text-xs font-bold text-foreground leading-tight">WhatsApp Session Expired | Template Required</h4>
+                    <p class="text-[11px] text-muted-foreground font-semibold leading-normal mt-1">Message failed: 24-hour WhatsApp window expired.</p>
                   </div>
                 </div>
                 
                 <div class="flex flex-col gap-3">
-                  <select v-model="selectedTemplate" class="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-xs bg-white text-gray-700 font-bold focus:outline-none focus:border-green-200">
+                  <select v-model="selectedTemplate" class="w-full border border-border rounded-xl px-3 py-2.5 text-xs bg-card text-foreground font-bold focus:outline-none focus:border-success/30">
                     <option value="" disabled>Select a template</option>
                     <option v-for="opt in templateOptions" :key="opt.value" :value="opt.value">{{ opt.label }}</option>
                   </select>
                   
-                  <div v-if="selectedTemplate" class="border border-gray-200 rounded-xl p-3 bg-gray-50 flex flex-col gap-1.5 select-none relative animate-in fade-in duration-200">
-                    <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider leading-none">Preview</span>
-                    <p class="text-xs text-gray-600 leading-relaxed font-semibold pr-6">{{ templatePreviews[selectedTemplate] }}</p>
-                    <button @click="addToast('Template content copied to clipboard!', 'success')" class="absolute top-2.5 right-2.5 text-gray-450 hover:text-gray-700"><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+                  <div v-if="selectedTemplate" class="border border-border rounded-xl p-3 bg-muted/40 flex flex-col gap-1.5 select-none relative animate-in fade-in duration-200">
+                    <span class="text-[10px] font-bold text-muted-foreground uppercase tracking-wider leading-none">Preview</span>
+                    <p class="text-xs text-muted-foreground leading-relaxed font-semibold pr-6">{{ templatePreviews[selectedTemplate] }}</p>
+                    <button @click="addToast('Template content copied to clipboard!', 'success')" class="absolute top-2.5 right-2.5 text-muted-foreground hover:text-foreground"><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
                   </div>
                 </div>
                 
-                <button @click="handleSendTemplateInline" class="w-full py-2.5 bg-[#23B750] hover:bg-[#1f9f45] text-white rounded-xl text-xs font-bold transition-all cursor-pointer select-none">
+                <button @click="handleSendTemplateInline" class="w-full py-2.5 bg-primary hover:bg-[var(--primary)] text-primary-foreground rounded-xl text-xs font-bold transition-all cursor-pointer select-none">
                   Send Template
                 </button>
               </div>
@@ -3069,22 +3069,22 @@ nextTick(() => {
 
             <!-- 5. Private Note tan/yellow Card -->
             <div v-else-if="msg.type === 'private-note'" class="w-full flex justify-center py-2 select-none animate-in fade-in duration-200">
-              <div class="w-full max-w-[85%] bg-[#FEF9C3]/75 border border-[#FEF08A] rounded-2xl p-4 flex flex-col gap-2 shadow-sm">
-                <div class="flex items-center justify-between text-xs text-[#854D0E] font-bold border-b border-[#FEF08A] pb-2 leading-none h-6">
+              <div class="w-full max-w-[85%] bg-[var(--warning)]/75 border border-[var(--warning)] rounded-2xl p-4 flex flex-col gap-2 shadow-sm">
+                <div class="flex items-center justify-between text-xs text-[var(--warning-foreground)] font-bold border-b border-[var(--warning)] pb-2 leading-none h-6">
                   <div class="flex items-center gap-2">
-                    <span class="font-extrabold uppercase tracking-wider text-[9px] bg-[#FEF08A] px-2 py-1 rounded-full leading-none">Private Note</span>
+                    <span class="font-extrabold uppercase tracking-wider text-[9px] bg-[var(--warning)] px-2 py-1 rounded-full leading-none">Private Note</span>
                     <div class="flex items-center gap-1.5">
-                      <div class="w-5 h-5 rounded-full bg-[#EAB308] text-white flex items-center justify-center font-bold text-[9px]">OL</div>
-                      <span class="font-bold text-[#713F12]">{{ msg.noteAuthor }}</span>
+                      <div class="w-5 h-5 rounded-full bg-[var(--warning)] text-primary-foreground flex items-center justify-center font-bold text-[9px]">OL</div>
+                      <span class="font-bold text-[var(--warning-foreground)]">{{ msg.noteAuthor }}</span>
                     </div>
                   </div>
-                  <div class="flex items-center gap-2 text-gray-500">
+                  <div class="flex items-center gap-2 text-muted-foreground">
                     <span>{{ msg.time }}</span>
-                    <button @click="addToast('Copied note details!', 'success')" class="p-0.5 hover:bg-[#FEF08A]/80 rounded transition-colors text-[#713F12]"><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
-                    <button @click="addToast('Opening note options...', 'info')" class="p-0.5 hover:bg-[#FEF08A]/80 rounded transition-colors text-[#713F12]"><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/><circle cx="5" cy="12" r="1.5"/></svg></button>
+                    <button @click="addToast('Copied note details!', 'success')" class="p-0.5 hover:bg-[var(--warning)]/80 rounded transition-colors text-[var(--warning-foreground)]"><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+                    <button @click="addToast('Opening note options...', 'info')" class="p-0.5 hover:bg-[var(--warning)]/80 rounded transition-colors text-[var(--warning-foreground)]"><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/><circle cx="5" cy="12" r="1.5"/></svg></button>
                   </div>
                 </div>
-                <div class="text-xs text-[#713F12] leading-relaxed font-semibold mt-1">
+                <div class="text-xs text-[var(--warning-foreground)] leading-relaxed font-semibold mt-1">
                   {{ msg.text }}
                 </div>
               </div>
@@ -3092,36 +3092,36 @@ nextTick(() => {
 
             <!-- 6. Playable Audio wave bubble player -->
             <div v-else-if="msg.type === 'audio'" class="flex flex-col gap-1 w-full max-w-[70%] self-start items-start select-none animate-in fade-in duration-200">
-              <div class="flex items-center gap-1.5 px-1 select-none text-[10px] text-gray-400 font-bold">
-                <span class="font-bold text-gray-600">{{ msg.sender }}</span>
+              <div class="flex items-center gap-1.5 px-1 select-none text-[10px] text-muted-foreground font-bold">
+                <span class="font-bold text-muted-foreground">{{ msg.sender }}</span>
                 <span>{{ msg.time }}</span>
               </div>
-              <div class="flex items-center gap-3.5 p-3 rounded-2xl bg-white border border-gray-200 shadow-sm w-64 h-13.5">
+              <div class="flex items-center gap-3.5 p-3 rounded-2xl bg-card border border-border shadow-sm w-64 h-13.5">
                 <!-- Audio play toggle button -->
-                <button @click="addToast('Playing voice message playback...', 'info')" class="w-8 h-8 rounded-full bg-[#7C3AED] hover:bg-[#6D28D9] flex items-center justify-center text-white transition-all hover:scale-105 active:scale-95 cursor-pointer shrink-0">
+                <button @click="addToast('Playing voice message playback...', 'info')" class="w-8 h-8 rounded-full bg-[var(--tag-6-foreground)] hover:bg-[var(--tag-6-foreground)] flex items-center justify-center text-primary-foreground transition-all hover:scale-105 active:scale-95 cursor-pointer shrink-0">
                   <svg class="w-4 h-4 fill-current ml-0.5" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                 </button>
                 <div class="flex-1 flex flex-col gap-1">
                   <!-- Audio waveform lines -->
                   <div class="flex items-end gap-[2px] h-5 mb-0.5">
-                    <span class="w-[3px] bg-[#7C3AED] rounded-full" style="height: 12px"></span>
-                    <span class="w-[3px] bg-[#7C3AED] rounded-full" style="height: 18px"></span>
-                    <span class="w-[3px] bg-gray-200 rounded-full" style="height: 6px"></span>
-                    <span class="w-[3px] bg-[#7C3AED] rounded-full" style="height: 14px"></span>
-                    <span class="w-[3px] bg-[#7C3AED] rounded-full" style="height: 20px"></span>
-                    <span class="w-[3px] bg-gray-200 rounded-full" style="height: 10px"></span>
-                    <span class="w-[3px] bg-gray-200 rounded-full" style="height: 16px"></span>
-                    <span class="w-[3px] bg-[#7C3AED] rounded-full" style="height: 8px"></span>
-                    <span class="w-[3px] bg-[#7C3AED] rounded-full" style="height: 15px"></span>
-                    <span class="w-[3px] bg-gray-200 rounded-full" style="height: 12px"></span>
-                    <span class="w-[3px] bg-gray-200 rounded-full" style="height: 4px"></span>
-                    <span class="w-[3px] bg-[#7C3AED] rounded-full" style="height: 18px"></span>
-                    <span class="w-[3px] bg-[#7C3AED] rounded-full" style="height: 12px"></span>
-                    <span class="w-[3px] bg-gray-200 rounded-full" style="height: 8px"></span>
-                    <span class="w-[3px] bg-gray-200 rounded-full" style="height: 14px"></span>
-                    <span class="w-[3px] bg-[#7C3AED] rounded-full" style="height: 6px"></span>
+                    <span class="w-[3px] bg-[var(--tag-6-foreground)] rounded-full" style="height: 12px"></span>
+                    <span class="w-[3px] bg-[var(--tag-6-foreground)] rounded-full" style="height: 18px"></span>
+                    <span class="w-[3px] bg-muted rounded-full" style="height: 6px"></span>
+                    <span class="w-[3px] bg-[var(--tag-6-foreground)] rounded-full" style="height: 14px"></span>
+                    <span class="w-[3px] bg-[var(--tag-6-foreground)] rounded-full" style="height: 20px"></span>
+                    <span class="w-[3px] bg-muted rounded-full" style="height: 10px"></span>
+                    <span class="w-[3px] bg-muted rounded-full" style="height: 16px"></span>
+                    <span class="w-[3px] bg-[var(--tag-6-foreground)] rounded-full" style="height: 8px"></span>
+                    <span class="w-[3px] bg-[var(--tag-6-foreground)] rounded-full" style="height: 15px"></span>
+                    <span class="w-[3px] bg-muted rounded-full" style="height: 12px"></span>
+                    <span class="w-[3px] bg-muted rounded-full" style="height: 4px"></span>
+                    <span class="w-[3px] bg-[var(--tag-6-foreground)] rounded-full" style="height: 18px"></span>
+                    <span class="w-[3px] bg-[var(--tag-6-foreground)] rounded-full" style="height: 12px"></span>
+                    <span class="w-[3px] bg-muted rounded-full" style="height: 8px"></span>
+                    <span class="w-[3px] bg-muted rounded-full" style="height: 14px"></span>
+                    <span class="w-[3px] bg-[var(--tag-6-foreground)] rounded-full" style="height: 6px"></span>
                   </div>
-                  <div class="flex items-center justify-between text-[9px] text-gray-400 font-extrabold leading-none">
+                  <div class="flex items-center justify-between text-[9px] text-muted-foreground font-extrabold leading-none">
                     <span>{{ msg.audioDuration || '00:00' }}</span>
                     <span>11:40 AM</span>
                   </div>
@@ -3136,8 +3136,8 @@ nextTick(() => {
               :class="[msg.isSelf ? 'self-end items-end' : 'self-start items-start']"
             >
               <!-- Sender name and timestamp -->
-              <div class="flex items-center gap-1.5 px-1 select-none text-[10px] text-gray-400 font-bold">
-                <span class="font-bold text-gray-600" v-if="!msg.isSelf">{{ msg.sender }}</span>
+              <div class="flex items-center gap-1.5 px-1 select-none text-[10px] text-muted-foreground font-bold">
+                <span class="font-bold text-muted-foreground" v-if="!msg.isSelf">{{ msg.sender }}</span>
                 <span>{{ msg.time }}</span>
               </div>
               
@@ -3147,7 +3147,7 @@ nextTick(() => {
                 <!-- Left side red alert circle info icon for delivery failure of outbox bubbles -->
                 <div 
                   v-if="msg.isSelf && (msg.status === 'failed' || msg.status === 'expired')" 
-                  class="flex items-center justify-center w-5 h-5 rounded-full text-red-500 bg-red-100 animate-pulse-glow mr-1 shrink-0"
+                  class="flex items-center justify-center w-5 h-5 rounded-full text-destructive bg-destructive/20 animate-pulse-glow mr-1 shrink-0"
                   title="Delivery Failure Notice"
                 >
                   <span class="text-xs font-extrabold leading-none select-none">ⓘ</span>
@@ -3158,9 +3158,9 @@ nextTick(() => {
                   :class="[
                     msg.isSelf 
                       ? (msg.status === 'failed' || msg.status === 'expired'
-                        ? 'bg-red-50 text-red-700 border-red-150 rounded-tr-sm rounded-bl-2xl rounded-br-2xl' 
-                        : 'bg-[#23B750] text-white border-transparent rounded-tr-sm rounded-bl-2xl rounded-br-2xl') 
-                      : 'bg-white text-gray-800 border-gray-200 rounded-tl-sm rounded-bl-2xl rounded-br-2xl'
+                        ? 'bg-destructive/10 text-destructive border-destructive/30 rounded-tr-sm rounded-bl-2xl rounded-br-2xl' 
+                        : 'bg-primary text-primary-foreground border-transparent rounded-tr-sm rounded-bl-2xl rounded-br-2xl') 
+                      : 'bg-card text-foreground border-border rounded-tl-sm rounded-bl-2xl rounded-br-2xl'
                   ]"
                 >
                   <!-- WhatsApp-style Quoted Reply Box -->
@@ -3169,26 +3169,26 @@ nextTick(() => {
                     class="mb-2 p-2 rounded-lg text-left select-none overflow-hidden flex gap-2 items-stretch"
                     :class="[
                       msg.isSelf 
-                        ? 'bg-black/15 text-white' 
-                        : 'bg-gray-100/80 text-gray-800'
+                        ? 'bg-muted/50 text-primary-foreground' 
+                        : 'bg-muted/80 text-foreground'
                     ]"
                   >
                     <!-- Left Accent Bar -->
                     <span 
                       class="w-1 rounded-full shrink-0" 
-                      :class="[msg.isSelf ? 'bg-white' : 'bg-[#23B750]']"
+                      :class="[msg.isSelf ? 'bg-primary-foreground' : 'bg-primary']"
                     ></span>
 
                     <div class="flex-1 min-w-0 flex flex-col justify-center">
                       <div 
                         class="text-[11px] font-bold leading-tight mb-0.5 truncate"
-                        :class="[msg.isSelf ? 'text-white' : 'text-[#23B750]']"
+                        :class="[msg.isSelf ? 'text-primary-foreground' : 'text-primary']"
                       >
                         {{ msg.quote.sender }}
                       </div>
                       <div 
                         class="text-[11px] leading-tight line-clamp-2"
-                        :class="[msg.isSelf ? 'text-white/90' : 'text-gray-600']"
+                        :class="[msg.isSelf ? 'text-primary-foreground/90' : 'text-muted-foreground']"
                       >
                         {{ msg.quote.text }}
                       </div>
@@ -3200,31 +3200,31 @@ nextTick(() => {
               </div>
 
               <!-- Outbox checks and captions -->
-              <div class="flex items-center gap-1 select-none text-[10px] font-bold text-gray-400 mt-0.5 h-3.5">
+              <div class="flex items-center gap-1 select-none text-[10px] font-bold text-muted-foreground mt-0.5 h-3.5">
                 <template v-if="msg.isSelf">
                   <!-- Check if AI Chatbot -->
                   <template v-if="msg.sender === 'AI Chatbot'">
-                    <span class="text-green-600 font-bold select-none flex items-center gap-1">
-                      <svg class="w-3 h-3 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9.813 15.904L9 21l-.813-5.096L3.096 15 8.187 14.187 9 9l.813 5.187L14.904 15z"/></svg>
+                    <span class="text-success font-bold select-none flex items-center gap-1">
+                      <svg class="w-3 h-3 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9.813 15.904L9 21l-.813-5.096L3.096 15 8.187 14.187 9 9l.813 5.187L14.904 15z"/></svg>
                       <span>Sent by RakanSalesAI (Internal Note)</span>
                     </span>
                   </template>
                   <template v-else>
                     <!-- Double checks indicators for success -->
-                    <span v-if="!msg.status || msg.status === 'delivered' || msg.status === 'sent'" class="text-[#23B750] flex items-center leading-none">
+                    <span v-if="!msg.status || msg.status === 'delivered' || msg.status === 'sent'" class="text-primary flex items-center leading-none">
                       <svg class="w-3.5 h-3.5 stroke-current stroke-[2.5]" fill="none" viewBox="0 0 24 24">
                         <polyline points="20 6 9 17 4 12" />
                       </svg>
                     </span>
                     
                     <!-- Failed Send Alert texts -->
-                    <span v-if="msg.status === 'failed'" class="text-red-500 font-extrabold select-none">Message Failed to Send</span>
-                    <span v-else-if="msg.status === 'expired'" class="text-red-500 font-extrabold select-none">Message failed: 24-hour Whatsapp window expired</span>
-                    <span v-else-if="msg.metaLabel" class="text-gray-500 font-semibold">{{ msg.metaLabel }}</span>
+                    <span v-if="msg.status === 'failed'" class="text-destructive font-extrabold select-none">Message Failed to Send</span>
+                    <span v-else-if="msg.status === 'expired'" class="text-destructive font-extrabold select-none">Message failed: 24-hour Whatsapp window expired</span>
+                    <span v-else-if="msg.metaLabel" class="text-muted-foreground font-semibold">{{ msg.metaLabel }}</span>
                   </template>
                 </template>
                 <template v-else-if="msg.metaLabel">
-                  <span class="text-gray-500 font-semibold">{{ msg.metaLabel }}</span>
+                  <span class="text-muted-foreground font-semibold">{{ msg.metaLabel }}</span>
                 </template>
               </div>
             </div>
@@ -3232,13 +3232,13 @@ nextTick(() => {
           
           <!-- Empty state placeholder if no messages -->
           <div v-if="activeChatMessages.length === 0" class="flex-grow flex flex-col items-center justify-center text-center p-12 select-none">
-            <div class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 mb-3">
+            <div class="w-12 h-12 rounded-full bg-muted flex items-center justify-center text-muted-foreground mb-3">
               <svg class="w-6 h-6 stroke-[1.75]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
               </svg>
             </div>
-            <h3 class="text-sm font-semibold text-gray-800">No message history</h3>
-            <p class="text-xs text-gray-500 mt-1 max-w-xs">Start the conversation by typing a reply in the composer below.</p>
+            <h3 class="text-sm font-semibold text-foreground">No message history</h3>
+            <p class="text-xs text-muted-foreground mt-1 max-w-xs">Start the conversation by typing a reply in the composer below.</p>
           </div>
         </div>
 
@@ -3254,7 +3254,7 @@ nextTick(() => {
           <button 
             v-if="showJumpToLatest" 
             @click="scrollToBottom" 
-            class="absolute bottom-4 right-6 bg-[#23B750] hover:bg-[#1fa346] text-white font-bold text-xs px-3.5 py-2 rounded-full shadow-md z-10 flex items-center gap-1.5 cursor-pointer outline-none hover:scale-105 active:scale-95 transition-all select-none"
+            class="absolute bottom-4 right-6 bg-primary hover:bg-[var(--primary)] text-primary-foreground font-bold text-xs px-3.5 py-2 rounded-full shadow-md z-10 flex items-center gap-1.5 cursor-pointer outline-none hover:scale-105 active:scale-95 transition-all select-none"
           >
             <svg class="w-3.5 h-3.5 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
             <span>Jump to latest</span>
@@ -3263,11 +3263,11 @@ nextTick(() => {
       </div>
 
       <!-- PERSISTENT FOOTER BANNERS SECTION -->
-      <div class="flex flex-col border-t border-gray-150 select-none">
+      <div class="flex flex-col border-t border-border select-none">
         <!-- Banner 1: Snoozed Alert Banner (red-tinted) -->
-        <div v-if="activeConversation?.isSnoozed" class="bg-red-50/75 border-b border-red-100 px-6 py-2.5 flex items-center justify-between text-xs font-semibold animate-in slide-in-from-bottom duration-300">
-          <div class="flex items-center gap-2 text-red-700">
-            <svg class="w-4 h-4 text-red-500 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <div v-if="activeConversation?.isSnoozed" class="bg-destructive/10 border-b border-destructive/30 px-6 py-2.5 flex items-center justify-between text-xs font-semibold animate-in slide-in-from-bottom duration-300">
+          <div class="flex items-center gap-2 text-destructive">
+            <svg class="w-4 h-4 text-destructive shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
               <path d="M18.63 13A17.89 17.89 0 0 1 18 8"/>
               <path d="M6.26 6.26A5.86 5.86 0 0 0 6 8v7a3 3 0 0 1-3 3h15"/>
@@ -3277,20 +3277,20 @@ nextTick(() => {
             <span>Chat is Muted / Snoozed ({{ getSnoozeCountdown(activeConversation) }})</span>
           </div>
           <div class="flex items-center gap-3">
-            <button @click="toggleSnooze(activeConversation)" class="text-red-750 hover:text-red-900 cursor-pointer outline-none font-extrabold">Unsnooze</button>
+            <button @click="toggleSnooze(activeConversation)" class="text-destructive hover:text-destructive cursor-pointer outline-none font-extrabold">Unsnooze</button>
           </div>
         </div>
 
         <!-- Banner 2: Ready for Human Response Banner (green-tinted) -->
-        <div v-if="isHumanResponseBannerOpen" class="bg-green-50/75 border-b border-green-150 px-6 py-2.5 flex items-center justify-between text-xs font-semibold animate-in slide-in-from-bottom duration-300">
-          <div class="flex items-center gap-2 text-green-700">
+        <div v-if="isHumanResponseBannerOpen" class="bg-success/10 border-b border-success/30 px-6 py-2.5 flex items-center justify-between text-xs font-semibold animate-in slide-in-from-bottom duration-300">
+          <div class="flex items-center gap-2 text-success">
             <svg class="w-4 h-4 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
             <span>Chat ready for human response</span>
           </div>
           <div class="flex items-center gap-3">
-            <button @click="addToast('Opening agent transfer drawer...', 'info')" class="text-green-750 hover:text-green-900 cursor-pointer outline-none font-extrabold">Reassign</button>
-            <span class="text-green-200 font-normal">|</span>
-            <button @click="isHumanResponseBannerOpen = false" class="text-green-555 hover:text-green-750 cursor-pointer outline-none font-extrabold">Dismiss</button>
+            <button @click="addToast('Opening agent transfer drawer...', 'info')" class="text-success hover:text-success cursor-pointer outline-none font-extrabold">Reassign</button>
+            <span class="text-success/40 font-normal">|</span>
+            <button @click="isHumanResponseBannerOpen = false" class="text-success hover:text-success cursor-pointer outline-none font-extrabold">Dismiss</button>
           </div>
         </div>
 
@@ -3298,21 +3298,21 @@ nextTick(() => {
       </div>
 
       <!-- Textbox message sender bar / Resolved Banner wrapper -->
-      <div class="p-3.5 bg-white border-t border-gray-200 flex-shrink-0 select-none">
+      <div class="p-3.5 bg-card border-t border-border flex-shrink-0 select-none">
         <!-- RESOLVED LOCK FLOW PANEL -->
-        <div v-if="activeConversation.section === 'Resolved'" class="flex items-center justify-between bg-green-50/40 border border-green-150 rounded-xl p-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
+        <div v-if="activeConversation.section === 'Resolved'" class="flex items-center justify-between bg-success/10 border border-success/30 rounded-xl p-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
           <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-[#23B750] flex-shrink-0">
+            <div class="w-8 h-8 rounded-full bg-success/20 flex items-center justify-center text-primary flex-shrink-0">
               <svg class="w-4.5 h-4.5 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
             </div>
             <div>
-              <h4 class="text-xs font-bold text-gray-900 leading-none">Conversation Resolved</h4>
-              <p class="text-[11px] text-gray-500 mt-1.5">This conversation is resolved and archived. Reopen thread to continue writing messages.</p>
+              <h4 class="text-xs font-bold text-foreground leading-none">Conversation Resolved</h4>
+              <p class="text-[11px] text-muted-foreground mt-1.5">This conversation is resolved and archived. Reopen thread to continue writing messages.</p>
             </div>
           </div>
           <button 
             @click="reopenActiveConversation" 
-            class="px-4 py-2 text-xs font-bold text-white bg-[#23B750] hover:bg-[#1a923f] rounded-lg transition-colors cursor-pointer"
+            class="px-4 py-2 text-xs font-bold text-primary-foreground bg-primary hover:bg-[var(--primary)] rounded-lg transition-colors cursor-pointer"
           >
             Reopen Thread
           </button>
@@ -3320,19 +3320,19 @@ nextTick(() => {
         
         <div v-else class="flex flex-col w-full animate-in fade-in duration-200">
           <!-- Switcher Mode Tabs & AI Toggle -->
-          <div class="flex items-center justify-between border-b border-gray-150 pb-0.5">
+          <div class="flex items-center justify-between border-b border-border pb-0.5">
             <div class="flex gap-1.5">
               <button 
                 @click="composerMode = 'reply'"
                 class="px-4 py-1.5 text-xs font-bold transition-all border-b-2 outline-none h-8 flex items-center justify-center cursor-pointer"
-                :class="composerMode === 'reply' ? 'border-[#23B750] text-[#23B750] font-extrabold' : 'border-transparent text-gray-400 hover:text-gray-700'"
+                :class="composerMode === 'reply' ? 'border-primary text-primary font-extrabold' : 'border-transparent text-muted-foreground hover:text-foreground'"
               >
                 Reply
               </button>
               <button 
                 @click="composerMode = 'note'"
                 class="px-4 py-1.5 text-xs font-bold transition-all border-b-2 outline-none h-8 flex items-center justify-center cursor-pointer"
-                :class="composerMode === 'note' ? 'border-[#23B750] text-[#23B750] font-extrabold' : 'border-transparent text-gray-400 hover:text-gray-700'"
+                :class="composerMode === 'note' ? 'border-primary text-primary font-extrabold' : 'border-transparent text-muted-foreground hover:text-foreground'"
               >
                 Private Note
               </button>
@@ -3340,13 +3340,13 @@ nextTick(() => {
             
             <!-- AI Auto-Reply Switcher -->
             <div class="flex items-center gap-2 pr-2 select-none shrink-0">
-              <span class="text-[10px] font-extrabold tracking-wider uppercase text-gray-400">AI Auto-Reply</span>
+              <span class="text-[10px] font-extrabold tracking-wider uppercase text-muted-foreground">AI Auto-Reply</span>
               <button 
                 @click="toggleAiAutoReply"
                 class="w-8 h-4 rounded-full relative transition-colors focus:outline-none cursor-pointer"
-                :class="isAiAutoReplyOn ? 'bg-[#23B750]' : 'bg-gray-200'"
+                :class="isAiAutoReplyOn ? 'bg-primary' : 'bg-muted'"
               >
-                <span class="w-3.5 h-3.5 bg-white rounded-full absolute top-[0.5px] transition-all" :class="isAiAutoReplyOn ? 'left-[17px]' : 'left-[1px]'"></span>
+                <span class="w-3.5 h-3.5 bg-card rounded-full absolute top-[0.5px] transition-all" :class="isAiAutoReplyOn ? 'left-[17px]' : 'left-[1px]'"></span>
               </button>
             </div>
           </div>
@@ -3356,109 +3356,109 @@ nextTick(() => {
             class="flex flex-col border rounded-xl mt-3.5 transition-all duration-300 relative"
             :class="[
               isAiDraftCompleteGlow
-                ? 'border-[#23B750] ring-3 ring-[#23B750]/25 bg-[#23B750]/[0.04] shadow-[0_0_24px_rgba(35,183,80,0.28)]'
+                ? 'border-brand ring-3 ring-brand/25 bg-brand/5 shadow-lg shadow-brand/25'
                 : isAiTypingAnimation
-                  ? 'border-[#2563EB]/50 ring-2 ring-[#2563EB]/10 bg-white'
+                  ? 'border-info/50 ring-2 ring-info/10 bg-card'
                   : composerMode === 'note'
-                    ? 'bg-[#FEF9C3]/20 border-[#FEF08A]'
-                    : 'bg-white border-gray-250/80'
+                    ? 'bg-warning/10 border-warning/30'
+                    : 'bg-card border-input/80'
             ]"
           >
             <!-- SENDER IDENTITIES / EMAIL HEADERS -->
             <template v-if="composerMode === 'reply'">
               <!-- Email format parameters -->
               <div v-if="activeConversation.platform === 'Mail'" class="flex flex-col">
-                <div class="flex items-center justify-between border-b border-gray-150 px-4 py-2 text-xs font-bold text-gray-500 bg-gray-50/20">
+                <div class="flex items-center justify-between border-b border-border px-4 py-2 text-xs font-bold text-muted-foreground bg-muted/30">
                   <div class="flex items-center gap-2 flex-1 min-w-0">
-                    <span class="text-gray-400 w-8 select-none">TO</span>
-                    <input v-model="emailTo" class="flex-1 bg-transparent focus:outline-none font-semibold text-gray-700 text-xs" />
+                    <span class="text-muted-foreground w-8 select-none">TO</span>
+                    <input v-model="emailTo" class="flex-1 bg-transparent focus:outline-none font-semibold text-foreground text-xs" />
                   </div>
                   <div class="flex items-center gap-2 select-none">
-                    <button @click="isCcBccOpen = !isCcBccOpen" class="text-[11px] font-bold text-gray-400 hover:text-gray-700 cursor-pointer outline-none">CC Bcc</button>
+                    <button @click="isCcBccOpen = !isCcBccOpen" class="text-[11px] font-bold text-muted-foreground hover:text-foreground cursor-pointer outline-none">CC Bcc</button>
                   </div>
                 </div>
                 
-                <div v-if="isCcBccOpen" class="flex flex-col border-b border-gray-150 select-none bg-gray-50/20">
-                  <div class="flex items-center border-b border-gray-150 px-4 py-2 text-xs font-bold text-gray-500">
-                    <span class="text-gray-400 w-8">CC</span>
-                    <input v-model="emailCc" placeholder="Cc addresses..." class="flex-1 bg-transparent focus:outline-none font-semibold text-gray-700 text-xs" />
+                <div v-if="isCcBccOpen" class="flex flex-col border-b border-border select-none bg-muted/30">
+                  <div class="flex items-center border-b border-border px-4 py-2 text-xs font-bold text-muted-foreground">
+                    <span class="text-muted-foreground w-8">CC</span>
+                    <input v-model="emailCc" placeholder="Cc addresses..." class="flex-1 bg-transparent focus:outline-none font-semibold text-foreground text-xs" />
                   </div>
-                  <div class="flex items-center border-b border-gray-150 px-4 py-2 text-xs font-bold text-gray-500">
-                    <span class="text-gray-400 w-8">BCC</span>
-                    <input v-model="emailBcc" placeholder="Bcc addresses..." class="flex-1 bg-transparent focus:outline-none font-semibold text-gray-700 text-xs" />
+                  <div class="flex items-center border-b border-border px-4 py-2 text-xs font-bold text-muted-foreground">
+                    <span class="text-muted-foreground w-8">BCC</span>
+                    <input v-model="emailBcc" placeholder="Bcc addresses..." class="flex-1 bg-transparent focus:outline-none font-semibold text-foreground text-xs" />
                   </div>
                 </div>
                 
-                <div class="flex items-center border-b border-gray-150 px-4 py-2 text-xs font-bold text-gray-500 bg-gray-50/20">
-                  <span class="text-gray-400 w-8 select-none">VIA</span>
-                  <input v-model="emailVia" class="flex-1 bg-transparent focus:outline-none font-semibold text-gray-700 text-xs" />
+                <div class="flex items-center border-b border-border px-4 py-2 text-xs font-bold text-muted-foreground bg-muted/30">
+                  <span class="text-muted-foreground w-8 select-none">VIA</span>
+                  <input v-model="emailVia" class="flex-1 bg-transparent focus:outline-none font-semibold text-foreground text-xs" />
                 </div>
-                <div class="flex items-center border-b border-gray-150 px-4 py-2 text-xs font-bold text-gray-500 bg-gray-50/20">
-                  <span class="text-gray-400 w-8 select-none">SUB</span>
-                  <input v-model="emailSubject" class="flex-1 bg-transparent focus:outline-none font-semibold text-gray-700 text-xs" />
+                <div class="flex items-center border-b border-border px-4 py-2 text-xs font-bold text-muted-foreground bg-muted/30">
+                  <span class="text-muted-foreground w-8 select-none">SUB</span>
+                  <input v-model="emailSubject" class="flex-1 bg-transparent focus:outline-none font-semibold text-foreground text-xs" />
                 </div>
               </div>
               
               <!-- Direct message parameters -->
-              <div v-else class="border-b border-gray-150 px-4 py-2 text-[11px] font-bold text-gray-500 bg-gray-50/10 flex items-center gap-1.5 select-none">
+              <div v-else class="border-b border-border px-4 py-2 text-[11px] font-bold text-muted-foreground bg-muted/30 flex items-center gap-1.5 select-none">
                 <span>Replying as Janice Lee (+6012 3456 7890)</span>
               </div>
             </template>
 
             <!-- TYPOGRAPHY FORMATTING TOOLBAR -->
             <!-- Reply Mode formatting toolbar (shown if Mail platform OR isTypographyToolbarOpen is active) -->
-            <div v-if="composerMode === 'reply' && (activeConversation.platform === 'Mail' || isTypographyToolbarOpen)" class="flex items-center gap-1.5 border-b border-gray-150 px-3 py-1.5 bg-gray-55/50 overflow-x-auto scrollbar-none select-none h-11 animate-in slide-in-from-top-1 duration-150">
+            <div v-if="composerMode === 'reply' && (activeConversation.platform === 'Mail' || isTypographyToolbarOpen)" class="flex items-center gap-1.5 border-b border-border px-3 py-1.5 bg-muted/50 overflow-x-auto scrollbar-none select-none h-11 animate-in slide-in-from-top-1 duration-150">
               <!-- Font selector dropdown -->
               <div class="relative flex-shrink-0">
-                <button @click.stop="isFontDropdownOpen = !isFontDropdownOpen" class="h-7 px-2.5 rounded-lg border border-gray-200 bg-white text-[11px] font-bold text-gray-600 flex items-center gap-1 outline-none cursor-pointer">
+                <button @click.stop="isFontDropdownOpen = !isFontDropdownOpen" class="h-7 px-2.5 rounded-lg border border-border bg-card text-[11px] font-bold text-muted-foreground flex items-center gap-1 outline-none cursor-pointer">
                   <span>{{ activeFont }}</span>
-                  <svg class="w-3 h-3 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 9l-7 7-7-7"/></svg>
+                  <svg class="w-3 h-3 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 9l-7 7-7-7"/></svg>
                 </button>
-                <div v-if="isFontDropdownOpen" class="absolute left-0 mt-1 w-28 bg-white border border-gray-200 rounded-lg shadow-md z-30 py-1">
-                  <button v-for="font in fontOptions" :key="font" @click="activeFont = font; isFontDropdownOpen = false" class="w-full text-left px-2.5 py-1.5 text-xs hover:bg-gray-50 font-semibold text-gray-700">{{ font }}</button>
+                <div v-if="isFontDropdownOpen" class="absolute left-0 mt-1 w-28 bg-card border border-border rounded-lg shadow-md z-30 py-1">
+                  <button v-for="font in fontOptions" :key="font" @click="activeFont = font; isFontDropdownOpen = false" class="w-full text-left px-2.5 py-1.5 text-xs hover:bg-muted/40 font-semibold text-foreground">{{ font }}</button>
                 </div>
               </div>
 
               <!-- Size selector dropdown -->
               <div class="relative flex-shrink-0">
-                <button @click.stop="isFontSizeDropdownOpen = !isFontSizeDropdownOpen" class="h-7 px-2 rounded-lg border border-gray-200 bg-white text-[11px] font-bold text-gray-600 flex items-center gap-1 outline-none cursor-pointer">
+                <button @click.stop="isFontSizeDropdownOpen = !isFontSizeDropdownOpen" class="h-7 px-2 rounded-lg border border-border bg-card text-[11px] font-bold text-muted-foreground flex items-center gap-1 outline-none cursor-pointer">
                   <span>{{ activeFontSize }}</span>
-                  <svg class="w-3 h-3 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 9l-7 7-7-7"/></svg>
+                  <svg class="w-3 h-3 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 9l-7 7-7-7"/></svg>
                 </button>
-                <div v-if="isFontSizeDropdownOpen" class="absolute left-0 mt-1 w-20 bg-white border border-gray-200 rounded-lg shadow-md z-30 py-1">
-                  <button v-for="size in fontSizeOptions" :key="size" @click="activeFontSize = size; isFontSizeDropdownOpen = false" class="w-full text-left px-2.5 py-1.5 text-xs hover:bg-gray-50 font-semibold text-gray-700">{{ size }}</button>
+                <div v-if="isFontSizeDropdownOpen" class="absolute left-0 mt-1 w-20 bg-card border border-border rounded-lg shadow-md z-30 py-1">
+                  <button v-for="size in fontSizeOptions" :key="size" @click="activeFontSize = size; isFontSizeDropdownOpen = false" class="w-full text-left px-2.5 py-1.5 text-xs hover:bg-muted/40 font-semibold text-foreground">{{ size }}</button>
                 </div>
               </div>
 
-              <button @click="isBoldActive = !isBoldActive; addToast(isBoldActive ? 'Bold formatting active' : 'Bold deactivated', 'info')" class="w-7 h-7 rounded-lg border flex items-center justify-center font-bold text-[11px] cursor-pointer outline-none transition-colors duration-150" :class="[isBoldActive ? 'bg-[#23B750] text-white border-[#23B750] shadow-2xs' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900']">B</button>
-              <button @click="isItalicActive = !isItalicActive; addToast(isItalicActive ? 'Italic formatting active' : 'Italic deactivated', 'info')" class="w-7 h-7 rounded-lg border flex items-center justify-center font-bold text-[11px] italic cursor-pointer outline-none transition-colors duration-150" :class="[isItalicActive ? 'bg-[#23B750] text-white border-[#23B750] shadow-2xs' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900']">I</button>
-              <button @click="isUnderlineActive = !isUnderlineActive; addToast(isUnderlineActive ? 'Underline formatting active' : 'Underline deactivated', 'info')" class="w-7 h-7 rounded-lg border flex items-center justify-center font-bold text-[11px] underline cursor-pointer outline-none transition-colors duration-150" :class="[isUnderlineActive ? 'bg-[#23B750] text-white border-[#23B750] shadow-2xs' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900']">U</button>
+              <button @click="isBoldActive = !isBoldActive; addToast(isBoldActive ? 'Bold formatting active' : 'Bold deactivated', 'info')" class="w-7 h-7 rounded-lg border flex items-center justify-center font-bold text-[11px] cursor-pointer outline-none transition-colors duration-150" :class="[isBoldActive ? 'bg-primary text-primary-foreground border-primary shadow-2xs' : 'bg-card border-border text-foreground hover:bg-muted/50 hover:text-foreground']">B</button>
+              <button @click="isItalicActive = !isItalicActive; addToast(isItalicActive ? 'Italic formatting active' : 'Italic deactivated', 'info')" class="w-7 h-7 rounded-lg border flex items-center justify-center font-bold text-[11px] italic cursor-pointer outline-none transition-colors duration-150" :class="[isItalicActive ? 'bg-primary text-primary-foreground border-primary shadow-2xs' : 'bg-card border-border text-foreground hover:bg-muted/50 hover:text-foreground']">I</button>
+              <button @click="isUnderlineActive = !isUnderlineActive; addToast(isUnderlineActive ? 'Underline formatting active' : 'Underline deactivated', 'info')" class="w-7 h-7 rounded-lg border flex items-center justify-center font-bold text-[11px] underline cursor-pointer outline-none transition-colors duration-150" :class="[isUnderlineActive ? 'bg-primary text-primary-foreground border-primary shadow-2xs' : 'bg-card border-border text-foreground hover:bg-muted/50 hover:text-foreground']">U</button>
               
-              <span class="text-gray-300 font-normal select-none px-0.5">|</span>
+              <span class="text-muted-foreground/60 font-normal select-none px-0.5">|</span>
 
               <!-- Text color picker dropdown popover -->
               <div class="relative shrink-0 flex items-center">
-                <button @click.stop="isColorDropdownOpen = !isColorDropdownOpen" class="w-7 h-7 rounded-lg border flex items-center justify-center cursor-pointer outline-none transition-colors duration-200 bg-white" :style="{ borderColor: activeTextColor }">
+                <button @click.stop="isColorDropdownOpen = !isColorDropdownOpen" class="w-7 h-7 rounded-lg border flex items-center justify-center cursor-pointer outline-none transition-colors duration-200 bg-card" :style="{ borderColor: activeTextColor }">
                   <span class="w-3.5 h-3.5 rounded-full" :style="{ backgroundColor: activeTextColor }"></span>
                 </button>
-                <div v-if="isColorDropdownOpen" class="absolute bottom-9 left-0 bg-white border border-gray-200 rounded-xl shadow-lg p-2.5 z-45 w-32 flex flex-wrap gap-1.5 animate-in slide-in-from-bottom-2 duration-150">
-                  <button v-for="c in ['#1E293B', '#EF4444', '#10B981', '#3B82F6', '#8B5CF6']" :key="c" @click="activeTextColor = c; isColorDropdownOpen = false; addToast('Active text color set successfully!', 'info')" class="w-5.5 h-5.5 rounded-full border border-gray-150 hover:scale-110 active:scale-95 transition-all cursor-pointer" :style="{ backgroundColor: c }"></button>
+                <div v-if="isColorDropdownOpen" class="absolute bottom-9 left-0 bg-card border border-border rounded-xl shadow-lg p-2.5 z-45 w-32 flex flex-wrap gap-1.5 animate-in slide-in-from-bottom-2 duration-150">
+                  <button v-for="c in ['var(--foreground)', 'var(--destructive)', 'var(--success)', 'var(--info)', 'var(--tag-6-foreground)']" :key="c" @click="activeTextColor = c; isColorDropdownOpen = false; addToast('Active text color set successfully!', 'info')" class="w-5.5 h-5.5 rounded-full border border-border hover:scale-110 active:scale-95 transition-all cursor-pointer" :style="{ backgroundColor: c }"></button>
                 </div>
               </div>
 
-              <span class="text-gray-300 font-normal select-none px-0.5">|</span>
+              <span class="text-muted-foreground/60 font-normal select-none px-0.5">|</span>
 
-              <button @click="activeTextAlign = 'left'; addToast('Text alignment: Left', 'info')" class="p-1 rounded cursor-pointer outline-none transition-colors" :class="[activeTextAlign === 'left' ? 'bg-[#23B750] text-white' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900']"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="17" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="17" y1="18" x2="3" y2="18"/></svg></button>
-              <button @click="activeTextAlign = 'center'; addToast('Text alignment: Center', 'info')" class="p-1 rounded cursor-pointer outline-none transition-colors" :class="[activeTextAlign === 'center' ? 'bg-[#23B750] text-white' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900']"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="10" x2="6" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="18" y1="14" x2="6" y2="14"/><line x1="21" y1="18" x2="3" y2="18"/></svg></button>
-              <button @click="addToast('Applied list styling', 'info')" class="p-1 hover:bg-gray-100 rounded text-gray-600 hover:text-gray-900 cursor-pointer outline-none transition-colors"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6" stroke-width="3"/><line x1="3" y1="12" x2="3.01" y2="12" stroke-width="3"/><line x1="3" y1="18" x2="3.01" y2="18" stroke-width="3"/></svg></button>
+              <button @click="activeTextAlign = 'left'; addToast('Text alignment: Left', 'info')" class="p-1 rounded cursor-pointer outline-none transition-colors" :class="[activeTextAlign === 'left' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-muted hover:text-foreground']"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="17" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="17" y1="18" x2="3" y2="18"/></svg></button>
+              <button @click="activeTextAlign = 'center'; addToast('Text alignment: Center', 'info')" class="p-1 rounded cursor-pointer outline-none transition-colors" :class="[activeTextAlign === 'center' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-muted hover:text-foreground']"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="10" x2="6" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="18" y1="14" x2="6" y2="14"/><line x1="21" y1="18" x2="3" y2="18"/></svg></button>
+              <button @click="addToast('Applied list styling', 'info')" class="p-1 hover:bg-muted rounded text-muted-foreground hover:text-foreground cursor-pointer outline-none transition-colors"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6" stroke-width="3"/><line x1="3" y1="12" x2="3.01" y2="12" stroke-width="3"/><line x1="3" y1="18" x2="3.01" y2="18" stroke-width="3"/></svg></button>
               
-              <span class="text-gray-300 font-normal select-none px-0.5">|</span>
+              <span class="text-muted-foreground/60 font-normal select-none px-0.5">|</span>
 
-              <button @click="addToast('Inserting hyper link...', 'info')" class="p-1 hover:bg-gray-100 rounded text-gray-600 hover:text-gray-900 cursor-pointer outline-none transition-colors"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
-              <button @click="addToast('Uploading image...', 'info')" class="p-1 hover:bg-gray-150 rounded text-gray-600 hover:text-gray-900 cursor-pointer outline-none transition-colors"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></button>
+              <button @click="addToast('Inserting hyper link...', 'info')" class="p-1 hover:bg-muted rounded text-muted-foreground hover:text-foreground cursor-pointer outline-none transition-colors"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
+              <button @click="addToast('Uploading image...', 'info')" class="p-1 hover:bg-muted rounded text-muted-foreground hover:text-foreground cursor-pointer outline-none transition-colors"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></button>
               <button 
                 @click="generateAiDraft" 
-                class="p-1 hover:bg-blue-50 rounded text-[#2563EB] cursor-pointer outline-none transition-colors"
+                class="p-1 hover:bg-info/10 rounded text-[var(--info)] cursor-pointer outline-none transition-colors"
                 :class="isGeneratingAiDraft ? 'animate-pulse opacity-70' : ''"
                 title="AI Assistant: Generate Contextual Reply Draft"
               >
@@ -3470,22 +3470,22 @@ nextTick(() => {
             </div>
             
             <!-- Private Note Mode Toolbar -->
-            <div v-else-if="composerMode === 'note'" class="flex items-center gap-1.5 border-b border-gray-150 px-3 py-1.5 bg-gray-55/50 overflow-x-auto scrollbar-none select-none h-11">
-              <button @click="isBoldActive = !isBoldActive; addToast(isBoldActive ? 'Bold active' : 'Bold inactive', 'info')" class="w-7 h-7 rounded-lg border flex items-center justify-center font-bold text-[11px] cursor-pointer outline-none transition-colors duration-150" :class="[isBoldActive ? 'bg-amber-600 text-white border-amber-600 shadow-2xs' : 'bg-white border-amber-200 text-amber-900 hover:bg-amber-50']">B</button>
-              <button @click="isItalicActive = !isItalicActive; addToast(isItalicActive ? 'Italic active' : 'Italic inactive', 'info')" class="w-7 h-7 rounded-lg border flex items-center justify-center font-bold text-[11px] italic cursor-pointer outline-none transition-colors duration-150" :class="[isItalicActive ? 'bg-amber-600 text-white border-amber-600 shadow-2xs' : 'bg-white border-amber-200 text-amber-900 hover:bg-amber-50']">I</button>
-              <button @click="isUnderlineActive = !isUnderlineActive; addToast(isUnderlineActive ? 'Underline active' : 'Underline inactive', 'info')" class="w-7 h-7 rounded-lg border flex items-center justify-center font-bold text-[11px] underline cursor-pointer outline-none transition-colors duration-150" :class="[isUnderlineActive ? 'bg-amber-600 text-white border-amber-600 shadow-2xs' : 'bg-white border-amber-200 text-amber-900 hover:bg-amber-50']">U</button>
+            <div v-else-if="composerMode === 'note'" class="flex items-center gap-1.5 border-b border-border px-3 py-1.5 bg-muted/50 overflow-x-auto scrollbar-none select-none h-11">
+              <button @click="isBoldActive = !isBoldActive; addToast(isBoldActive ? 'Bold active' : 'Bold inactive', 'info')" class="w-7 h-7 rounded-lg border flex items-center justify-center font-bold text-[11px] cursor-pointer outline-none transition-colors duration-150" :class="[isBoldActive ? 'bg-warning text-primary-foreground border-warning shadow-2xs' : 'bg-card border-warning/30 text-warning-foreground hover:bg-warning/10']">B</button>
+              <button @click="isItalicActive = !isItalicActive; addToast(isItalicActive ? 'Italic active' : 'Italic inactive', 'info')" class="w-7 h-7 rounded-lg border flex items-center justify-center font-bold text-[11px] italic cursor-pointer outline-none transition-colors duration-150" :class="[isItalicActive ? 'bg-warning text-primary-foreground border-warning shadow-2xs' : 'bg-card border-warning/30 text-warning-foreground hover:bg-warning/10']">I</button>
+              <button @click="isUnderlineActive = !isUnderlineActive; addToast(isUnderlineActive ? 'Underline active' : 'Underline inactive', 'info')" class="w-7 h-7 rounded-lg border flex items-center justify-center font-bold text-[11px] underline cursor-pointer outline-none transition-colors duration-150" :class="[isUnderlineActive ? 'bg-warning text-primary-foreground border-warning shadow-2xs' : 'bg-card border-warning/30 text-warning-foreground hover:bg-warning/10']">U</button>
               
-              <span class="text-gray-300 font-normal select-none px-0.5">|</span>
+              <span class="text-muted-foreground/60 font-normal select-none px-0.5">|</span>
               
-              <button @click="activeTextAlign = 'left'; addToast('Text alignment: Left', 'info')" class="p-1 rounded cursor-pointer outline-none transition-colors" :class="[activeTextAlign === 'left' ? 'bg-amber-600 text-white' : 'text-amber-900 hover:bg-amber-100']"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="17" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="17" y1="18" x2="3" y2="18"/></svg></button>
-              <button @click="activeTextAlign = 'center'; addToast('Text alignment: Center', 'info')" class="p-1 rounded cursor-pointer outline-none transition-colors" :class="[activeTextAlign === 'center' ? 'bg-amber-600 text-white' : 'text-amber-900 hover:bg-amber-100']"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="10" x2="6" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="18" y1="14" x2="6" y2="14"/><line x1="21" y1="18" x2="3" y2="18"/></svg></button>
-              <button @click="addToast('Applied list styling', 'info')" class="p-1 hover:bg-gray-100 rounded text-gray-600 hover:text-gray-900 cursor-pointer outline-none transition-colors"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6" stroke-width="3"/><line x1="3" y1="12" x2="3.01" y2="12" stroke-width="3"/><line x1="3" y1="18" x2="3.01" y2="18" stroke-width="3"/></svg></button>
+              <button @click="activeTextAlign = 'left'; addToast('Text alignment: Left', 'info')" class="p-1 rounded cursor-pointer outline-none transition-colors" :class="[activeTextAlign === 'left' ? 'bg-warning text-primary-foreground' : 'text-warning-foreground hover:bg-warning/20']"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="17" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="17" y1="18" x2="3" y2="18"/></svg></button>
+              <button @click="activeTextAlign = 'center'; addToast('Text alignment: Center', 'info')" class="p-1 rounded cursor-pointer outline-none transition-colors" :class="[activeTextAlign === 'center' ? 'bg-warning text-primary-foreground' : 'text-warning-foreground hover:bg-warning/20']"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="10" x2="6" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="18" y1="14" x2="6" y2="14"/><line x1="21" y1="18" x2="3" y2="18"/></svg></button>
+              <button @click="addToast('Applied list styling', 'info')" class="p-1 hover:bg-muted rounded text-muted-foreground hover:text-foreground cursor-pointer outline-none transition-colors"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6" stroke-width="3"/><line x1="3" y1="12" x2="3.01" y2="12" stroke-width="3"/><line x1="3" y1="18" x2="3.01" y2="18" stroke-width="3"/></svg></button>
             </div>
 
             <!-- TEXTAREA INPUT WINDOW WITH FLOATING /SLASH TEMPLATES POPOVER -->
             <div 
               class="p-2 select-none flex flex-col gap-1 relative transition-colors duration-300"
-              :class="isAiDraftCompleteGlow ? 'bg-[#23B750]/[0.06]' : ''"
+              :class="isAiDraftCompleteGlow ? 'bg-[var(--primary)]/[0.06]' : ''"
             >
               <!-- FLOATING /SLASH COMMAND TEMPLATE SELECTION MENU POPOVER -->
               <transition
@@ -3499,19 +3499,19 @@ nextTick(() => {
                 <div 
                   v-if="slashMenuOpen" 
                   ref="slashPopupRef"
-                  class="absolute bottom-full mb-2 left-0 right-0 sm:right-auto sm:w-[520px] bg-white border border-gray-200 rounded-2xl shadow-2xl z-50 overflow-hidden flex flex-col animate-in fade-in zoom-in-95 duration-150"
+                  class="absolute bottom-full mb-2 left-0 right-0 sm:right-auto sm:w-[520px] bg-card border border-border rounded-2xl shadow-2xl z-50 overflow-hidden flex flex-col animate-in fade-in zoom-in-95 duration-150"
                 >
                   <!-- Slash Header Bar -->
-                  <div class="px-3.5 py-2.5 bg-gray-50/90 border-b border-gray-150 flex items-center justify-between select-none shrink-0">
+                  <div class="px-3.5 py-2.5 bg-muted/90 border-b border-border flex items-center justify-between select-none shrink-0">
                     <div class="flex items-center gap-2">
-                      <span class="w-5 h-5 rounded-md bg-[#23B750]/15 text-[#23B750] flex items-center justify-center font-mono font-black text-xs">/</span>
-                      <span class="text-xs font-extrabold text-gray-900">CRM Template Shortcuts</span>
-                      <span v-if="slashQuery" class="text-[11px] font-mono font-bold text-gray-600 bg-gray-200/80 px-1.5 py-0.5 rounded leading-none">/{{ slashQuery }}</span>
+                      <span class="w-5 h-5 rounded-md bg-[var(--primary)]/15 text-primary flex items-center justify-center font-mono font-black text-xs">/</span>
+                      <span class="text-xs font-extrabold text-foreground">CRM Template Shortcuts</span>
+                      <span v-if="slashQuery" class="text-[11px] font-mono font-bold text-muted-foreground bg-muted/80 px-1.5 py-0.5 rounded leading-none">/{{ slashQuery }}</span>
                     </div>
                     <button 
                       type="button"
                       @click="isComposerTemplatePickerOpen = true; slashMenuOpen = false" 
-                      class="text-[11px] font-bold text-[#23B750] hover:text-[#1fa346] flex items-center gap-1 cursor-pointer outline-none transition-colors"
+                      class="text-[11px] font-bold text-primary hover:text-[var(--primary)] flex items-center gap-1 cursor-pointer outline-none transition-colors"
                     >
                       <span>Browse Library (Modal)</span>
                       <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -3529,31 +3529,31 @@ nextTick(() => {
                         class="p-2.5 rounded-xl cursor-pointer transition-all select-none border"
                         :class="[
                           slashHighlightedIndex === idx 
-                            ? 'bg-green-50/70 border-green-200 shadow-2xs slash-item-active' 
-                            : 'border-transparent hover:bg-gray-50'
+                            ? 'bg-success/10 border-success/30 shadow-2xs slash-item-active' 
+                            : 'border-transparent hover:bg-muted/40'
                         ]"
                       >
                         <div class="flex items-center justify-between gap-2">
                           <div class="flex items-center gap-2 min-w-0">
                             <span 
                               class="px-2 py-0.5 rounded-md font-mono text-[11px] font-extrabold border shrink-0 transition-colors"
-                              :class="slashHighlightedIndex === idx ? 'bg-white text-[#23B750] border-green-300 shadow-2xs' : 'bg-gray-100 text-gray-700 border-gray-200'"
+                              :class="slashHighlightedIndex === idx ? 'bg-card text-primary border-success/30 shadow-2xs' : 'bg-muted text-foreground border-border'"
                             >
                               {{ template.shortcut }}
                             </span>
-                            <span class="text-xs font-extrabold text-gray-900 truncate">{{ template.title }}</span>
+                            <span class="text-xs font-extrabold text-foreground truncate">{{ template.title }}</span>
                           </div>
                           
                           <div class="flex items-center gap-1.5 shrink-0">
-                            <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-gray-100 text-gray-600">{{ template.category }}</span>
-                            <span v-if="slashHighlightedIndex === idx" class="text-[10px] font-bold text-[#23B750] flex items-center gap-0.5">
+                            <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-muted text-muted-foreground">{{ template.category }}</span>
+                            <span v-if="slashHighlightedIndex === idx" class="text-[10px] font-bold text-primary flex items-center gap-0.5">
                               ↵ Insert
                             </span>
                           </div>
                         </div>
 
                         <!-- Snippet Preview with dynamic variable resolution -->
-                        <p class="text-[11px] text-gray-500 leading-snug line-clamp-1 mt-1 font-medium pl-0.5">
+                        <p class="text-[11px] text-muted-foreground leading-snug line-clamp-1 mt-1 font-medium pl-0.5">
                           {{ resolveTemplateForActiveContact(template) }}
                         </p>
                       </div>
@@ -3561,13 +3561,13 @@ nextTick(() => {
 
                     <!-- Empty State -->
                     <div v-else class="py-6 px-4 text-center flex flex-col items-center justify-center gap-1 select-none">
-                      <span class="text-xs font-bold text-gray-600">No template matching "/{{ slashQuery }}"</span>
-                      <span class="text-[11px] text-gray-400">Press <kbd class="px-1 py-0.5 bg-gray-100 rounded border text-[10px] font-mono">Esc</kbd> to dismiss or click Browse Library above.</span>
+                      <span class="text-xs font-bold text-muted-foreground">No template matching "/{{ slashQuery }}"</span>
+                      <span class="text-[11px] text-muted-foreground">Press <kbd class="px-1 py-0.5 bg-muted rounded border text-[10px] font-mono">Esc</kbd> to dismiss or click Browse Library above.</span>
                     </div>
                   </div>
 
                   <!-- Slash Footer Bar -->
-                  <div class="px-3.5 py-2 bg-gray-50/80 border-t border-gray-150 flex items-center justify-between text-[11px] text-gray-400 font-semibold select-none shrink-0">
+                  <div class="px-3.5 py-2 bg-muted/80 border-t border-border flex items-center justify-between text-[11px] text-muted-foreground font-semibold select-none shrink-0">
                     <span>↑↓ Navigate • ↵ / Tab Select • Esc Dismiss</span>
                     <span>{{ filteredSlashTemplates.length }} templates</span>
                   </div>
@@ -3586,14 +3586,14 @@ nextTick(() => {
                 <div
                   v-if="isAiTypingAnimation || isAiDraftCompleteGlow"
                   class="absolute top-1.5 right-8 z-20 inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold pointer-events-none select-none transition-colors duration-200"
-                  :class="isAiDraftCompleteGlow ? 'bg-[#23B750]/15 text-[#15803D] border border-[#23B750]/30' : 'bg-blue-50 text-[#2563EB] border border-blue-200'"
+                  :class="isAiDraftCompleteGlow ? 'bg-[var(--primary)]/15 text-[var(--primary)] border border-[var(--primary)]/30' : 'bg-info/10 text-[var(--info)] border border-info/30'"
                 >
                   <template v-if="isAiTypingAnimation">
-                    <span class="w-1.5 h-1.5 rounded-full bg-[#2563EB] animate-ping"></span>
+                    <span class="w-1.5 h-1.5 rounded-full bg-[var(--info)] animate-ping"></span>
                     <span>AI drafting...</span>
                   </template>
                   <template v-else>
-                    <svg class="w-3 h-3 text-[#23B750]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                    <svg class="w-3 h-3 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
                     <span>AI draft ready</span>
                   </template>
                 </div>
@@ -3604,53 +3604,53 @@ nextTick(() => {
                 ref="composerTextareaRef"
                 v-model="newMessage"
                 :placeholder="composerMode === 'note' ? 'Write an internal private note...' : (activeConversation.platform === 'Mail' ? 'Write an email reply... (Type / for templates)' : `Message ${activeConversation.sender}... (Type / for templates)`)" 
-                class="w-full text-xs border-0 bg-transparent focus:outline-none focus:ring-0 resize-none font-medium h-20 placeholder:text-[13px] placeholder:text-gray-400 leading-relaxed text-gray-700 outline-none transition-all duration-150"
+                class="w-full text-xs border-0 bg-transparent focus:outline-none focus:ring-0 resize-none font-medium h-20 placeholder:text-[13px] placeholder:text-muted-foreground leading-relaxed text-foreground outline-none transition-all duration-150"
                 :style="composerStyles"
                 @input="checkSlashCommand"
                 @keydown="handleComposerKeydown"
               ></textarea>
-              <button @click="addToast('Editor expanded to full window focus!', 'info')" class="absolute top-2 right-2 text-gray-400 hover:text-gray-655 cursor-pointer outline-none" title="Expand composer size"><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></button>
+              <button @click="addToast('Editor expanded to full window focus!', 'info')" class="absolute top-2 right-2 text-muted-foreground hover:text-muted-foreground cursor-pointer outline-none" title="Expand composer size"><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></button>
             </div>
 
             <!-- Attachment Pills List -->
-            <div v-if="simulatedAttachments.length > 0" class="flex flex-wrap gap-2 px-3 pb-2 pt-1 border-t border-gray-100 bg-gray-50/50">
+            <div v-if="simulatedAttachments.length > 0" class="flex flex-wrap gap-2 px-3 pb-2 pt-1 border-t border-border bg-muted/50">
               <span 
                 v-for="file in simulatedAttachments" 
                 :key="file.name"
-                class="inline-flex items-center gap-2 px-2.5 py-1 rounded-lg border text-xs font-bold bg-white"
-                :class="file.uploaded ? 'border-gray-200 text-gray-700' : 'border-blue-150 text-blue-600'"
+                class="inline-flex items-center gap-2 px-2.5 py-1 rounded-lg border text-xs font-bold bg-card"
+                :class="file.uploaded ? 'border-border text-foreground' : 'border-info/30 text-info'"
               >
-                <svg v-if="!file.uploaded" class="w-3.5 h-3.5 animate-spin text-blue-500" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" class="opacity-25" stroke-dasharray="80" stroke-dashoffset="60"/><path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" class="opacity-75"/></svg>
-                <svg v-else class="w-3.5 h-3.5 text-[#23B750]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <svg v-if="!file.uploaded" class="w-3.5 h-3.5 animate-spin text-info" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" class="opacity-25" stroke-dasharray="80" stroke-dashoffset="60"/><path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" class="opacity-75"/></svg>
+                <svg v-else class="w-3.5 h-3.5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
                 <span>{{ file.name }}</span>
-                <span v-if="!file.uploaded" class="text-[10px] text-gray-400 font-medium font-mono">({{ file.progress }}%)</span>
-                <button @click="simulatedAttachments = simulatedAttachments.filter(f => f.name !== file.name)" class="text-gray-450 hover:text-red-500 font-extrabold ml-1 font-sans cursor-pointer outline-none">×</button>
+                <span v-if="!file.uploaded" class="text-[10px] text-muted-foreground font-medium font-mono">({{ file.progress }}%)</span>
+                <button @click="simulatedAttachments = simulatedAttachments.filter(f => f.name !== file.name)" class="text-muted-foreground hover:text-destructive font-extrabold ml-1 font-sans cursor-pointer outline-none">×</button>
               </span>
             </div>
 
             <!-- TOOLBAR / ACTIONS persistence bar -->
-            <div class="flex items-center justify-between border-t border-gray-150 px-4 py-2 bg-gray-55 select-none shrink-0 h-11 relative rounded-b-xl">
+            <div class="flex items-center justify-between border-t border-border px-4 py-2 bg-muted select-none shrink-0 h-11 relative rounded-b-xl">
               <div class="flex items-center gap-1.5">
                 <!-- Floating Emoji Picker -->
                 <div class="relative shrink-0 flex items-center">
                   <button 
                     @click="isComposerEmojiOpen = !isComposerEmojiOpen; if (isComposerEmojiOpen) isComposerAttachmentOpen = false" 
-                    class="p-1 hover:bg-gray-150 rounded text-gray-400 hover:text-gray-650 cursor-pointer outline-none transition-colors" 
-                    :class="isComposerEmojiOpen ? 'bg-gray-200 text-gray-800' : '' "
+                    class="p-1 hover:bg-muted rounded text-muted-foreground hover:text-muted-foreground cursor-pointer outline-none transition-colors" 
+                    :class="isComposerEmojiOpen ? 'bg-muted text-foreground' : '' "
                     title="Insert emoji"
                   >
                     <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9" stroke-width="2.5"/><line x1="15" y1="9" x2="15.01" y2="9" stroke-width="2.5"/></svg>
                   </button>
                   <div 
                     v-if="isComposerEmojiOpen" 
-                    class="absolute bottom-full mb-2 left-0 bg-white border border-gray-200 rounded-xl shadow-xl p-2.5 z-50 w-52 flex flex-col gap-1.5 animate-in slide-in-from-bottom-2 duration-150 select-none"
+                    class="absolute bottom-full mb-2 left-0 bg-card border border-border rounded-xl shadow-xl p-2.5 z-50 w-52 flex flex-col gap-1.5 animate-in slide-in-from-bottom-2 duration-150 select-none"
                   >
-                    <div class="flex items-center justify-between border-b border-gray-100 pb-1 px-0.5">
-                      <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Quick Emojis</span>
-                      <button @click="isComposerEmojiOpen = false" class="text-gray-400 hover:text-gray-600 text-xs font-bold">×</button>
+                    <div class="flex items-center justify-between border-b border-border pb-1 px-0.5">
+                      <span class="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Quick Emojis</span>
+                      <button @click="isComposerEmojiOpen = false" class="text-muted-foreground hover:text-muted-foreground text-xs font-bold">×</button>
                     </div>
                     <div class="grid grid-cols-6 gap-1 pt-0.5">
-                      <button v-for="emoji in ['😊', '👍', '👋', '✨', '🔥', '📅', '💬', '🚀', '💡', '🎉', '❤️', '👏', '🤝', '⭐', '⚡', '🎯', '✅', '🙌']" :key="emoji" @click="insertEmoji(emoji)" class="text-base hover:scale-125 hover:bg-gray-50 rounded transition-transform p-1 flex items-center justify-center cursor-pointer select-none">{{ emoji }}</button>
+                      <button v-for="emoji in ['😊', '👍', '👋', '✨', '🔥', '📅', '💬', '🚀', '💡', '🎉', '❤️', '👏', '🤝', '⭐', '⚡', '🎯', '✅', '🙌']" :key="emoji" @click="insertEmoji(emoji)" class="text-base hover:scale-125 hover:bg-muted/40 rounded transition-transform p-1 flex items-center justify-center cursor-pointer select-none">{{ emoji }}</button>
                     </div>
                   </div>
                 </div>
@@ -3659,32 +3659,32 @@ nextTick(() => {
                 <div class="relative shrink-0 flex items-center">
                   <button 
                     @click="isComposerAttachmentOpen = !isComposerAttachmentOpen; if (isComposerAttachmentOpen) isComposerEmojiOpen = false" 
-                    class="p-1 hover:bg-gray-150 rounded text-gray-400 hover:text-gray-655 cursor-pointer outline-none transition-colors" 
-                    :class="isComposerAttachmentOpen ? 'bg-gray-200 text-gray-800' : '' "
+                    class="p-1 hover:bg-muted rounded text-muted-foreground hover:text-muted-foreground cursor-pointer outline-none transition-colors" 
+                    :class="isComposerAttachmentOpen ? 'bg-muted text-foreground' : '' "
                     title="Attach file"
                   >
                     <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
                   </button>
                   <div 
                     v-if="isComposerAttachmentOpen" 
-                    class="absolute bottom-full mb-2 left-0 bg-white border border-gray-200 rounded-2xl shadow-xl p-3 z-50 w-72 flex flex-col gap-2.5 animate-in slide-in-from-bottom-2 duration-150 select-none"
+                    class="absolute bottom-full mb-2 left-0 bg-card border border-border rounded-2xl shadow-xl p-3 z-50 w-72 flex flex-col gap-2.5 animate-in slide-in-from-bottom-2 duration-150 select-none"
                   >
-                    <div class="flex items-center justify-between border-b border-gray-100 pb-1.5">
-                      <span class="text-[10px] font-extrabold uppercase tracking-widest text-gray-400">Select File to Attach</span>
-                      <button @click="isComposerAttachmentOpen = false" class="text-gray-400 hover:text-gray-600 text-xs font-bold">×</button>
+                    <div class="flex items-center justify-between border-b border-border pb-1.5">
+                      <span class="text-[10px] font-extrabold uppercase tracking-widest text-muted-foreground">Select File to Attach</span>
+                      <button @click="isComposerAttachmentOpen = false" class="text-muted-foreground hover:text-muted-foreground text-xs font-bold">×</button>
                     </div>
                     <div class="flex flex-col gap-1.5">
-                      <button @click="uploadMockFile('RakanSales_Proposal_v4.pdf', '1.2 MB')" class="w-full text-left p-2 hover:bg-gray-50 border border-gray-100 rounded-xl text-xs font-semibold text-gray-700 flex items-center justify-between cursor-pointer transition-colors">
+                      <button @click="uploadMockFile('RakanSales_Proposal_v4.pdf', '1.2 MB')" class="w-full text-left p-2 hover:bg-muted/40 border border-border rounded-xl text-xs font-semibold text-foreground flex items-center justify-between cursor-pointer transition-colors">
                         <span class="flex items-center gap-1.5 truncate">📂 Proposal_v4.pdf</span>
-                        <span class="text-[10px] text-gray-400 shrink-0 font-normal">1.2MB</span>
+                        <span class="text-[10px] text-muted-foreground shrink-0 font-normal">1.2MB</span>
                       </button>
-                      <button @click="uploadMockFile('Contract_Draft_KK_Steel.docx', '420 KB')" class="w-full text-left p-2 hover:bg-gray-50 border border-gray-100 rounded-xl text-xs font-semibold text-gray-700 flex items-center justify-between cursor-pointer transition-colors">
+                      <button @click="uploadMockFile('Contract_Draft_KK_Steel.docx', '420 KB')" class="w-full text-left p-2 hover:bg-muted/40 border border-border rounded-xl text-xs font-semibold text-foreground flex items-center justify-between cursor-pointer transition-colors">
                         <span class="flex items-center gap-1.5 truncate">📂 Contract_Draft.docx</span>
-                        <span class="text-[10px] text-gray-400 shrink-0 font-normal">420KB</span>
+                        <span class="text-[10px] text-muted-foreground shrink-0 font-normal">420KB</span>
                       </button>
-                      <button @click="uploadMockFile('Mockup_Attachment.png', '2.4 MB')" class="w-full text-left p-2 hover:bg-gray-50 border border-gray-100 rounded-xl text-xs font-semibold text-gray-700 flex items-center justify-between cursor-pointer transition-colors">
+                      <button @click="uploadMockFile('Mockup_Attachment.png', '2.4 MB')" class="w-full text-left p-2 hover:bg-muted/40 border border-border rounded-xl text-xs font-semibold text-foreground flex items-center justify-between cursor-pointer transition-colors">
                         <span class="flex items-center gap-1.5 truncate">📂 Mockup_Attachment.png</span>
-                        <span class="text-[10px] text-gray-400 shrink-0 font-normal">2.4MB</span>
+                        <span class="text-[10px] text-muted-foreground shrink-0 font-normal">2.4MB</span>
                       </button>
                     </div>
                   </div>
@@ -3693,15 +3693,15 @@ nextTick(() => {
                 <!-- Typography toggle button -->
                 <button 
                   @click="isTypographyToolbarOpen = !isTypographyToolbarOpen" 
-                  class="p-1 hover:bg-gray-150 rounded text-gray-400 hover:text-gray-650 cursor-pointer outline-none transition-colors"
-                  :class="isTypographyToolbarOpen ? 'bg-gray-200 text-gray-800 font-bold' : ''"
+                  class="p-1 hover:bg-muted rounded text-muted-foreground hover:text-muted-foreground cursor-pointer outline-none transition-colors"
+                  :class="isTypographyToolbarOpen ? 'bg-muted text-foreground font-bold' : ''"
                   title="Toggle typography formatting toolbar"
                 >
                   <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
                 </button>
                 <button 
                   @click="generateAiDraft" 
-                  class="p-1 hover:bg-blue-50 rounded text-[#2563EB] cursor-pointer outline-none transition-colors flex items-center justify-center"
+                  class="p-1 hover:bg-info/10 rounded text-[var(--info)] cursor-pointer outline-none transition-colors flex items-center justify-center"
                   :class="isGeneratingAiDraft ? 'animate-pulse opacity-70' : ''"
                   title="AI Assistant: Generate Contextual Reply Draft"
                 >
@@ -3712,17 +3712,17 @@ nextTick(() => {
                 </button>
                 
                 <template v-if="composerMode === 'reply' && activeConversation.platform !== 'Mail'">
-                  <span class="text-gray-300 font-normal select-none px-0.5">|</span>
-                  <button @click="isComposerTemplatePickerOpen = true" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded border border-gray-200 bg-white hover:bg-gray-50 text-xs font-semibold text-gray-600 cursor-pointer outline-none transition-all duration-200">
-                    <svg class="w-3.5 h-3.5 text-gray-500 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                  <span class="text-muted-foreground/60 font-normal select-none px-0.5">|</span>
+                  <button @click="isComposerTemplatePickerOpen = true" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded border border-border bg-card hover:bg-muted/40 text-xs font-semibold text-muted-foreground cursor-pointer outline-none transition-all duration-200">
+                    <svg class="w-3.5 h-3.5 text-muted-foreground shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
                     <span>Template</span>
                   </button>
-                  <button @click="triggerComposerSummary" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded border border-gray-200 bg-white hover:bg-gray-50 text-xs font-semibold text-gray-600 cursor-pointer outline-none transition-all duration-200">
-                    <svg class="w-3.5 h-3.5 text-[#2563EB] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 10h16M4 14h12M4 18h8"/></svg>
+                  <button @click="triggerComposerSummary" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded border border-border bg-card hover:bg-muted/40 text-xs font-semibold text-muted-foreground cursor-pointer outline-none transition-all duration-200">
+                    <svg class="w-3.5 h-3.5 text-[var(--info)] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 10h16M4 14h12M4 18h8"/></svg>
                     <span>Summarize</span>
                   </button>
-                  <button @click="isComposerMeetingOpen = true" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded border border-gray-200 bg-white hover:bg-gray-50 text-xs font-semibold text-gray-600 cursor-pointer outline-none transition-all duration-200">
-                    <svg class="w-3.5 h-3.5 text-gray-500 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                  <button @click="isComposerMeetingOpen = true" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded border border-border bg-card hover:bg-muted/40 text-xs font-semibold text-muted-foreground cursor-pointer outline-none transition-all duration-200">
+                    <svg class="w-3.5 h-3.5 text-muted-foreground shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
                     <span>Meeting</span>
                   </button>
                 </template>
@@ -3732,14 +3732,14 @@ nextTick(() => {
                 <button 
                   v-if="composerMode === 'note'"
                   @click="addPrivateNoteFromComposer"
-                  class="px-4 py-1.5 text-xs font-bold text-white bg-[#1E823B] hover:bg-[#15612c] rounded-lg transition-colors cursor-pointer select-none outline-none"
+                  class="px-4 py-1.5 text-xs font-bold text-primary-foreground bg-[var(--primary)] hover:bg-[var(--primary)] rounded-lg transition-colors cursor-pointer select-none outline-none"
                 >
                   + Add Note
                 </button>
                 <button
                   v-else
                   @click="sendChatMessage"
-                  class="px-4 py-1.5 text-xs font-bold text-white bg-[#23B750] hover:bg-[#1a923f] rounded-lg transition-colors cursor-pointer select-none outline-none"
+                  class="px-4 py-1.5 text-xs font-bold text-primary-foreground bg-primary hover:bg-[var(--primary)] rounded-lg transition-colors cursor-pointer select-none outline-none"
                 >
                   Send
                 </button>
@@ -3782,36 +3782,36 @@ nextTick(() => {
         leave-from-class="opacity-100 scale-100"
         leave-to-class="opacity-0 scale-95"
       >
-        <div v-if="isComposeOpen" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/45 backdrop-blur-xs select-none">
-          <div class="bg-white rounded-2xl max-w-md w-full p-6 border border-gray-100 shadow-none flex flex-col gap-4 animate-in fade-in zoom-in-95 duration-200">
-            <div class="flex items-center justify-between pb-2 border-b border-gray-100">
-              <h2 class="text-base font-extrabold text-gray-900 flex items-center gap-2">
+        <div v-if="isComposeOpen" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm backdrop-blur-xs select-none">
+          <div class="bg-card rounded-2xl max-w-md w-full p-6 border border-border shadow-none flex flex-col gap-4 animate-in fade-in zoom-in-95 duration-200">
+            <div class="flex items-center justify-between pb-2 border-b border-border">
+              <h2 class="text-base font-extrabold text-foreground flex items-center gap-2">
                 <svg class="w-5 h-5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/>
                 </svg>
                 Compose New Conversation
               </h2>
-              <button @click="isComposeOpen = false" class="text-gray-450 hover:text-gray-700 cursor-pointer">
+              <button @click="isComposeOpen = false" class="text-muted-foreground hover:text-foreground cursor-pointer">
                 <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
               </button>
             </div>
             
             <div class="space-y-4">
               <div>
-                <label class="text-[11px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Contact Name</label>
+                <label class="text-[11px] font-bold text-muted-foreground uppercase tracking-wider block mb-1">Contact Name</label>
                 <input 
                   v-model="composeName"
                   type="text" 
                   placeholder="e.g. Sarah Jenkins"
-                  class="w-full text-xs bg-gray-50 border border-gray-250 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary font-semibold text-gray-700"
+                  class="w-full text-xs bg-muted/40 border border-input rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary font-semibold text-foreground"
                 />
               </div>
               
               <div>
-                <label class="text-[11px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Channel Platform</label>
+                <label class="text-[11px] font-bold text-muted-foreground uppercase tracking-wider block mb-1">Channel Platform</label>
                 <select 
                   v-model="composePlatform"
-                  class="w-full text-xs bg-gray-50 border border-gray-250 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary cursor-pointer font-semibold text-gray-700"
+                  class="w-full text-xs bg-muted/40 border border-input rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary cursor-pointer font-semibold text-foreground"
                 >
                   <option value="WhatsApp">WhatsApp</option>
                   <option value="LinkedIn">LinkedIn</option>
@@ -3822,26 +3822,26 @@ nextTick(() => {
               </div>
               
               <div>
-                <label class="text-[11px] font-bold text-gray-400 uppercase tracking-wider block mb-1">First Message</label>
+                <label class="text-[11px] font-bold text-muted-foreground uppercase tracking-wider block mb-1">First Message</label>
                 <textarea 
                   v-model="composeMessage"
                   rows="3" 
                   placeholder="Type the initial message details..."
-                  class="w-full text-xs bg-gray-50 border border-gray-255 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary resize-none font-medium text-gray-700"
+                  class="w-full text-xs bg-muted/40 border border-border rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary resize-none font-medium text-foreground"
                 ></textarea>
               </div>
             </div>
             
-            <div class="flex justify-end gap-2.5 pt-2 border-t border-gray-100">
+            <div class="flex justify-end gap-2.5 pt-2 border-t border-border">
               <button 
                 @click="isComposeOpen = false" 
-                class="px-4 py-2 text-xs font-bold text-gray-500 bg-gray-100 hover:bg-gray-200 rounded-md cursor-pointer transition-colors"
+                class="px-4 py-2 text-xs font-bold text-muted-foreground bg-muted hover:bg-muted rounded-md cursor-pointer transition-colors"
               >
                 Cancel
               </button>
               <button 
                 @click="handleCreateConversation" 
-                class="px-4 py-2 text-xs font-bold text-white bg-primary hover:bg-primary-dark rounded-md cursor-pointer transition-colors"
+                class="px-4 py-2 text-xs font-bold text-primary-foreground bg-primary hover:bg-primary-dark rounded-md cursor-pointer transition-colors"
               >
                 Create Thread
               </button>
@@ -3886,53 +3886,53 @@ nextTick(() => {
         leave-from-class="opacity-100 scale-100"
         leave-to-class="opacity-0 scale-95"
       >
-        <div v-if="isComposerSummaryOpen" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/45 backdrop-blur-xs select-none">
-          <div class="bg-white rounded-2xl max-w-md w-full p-6 border border-gray-100 shadow-xl flex flex-col gap-4 animate-in fade-in zoom-in-95 duration-200">
-            <div class="flex items-center justify-between pb-2 border-b border-gray-100">
-              <h2 class="text-base font-extrabold text-gray-900 flex items-center gap-2">
-                <svg class="w-5 h-5 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.813 15.904L9 21l-.813-5.096L3.096 15 8.187 14.187 9 9l.813 5.187L14.904 15z"/></svg>
+        <div v-if="isComposerSummaryOpen" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm backdrop-blur-xs select-none">
+          <div class="bg-card rounded-2xl max-w-md w-full p-6 border border-border shadow-xl flex flex-col gap-4 animate-in fade-in zoom-in-95 duration-200">
+            <div class="flex items-center justify-between pb-2 border-b border-border">
+              <h2 class="text-base font-extrabold text-foreground flex items-center gap-2">
+                <svg class="w-5 h-5 text-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.813 15.904L9 21l-.813-5.096L3.096 15 8.187 14.187 9 9l.813 5.187L14.904 15z"/></svg>
                 <span>AI Conversation Summary</span>
               </h2>
-              <button @click="isComposerSummaryOpen = false" class="text-gray-450 hover:text-gray-700 cursor-pointer">
+              <button @click="isComposerSummaryOpen = false" class="text-muted-foreground hover:text-foreground cursor-pointer">
                 <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
               </button>
             </div>
             
             <!-- Loading state -->
             <div v-if="isComposerSummaryLoading" class="py-12 flex flex-col items-center justify-center gap-3">
-              <svg class="w-8 h-8 animate-spin text-blue-500" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" class="opacity-25" stroke-dasharray="80" stroke-dashoffset="60"/><path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" class="opacity-75"/></svg>
-              <span class="text-xs font-bold text-gray-500 animate-pulse">AI analyzing thread transcripts...</span>
+              <svg class="w-8 h-8 animate-spin text-info" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" class="opacity-25" stroke-dasharray="80" stroke-dashoffset="60"/><path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" class="opacity-75"/></svg>
+              <span class="text-xs font-bold text-muted-foreground animate-pulse">AI analyzing thread transcripts...</span>
             </div>
             
             <!-- Summary output -->
             <div v-else class="space-y-4">
-              <div class="p-4 bg-blue-50/20 border border-blue-150 rounded-xl flex flex-col gap-2">
-                <span class="text-[10px] font-extrabold uppercase text-blue-700 bg-blue-100 px-2 py-0.5 rounded-full self-start leading-none">Context</span>
-                <p class="text-xs text-gray-700 font-bold leading-relaxed">Prospect Mel Wong (KK Steel) is interested in our C4 sales execution integration tools.</p>
+              <div class="p-4 bg-info/10 border border-info/30 rounded-xl flex flex-col gap-2">
+                <span class="text-[10px] font-extrabold uppercase text-info bg-info/20 px-2 py-0.5 rounded-full self-start leading-none">Context</span>
+                <p class="text-xs text-foreground font-bold leading-relaxed">Prospect Mel Wong (KK Steel) is interested in our C4 sales execution integration tools.</p>
               </div>
               
-              <div class="p-4 bg-orange-50/20 border border-orange-150 rounded-xl flex flex-col gap-2">
-                <span class="text-[10px] font-extrabold uppercase text-orange-700 bg-orange-100 px-2 py-0.5 rounded-full self-start leading-none">Prospect Grade</span>
-                <p class="text-xs text-gray-700 font-bold leading-relaxed">🔥 Hot Lead (High signature matching in active lead databases).</p>
+              <div class="p-4 bg-warning/10 border border-warning/30 rounded-xl flex flex-col gap-2">
+                <span class="text-[10px] font-extrabold uppercase text-warning bg-warning/20 px-2 py-0.5 rounded-full self-start leading-none">Prospect Grade</span>
+                <p class="text-xs text-foreground font-bold leading-relaxed">🔥 Hot Lead (High signature matching in active lead databases).</p>
               </div>
               
-              <div class="p-4 bg-green-50/20 border border-green-150 rounded-xl flex flex-col gap-2">
-                <span class="text-[10px] font-extrabold uppercase text-green-700 bg-green-100 px-2 py-0.5 rounded-full self-start leading-none">Next Action Plan</span>
-                <p class="text-xs text-gray-700 font-bold leading-relaxed">Schedule deep-dive discovery meeting this week to qualify deal sizing.</p>
+              <div class="p-4 bg-success/10 border border-success/30 rounded-xl flex flex-col gap-2">
+                <span class="text-[10px] font-extrabold uppercase text-success bg-success/20 px-2 py-0.5 rounded-full self-start leading-none">Next Action Plan</span>
+                <p class="text-xs text-foreground font-bold leading-relaxed">Schedule deep-dive discovery meeting this week to qualify deal sizing.</p>
               </div>
             </div>
             
-            <div class="flex justify-end gap-2.5 pt-2 border-t border-gray-100">
+            <div class="flex justify-end gap-2.5 pt-2 border-t border-border">
               <button 
                 @click="isComposerSummaryOpen = false" 
-                class="px-4 py-2 text-xs font-bold text-gray-500 bg-gray-100 hover:bg-gray-200 rounded-md cursor-pointer transition-colors"
+                class="px-4 py-2 text-xs font-bold text-muted-foreground bg-muted hover:bg-muted rounded-md cursor-pointer transition-colors"
               >
                 Cancel
               </button>
               <button 
                 v-if="!isComposerSummaryLoading"
                 @click="addSummaryAsPrivateNote" 
-                class="px-4 py-2 text-xs font-bold text-white bg-[#23B750] hover:bg-[#1a923f] rounded-md cursor-pointer transition-colors"
+                class="px-4 py-2 text-xs font-bold text-primary-foreground bg-primary hover:bg-[var(--primary)] rounded-md cursor-pointer transition-colors"
               >
                 Add as Private Note
               </button>
@@ -3952,56 +3952,56 @@ nextTick(() => {
         leave-from-class="opacity-100 scale-100"
         leave-to-class="opacity-0 scale-95"
       >
-        <div v-if="isComposerMeetingOpen" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/45 backdrop-blur-xs select-none">
-          <div class="bg-white rounded-2xl max-w-md w-full p-6 border border-gray-150 shadow-xl flex flex-col gap-4 animate-in fade-in zoom-in-95 duration-200">
-            <div class="flex items-center justify-between pb-2 border-b border-gray-100">
-              <h2 class="text-base font-extrabold text-gray-900 flex items-center gap-2">
+        <div v-if="isComposerMeetingOpen" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm backdrop-blur-xs select-none">
+          <div class="bg-card rounded-2xl max-w-md w-full p-6 border border-border shadow-xl flex flex-col gap-4 animate-in fade-in zoom-in-95 duration-200">
+            <div class="flex items-center justify-between pb-2 border-b border-border">
+              <h2 class="text-base font-extrabold text-foreground flex items-center gap-2">
                 <span>📅 Book Discovery / Demo Meeting</span>
               </h2>
-              <button @click="isComposerMeetingOpen = false" class="text-gray-450 hover:text-gray-700 cursor-pointer">
+              <button @click="isComposerMeetingOpen = false" class="text-muted-foreground hover:text-foreground cursor-pointer">
                 <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
               </button>
             </div>
             
             <div class="space-y-4">
               <div>
-                <label class="text-[11px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Meeting Title</label>
+                <label class="text-[11px] font-bold text-muted-foreground uppercase tracking-wider block mb-1">Meeting Title</label>
                 <input 
                   v-model="meetingTitle" 
                   type="text" 
-                  class="w-full text-xs bg-gray-50 border border-gray-250 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary font-semibold text-gray-700"
+                  class="w-full text-xs bg-muted/40 border border-input rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary font-semibold text-foreground"
                 />
               </div>
               
               <div>
-                <label class="text-[11px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Date</label>
+                <label class="text-[11px] font-bold text-muted-foreground uppercase tracking-wider block mb-1">Date</label>
                 <input 
                   v-model="meetingDate" 
                   type="date" 
-                  class="w-full text-xs bg-gray-50 border border-gray-250 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary font-semibold text-gray-700"
+                  class="w-full text-xs bg-muted/40 border border-input rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary font-semibold text-foreground"
                 />
               </div>
               
               <div>
-                <label class="text-[11px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Time</label>
+                <label class="text-[11px] font-bold text-muted-foreground uppercase tracking-wider block mb-1">Time</label>
                 <input 
                   v-model="meetingTime" 
                   type="time" 
-                  class="w-full text-xs bg-gray-50 border border-gray-250 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary font-semibold text-gray-700"
+                  class="w-full text-xs bg-muted/40 border border-input rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary font-semibold text-foreground"
                 />
               </div>
             </div>
             
-            <div class="flex justify-end gap-2.5 pt-2 border-t border-gray-150">
+            <div class="flex justify-end gap-2.5 pt-2 border-t border-border">
               <button 
                 @click="isComposerMeetingOpen = false" 
-                class="px-4 py-2 text-xs font-bold text-gray-500 bg-gray-100 hover:bg-gray-200 rounded-md cursor-pointer transition-colors"
+                class="px-4 py-2 text-xs font-bold text-muted-foreground bg-muted hover:bg-muted rounded-md cursor-pointer transition-colors"
               >
                 Cancel
               </button>
               <button 
                 @click="scheduleComposerMeeting" 
-                class="px-4 py-2 text-xs font-bold text-white bg-[#23B750] hover:bg-[#1a923f] rounded-md cursor-pointer transition-colors"
+                class="px-4 py-2 text-xs font-bold text-primary-foreground bg-primary hover:bg-[var(--primary)] rounded-md cursor-pointer transition-colors"
               >
                 Confirm Booking
               </button>

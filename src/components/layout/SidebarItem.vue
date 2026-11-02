@@ -3,8 +3,8 @@
     class="w-full flex items-center py-1.5 text-[13px] font-medium rounded-md transition-all duration-150 group outline-none relative"
     :class="[
       selected
-        ? 'bg-gray-800 text-white'
-        : 'text-gray-300 hover:bg-gray-800/60 hover:text-white focus-visible:ring-2 focus-visible:ring-gray-400',
+        ? 'bg-rail-active text-rail-foreground'
+        : 'text-rail-muted-foreground hover:bg-rail-active/60 hover:text-rail-foreground focus-visible:ring-2 focus-visible:ring-rail-muted-foreground',
       isCollapsed ? 'px-0 justify-center' : 'px-2.5',
     ]"
     @click="$emit('click')"
@@ -16,7 +16,7 @@
       :is="item.icon"
       class="w-[18px] h-[18px] transition-colors shrink-0"
       :class="[
-        selected ? 'text-white' : 'text-gray-400 group-hover:text-gray-300',
+        selected ? 'text-rail-foreground' : 'text-rail-muted-foreground group-hover:text-rail-foreground',
         isCollapsed ? '' : 'mr-2',
       ]"
       aria-hidden="true"
@@ -33,21 +33,21 @@
       <!-- Optional Badge -->
       <span
         v-if="item.badge"
-        class="ml-2 px-1.5 py-0.5 text-[10px] bg-gray-800 rounded-full text-gray-300 group-hover:text-white"
-        :class="selected ? 'text-white' : ''"
+        class="ml-2 px-1.5 py-0.5 text-[10px] bg-rail-active rounded-full text-rail-muted-foreground group-hover:text-rail-foreground"
+        :class="selected ? 'text-rail-foreground' : ''"
       >
         {{ item.badge }}
       </span>
 
       <!-- Chevron for Submenu -->
-      <ChevronRight v-if="item.hasSubmenu && !selected" class="w-4 h-4 ml-auto text-gray-500 transition-transform duration-150" />
-      <ChevronDown v-if="item.hasSubmenu && selected" class="w-4 h-4 ml-auto text-white transition-transform duration-150" />
+      <ChevronRight v-if="item.hasSubmenu && !selected" class="w-4 h-4 ml-auto text-rail-muted-foreground transition-transform duration-150" />
+      <ChevronDown v-if="item.hasSubmenu && selected" class="w-4 h-4 ml-auto text-rail-foreground transition-transform duration-150" />
     </template>
 
     <!-- Collapsed Tooltip -->
     <div
       v-if="isCollapsed && isHovered"
-      class="absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded shadow-lg whitespace-nowrap z-50"
+      class="absolute left-full ml-2 px-2 py-1 bg-rail-active text-rail-foreground border border-rail-border text-xs rounded shadow-lg whitespace-nowrap z-50"
     >
       {{ item.label }}
       <span v-if="item.badge" class="ml-1 opacity-70">({{ item.badge }})</span>

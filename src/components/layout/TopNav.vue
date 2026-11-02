@@ -1,17 +1,17 @@
 <template>
-  <header class="h-[52px] bg-gray-950 border-b border-gray-800 flex items-center justify-between px-4 shrink-0 z-[60]">
+  <header class="h-[52px] bg-rail border-b border-rail-border flex items-center justify-between px-4 shrink-0 z-[60]">
     <!-- Left Cluster -->
     <div class="flex items-center gap-3 w-[202px]">
       <button
         @click="ui.toggleSidebar"
-        class="p-1.5 text-gray-400 hover:text-white rounded-lg hover:bg-gray-800 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-gray-400"
+        class="p-1.5 text-rail-muted-foreground hover:text-rail-foreground rounded-lg hover:bg-rail-active transition-colors outline-none focus-visible:ring-2 focus-visible:ring-rail-muted-foreground"
       >
         <Menu class="w-4.5 h-4.5" />
       </button>
       <div class="flex items-center gap-2">
         <img :src="logomarkColoredUrl" class="w-6 h-6 flex-shrink-0" alt="RakanSales Logomark" />
-        <span class="text-white font-bold text-base tracking-tight select-none">
-          <span class="text-[#23B750]">Rakan</span><span class="text-[#62D816]">Sales</span>
+        <span class="text-rail-foreground font-bold text-base tracking-tight select-none">
+          <span class="text-primary">Rakan</span><span class="text-brand-secondary">Sales</span>
         </span>
       </div>
     </div>
@@ -20,16 +20,16 @@
     <div class="flex-1 max-w-sm mx-4">
       <div class="relative group">
         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <Search class="h-3.5 w-3.5 text-gray-400" />
+          <Search class="h-3.5 w-3.5 text-rail-muted-foreground" />
         </div>
         <input
           ref="searchInput"
           type="text"
-          class="block w-full pl-9 pr-12 py-1.5 bg-gray-800 border-transparent rounded-full text-xs text-white placeholder-gray-400 focus:border-gray-600 focus:bg-gray-700 focus:ring-0 outline-none transition-colors"
+          class="block w-full pl-9 pr-12 py-1.5 bg-rail-active border border-transparent rounded-full text-xs text-rail-foreground placeholder:text-rail-muted-foreground focus:border-rail-border focus:bg-rail-active/80 outline-none transition-colors"
           placeholder="Search..."
         />
         <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-          <span class="text-[10px] text-gray-500 font-medium tracking-widest">{{ isMac ? '⌘K' : 'Ctrl+K' }}</span>
+          <span class="text-[10px] text-rail-muted-foreground font-medium tracking-widest">{{ isMac ? '⌘K' : 'Ctrl+K' }}</span>
         </div>
       </div>
     </div>
@@ -40,8 +40,8 @@
       <DropdownMenu v-model:open="isHelpDropdownOpen">
         <DropdownMenuTrigger as-child>
           <button
-            class="relative p-1.5 rounded-full transition-colors outline-none focus-visible:ring-2 focus-visible:ring-gray-400 cursor-pointer"
-            :class="isHelpDropdownOpen ? 'text-white bg-gray-800 ring-1 ring-gray-700' : 'text-gray-400 hover:text-white hover:bg-gray-800'"
+            class="relative p-1.5 rounded-full transition-colors outline-none focus-visible:ring-2 focus-visible:ring-rail-muted-foreground cursor-pointer"
+            :class="isHelpDropdownOpen ? 'text-rail-foreground bg-rail-active ring-1 ring-rail-border' : 'text-rail-muted-foreground hover:text-rail-foreground hover:bg-rail-active'"
             :title="`Help for ${pageContext.name}`"
             aria-label="Help and resources"
           >
@@ -52,17 +52,17 @@
         <DropdownMenuContent
           align="end"
           :side-offset="8"
-          class="w-72 bg-white border border-gray-200 text-gray-800 shadow-xl rounded-xl p-1.5 z-[70]"
+          class="w-72 bg-popover border border-border text-popover-foreground shadow-xl rounded-xl p-1.5 z-[70]"
         >
           <!-- Current Page Context Header -->
-          <div class="px-2.5 py-2 border-b border-gray-100 mb-1">
+          <div class="px-2.5 py-2 border-b border-border mb-1">
             <div class="flex items-center justify-between gap-1.5">
-              <span class="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Page Assistance</span>
-              <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-semibold">
+              <span class="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Page Assistance</span>
+              <span class="text-[10px] px-2 py-0.5 rounded-full bg-success/10 text-success border border-success/20 font-semibold">
                 {{ pageContext.name }}
               </span>
             </div>
-            <p class="text-[11px] text-gray-600 mt-1 line-clamp-2 leading-relaxed">
+            <p class="text-[11px] text-muted-foreground mt-1 line-clamp-2 leading-relaxed">
               {{ pageContext.summary }}
             </p>
           </div>
@@ -72,139 +72,150 @@
             <!-- 1. Open Wiki -->
             <DropdownMenuItem
               @click="handleOpenWiki"
-              class="flex items-start gap-2.5 px-2.5 py-2 rounded-lg cursor-pointer hover:bg-gray-50 focus:bg-gray-50 text-gray-800 transition-colors"
+              class="flex items-start gap-2.5 px-2.5 py-2 rounded-lg cursor-pointer hover:bg-muted focus:bg-muted text-popover-foreground transition-colors"
             >
-              <BookOpen class="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+              <BookOpen class="w-4 h-4 text-success shrink-0 mt-0.5" />
               <div class="flex-1 min-w-0">
                 <div class="flex items-center justify-between">
-                  <span class="text-xs font-semibold text-gray-900">Open Wiki</span>
-                  <ExternalLink class="w-3 h-3 text-gray-400" />
+                  <span class="text-xs font-semibold text-foreground">Open Wiki</span>
+                  <ExternalLink class="w-3 h-3 text-muted-foreground" />
                 </div>
-                <p class="text-[11px] text-gray-500">Browse general knowledge base & user guides</p>
+                <p class="text-[11px] text-muted-foreground">Browse general knowledge base & user guides</p>
               </div>
             </DropdownMenuItem>
 
             <!-- 2. How to use page -->
             <DropdownMenuItem
               @click="handleHowToUse"
-              class="flex items-start gap-2.5 px-2.5 py-2 rounded-lg cursor-pointer hover:bg-gray-50 focus:bg-gray-50 text-gray-800 transition-colors"
+              class="flex items-start gap-2.5 px-2.5 py-2 rounded-lg cursor-pointer hover:bg-muted focus:bg-muted text-popover-foreground transition-colors"
             >
-              <FileQuestion class="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
+              <FileQuestion class="w-4 h-4 text-info shrink-0 mt-0.5" />
               <div class="flex-1 min-w-0">
                 <div class="flex items-center justify-between">
-                  <span class="text-xs font-semibold text-gray-900">How to use page</span>
-                  <span class="text-[9px] px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 font-medium border border-blue-100">Article</span>
+                  <span class="text-xs font-semibold text-foreground">How to use page</span>
+                  <span class="text-[9px] px-1.5 py-0.5 rounded bg-info/10 text-info font-medium border border-info/20">Article</span>
                 </div>
-                <p class="text-[11px] text-gray-500">View quick article guide & walkthrough</p>
+                <p class="text-[11px] text-muted-foreground">View quick article guide & walkthrough</p>
               </div>
             </DropdownMenuItem>
 
             <!-- 3. Page Tour -->
             <DropdownMenuItem
               @click="handlePageTour"
-              class="flex items-start gap-2.5 px-2.5 py-2 rounded-lg cursor-pointer hover:bg-gray-50 focus:bg-gray-50 text-gray-800 transition-colors"
+              class="flex items-start gap-2.5 px-2.5 py-2 rounded-lg cursor-pointer hover:bg-muted focus:bg-muted text-popover-foreground transition-colors"
             >
-              <Compass class="w-4 h-4 text-purple-600 shrink-0 mt-0.5" />
+              <Compass class="w-4 h-4 text-tag-4-foreground shrink-0 mt-0.5" />
               <div class="flex-1 min-w-0">
                 <div class="flex items-center justify-between">
-                  <span class="text-xs font-semibold text-gray-900">Page Tour</span>
-                  <span class="text-[9px] px-1.5 py-0.5 rounded bg-purple-50 text-purple-700 font-medium border border-purple-100">Tour</span>
+                  <span class="text-xs font-semibold text-foreground">Page Tour</span>
+                  <span class="text-[9px] px-1.5 py-0.5 rounded bg-tag-4 text-tag-4-foreground font-medium border border-tag-4-foreground/20">Tour</span>
                 </div>
-                <p class="text-[11px] text-gray-500">Replay onboarding tour for this page</p>
+                <p class="text-[11px] text-muted-foreground">Replay onboarding tour for this page</p>
               </div>
             </DropdownMenuItem>
 
-            <DropdownMenuSeparator class="my-1 bg-gray-100" />
+            <DropdownMenuSeparator class="my-1 bg-border" />
 
             <!-- 4. Ask RakanAI -->
             <DropdownMenuItem
               @click="handleAskAI"
-              class="flex items-start gap-2.5 px-2.5 py-2 rounded-lg cursor-pointer hover:bg-emerald-50/70 focus:bg-emerald-50/70 text-emerald-950 transition-colors group"
+              class="flex items-start gap-2.5 px-2.5 py-2 rounded-lg cursor-pointer hover:bg-success/15 focus:bg-success/15 text-foreground transition-colors group"
             >
-              <Sparkles class="w-4 h-4 text-emerald-600 shrink-0 mt-0.5 group-hover:scale-110 transition-transform" />
+              <Sparkles class="w-4 h-4 text-success shrink-0 mt-0.5 group-hover:scale-110 transition-transform" />
               <div class="flex-1 min-w-0">
                 <div class="flex items-center justify-between">
-                  <span class="text-xs font-semibold text-emerald-800">Ask RakanAI</span>
-                  <span class="text-[9px] px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold border border-emerald-200">AI</span>
+                  <span class="text-xs font-semibold text-success">Ask RakanAI</span>
+                  <span class="text-[9px] px-1.5 py-0.5 rounded-full bg-success/20 text-success font-bold border border-success/30">AI</span>
                 </div>
-                <p class="text-[11px] text-gray-500">Ask questions relevant to this page</p>
+                <p class="text-[11px] text-muted-foreground">Ask questions relevant to this page</p>
               </div>
             </DropdownMenuItem>
           </div>
         </DropdownMenuContent>
       </DropdownMenu>
 
+      <!-- Theme Toggle Utility Button -->
+      <button
+        @click="theme.toggleTheme()"
+        class="relative p-1.5 rounded-full text-rail-muted-foreground hover:text-rail-foreground hover:bg-rail-active transition-colors outline-none focus-visible:ring-2 focus-visible:ring-rail-muted-foreground cursor-pointer"
+        :title="theme.isDark.value ? 'Switch to light mode' : 'Switch to dark mode'"
+        aria-label="Toggle theme"
+      >
+        <Sun v-if="theme.isDark.value" class="w-[18px] h-[18px]" />
+        <Moon v-else class="w-[18px] h-[18px]" />
+      </button>
+
       <!-- Notification Utility -->
-      <button class="relative p-1.5 text-gray-400 hover:text-white rounded-full hover:bg-gray-800 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-gray-400">
+      <button class="relative p-1.5 text-rail-muted-foreground hover:text-rail-foreground rounded-full hover:bg-rail-active transition-colors outline-none focus-visible:ring-2 focus-visible:ring-rail-muted-foreground">
         <Bell class="w-[18px] h-[18px]" />
-        <span class="absolute top-1 right-1 block w-1.5 h-1.5 rounded-full bg-primary ring-2 ring-gray-950"></span>
+        <span class="absolute top-1 right-1 block w-1.5 h-1.5 rounded-full bg-primary ring-2 ring-rail"></span>
       </button>
 
       <!-- User Profile -->
-      <button class="flex items-center gap-1.5 pl-1.5 pr-1 py-1 rounded-full hover:bg-gray-800 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-gray-400">
+      <button class="flex items-center gap-1.5 pl-1.5 pr-1 py-1 rounded-full hover:bg-rail-active transition-colors outline-none focus-visible:ring-2 focus-visible:ring-rail-muted-foreground">
         <div class="relative">
-          <div class="w-7 h-7 rounded-full bg-pink-200 text-pink-700 font-medium text-xs flex items-center justify-center">
+          <div class="w-7 h-7 rounded-full bg-primary/20 text-primary font-medium text-xs flex items-center justify-center">
             J
           </div>
-          <span class="absolute bottom-0 right-0 block w-2 h-2 rounded-full bg-primary ring-2 ring-gray-950"></span>
+          <span class="absolute bottom-0 right-0 block w-2 h-2 rounded-full bg-primary ring-2 ring-rail"></span>
         </div>
-        <ChevronDown class="w-3.5 h-3.5 text-gray-400" />
+        <ChevronDown class="w-3.5 h-3.5 text-rail-muted-foreground" />
       </button>
     </div>
 
     <!-- How To Use Modal Popup Dialog -->
     <Dialog :open="isHowToUseOpen" @update:open="isHowToUseOpen = $event">
-      <DialogContent class="max-w-md bg-white border border-gray-200 text-gray-900 p-6 rounded-2xl shadow-2xl z-[80]">
+      <DialogContent class="max-w-md bg-card border border-border text-foreground p-6 rounded-2xl shadow-2xl z-[80]">
         <DialogHeader>
           <div class="flex items-center gap-2 mb-1">
-            <span class="p-1.5 rounded-lg bg-blue-50 text-blue-600 border border-blue-100">
+            <span class="p-1.5 rounded-lg bg-info/10 text-info border border-info/20">
               <BookOpen class="w-4 h-4" />
             </span>
-            <span class="text-[10px] uppercase tracking-wider font-bold text-gray-500">Page Documentation</span>
+            <span class="text-[10px] uppercase tracking-wider font-bold text-muted-foreground">Page Documentation</span>
           </div>
-          <DialogTitle class="text-base font-bold text-gray-900 flex items-center justify-between">
+          <DialogTitle class="text-base font-bold text-foreground flex items-center justify-between">
             <span>How to use {{ pageContext.name }}</span>
           </DialogTitle>
-          <DialogDescription class="text-xs text-gray-500">
+          <DialogDescription class="text-xs text-muted-foreground">
             Guide and key actions for the {{ pageContext.name }} workspace.
           </DialogDescription>
         </DialogHeader>
 
         <div class="space-y-3.5 my-2">
           <!-- Overview Card -->
-          <div class="p-3 bg-gray-50 rounded-xl border border-gray-200/80 text-xs text-gray-700 leading-relaxed">
+          <div class="p-3 bg-muted/50 rounded-xl border border-border text-xs text-muted-foreground leading-relaxed">
             {{ pageContext.articleOverview }}
           </div>
 
           <!-- Key Highlights -->
           <div>
-            <h4 class="text-xs font-semibold text-gray-900 uppercase tracking-wide mb-2">Key Highlights</h4>
-            <ul class="space-y-1.5 text-xs text-gray-600">
+            <h4 class="text-xs font-semibold text-foreground uppercase tracking-wide mb-2">Key Highlights</h4>
+            <ul class="space-y-1.5 text-xs text-muted-foreground">
               <li v-for="(tip, i) in pageContext.tips" :key="i" class="flex items-start gap-2">
-                <span class="text-emerald-600 font-bold mt-0.5 text-xs">✓</span>
-                <span class="text-gray-700">{{ tip }}</span>
+                <span class="text-success font-bold mt-0.5 text-xs">✓</span>
+                <span class="text-foreground">{{ tip }}</span>
               </li>
             </ul>
           </div>
 
           <!-- Prototype Notice -->
-          <div class="p-2.5 bg-blue-50/70 border border-blue-100 rounded-lg flex items-center gap-2 text-[11px] text-blue-700">
-            <Sparkles class="w-3.5 h-3.5 text-blue-600 shrink-0" />
+          <div class="p-2.5 bg-info/10 border border-info/20 rounded-lg flex items-center gap-2 text-[11px] text-info">
+            <Sparkles class="w-3.5 h-3.5 text-info shrink-0" />
             <span>Interactive prototype. Real documentation is synced with your RakanSales Wiki.</span>
           </div>
         </div>
 
-        <DialogFooter class="flex sm:justify-between items-center gap-2 pt-3 border-t border-gray-100 mt-2">
+        <DialogFooter class="flex sm:justify-between items-center gap-2 pt-3 border-t border-border mt-2">
           <button
             @click="openWikiFromModal"
-            class="inline-flex items-center gap-1.5 text-xs text-emerald-600 hover:text-emerald-700 font-medium transition-colors cursor-pointer"
+            class="inline-flex items-center gap-1.5 text-xs text-success hover:text-success/90 font-medium transition-colors cursor-pointer"
           >
             <span>Open directly in Wiki</span>
             <ExternalLink class="w-3.5 h-3.5" />
           </button>
           <button
             @click="isHowToUseOpen = false"
-            class="px-4 py-1.5 bg-gray-900 hover:bg-gray-800 text-white rounded-lg text-xs font-medium transition-colors cursor-pointer"
+            class="px-4 py-1.5 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg text-xs font-medium transition-colors cursor-pointer"
           >
             Got it
           </button>
@@ -228,7 +239,10 @@ import {
   FileQuestion,
   Compass,
   Sparkles,
+  Sun,
+  Moon,
 } from 'lucide-vue-next';
+import { useTheme } from '@/composables/useTheme';
 import { useUIStore } from '@/stores/ui';
 import logomarkColoredUrl from '@/assets/logo/RKS Logomark 01.svg';
 import {
@@ -248,6 +262,7 @@ import {
 } from '@/components/ui/dialog';
 import { toast } from 'vue-sonner';
 
+const theme = useTheme();
 const ui = useUIStore();
 const route = useRoute();
 const searchInput = ref<HTMLInputElement | null>(null);
