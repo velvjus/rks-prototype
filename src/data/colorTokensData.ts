@@ -64,14 +64,14 @@ export const SEMANTIC_TOKENS: SemanticTokenSpec[] = [
     lightOklch: 'oklch(0.984 0.003 247.858)',
     lightHex: '#F8FAFC', /* audit-ignore */
     lightForegroundOklch: 'oklch(0.208 0.042 265.755)',
-    darkOklch: 'oklch(0.129 0.042 264.695)',
-    darkHex: '#020617', /* audit-ignore */
-    darkForegroundOklch: 'oklch(0.984 0.003 247.858)',
+    darkOklch: 'oklch(0.141 0.005 285.823)',
+    darkHex: '#09090B', /* audit-ignore */
+    darkForegroundOklch: 'oklch(0.985 0 0)',
     contrastLight: '17.1:1 AAA',
     contrastDark: '19.4:1 AAA',
     tailwindMatchLight: 'Slate 50',
-    tailwindMatchDark: 'Slate 950',
-    usage: 'Primary workspace canvas (#F8FAFC in light mode) and scrollable route background.'
+    tailwindMatchDark: 'Zinc 950',
+    usage: 'Primary workspace canvas (#F8FAFC Slate 50 in light mode, #09090B Zinc 950 in dark mode).'
   },
   {
     id: 'foreground',
@@ -85,13 +85,13 @@ export const SEMANTIC_TOKENS: SemanticTokenSpec[] = [
     lightOklch: 'oklch(0.208 0.042 265.755)',
     lightHex: '#0F172A', /* audit-ignore */
     lightForegroundOklch: 'oklch(0.984 0.003 247.858)',
-    darkOklch: 'oklch(0.984 0.003 247.858)',
-    darkHex: '#F8FAFC', /* audit-ignore */
-    darkForegroundOklch: 'oklch(0.129 0.042 264.695)',
+    darkOklch: 'oklch(0.985 0 0)',
+    darkHex: '#FAFAFA', /* audit-ignore */
+    darkForegroundOklch: 'oklch(0.141 0.005 285.823)',
     contrastLight: '17.1:1 AAA',
     contrastDark: '19.4:1 AAA',
     tailwindMatchLight: 'Slate 900',
-    tailwindMatchDark: 'Slate 50',
+    tailwindMatchDark: 'Zinc 50',
     usage: 'Headings, primary body copy, active table cells, and high-emphasis data.'
   },
   {
@@ -106,14 +106,14 @@ export const SEMANTIC_TOKENS: SemanticTokenSpec[] = [
     lightOklch: 'oklch(1 0 0)',
     lightHex: '#FFFFFF', /* audit-ignore */
     lightForegroundOklch: 'oklch(0.208 0.042 265.755)',
-    darkOklch: 'oklch(0.208 0.042 265.755)',
-    darkHex: '#0F172A', /* audit-ignore */
-    darkForegroundOklch: 'oklch(0.984 0.003 247.858)',
+    darkOklch: 'oklch(0.21 0.006 285.885)',
+    darkHex: '#18181B', /* audit-ignore */
+    darkForegroundOklch: 'oklch(0.985 0 0)',
     contrastLight: '18.1:1 AAA',
     contrastDark: '17.1:1 AAA',
     tailwindMatchLight: 'White',
-    tailwindMatchDark: 'Slate 900',
-    usage: 'KPI cards, Kanban deal cards, data tables, and elevated containers over Slate 50 canvas.'
+    tailwindMatchDark: 'Zinc 900',
+    usage: 'KPI cards, Kanban deal cards, data tables, and elevated containers.'
   },
   {
     id: 'popover',
@@ -127,13 +127,13 @@ export const SEMANTIC_TOKENS: SemanticTokenSpec[] = [
     lightOklch: 'oklch(1 0 0)',
     lightHex: '#FFFFFF', /* audit-ignore */
     lightForegroundOklch: 'oklch(0.208 0.042 265.755)',
-    darkOklch: 'oklch(0.208 0.042 265.755)',
-    darkHex: '#0F172A', /* audit-ignore */
-    darkForegroundOklch: 'oklch(0.984 0.003 247.858)',
+    darkOklch: 'oklch(0.21 0.006 285.885)',
+    darkHex: '#18181B', /* audit-ignore */
+    darkForegroundOklch: 'oklch(0.985 0 0)',
     contrastLight: '18.1:1 AAA',
     contrastDark: '17.1:1 AAA',
     tailwindMatchLight: 'White',
-    tailwindMatchDark: 'Slate 900',
+    tailwindMatchDark: 'Zinc 900',
     usage: 'Floating dropdown menus, select lists, date pickers, dialogs, and command palettes.'
   },
   {
@@ -148,13 +148,13 @@ export const SEMANTIC_TOKENS: SemanticTokenSpec[] = [
     lightOklch: 'oklch(0.968 0.007 247.896)',
     lightHex: '#F1F5F9', /* audit-ignore */
     lightForegroundOklch: 'oklch(0.554 0.046 257.417)',
-    darkOklch: 'oklch(0.279 0.041 260.031)',
-    darkHex: '#1E293B', /* audit-ignore */
-    darkForegroundOklch: 'oklch(0.704 0.04 256.788)',
+    darkOklch: 'oklch(0.274 0.006 286.033)',
+    darkHex: '#27272A', /* audit-ignore */
+    darkForegroundOklch: 'oklch(0.705 0.015 286.067)',
     contrastLight: '4.6:1 AA',
     contrastDark: '5.2:1 AA',
     tailwindMatchLight: 'Slate 100',
-    tailwindMatchDark: 'Slate 800',
+    tailwindMatchDark: 'Zinc 800',
     usage: 'Table header rows, recessed wells, inactive tab tracks, code blocks, and skeleton loaders.'
   },
   {
@@ -169,13 +169,13 @@ export const SEMANTIC_TOKENS: SemanticTokenSpec[] = [
     lightOklch: 'oklch(0.554 0.046 257.417)',
     lightHex: '#64748B', /* audit-ignore */
     lightForegroundOklch: 'oklch(0.984 0.003 247.858)',
-    darkOklch: 'oklch(0.704 0.04 256.788)',
-    darkHex: '#94A3B8', /* audit-ignore */
-    darkForegroundOklch: 'oklch(0.129 0.042 264.695)',
+    darkOklch: 'oklch(0.705 0.015 286.067)',
+    darkHex: '#A1A1AA', /* audit-ignore */
+    darkForegroundOklch: 'oklch(0.141 0.005 285.823)',
     contrastLight: '4.8:1 AA',
     contrastDark: '7.6:1 AAA',
     tailwindMatchLight: 'Slate 500',
-    tailwindMatchDark: 'Slate 400',
+    tailwindMatchDark: 'Zinc 400',
     usage: 'Subtitles, timestamps, field descriptions, empty-state captions, and table column labels.'
   },
   {
@@ -190,13 +190,13 @@ export const SEMANTIC_TOKENS: SemanticTokenSpec[] = [
     lightOklch: 'oklch(0.968 0.007 247.896)',
     lightHex: '#F1F5F9', /* audit-ignore */
     lightForegroundOklch: 'oklch(0.208 0.042 265.755)',
-    darkOklch: 'oklch(0.279 0.041 260.031)',
-    darkHex: '#1E293B', /* audit-ignore */
-    darkForegroundOklch: 'oklch(0.984 0.003 247.858)',
+    darkOklch: 'oklch(0.274 0.006 286.033)',
+    darkHex: '#27272A', /* audit-ignore */
+    darkForegroundOklch: 'oklch(0.985 0 0)',
     contrastLight: '16.4:1 AAA',
     contrastDark: '12.6:1 AAA',
     tailwindMatchLight: 'Slate 100',
-    tailwindMatchDark: 'Slate 800',
+    tailwindMatchDark: 'Zinc 800',
     usage: 'Hover states on ghost buttons, dropdown menu items, and selectable table rows.'
   },
   {
@@ -211,13 +211,13 @@ export const SEMANTIC_TOKENS: SemanticTokenSpec[] = [
     lightOklch: 'oklch(0.929 0.013 255.508)',
     lightHex: '#E2E8F0', /* audit-ignore */
     lightForegroundOklch: 'oklch(0.208 0.042 265.755)',
-    darkOklch: 'oklch(0.279 0.041 260.031)',
-    darkHex: '#1E293B', /* audit-ignore */
-    darkForegroundOklch: 'oklch(0.984 0.003 247.858)',
+    darkOklch: 'oklch(0.274 0.006 286.033)',
+    darkHex: '#27272A', /* audit-ignore */
+    darkForegroundOklch: 'oklch(0.985 0 0)',
     contrastLight: '1.2:1 Hairline',
     contrastDark: '1.3:1 Hairline',
     tailwindMatchLight: 'Slate 200',
-    tailwindMatchDark: 'Slate 800',
+    tailwindMatchDark: 'Zinc 800',
     usage: '1px card boundaries, section dividers, table row separators, and panel splits.'
   },
   {
@@ -232,13 +232,13 @@ export const SEMANTIC_TOKENS: SemanticTokenSpec[] = [
     lightOklch: 'oklch(0.929 0.013 255.508)',
     lightHex: '#E2E8F0', /* audit-ignore */
     lightForegroundOklch: 'oklch(0.208 0.042 265.755)',
-    darkOklch: 'oklch(0.279 0.041 260.031)',
-    darkHex: '#1E293B', /* audit-ignore */
-    darkForegroundOklch: 'oklch(0.984 0.003 247.858)',
+    darkOklch: 'oklch(0.274 0.006 286.033)',
+    darkHex: '#27272A', /* audit-ignore */
+    darkForegroundOklch: 'oklch(0.985 0 0)',
     contrastLight: '1.2:1 Control',
     contrastDark: '1.3:1 Control',
     tailwindMatchLight: 'Slate 200',
-    tailwindMatchDark: 'Slate 800',
+    tailwindMatchDark: 'Zinc 800',
     usage: 'Text inputs, select triggers, checkboxes, comboboxes, and search bars.'
   },
   {
@@ -253,13 +253,13 @@ export const SEMANTIC_TOKENS: SemanticTokenSpec[] = [
     lightOklch: 'oklch(0.704 0.04 256.788)',
     lightHex: '#94A3B8', /* audit-ignore */
     lightForegroundOklch: 'oklch(0.208 0.042 265.755)',
-    darkOklch: 'oklch(0.554 0.046 257.417)',
-    darkHex: '#64748B', /* audit-ignore */
-    darkForegroundOklch: 'oklch(0.984 0.003 247.858)',
+    darkOklch: 'oklch(0.552 0.016 285.938)',
+    darkHex: '#71717A', /* audit-ignore */
+    darkForegroundOklch: 'oklch(0.985 0 0)',
     contrastLight: '3.1:1 UI',
     contrastDark: '3.9:1 UI',
     tailwindMatchLight: 'Slate 400',
-    tailwindMatchDark: 'Slate 500',
+    tailwindMatchDark: 'Zinc 500',
     usage: 'Accessible focus-visible outlines on interactive buttons, inputs, and dialogs.'
   },
 
@@ -350,7 +350,7 @@ export const SEMANTIC_TOKENS: SemanticTokenSpec[] = [
   },
   {
     id: 'secondary',
-    name: 'Secondary Slate Action',
+    name: 'Secondary Neutral Action',
     cssVar: '--secondary',
     category: 'brand',
     twBgClass: 'bg-secondary',
@@ -360,13 +360,13 @@ export const SEMANTIC_TOKENS: SemanticTokenSpec[] = [
     lightOklch: 'oklch(0.968 0.007 247.896)',
     lightHex: '#F1F5F9', /* audit-ignore */
     lightForegroundOklch: 'oklch(0.208 0.042 265.755)',
-    darkOklch: 'oklch(0.279 0.041 260.031)',
-    darkHex: '#1E293B', /* audit-ignore */
-    darkForegroundOklch: 'oklch(0.984 0.003 247.858)',
+    darkOklch: 'oklch(0.274 0.006 286.033)',
+    darkHex: '#27272A', /* audit-ignore */
+    darkForegroundOklch: 'oklch(0.985 0 0)',
     contrastLight: '16.4:1 AAA',
     contrastDark: '12.6:1 AAA',
     tailwindMatchLight: 'Slate 100',
-    tailwindMatchDark: 'Slate 800',
+    tailwindMatchDark: 'Zinc 800',
     usage: 'Secondary action buttons, filter pills, neutral chips, and cancel actions.'
   },
 
@@ -469,14 +469,14 @@ export const SEMANTIC_TOKENS: SemanticTokenSpec[] = [
     lightOklch: 'oklch(0.129 0.042 264.695)',
     lightHex: '#020617', /* audit-ignore */
     lightForegroundOklch: 'oklch(0.984 0.003 247.858)',
-    darkOklch: 'oklch(0.129 0.042 264.695)',
-    darkHex: '#020617', /* audit-ignore */
-    darkForegroundOklch: 'oklch(0.984 0.003 247.858)',
+    darkOklch: 'oklch(0.141 0.005 285.823)',
+    darkHex: '#09090B', /* audit-ignore */
+    darkForegroundOklch: 'oklch(0.985 0 0)',
     contrastLight: '19.4:1 AAA',
     contrastDark: '19.4:1 AAA',
     tailwindMatchLight: 'Slate 950',
-    tailwindMatchDark: 'Slate 950',
-    usage: 'Invariant dark primary navigation rail (Sidebar.vue) and top header bar (TopNav.vue) in both light and dark modes.'
+    tailwindMatchDark: 'Zinc 950',
+    usage: 'Dark primary navigation rail (Sidebar.vue) and top header bar (TopNav.vue).'
   },
   {
     id: 'rail-active',
@@ -490,13 +490,13 @@ export const SEMANTIC_TOKENS: SemanticTokenSpec[] = [
     lightOklch: 'oklch(0.279 0.041 260.031)',
     lightHex: '#1E293B', /* audit-ignore */
     lightForegroundOklch: 'oklch(0.984 0.003 247.858)',
-    darkOklch: 'oklch(0.279 0.041 260.031)',
-    darkHex: '#1E293B', /* audit-ignore */
-    darkForegroundOklch: 'oklch(0.984 0.003 247.858)',
+    darkOklch: 'oklch(0.274 0.006 286.033)',
+    darkHex: '#27272A', /* audit-ignore */
+    darkForegroundOklch: 'oklch(0.985 0 0)',
     contrastLight: '12.6:1 AAA',
     contrastDark: '12.6:1 AAA',
     tailwindMatchLight: 'Slate 800',
-    tailwindMatchDark: 'Slate 800',
+    tailwindMatchDark: 'Zinc 800',
     usage: 'Selected and hovered module icon button inside the dark outer rail and top header bar.'
   },
   {
@@ -508,16 +508,16 @@ export const SEMANTIC_TOKENS: SemanticTokenSpec[] = [
     twTextClass: 'text-rail-muted-foreground',
     twBorderClass: 'border-rail-border',
     pairedForegroundVar: '--rail',
-    lightOklch: 'oklch(0.704 0.04 256.788)',
-    lightHex: '#94A3B8', /* audit-ignore */
+    lightOklch: 'oklch(0.869 0.022 252.894)',
+    lightHex: '#CBD5E1', /* audit-ignore */
     lightForegroundOklch: 'oklch(0.129 0.042 264.695)',
-    darkOklch: 'oklch(0.704 0.04 256.788)',
-    darkHex: '#94A3B8', /* audit-ignore */
-    darkForegroundOklch: 'oklch(0.129 0.042 264.695)',
-    contrastLight: '7.6:1 AAA',
-    contrastDark: '7.6:1 AAA',
-    tailwindMatchLight: 'Slate 400',
-    tailwindMatchDark: 'Slate 400',
+    darkOklch: 'oklch(0.871 0.006 286.286)',
+    darkHex: '#D4D4D8', /* audit-ignore */
+    darkForegroundOklch: 'oklch(0.141 0.005 285.823)',
+    contrastLight: '11.4:1 AAA',
+    contrastDark: '11.4:1 AAA',
+    tailwindMatchLight: 'Slate 300',
+    tailwindMatchDark: 'Zinc 300',
     usage: 'Unselected navigation icons and collapsed tooltips on the outer rail and top header bar.'
   },
   {
@@ -532,13 +532,13 @@ export const SEMANTIC_TOKENS: SemanticTokenSpec[] = [
     lightOklch: 'oklch(0.279 0.041 260.031)',
     lightHex: '#1E293B', /* audit-ignore */
     lightForegroundOklch: 'oklch(0.984 0.003 247.858)',
-    darkOklch: 'oklch(0.279 0.041 260.031)',
-    darkHex: '#1E293B', /* audit-ignore */
-    darkForegroundOklch: 'oklch(0.984 0.003 247.858)',
+    darkOklch: 'oklch(0.274 0.006 286.033)',
+    darkHex: '#27272A', /* audit-ignore */
+    darkForegroundOklch: 'oklch(0.985 0 0)',
     contrastLight: '1.4:1 Divider',
     contrastDark: '1.4:1 Divider',
     tailwindMatchLight: 'Slate 800',
-    tailwindMatchDark: 'Slate 800',
+    tailwindMatchDark: 'Zinc 800',
     usage: 'Subtle horizontal and vertical borders inside the dark outer rail and top header bar.'
   },
   {
@@ -550,16 +550,16 @@ export const SEMANTIC_TOKENS: SemanticTokenSpec[] = [
     twTextClass: 'text-sidebar-foreground',
     twBorderClass: 'border-sidebar-border',
     pairedForegroundVar: '--sidebar-foreground',
-    lightOklch: 'oklch(0.984 0.003 247.858)',
-    lightHex: '#F8FAFC', /* audit-ignore */
-    lightForegroundOklch: 'oklch(0.208 0.042 265.755)',
-    darkOklch: 'oklch(0.208 0.042 265.755)',
-    darkHex: '#0F172A', /* audit-ignore */
-    darkForegroundOklch: 'oklch(0.984 0.003 247.858)',
-    contrastLight: '17.1:1 AAA',
-    contrastDark: '17.1:1 AAA',
-    tailwindMatchLight: 'Slate 50',
-    tailwindMatchDark: 'Slate 900',
+    lightOklch: 'oklch(0.129 0.042 264.695)',
+    lightHex: '#020617', /* audit-ignore */
+    lightForegroundOklch: 'oklch(0.984 0.003 247.858)',
+    darkOklch: 'oklch(0.141 0.005 285.823)',
+    darkHex: '#09090B', /* audit-ignore */
+    darkForegroundOklch: 'oklch(0.985 0 0)',
+    contrastLight: '19.4:1 AAA',
+    contrastDark: '19.4:1 AAA',
+    tailwindMatchLight: 'Slate 950',
+    tailwindMatchDark: 'Zinc 950',
     usage: 'Inner 240px contextual panel (SecondaryPanel.vue) for sub-routes and inbox folders.'
   },
   {
@@ -576,7 +576,7 @@ export const SEMANTIC_TOKENS: SemanticTokenSpec[] = [
     lightForegroundOklch: 'oklch(0.982 0.018 155.826)',
     darkOklch: 'oklch(0.723 0.219 149.579)',
     darkHex: '#22C55E', /* audit-ignore */
-    darkForegroundOklch: 'oklch(0.208 0.042 265.755)',
+    darkForegroundOklch: 'oklch(0.21 0.034 264.665)',
     contrastLight: '4.5:1 AA',
     contrastDark: '8.9:1 AAA',
     tailwindMatchLight: 'Green 600',
@@ -592,16 +592,16 @@ export const SEMANTIC_TOKENS: SemanticTokenSpec[] = [
     twTextClass: 'text-sidebar-accent-foreground',
     twBorderClass: 'border-sidebar-border',
     pairedForegroundVar: '--sidebar-accent-foreground',
-    lightOklch: 'oklch(0.968 0.007 247.896)',
-    lightHex: '#F1F5F9', /* audit-ignore */
-    lightForegroundOklch: 'oklch(0.208 0.042 265.755)',
-    darkOklch: 'oklch(0.279 0.041 260.031)',
-    darkHex: '#1E293B', /* audit-ignore */
-    darkForegroundOklch: 'oklch(0.984 0.003 247.858)',
-    contrastLight: '16.4:1 AAA',
+    lightOklch: 'oklch(0.279 0.041 260.031)',
+    lightHex: '#1E293B', /* audit-ignore */
+    lightForegroundOklch: 'oklch(0.984 0.003 247.858)',
+    darkOklch: 'oklch(0.274 0.006 286.033)',
+    darkHex: '#27272A', /* audit-ignore */
+    darkForegroundOklch: 'oklch(0.985 0 0)',
+    contrastLight: '12.6:1 AAA',
     contrastDark: '12.6:1 AAA',
-    tailwindMatchLight: 'Slate 100',
-    tailwindMatchDark: 'Slate 800',
+    tailwindMatchLight: 'Slate 800',
+    tailwindMatchDark: 'Zinc 800',
     usage: 'Hovered sub-menu item background inside SecondaryPanel.'
   },
 
@@ -1251,20 +1251,20 @@ export const TAILWIND_V4_PALETTE: TailwindColorFamily[] = [
     name: 'Slate',
     slug: 'slate',
     group: 'Neutral & Slate',
-    description: 'Primary RakanSales surface & structural blue-tinted gray scale — powers --background (#f8fafc), --foreground, --card, --muted, --border, --sidebar, and --rail.',
+    description: 'Light Mode (:root) primary RakanSales surface & structural scale — powers --background (#f8fafc), --foreground, --muted, --border, --sidebar, and --rail in Light Mode.',
     isSystemFamily: true,
     shades: [
-      { step: '50', oklch: 'oklch(0.984 0.003 247.858)', hex: '#f8fafc', systemTokenMatch: '--background (:root) / --foreground (.dark) / --sidebar (:root)' }, /* audit-ignore */
+      { step: '50', oklch: 'oklch(0.984 0.003 247.858)', hex: '#f8fafc', systemTokenMatch: '--background (:root) / --rail-foreground (:root)' }, /* audit-ignore */
       { step: '100', oklch: 'oklch(0.968 0.007 247.896)', hex: '#f1f5f9', systemTokenMatch: '--muted (:root) / --accent (:root) / --secondary (:root)' }, /* audit-ignore */
       { step: '200', oklch: 'oklch(0.929 0.013 255.508)', hex: '#e2e8f0', systemTokenMatch: '--border (:root) / --input (:root)' }, /* audit-ignore */
-      { step: '300', oklch: 'oklch(0.869 0.022 252.894)', hex: '#cbd5e1' }, /* audit-ignore */
-      { step: '400', oklch: 'oklch(0.704 0.04 256.788)', hex: '#94a3b8', systemTokenMatch: '--ring (:root) / --muted-foreground (.dark)' }, /* audit-ignore */
-      { step: '500', oklch: 'oklch(0.554 0.046 257.417)', hex: '#64748b', systemTokenMatch: '--muted-foreground (:root) / --ring (.dark)' }, /* audit-ignore */
+      { step: '300', oklch: 'oklch(0.869 0.022 252.894)', hex: '#cbd5e1', systemTokenMatch: '--rail-muted-foreground (:root)' }, /* audit-ignore */
+      { step: '400', oklch: 'oklch(0.704 0.04 256.788)', hex: '#94a3b8', systemTokenMatch: '--ring (:root)' }, /* audit-ignore */
+      { step: '500', oklch: 'oklch(0.554 0.046 257.417)', hex: '#64748b', systemTokenMatch: '--muted-foreground (:root)' }, /* audit-ignore */
       { step: '600', oklch: 'oklch(0.446 0.043 257.281)', hex: '#475569' }, /* audit-ignore */
       { step: '700', oklch: 'oklch(0.372 0.044 257.287)', hex: '#334155' }, /* audit-ignore */
-      { step: '800', oklch: 'oklch(0.279 0.041 260.031)', hex: '#1e293b', systemTokenMatch: '--muted (.dark) / --border (.dark) / --rail-active' }, /* audit-ignore */
-      { step: '900', oklch: 'oklch(0.208 0.042 265.755)', hex: '#0f172a', systemTokenMatch: '--foreground (:root) / --card (.dark) / --sidebar (.dark)' }, /* audit-ignore */
-      { step: '950', oklch: 'oklch(0.129 0.042 264.695)', hex: '#020617', systemTokenMatch: '--background (.dark) / --rail (:root & .dark)' }, /* audit-ignore */
+      { step: '800', oklch: 'oklch(0.279 0.041 260.031)', hex: '#1e293b', systemTokenMatch: '--rail-active (:root) / --rail-border (:root)' }, /* audit-ignore */
+      { step: '900', oklch: 'oklch(0.208 0.042 265.755)', hex: '#0f172a', systemTokenMatch: '--foreground (:root)' }, /* audit-ignore */
+      { step: '950', oklch: 'oklch(0.129 0.042 264.695)', hex: '#020617', systemTokenMatch: '--rail (:root) / --sidebar (:root)' }, /* audit-ignore */
     ]
   },
   {
@@ -1309,19 +1309,20 @@ export const TAILWIND_V4_PALETTE: TailwindColorFamily[] = [
     name: 'Zinc',
     slug: 'zinc',
     group: 'Neutral & Slate',
-    description: 'Cool industrial metallic gray.',
+    description: 'Dark Mode (.dark) primary RakanSales surface & structural scale — powers --background (#09090b), --foreground, --card, --muted, --border, --sidebar, and --rail in Dark Mode.',
+    isSystemFamily: true,
     shades: [
-      { step: '50', oklch: 'oklch(0.985 0 0)', hex: '#fafafa' }, /* audit-ignore */
+      { step: '50', oklch: 'oklch(0.985 0 0)', hex: '#fafafa', systemTokenMatch: '--foreground (.dark) / --rail-foreground (.dark)' }, /* audit-ignore */
       { step: '100', oklch: 'oklch(0.967 0.001 286.375)', hex: '#f4f4f5' }, /* audit-ignore */
       { step: '200', oklch: 'oklch(0.92 0.004 286.32)', hex: '#e4e4e7' }, /* audit-ignore */
-      { step: '300', oklch: 'oklch(0.871 0.006 286.286)', hex: '#d4d4d8' }, /* audit-ignore */
-      { step: '400', oklch: 'oklch(0.705 0.015 286.067)', hex: '#a1a1aa' }, /* audit-ignore */
-      { step: '500', oklch: 'oklch(0.552 0.016 285.938)', hex: '#71717a' }, /* audit-ignore */
+      { step: '300', oklch: 'oklch(0.871 0.006 286.286)', hex: '#d4d4d8', systemTokenMatch: '--rail-muted-foreground (.dark)' }, /* audit-ignore */
+      { step: '400', oklch: 'oklch(0.705 0.015 286.067)', hex: '#a1a1aa', systemTokenMatch: '--muted-foreground (.dark)' }, /* audit-ignore */
+      { step: '500', oklch: 'oklch(0.552 0.016 285.938)', hex: '#71717a', systemTokenMatch: '--ring (.dark)' }, /* audit-ignore */
       { step: '600', oklch: 'oklch(0.442 0.017 285.786)', hex: '#52525b' }, /* audit-ignore */
       { step: '700', oklch: 'oklch(0.37 0.013 285.805)', hex: '#3f3f46' }, /* audit-ignore */
-      { step: '800', oklch: 'oklch(0.274 0.006 286.033)', hex: '#27272a' }, /* audit-ignore */
-      { step: '900', oklch: 'oklch(0.21 0.006 285.885)', hex: '#18181b' }, /* audit-ignore */
-      { step: '950', oklch: 'oklch(0.141 0.005 285.823)', hex: '#09090b' }, /* audit-ignore */
+      { step: '800', oklch: 'oklch(0.274 0.006 286.033)', hex: '#27272a', systemTokenMatch: '--muted (.dark) / --border (.dark) / --rail-active (.dark)' }, /* audit-ignore */
+      { step: '900', oklch: 'oklch(0.21 0.006 285.885)', hex: '#18181b', systemTokenMatch: '--card (.dark) / --popover (.dark)' }, /* audit-ignore */
+      { step: '950', oklch: 'oklch(0.141 0.005 285.823)', hex: '#09090b', systemTokenMatch: '--background (.dark) / --rail (.dark) / --sidebar (.dark)' }, /* audit-ignore */
     ]
   },
   {

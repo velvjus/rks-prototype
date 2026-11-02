@@ -781,33 +781,33 @@ const spacingScale = [
           <!-- Simulated Dark Mode Preview Card -->
           <div
             class="rounded-xl border border-border p-4 space-y-3 shadow-soft"
-            :style="{ backgroundColor: 'oklch(0.129 0.042 264.695)', color: 'oklch(0.984 0.003 247.858)' }"
+            :style="{ backgroundColor: 'oklch(0.141 0.005 285.823)', color: 'oklch(0.985 0 0)' }"
           >
-            <div class="flex items-center justify-between border-b pb-2.5" :style="{ borderColor: 'oklch(0.279 0.041 260.031)' }">
+            <div class="flex items-center justify-between border-b pb-2.5" :style="{ borderColor: 'oklch(0.274 0.006 286.033)' }">
               <div class="flex items-center gap-2">
                 <Moon class="size-4" :style="{ color: 'oklch(0.68 0.16 250)' }" />
                 <span class="text-xs font-bold">Dark Mode Surface Preview (<code class="font-mono">.dark</code>)</span>
               </div>
               <span
                 class="px-2 py-0.5 rounded text-[10px] font-mono font-semibold"
-                :style="{ backgroundColor: 'oklch(0.279 0.041 260.031)', color: 'oklch(0.704 0.04 256.788)' }"
+                :style="{ backgroundColor: 'oklch(0.274 0.006 286.033)', color: 'oklch(0.705 0.015 286.067)' }"
               >
-                --background: #020617 (Slate 950)
+                --background: #09090B (Zinc 950)
               </span>
             </div>
 
             <div class="grid grid-cols-3 gap-2.5">
-              <div class="p-2.5 rounded-lg border" :style="{ backgroundColor: 'oklch(0.208 0.042 265.755)', borderColor: 'oklch(0.279 0.041 260.031)' }">
-                <div class="text-[10px]" :style="{ color: 'oklch(0.704 0.04 256.788)' }">Monthly Pipeline</div>
+              <div class="p-2.5 rounded-lg border" :style="{ backgroundColor: 'oklch(0.21 0.006 285.885)', borderColor: 'oklch(0.274 0.006 286.033)' }">
+                <div class="text-[10px]" :style="{ color: 'oklch(0.705 0.015 286.067)' }">Monthly Pipeline</div>
                 <div class="text-sm font-bold font-mono mt-0.5">RM 428,000</div>
               </div>
               <div class="p-2.5 rounded-lg" :style="{ backgroundColor: 'oklch(0.65 0.18 149.2)', color: 'oklch(0.982 0.018 155.826)' }">
                 <div class="text-[10px] opacity-85">Primary Action (--brand)</div>
                 <div class="text-xs font-bold font-mono mt-0.5">Green 500 (4.6:1)</div>
               </div>
-              <div class="p-2.5 rounded-lg" :style="{ backgroundColor: 'oklch(0.129 0.042 264.695)', color: 'oklch(0.984 0.003 247.858)' }">
+              <div class="p-2.5 rounded-lg" :style="{ backgroundColor: 'oklch(0.141 0.005 285.823)', color: 'oklch(0.985 0 0)' }">
                 <div class="text-[10px] opacity-75">Rail &amp; TopNav</div>
-                <div class="text-xs font-bold font-mono mt-0.5">Slate 950 (--rail)</div>
+                <div class="text-xs font-bold font-mono mt-0.5">Zinc 950 (--rail)</div>
               </div>
             </div>
           </div>
