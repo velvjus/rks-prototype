@@ -68,7 +68,11 @@ import {
   Info,
   Clock,
   CheckCircle,
-  AlertCircle
+  AlertCircle,
+  Upload,
+  FileSpreadsheet,
+  ArrowRight,
+  ArrowLeft
 } from 'lucide-vue-next'
 
 // --- Core Data State ---
@@ -236,8 +240,13 @@ const filteredAndSortedContacts = computed(() => {
     return matchesSearch && matchesStatus && matchesLifecycle && matchesCompany && matchesRole
   })
 
-  // 2. Sorting
+  // 2. Sorting (keep newly imported contacts at the very top so they are immediately visible)
   result.sort((a, b) => {
+    const aImported = a.id.startsWith('IMP-')
+    const bImported = b.id.startsWith('IMP-')
+    if (aImported && !bImported) return -1
+    if (!aImported && bImported) return 1
+
     let valA = a[sortBy.value]
     let valB = b[sortBy.value]
 
@@ -574,6 +583,224 @@ const bulkUpdateStatus = (val: Contact['status']) => {
   clearSelection()
   showToast(`Updated status for selected contacts to ${val}`)
 }
+
+// --- CSV Import Contacts Flow (3 Steps: Upload -> Column Matching -> Success Summary) ---
+const isImportModalOpen = ref(false)
+const importStep = ref<1 | 2 | 3>(1)
+const uploadedCsvFileName = ref('')
+const uploadedCsvFileSize = ref('')
+const csvFileInputRef = ref<HTMLInputElement | null>(null)
+
+interface CsvColumnMapping {
+  index: number
+  csvHeader: string
+  sampleRow1: string
+  sampleRow2: string
+  crmField: 'name' | 'email' | 'phone' | 'company' | 'role' | 'status' | 'tags' | 'skip'
+}
+
+const crmFieldOptions = [
+  { value: 'name', label: 'Full Name (Required)' },
+  { value: 'email', label: 'Email Address (Required)' },
+  { value: 'phone', label: 'Phone Number' },
+  { value: 'company', label: 'Company Name' },
+  { value: 'role', label: 'Job Title / Role' },
+  { value: 'status', label: 'Lead Status' },
+  { value: 'tags', label: 'Label / Tag' },
+  { value: 'skip', label: 'Do not import (Skip)' }
+]
+
+const defaultSampleCsvRows: string[][] = [
+  ['Full Name', 'Work Email', 'Mobile Phone', 'Company Name', 'Job Title', 'Lead Label'],
+  ['Nurul Izzah Kamarul', 'izzah@petronas-digital.my', '+60 12-894 3310', 'Petronas Digital Sdn Bhd', 'Head of Digital Sales', 'Hot'],
+  ['Marcus Lim Wei', 'marcus.lim@sunwayventures.com', '+60 17-309 8821', 'Sunway Ventures MY', 'VP of Commercial', 'Hot'],
+  ['Faridah Begum', 'faridah@cimb-wealth.com.my', '+60 19-228 4501', 'CIMB Wealth Advisory', 'Regional Director', 'VIP-Tier'],
+  ['Jason Khoo', 'jkhoo@grab-enterprise.my', '+60 16-772 9104', 'Grab Enterprise MY', 'Partnerships Lead', 'Hot'],
+  ['Dr. Arvind Nair', 'arvind@kpjhealth.com.my', '+60 13-550 1198', 'KPJ Healthcare Group', 'Chief Operations Officer', 'Warm']
+]
+
+const parsedCsvRows = ref<string[][]>([])
+const csvColumnMappings = ref<CsvColumnMapping[]>([])
+const importedContactsSummary = ref<Contact[]>([])
+
+const autoDetectCrmField = (header: string): CsvColumnMapping['crmField'] => {
+  const h = header.toLowerCase().trim()
+  if (h.includes('name') && !h.includes('company')) return 'name'
+  if (h.includes('email') || h.includes('mail')) return 'email'
+  if (h.includes('phone') || h.includes('mobile') || h.includes('tel') || h.includes('whatsapp')) return 'phone'
+  if (h.includes('company') || h.includes('org') || h.includes('business')) return 'company'
+  if (h.includes('role') || h.includes('title') || h.includes('position') || h.includes('job')) return 'role'
+  if (h.includes('status')) return 'status'
+  if (h.includes('tag') || h.includes('label') || h.includes('segment')) return 'tags'
+  return 'skip'
+}
+
+const populateCsvMappingsFromRows = (rows: string[][]) => {
+  if (rows.length < 2) return
+  const headers = rows[0]
+  const row1 = rows[1] || []
+  const row2 = rows[2] || []
+
+  csvColumnMappings.value = headers.map((hdr, idx) => ({
+    index: idx,
+    csvHeader: hdr,
+    sampleRow1: row1[idx] || '—',
+    sampleRow2: row2[idx] || '—',
+    crmField: autoDetectCrmField(hdr)
+  }))
+}
+
+const openImportModal = () => {
+  importStep.value = 1
+  uploadedCsvFileName.value = ''
+  uploadedCsvFileSize.value = ''
+  parsedCsvRows.value = []
+  csvColumnMappings.value = []
+  importedContactsSummary.value = []
+  isImportModalOpen.value = true
+}
+
+const loadSampleCsvFile = () => {
+  uploadedCsvFileName.value = 'malaysia_q2_hot_leads.csv'
+  uploadedCsvFileSize.value = '4.2 KB'
+  parsedCsvRows.value = defaultSampleCsvRows.map(r => [...r])
+  populateCsvMappingsFromRows(parsedCsvRows.value)
+  showToast('Loaded sample CSV file (5 contact rows detected)', 'info')
+}
+
+const handleCsvFileUpload = (event: Event) => {
+  const input = event.target as HTMLInputElement
+  const file = input.files?.[0]
+  if (!file) return
+
+  uploadedCsvFileName.value = file.name
+  uploadedCsvFileSize.value = `${Math.max(1, Math.round(file.size / 1024))} KB`
+
+  const reader = new FileReader()
+  reader.onload = e => {
+    const text = String(e.target?.result || '')
+    const lines = text
+      .split(/\r?\n/)
+      .map(l => l.trim())
+      .filter(l => l.length > 0)
+
+    if (lines.length >= 2) {
+      const rows = lines.map(line =>
+        line.split(',').map(cell => cell.replace(/^"|"$/g, '').trim())
+      )
+      parsedCsvRows.value = rows
+      populateCsvMappingsFromRows(rows)
+      showToast(`Parsed ${rows.length - 1} rows from ${file.name}`, 'info')
+    } else {
+      loadSampleCsvFile()
+    }
+  }
+  reader.readAsText(file)
+}
+
+const proceedToColumnMatching = () => {
+  if (!uploadedCsvFileName.value) {
+    loadSampleCsvFile()
+  }
+  importStep.value = 2
+}
+
+const matchedColumnsCount = computed(() => {
+  return csvColumnMappings.value.filter(m => m.crmField !== 'skip').length
+})
+
+const executeCsvImport = () => {
+  const dataRows = parsedCsvRows.value.slice(1)
+  const newlyCreated: Contact[] = []
+  const todayIso = new Date().toISOString().split('T')[0]
+
+  dataRows.forEach((row, idx) => {
+    let name = ''
+    let email = ''
+    let phone = ''
+    let company = ''
+    let role = ''
+    let status: Contact['status'] = 'Lead'
+    let tags: string[] = ['CSV Import']
+
+    csvColumnMappings.value.forEach(mapping => {
+      const val = (row[mapping.index] || '').trim()
+      if (!val) return
+      if (mapping.crmField === 'name') name = val
+      else if (mapping.crmField === 'email') email = val
+      else if (mapping.crmField === 'phone') phone = val
+      else if (mapping.crmField === 'company') company = val
+      else if (mapping.crmField === 'role') role = val
+      else if (mapping.crmField === 'status') {
+        if (['Active', 'Inactive', 'Pending', 'Lead'].includes(val)) {
+          status = val as Contact['status']
+        }
+      } else if (mapping.crmField === 'tags') {
+        tags = [val, 'CSV Import']
+      }
+    })
+
+    if (!name) name = `Imported Contact ${idx + 1}`
+    if (!email) email = `contact${idx + 1}@company.my`
+    if (!phone) phone = `+60 12-300 400${idx}`
+    if (!company) company = 'Enterprise MY'
+    if (!role) role = 'Decision Maker'
+
+    const avatar = name
+      .split(' ')
+      .filter(Boolean)
+      .slice(0, 2)
+      .map(n => n[0].toUpperCase())
+      .join('')
+
+    const newContact: Contact = {
+      id: `IMP-${String(idx + 1).padStart(3, '0')}`,
+      name,
+      email,
+      phone,
+      company,
+      role,
+      status,
+      lifecycleStage: 'Lead',
+      lastContact: 'Just imported',
+      dateAdded: todayIso,
+      avatar: avatar || 'IC',
+      notes: `Imported via CSV (${uploadedCsvFileName.value})`,
+      tags,
+      activities: [
+        {
+          id: `act-imp-${Date.now()}-${idx}`,
+          type: 'note',
+          title: 'Contact Imported via CSV',
+          timestamp: 'Today',
+          description: `Imported from ${uploadedCsvFileName.value} with matched CRM columns.`
+        }
+      ]
+    }
+
+    newlyCreated.push(newContact)
+  })
+
+  // Prepend to main contacts list and reset pagination/filters so they appear at the top
+  contacts.value.unshift(...newlyCreated)
+  importedContactsSummary.value = newlyCreated
+  currentPage.value = 1
+  importStep.value = 3
+  showToast(`Successfully imported ${newlyCreated.length} contacts from CSV!`, 'success')
+}
+
+const downloadSampleCsvTemplate = () => {
+  const csvContent =
+    'data:text/csv;charset=utf-8,' +
+    defaultSampleCsvRows.map(r => r.map(c => `"${c}"`).join(',')).join('\n')
+  const link = document.createElement('a')
+  link.setAttribute('href', encodeURI(csvContent))
+  link.setAttribute('download', 'rakansales_sample_contacts.csv')
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+  showToast('Sample CSV template downloaded', 'info')
+}
 </script>
 
 <template>
@@ -609,10 +836,24 @@ const bulkUpdateStatus = (val: Contact['status']) => {
         <h1 class="text-2xl font-bold tracking-tight text-foreground">Contacts Database</h1>
         <p class="text-xs text-muted-foreground mt-0.5">Manage and analyze your CRM network, leads, and customer lifecycles.</p>
       </div>
-      <Button variant="primary" class="gap-2 shadow-sm rounded-xl cursor-pointer hover:scale-[1.01] active:scale-[0.98] transition-all" @click="openAddDialog">
-        <Plus class="w-4 h-4" />
-        Add Contact
-      </Button>
+      <div class="flex flex-wrap items-center gap-2.5">
+        <Button
+          variant="outline"
+          class="gap-2 rounded-xl border-border bg-card hover:bg-muted text-foreground cursor-pointer font-semibold text-xs h-9"
+          @click="openImportModal"
+        >
+          <Upload class="w-4 h-4 text-primary" />
+          Import
+        </Button>
+        <Button
+          variant="primary"
+          class="gap-2 shadow-sm rounded-xl cursor-pointer hover:scale-[1.01] active:scale-[0.98] transition-all text-xs h-9"
+          @click="openAddDialog"
+        >
+          <Plus class="w-4 h-4" />
+          Add Contact
+        </Button>
+      </div>
     </div>
 
     <!-- Statistics Dashboard (Glassmorphism Cards) -->
@@ -952,7 +1193,15 @@ const bulkUpdateStatus = (val: Contact['status']) => {
                     {{ contact.avatar }}
                   </div>
                   <div class="min-w-0">
-                    <span class="font-semibold text-foreground text-xs hover:underline truncate block max-w-[160px]">{{ contact.name }}</span>
+                    <div class="flex items-center gap-1.5">
+                      <span class="font-semibold text-foreground text-xs hover:underline truncate block max-w-[160px]">{{ contact.name }}</span>
+                      <span
+                        v-if="contact.id.startsWith('IMP-')"
+                        class="inline-flex items-center px-1.5 py-0.2 rounded-full text-[9px] font-bold bg-success/10 text-success border border-success/30 shrink-0"
+                      >
+                        Imported
+                      </span>
+                    </div>
                     <span class="text-[10px] text-muted-foreground block truncate">ID: {{ contact.id }}</span>
                   </div>
                 </div>
@@ -1465,6 +1714,292 @@ const bulkUpdateStatus = (val: Contact['status']) => {
           <Button variant="primary" class="rounded-xl text-xs h-9 px-4 cursor-pointer shadow-sm" @click="submitContactForm">
             Save Record
           </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+
+    <!-- 3-Step Import Contacts Modal (Step 1: CSV Upload -> Step 2: Column Matching -> Step 3: Success Summary) -->
+    <Dialog v-model:open="isImportModalOpen">
+      <DialogContent class="sm:max-w-[680px] p-0 rounded-2xl overflow-hidden border border-border bg-card">
+        <DialogHeader class="px-6 pt-6 pb-4 border-b border-border text-left">
+          <div class="flex items-center justify-between pr-6">
+            <div>
+              <DialogTitle class="text-base font-bold text-foreground flex items-center gap-2">
+                <FileSpreadsheet class="w-4 h-4 text-primary" />
+                Import Contacts from CSV
+              </DialogTitle>
+              <p class="text-xs text-muted-foreground mt-0.5">
+                <span v-if="importStep === 1">Step 1 of 3 — Upload your CSV file or load the sample leads CSV.</span>
+                <span v-else-if="importStep === 2">Step 2 of 3 — Match CSV columns to RakanSales CRM contact fields.</span>
+                <span v-else>Step 3 of 3 — Import complete! Review summary below.</span>
+              </p>
+            </div>
+
+            <!-- Step Pills -->
+            <div class="flex items-center gap-1.5">
+              <span
+                v-for="s in [1, 2, 3]"
+                :key="s"
+                class="w-6 h-6 rounded-full text-[11px] font-extrabold flex items-center justify-center border transition-all"
+                :class="[
+                  importStep === s
+                    ? 'bg-primary text-primary-foreground border-primary'
+                    : importStep > s
+                      ? 'bg-success/15 text-success border-success/30'
+                      : 'bg-muted text-muted-foreground border-border'
+                ]"
+              >
+                <Check v-if="importStep > s" class="w-3.5 h-3.5" />
+                <span v-else>{{ s }}</span>
+              </span>
+            </div>
+          </div>
+        </DialogHeader>
+
+        <!-- STEP 1: CSV UPLOAD -->
+        <div v-if="importStep === 1" class="p-6 space-y-5">
+          <input
+            ref="csvFileInputRef"
+            type="file"
+            accept=".csv,text/csv"
+            class="hidden"
+            @change="handleCsvFileUpload"
+          />
+
+          <!-- Dropzone / Upload Area -->
+          <div
+            @click="csvFileInputRef?.click()"
+            class="border-2 border-dashed rounded-2xl p-7 text-center transition-all cursor-pointer flex flex-col items-center justify-center gap-3"
+            :class="uploadedCsvFileName ? 'border-success/50 bg-success/5' : 'border-border hover:border-primary/50 bg-muted/20 hover:bg-muted/40'"
+          >
+            <div
+              class="w-12 h-12 rounded-2xl flex items-center justify-center border"
+              :class="uploadedCsvFileName ? 'bg-success/10 text-success border-success/30' : 'bg-primary/10 text-primary border-primary/20'"
+            >
+              <CheckCircle v-if="uploadedCsvFileName" class="w-6 h-6" />
+              <Upload v-else class="w-6 h-6" />
+            </div>
+
+            <div v-if="!uploadedCsvFileName" class="space-y-1">
+              <p class="text-sm font-bold text-foreground">Click to upload a CSV file or drag and drop</p>
+              <p class="text-xs text-muted-foreground">Supports standard .CSV files with headers (Name, Email, Phone, Company, Role, Label)</p>
+            </div>
+
+            <div v-else class="space-y-1">
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-card border border-border text-xs font-bold text-foreground">
+                <FileSpreadsheet class="w-3.5 h-3.5 text-success" />
+                <span>{{ uploadedCsvFileName }}</span>
+                <span class="text-muted-foreground font-normal">({{ uploadedCsvFileSize }})</span>
+              </div>
+              <p class="text-xs text-success font-semibold">
+                {{ parsedCsvRows.length - 1 }} sample contact rows detected and ready for column matching
+              </p>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-center gap-2 pt-1" @click.stop>
+              <Button
+                variant="outline"
+                size="xs"
+                class="rounded-xl text-xs font-semibold gap-1.5 border-primary/30 bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground cursor-pointer h-8 px-3"
+                @click="loadSampleCsvFile"
+              >
+                <Sparkles class="w-3.5 h-3.5" />
+                {{ uploadedCsvFileName ? 'Reload Sample CSV (malaysia_q2_hot_leads.csv)' : 'Load Sample CSV (malaysia_q2_hot_leads.csv)' }}
+              </Button>
+              <Button
+                variant="ghost"
+                size="xs"
+                class="rounded-xl text-xs text-muted-foreground hover:text-foreground cursor-pointer h-8 px-2.5"
+                @click="downloadSampleCsvTemplate"
+              >
+                <Download class="w-3.5 h-3.5 mr-1" />
+                Download Sample Template
+              </Button>
+            </div>
+          </div>
+
+          <!-- Detected Preview Strip -->
+          <div v-if="uploadedCsvFileName && parsedCsvRows.length > 1" class="bg-muted/30 border border-border rounded-xl p-3.5 space-y-2">
+            <div class="flex items-center justify-between text-xs">
+              <span class="font-bold text-foreground">Detected CSV Preview ({{ parsedCsvRows.length - 1 }} rows)</span>
+              <span class="text-muted-foreground font-semibold">{{ parsedCsvRows[0].length }} columns</span>
+            </div>
+            <div class="text-[11px] text-muted-foreground truncate font-mono bg-card p-2 rounded-lg border border-border">
+              Headers: {{ parsedCsvRows[0].join(' | ') }}
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 2: COLUMN MATCHING -->
+        <div v-else-if="importStep === 2" class="p-6 space-y-4">
+          <div class="flex items-center justify-between bg-muted/30 border border-border rounded-xl p-3">
+            <div class="flex items-center gap-2 text-xs">
+              <FileSpreadsheet class="w-4 h-4 text-primary shrink-0" />
+              <span class="font-bold text-foreground">{{ uploadedCsvFileName }}</span>
+              <span class="text-muted-foreground">• {{ parsedCsvRows.length - 1 }} rows to import</span>
+            </div>
+            <Badge variant="outline" class="bg-success/10 text-success border-success/30 text-[10px] font-bold">
+              {{ matchedColumnsCount }} of {{ csvColumnMappings.length }} Columns Matched
+            </Badge>
+          </div>
+
+          <div class="border border-border rounded-2xl overflow-hidden max-h-[320px] overflow-y-auto">
+            <Table class="w-full border-collapse">
+              <TableHeader class="bg-muted/40 border-b border-border">
+                <TableRow>
+                  <TableHead class="py-2.5 pl-4 text-xs font-bold text-foreground">CSV Column Header</TableHead>
+                  <TableHead class="py-2.5 text-xs font-bold text-foreground">Sample Row Preview</TableHead>
+                  <TableHead class="py-2.5 text-xs font-bold text-foreground">CRM Field Match</TableHead>
+                  <TableHead class="py-2.5 pr-4 text-right text-xs font-bold text-foreground">Status</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                <TableRow
+                  v-for="col in csvColumnMappings"
+                  :key="col.index"
+                  class="border-b border-border/60 hover:bg-muted/20"
+                >
+                  <TableCell class="py-2.5 pl-4 font-mono text-xs font-bold text-foreground">
+                    {{ col.csvHeader }}
+                  </TableCell>
+                  <TableCell class="py-2.5 text-xs text-muted-foreground max-w-[180px]">
+                    <div class="truncate font-medium text-foreground">{{ col.sampleRow1 }}</div>
+                    <div class="truncate text-[10px] text-muted-foreground">{{ col.sampleRow2 }}</div>
+                  </TableCell>
+                  <TableCell class="py-2.5">
+                    <select
+                      v-model="col.crmField"
+                      class="h-8 rounded-lg border border-border bg-background px-2.5 text-xs font-semibold text-foreground focus:outline-none focus:ring-1 focus:ring-primary w-full"
+                    >
+                      <option v-for="opt in crmFieldOptions" :key="opt.value" :value="opt.value">
+                        {{ opt.label }}
+                      </option>
+                    </select>
+                  </TableCell>
+                  <TableCell class="py-2.5 pr-4 text-right">
+                    <span
+                      v-if="col.crmField !== 'skip'"
+                      class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-success/10 text-success border border-success/30"
+                    >
+                      <Check class="w-3 h-3" />
+                      Matched
+                    </span>
+                    <span
+                      v-else
+                      class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-muted text-muted-foreground"
+                    >
+                      Skipped
+                    </span>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </div>
+        </div>
+
+        <!-- STEP 3: SUCCESS SUMMARY WITH COUNT -->
+        <div v-else-if="importStep === 3" class="p-6 space-y-5">
+          <div class="bg-success/10 border border-success/30 rounded-2xl p-5 flex items-center gap-4">
+            <div class="w-12 h-12 rounded-2xl bg-success text-success-foreground flex items-center justify-center shrink-0 shadow-sm">
+              <CheckCircle class="w-6 h-6" />
+            </div>
+            <div class="flex-1">
+              <h3 class="text-base font-extrabold text-foreground">
+                {{ importedContactsSummary.length }} Contacts Imported Successfully!
+              </h3>
+              <p class="text-xs text-muted-foreground mt-0.5">
+                All {{ importedContactsSummary.length }} sample rows from <strong class="text-foreground">{{ uploadedCsvFileName }}</strong> have been matched and added to your Contacts list.
+              </p>
+            </div>
+          </div>
+
+          <!-- Count Breakdown Cards -->
+          <div class="grid grid-cols-3 gap-3">
+            <div class="p-3.5 rounded-xl bg-muted/30 border border-border text-center">
+              <div class="text-2xl font-extrabold text-success">{{ importedContactsSummary.length }}</div>
+              <div class="text-[11px] font-bold text-muted-foreground">New Contacts Added</div>
+            </div>
+            <div class="p-3.5 rounded-xl bg-muted/30 border border-border text-center">
+              <div class="text-2xl font-extrabold text-foreground">{{ matchedColumnsCount }}</div>
+              <div class="text-[11px] font-bold text-muted-foreground">Columns Matched</div>
+            </div>
+            <div class="p-3.5 rounded-xl bg-muted/30 border border-border text-center">
+              <div class="text-2xl font-extrabold text-muted-foreground">0</div>
+              <div class="text-[11px] font-bold text-muted-foreground">Failed / Skipped Rows</div>
+            </div>
+          </div>
+
+          <!-- Preview of Newly Imported Contacts -->
+          <div class="space-y-2">
+            <div class="text-xs font-bold text-foreground">Imported Contacts Added to List</div>
+            <div class="border border-border rounded-xl divide-y divide-border max-h-[180px] overflow-y-auto bg-background">
+              <div
+                v-for="ic in importedContactsSummary"
+                :key="ic.id"
+                class="px-3.5 py-2.5 flex items-center justify-between text-xs"
+              >
+                <div class="flex items-center gap-2.5 min-w-0">
+                  <div class="w-7 h-7 rounded-full bg-primary/10 text-primary font-bold text-[10px] flex items-center justify-center border border-primary/20 shrink-0">
+                    {{ ic.avatar }}
+                  </div>
+                  <div class="min-w-0">
+                    <div class="font-bold text-foreground truncate">{{ ic.name }}</div>
+                    <div class="text-[10px] text-muted-foreground truncate">{{ ic.role }} • {{ ic.company }}</div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2 shrink-0">
+                  <span class="font-mono text-[11px] text-muted-foreground">{{ ic.email }}</span>
+                  <Badge variant="outline" class="bg-success/10 text-success border-success/30 text-[9px] font-bold">
+                    Imported
+                  </Badge>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Footer -->
+        <DialogFooter class="px-6 py-4 bg-muted/10 border-t border-border flex items-center justify-between gap-2.5">
+          <template v-if="importStep === 1">
+            <Button variant="ghost" class="rounded-xl text-xs h-9 px-4 cursor-pointer" @click="isImportModalOpen = false">
+              Cancel
+            </Button>
+            <Button
+              variant="primary"
+              class="rounded-xl text-xs h-9 px-5 gap-1.5 cursor-pointer shadow-sm"
+              @click="proceedToColumnMatching"
+            >
+              <span>Continue to Column Matching</span>
+              <ArrowRight class="w-3.5 h-3.5" />
+            </Button>
+          </template>
+
+          <template v-else-if="importStep === 2">
+            <Button variant="outline" class="rounded-xl text-xs h-9 px-4 gap-1.5 cursor-pointer" @click="importStep = 1">
+              <ArrowLeft class="w-3.5 h-3.5" />
+              Back
+            </Button>
+            <Button
+              variant="primary"
+              class="rounded-xl text-xs h-9 px-5 gap-1.5 cursor-pointer shadow-sm"
+              @click="executeCsvImport"
+            >
+              <Check class="w-3.5 h-3.5" />
+              <span>Import {{ parsedCsvRows.length - 1 }} Contacts</span>
+            </Button>
+          </template>
+
+          <template v-else>
+            <div></div>
+            <Button
+              variant="primary"
+              class="rounded-xl text-xs h-9 px-6 gap-1.5 cursor-pointer shadow-sm"
+              @click="isImportModalOpen = false"
+            >
+              <CheckCircle class="w-3.5 h-3.5" />
+              <span>Done — View Contacts in List</span>
+            </Button>
+          </template>
         </DialogFooter>
       </DialogContent>
     </Dialog>

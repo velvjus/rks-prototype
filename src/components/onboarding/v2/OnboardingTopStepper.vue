@@ -61,7 +61,7 @@ const emit = defineEmits<{
 }>();
 
 const subtitles: Record<number, string> = {
-  1: 'Company details & business type',
+  1: 'Company details & primary use case',
   2: 'Country & operating currency',
   3: 'Team size & primary industry',
   4: 'Select subscription plan',

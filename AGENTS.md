@@ -1,5 +1,13 @@
 # Project Rules & Guidelines
 
+## Session Continuity & Project Map (`.context/`)
+- **Start of every task/session:** Read [PROJECT_MAP.md](file:///c:/Users/justi/Documents/VeecoTech/Rakansales/Antigravity/RakanSales%20C4/.context/PROJECT_MAP.md) first to orient yourself (modules, routes, stores, cross-page wiring, and recent work) instead of broadly scanning the repository. Read [TASK_LOG.md](file:///c:/Users/justi/Documents/VeecoTech/Rakansales/Antigravity/RakanSales%20C4/.context/TASK_LOG.md) only if deeper history is needed.
+- **End of every completed task (Definition of Done):**
+  1. Prepend a concise entry to [TASK_LOG.md](file:///c:/Users/justi/Documents/VeecoTech/Rakansales/Antigravity/RakanSales%20C4/.context/TASK_LOG.md) using its template (Scope, Summary, Files, Connections Updated, Decisions/Gotchas, Open Follow-ups).
+  2. Update [PROJECT_MAP.md](file:///c:/Users/justi/Documents/VeecoTech/Rakansales/Antigravity/RakanSales%20C4/.context/PROJECT_MAP.md): refresh **Recent Activity (Last 5 Tasks)** and update the Module Registry or Wiring Table if any route, view, store, `localStorage` key, query param, nav item, or HTML mirror changed.
+  3. Run `npm run map:check` to confirm zero map drift.
+- Keep `PROJECT_MAP.md` concise (target <= 250 lines). For complex modules that need deep notes, create `.context/modules/<module>.md` and link it from `PROJECT_MAP.md`.
+
 ## Page Addition & Navigation
 Whenever adding a new page into our prototype:
 - Make sure it reflects on the navigation bar.

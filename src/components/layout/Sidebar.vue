@@ -98,7 +98,7 @@ const topNavItems: NavItem[] = [
 ];
 
 const bottomNavItems: NavItem[] = [
-  { label: 'Campaigns', icon: Megaphone, hasSubmenu: true },
+  { label: 'Campaigns', icon: Megaphone, hasSubmenu: true, route: '/campaigns' },
   { label: 'Reports', icon: BarChart2, hasSubmenu: true },
   { label: 'Help Center', icon: Book, hasSubmenu: true },
   { label: 'Settings', icon: Settings, hasSubmenu: false, route: '/settings' },
@@ -118,6 +118,7 @@ const partnersNavItem: NavItem = {
 
 function isItemSelected(item: NavItem) {
   if (item.route && route.path === item.route) return true;
+  if (item.label === 'Campaigns' && route.path.startsWith('/campaigns')) return true;
   if (item.label === 'Settings' && route.path.startsWith('/settings')) return true;
   if (item.label === 'Partners' && route.path.startsWith('/partner')) return true;
   return ui.activeParentItem === item.label;

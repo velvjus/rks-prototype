@@ -12,6 +12,7 @@
           <button
             v-for="tab in tabs"
             :key="tab.id"
+            :data-tour="`tab-${tab.id}`"
             @click="activeTab = tab.id"
             role="tab"
             :aria-selected="activeTab === tab.id"
@@ -31,6 +32,7 @@
       <div class="flex items-center gap-2 relative">
         <div class="relative">
           <button
+            data-tour="date-range-btn"
             @click="isDateOpen = !isDateOpen"
             class="inline-flex items-center gap-2 px-3.5 py-1.5 bg-card border border-border hover:border-input text-foreground rounded-lg text-xs font-medium shadow-xs transition-colors cursor-pointer"
             aria-haspopup="true"
@@ -55,6 +57,7 @@
             <button
               v-for="preset in datePresets"
               :key="preset.id"
+              :data-tour="`date-preset-${preset.id}`"
               @click="setDateRange(preset)"
               :class="[
                 'w-full text-left px-3 py-2 rounded-lg font-medium transition-colors cursor-pointer flex items-center justify-between',
@@ -69,6 +72,7 @@
           </div>
         </div>
 
+        <div class="flex items-center gap-2" data-tour="header-actions">
         <button
           @click="triggerExport"
           class="inline-flex items-center gap-1.5 px-4 py-1.5 bg-primary hover:bg-primary/90 active:scale-[0.98] text-primary-foreground rounded-lg text-xs font-bold shadow-md shadow-primary/20 transition-all cursor-pointer"
@@ -183,6 +187,7 @@
             </div>
           </div>
         </div>
+        </div>
       </div>
     </header>
 
@@ -220,7 +225,7 @@
           </div>
 
           <!-- Top KPI Strip (4 Focused Executive Metrics) -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div data-tour="kpi-strip" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             
             <!-- 1. Total Revenue Won -->
             <div class="bg-gradient-to-br from-primary via-primary/90 to-primary/80 text-primary-foreground p-5 rounded-2xl shadow-md shadow-primary/15 relative overflow-hidden flex flex-col justify-between h-[154px]">
@@ -327,6 +332,7 @@
               </div>
               <div class="flex items-center gap-2">
                 <button
+                  data-tour="stale-deals-btn"
                   @click="nudgeAllStaleDeals"
                   class="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-warning/10 hover:bg-warning/20 text-warning border border-warning/30 rounded-lg text-xs font-bold transition-colors cursor-pointer"
                   :title="hasSampleData ? 'Send automated WhatsApp follow-ups to 27 deals inactive for >3 days' : 'No stale deals requiring follow-up'"
@@ -453,6 +459,7 @@
                     <button
                       v-for="mode in ['Count', 'Value']"
                       :key="mode"
+                      :data-tour="mode === 'Value' ? 'funnel-value-btn' : undefined"
                       @click="funnelMode = mode"
                       :class="[
                         'px-3 py-1 text-[11px] font-bold rounded-md transition-colors cursor-pointer',
@@ -754,8 +761,9 @@
                 </thead>
                 <tbody class="divide-y divide-border">
                   <tr
-                    v-for="deal in filteredActiveDeals"
+                    v-for="(deal, dealIdx) in filteredActiveDeals"
                     :key="deal.id"
+                    :data-tour="dealIdx === 0 ? 'first-opportunity-row' : undefined"
                     @click="openDealDrawer(deal)"
                     class="hover:bg-primary/10 transition-colors cursor-pointer"
                   >
@@ -1435,11 +1443,11 @@
     </main>
 
     <!-- Slide-Over Opportunity Details Drawer -->
-    <div v-if="selectedDeal" class="fixed inset-0 z-50 overflow-hidden" role="dialog" aria-modal="true" aria-labelledby="drawer-title">
+    <div v-if="selectedDeal" class="fixed inset-0 z-[70] overflow-hidden" role="dialog" aria-modal="true" aria-labelledby="drawer-title">
       <div class="absolute inset-0 bg-background/80 backdrop-blur-xs transition-opacity" @click="selectedDeal = null"></div>
       
       <div class="fixed inset-y-0 right-0 max-w-full flex pl-10">
-        <div class="w-screen max-w-md bg-card border-l border-border p-6 shadow-2xl flex flex-col justify-between">
+        <div data-tour="opportunity-drawer" class="w-screen max-w-md bg-card border-l border-border p-6 shadow-2xl flex flex-col justify-between">
           <div class="space-y-5">
             <div class="flex justify-between items-start">
               <div>
@@ -1487,6 +1495,7 @@
 
           <div class="flex gap-2 pt-4 border-t border-border">
             <button
+              data-tour="drawer-send-btn"
               @click="sendQuickMessage"
               class="flex-1 py-2 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl text-xs font-bold transition-all shadow-md shadow-primary/20 cursor-pointer"
             >
@@ -1503,14 +1512,24 @@
       </div>
     </div>
 
+    <!-- Interactive Storylane / Supademo-Style Guided Walkthrough -->
+    <DashboardInteractiveTour
+      :open="ui.isDashboardTourOpen"
+      :controller="tourController"
+      @close="ui.closeDashboardTour()"
+    />
+
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onUnmounted } from 'vue'
 import CrmSetupStatusBar from '@/components/dashboard/CrmSetupStatusBar.vue'
+import DashboardInteractiveTour, { type DashboardTourController } from '@/components/dashboard/DashboardInteractiveTour.vue'
 import { useChartTheme } from '@/composables/useChartTheme'
+import { useUIStore } from '@/stores/ui'
 
+const ui = useUIStore()
 const { isDark, chartBase, colors } = useChartTheme()
 import {
   Calendar,
@@ -2348,6 +2367,63 @@ const activeSupportAgents = computed(() => {
     }))
   }
   return defaultSupportAgents
+})
+
+// ═════════════════════════════════════════════════════════
+// INTERACTIVE DASHBOARD WALKTHROUGH CONTROLLER
+// ═════════════════════════════════════════════════════════
+const tourController: DashboardTourController = {
+  getActiveTab: () => activeTab.value,
+  setActiveTab: (tab) => {
+    activeTab.value = tab
+  },
+  hasSampleData: () => hasSampleData.value,
+  ensureSampleData: () => {
+    if (!hasSampleData.value) {
+      hasSampleData.value = true
+      localStorage.setItem('rakansales_has_sample_data', 'true')
+      activeDealsList.value = [...defaultActiveDeals]
+    }
+    clearActiveDealFilters()
+  },
+  openDateMenu: () => {
+    isDateOpen.value = true
+  },
+  closeDateMenu: () => {
+    isDateOpen.value = false
+  },
+  selectDatePreset: (presetId) => {
+    const found = datePresets.find((p) => p.id === presetId)
+    if (found) setDateRange(found)
+  },
+  setFunnelMode: (mode) => {
+    funnelMode.value = mode
+  },
+  nudgeStaleDeals: () => {
+    nudgeAllStaleDeals()
+  },
+  openFirstOpportunity: () => {
+    clearActiveDealFilters()
+    if (activeDealsList.value.length === 0) {
+      activeDealsList.value = [...defaultActiveDeals]
+    }
+    openDealDrawer(activeDealsList.value[0])
+  },
+  closeOpportunityDrawer: () => {
+    selectedDeal.value = null
+  },
+  sendDrawerMessage: () => {
+    if (selectedDeal.value) {
+      sendQuickMessage()
+    }
+  },
+  closeKebabMenu: () => {
+    isKebabOpen.value = false
+  },
+}
+
+onUnmounted(() => {
+  ui.closeDashboardTour()
 })
 </script>
 

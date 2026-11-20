@@ -25,6 +25,7 @@ import {
   Inbox,
   Briefcase,
   Sparkles,
+  Megaphone,
 } from 'lucide-vue-next'
 
 const route = useRoute()
@@ -52,6 +53,7 @@ const routeLabels: Record<string, string> = {
   '/web-forms/templates':    'Form Templates Repository',
   '/web-forms/submissions':  'Form Submissions',
   '/deals':                  'Deals',
+  '/campaigns':              'Campaigns',
   '/design-system':          'Design System',
   '/addons':                 'Add-ons',
   '/guidelines':             'Guidelines',
@@ -99,6 +101,7 @@ const navItems = [
     ]
   },
   { to: '/deals',         icon: Briefcase,        label: 'Deals' },
+  { to: '/campaigns',     icon: Megaphone,        label: 'Campaigns' },
   { to: '/addons',        icon: Puzzle,           label: 'Add-ons' },
   { to: '/onboarding',    icon: Sparkles,         label: 'Onboarding Wizard v2' },
 ]

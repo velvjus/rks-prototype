@@ -17,11 +17,11 @@
           key="form-stage"
           class="w-full max-w-xl mx-auto px-6 py-4 sm:py-6 my-auto flex flex-col justify-center"
         >
-          <div class="w-full min-h-[460px] sm:h-[480px] flex flex-col justify-between">
+          <div class="w-full min-h-[520px] flex flex-col justify-between gap-6">
             <!-- Step Form Area with Inner Crossfade -->
             <div class="flex-1 flex flex-col justify-start">
               <Transition name="inner-step" mode="out-in">
-                <!-- Step 1: Company Name & Type -->
+                <!-- Step 1: Company Name, Primary Use Case & Referral Code -->
                 <StepCompanyNameType
                   v-if="currentStep === 1"
                   key="step-1"
@@ -73,7 +73,7 @@
                     : 'bg-muted text-muted-foreground cursor-not-allowed'
                 ]"
               >
-                <span>{{ continueText }}</span>
+                <span>Next</span>
                 <ArrowRight class="w-3.5 h-3.5" />
               </button>
             </footer>
@@ -115,7 +115,7 @@
                     : 'bg-muted text-muted-foreground cursor-not-allowed'
                 ]"
               >
-                <span>Complete Setup & Launch</span>
+                <span>Next</span>
                 <ArrowRight class="w-3.5 h-3.5" />
               </button>
             </footer>
@@ -216,7 +216,7 @@ import StepPlanSelection from '@/components/onboarding/v2/StepPlanSelection.vue'
 const router = useRouter();
 
 // Continuous single flow steps:
-// 1 = Company (Name & Type)
+// 1 = Company (Name, Primary Use Case & Referral Code)
 // 2 = Location (Country & Currency)
 // 3 = Team (Size & Industry)
 // 4 = Plan (Choose Plan)
@@ -228,7 +228,8 @@ const isProvisioning = ref(false);
 const formData = reactive({
   business: {
     businessName: '',
-    companyType: '',
+    useCase: '',
+    referralCode: '',
     country: '',
     currency: '',
     agentSize: '',
@@ -244,7 +245,7 @@ const formData = reactive({
 
 const isValid = computed(() => {
   if (currentStep.value === 1) {
-    return formData.business.businessName.trim().length > 0 && !!formData.business.companyType;
+    return formData.business.businessName.trim().length > 0 && !!formData.business.useCase;
   }
   if (currentStep.value === 2) {
     return !!formData.business.country && !!formData.business.currency;
@@ -262,14 +263,6 @@ const isValid = computed(() => {
     return !!formData.plan.selectedPlan;
   }
   return true;
-});
-
-const continueText = computed(() => {
-  if (currentStep.value === 1) return 'Continue to Location';
-  if (currentStep.value === 2) return 'Continue to Team';
-  if (currentStep.value === 3) return 'Continue to Plan';
-  if (currentStep.value === 4) return 'Complete Setup & Launch';
-  return 'Continue';
 });
 
 const selectedPlanName = computed(() => {

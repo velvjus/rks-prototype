@@ -51,7 +51,7 @@ const route = useRoute()
 const { isDark, toggleTheme } = useTheme()
 
 // Navigation sections within Foundation & Token Studio
-const activeSection = ref<'overview' | 'comparator' | 'tailwind' | 'typography' | 'prompt'>('comparator')
+const activeSection = ref<'overview' | 'comparator' | 'tailwind' | 'typography' | 'prompt'>('overview')
 
 const sections = [
   { id: 'overview', label: 'Overview', icon: Layers },
@@ -460,8 +460,8 @@ const spacingScale = [
           <Card class="p-4 flex items-start justify-between">
             <div class="space-y-1">
               <span class="text-xs font-medium text-muted-foreground">Semantic CSS Variables</span>
-              <div class="text-2xl font-bold font-mono tabular-nums text-foreground">37 Tokens</div>
-              <p class="text-[11px] text-muted-foreground">Dual-mapped in <code class="font-mono text-foreground">:root</code> &amp; <code class="font-mono text-foreground">.dark</code></p>
+              <div class="text-2xl font-bold font-mono tabular-nums text-foreground">56 Tokens</div>
+              <p class="text-[11px] text-muted-foreground">8 Token Groups dual-mapped in <code class="font-mono text-foreground">:root</code> &amp; <code class="font-mono text-foreground">.dark</code></p>
             </div>
             <div class="size-9 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
               <Contrast class="size-4" />
@@ -472,7 +472,7 @@ const spacingScale = [
             <div class="space-y-1">
               <span class="text-xs font-medium text-muted-foreground">Tailwind CSS v4 Library</span>
               <div class="text-2xl font-bold font-mono tabular-nums text-foreground">22 Families</div>
-              <p class="text-[11px] text-muted-foreground">242 official OKLCH &amp; Hex shades (50–950)</p>
+              <p class="text-[11px] text-muted-foreground">242 official OKLCH &amp; Hex shades (50–950) with live testing</p>
             </div>
             <div class="size-9 rounded-lg bg-info/10 text-info flex items-center justify-center">
               <Palette class="size-4" />
@@ -483,7 +483,7 @@ const spacingScale = [
             <div class="space-y-1">
               <span class="text-xs font-medium text-muted-foreground">UI Component Primitives</span>
               <div class="text-2xl font-bold font-mono tabular-nums text-foreground">51 Modules</div>
-              <p class="text-[11px] text-muted-foreground">Refined Shadcn/Vue + Reka UI in <code class="font-mono text-foreground">@/components/ui</code></p>
+              <p class="text-[11px] text-muted-foreground">Refined in <code class="font-mono text-foreground">@/components/ui</code> (65 registered in catalog)</p>
             </div>
             <div class="size-9 rounded-lg bg-success/10 text-success flex items-center justify-center">
               <Box class="size-4" />
@@ -494,7 +494,7 @@ const spacingScale = [
             <div class="space-y-1">
               <span class="text-xs font-medium text-muted-foreground">Token Audit Gate</span>
               <div class="text-2xl font-bold font-mono tabular-nums text-success">0 Violations</div>
-              <p class="text-[11px] text-muted-foreground">Enforced via <code class="font-mono text-foreground">scripts/audit-tokens.cjs</code></p>
+              <p class="text-[11px] text-muted-foreground">Verified across all 357 components via <code class="font-mono text-foreground">audit-tokens.cjs</code></p>
             </div>
             <div class="size-9 rounded-lg bg-warning/10 text-warning flex items-center justify-center">
               <ShieldCheck class="size-4" />
@@ -592,21 +592,21 @@ const spacingScale = [
 
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
               <div class="p-3 rounded-lg bg-muted/50 border border-border">
-                <div class="text-xs font-bold text-foreground">1. Outer Rail (<code class="font-mono">Sidebar.vue</code>)</div>
+                <div class="text-xs font-bold text-foreground">1. Invariant Rail &amp; TopNav (<code class="font-mono">Sidebar.vue</code> / <code class="font-mono">TopNav.vue</code>)</div>
                 <p class="text-[11px] text-muted-foreground mt-1">
-                  Stays deep dark (<code class="font-mono">bg-rail</code>) in both Light and Dark mode to anchor workspace hierarchy.
+                  Anchor the workspace hierarchy with an invariant dark aesthetic (<code class="font-mono">bg-rail text-rail-foreground border-rail-border</code>) across both Light and Dark modes.
                 </p>
               </div>
               <div class="p-3 rounded-lg bg-muted/50 border border-border">
                 <div class="text-xs font-bold text-foreground">2. Sub-Panel (<code class="font-mono">SecondaryPanel.vue</code>)</div>
                 <p class="text-[11px] text-muted-foreground mt-1">
-                  Contextual drawer (<code class="font-mono">bg-sidebar</code>) that adapts cleanly between light and dark themes.
+                  Contextual drawer (<code class="font-mono">bg-sidebar border-sidebar-border</code>) providing sub-routes, inbox filtering, and fast folder navigation.
                 </p>
               </div>
               <div class="p-3 rounded-lg bg-muted/50 border border-border">
                 <div class="text-xs font-bold text-foreground">3. Canvas (<code class="font-mono">MainLayout.vue</code>)</div>
                 <p class="text-[11px] text-muted-foreground mt-1">
-                  High-density workspace using <code class="font-mono">bg-background</code> and elevated <code class="font-mono">bg-card</code> containers.
+                  High-density workspace using modern canvas tokens (<code class="font-mono">bg-background</code>) and elevated <code class="font-mono">bg-card</code> containers.
                 </p>
               </div>
             </div>
@@ -629,7 +629,7 @@ const spacingScale = [
                   <div class="space-y-0.5">
                     <div class="text-xs font-bold text-foreground">1. Single Source of Truth (<code class="font-mono">src/assets/index.css</code>)</div>
                     <p class="text-[11px] text-muted-foreground">
-                      Never hardcode raw Tailwind grays, hex codes, or <code class="font-mono">dark:*</code> overrides in components. Change the CSS variable in <code class="font-mono">index.css</code> and every page updates automatically.
+                      56 semantic CSS variables mapped through Tailwind CSS v4 <code class="font-mono">@theme inline</code>. Never hardcode raw palette grays, hex colors, or <code class="font-mono">dark:*</code> modifiers in components.
                     </p>
                   </div>
                 </div>
@@ -637,9 +637,9 @@ const spacingScale = [
                 <div class="p-3 rounded-lg border border-border bg-background flex items-start gap-3">
                   <CheckCircle2 class="size-4 text-success shrink-0 mt-0.5" />
                   <div class="space-y-0.5">
-                    <div class="text-xs font-bold text-foreground">2. Semantic Status &amp; Opacity Modifiers</div>
+                    <div class="text-xs font-bold text-foreground">2. 4-Tier Badge System (Soft Fills for Data)</div>
                     <p class="text-[11px] text-muted-foreground">
-                      Use <code class="font-mono">bg-success/10 text-success border-success/20</code> for soft status pills, and <code class="font-mono">bg-tag-1 text-tag-1-foreground</code> for pipeline stages.
+                      Use soft-tinted badges (<code class="font-mono">bg-success/10 text-success border-success/20</code>) and categorical tags (<code class="font-mono">tag-1..6</code>) in data grids to avoid competing with primary action buttons. Solid fills are strictly for counters.
                     </p>
                   </div>
                 </div>
@@ -649,7 +649,7 @@ const spacingScale = [
                   <div class="space-y-0.5">
                     <div class="text-xs font-bold text-foreground">3. Typography Ceiling (<code class="font-mono">font-bold</code> Max)</div>
                     <p class="text-[11px] text-muted-foreground">
-                      Use <code class="font-mono">Inter Variable</code> with <code class="font-mono">font-bold</code> (700) as the maximum weight. Never use <code class="font-mono">font-extrabold</code> or <code class="font-mono">font-black</code>. Use <code class="font-mono">tabular-nums</code> on metrics.
+                      Use <code class="font-mono">Inter Variable</code> with <code class="font-mono">font-bold</code> (700) as the maximum font weight. Never use <code class="font-mono">font-extrabold</code> or <code class="font-mono">font-black</code>. Monetary amounts and timestamps require <code class="font-mono">font-mono tabular-nums</code>.
                     </p>
                   </div>
                 </div>
@@ -657,9 +657,9 @@ const spacingScale = [
                 <div class="p-3 rounded-lg border border-border bg-background flex items-start gap-3">
                   <CheckCircle2 class="size-4 text-success shrink-0 mt-0.5" />
                   <div class="space-y-0.5">
-                    <div class="text-xs font-bold text-foreground">4. Navigation Registration on New Pages</div>
+                    <div class="text-xs font-bold text-foreground">4. Navigation Registration &amp; Dual Verification</div>
                     <p class="text-[11px] text-muted-foreground">
-                      Every new view added to <code class="font-mono">src/views/</code> must be registered in <code class="font-mono">Sidebar.vue</code> or <code class="font-mono">SecondaryPanel.vue</code> and verified in both Light &amp; Dark mode.
+                      Every new view must be registered in <code class="font-mono">Sidebar.vue</code> or <code class="font-mono">SecondaryPanel.vue</code> and verified visually in both Light (<code class="font-mono">:root</code>) and Dark (<code class="font-mono">.dark</code>) modes.
                     </p>
                   </div>
                 </div>
@@ -677,6 +677,135 @@ const spacingScale = [
             </div>
           </Card>
         </div>
+
+        <!-- Recent Architecture Upgrades & System Changelog -->
+        <Card class="p-5 space-y-4">
+          <div class="flex items-center justify-between border-b border-border pb-3">
+            <div class="space-y-0.5">
+              <h2 class="text-sm font-bold text-foreground">System Architecture Upgrades &amp; Changelog (Nova v4.0)</h2>
+              <p class="text-xs text-muted-foreground">
+                Summary of core architectural refinements, token catalog additions, and component modernization.
+              </p>
+            </div>
+            <Badge variant="success">All Systems In Sync</Badge>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- 1. 56 Semantic Tokens -->
+            <div class="p-4 rounded-xl border border-border bg-background space-y-2">
+              <div class="flex items-center gap-2">
+                <div class="size-7 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                  <Contrast class="size-3.5" />
+                </div>
+                <div class="text-xs font-bold text-foreground">56 Dual-Mapped Tokens</div>
+              </div>
+              <p class="text-xs text-muted-foreground leading-relaxed">
+                Expanded across 8 functional groups: Surface, Brand, Status, Outer Rail &amp; Sidebar, Pipeline Stages (1–8), Metadata Tags (1–6), Charts (1–8), and Semantic Accents (1–8).
+              </p>
+              <div class="pt-1">
+                <Button variant="ghost" size="xs" @click="activeSection = 'comparator'" class="text-primary hover:text-primary gap-1 px-0">
+                  <span>Browse 56 Tokens</span>
+                  <ArrowUpRight class="size-3" />
+                </Button>
+              </div>
+            </div>
+
+            <!-- 2. Tailwind v4 Color Engine -->
+            <div class="p-4 rounded-xl border border-border bg-background space-y-2">
+              <div class="flex items-center gap-2">
+                <div class="size-7 rounded-lg bg-info/10 text-info flex items-center justify-center shrink-0">
+                  <Palette class="size-3.5" />
+                </div>
+                <div class="text-xs font-bold text-foreground">Tailwind CSS v4 Engine</div>
+              </div>
+              <p class="text-xs text-muted-foreground leading-relaxed">
+                22 official color families with 242 OKLCH &amp; Hex shades (50–950). Includes real-time <span class="font-mono text-foreground font-semibold">Live Token Target</span> injection into the running DOM.
+              </p>
+              <div class="pt-1">
+                <Button variant="ghost" size="xs" @click="activeSection = 'tailwind'" class="text-info hover:text-info gap-1 px-0">
+                  <span>Open 22 Families</span>
+                  <ArrowUpRight class="size-3" />
+                </Button>
+              </div>
+            </div>
+
+            <!-- 3. 4-Tier Badge System -->
+            <div class="p-4 rounded-xl border border-border bg-background space-y-2">
+              <div class="flex items-center gap-2">
+                <div class="size-7 rounded-lg bg-warning/10 text-warning flex items-center justify-center shrink-0">
+                  <ShieldCheck class="size-3.5" />
+                </div>
+                <div class="text-xs font-bold text-foreground">4-Tier Badge System</div>
+              </div>
+              <p class="text-xs text-muted-foreground leading-relaxed">
+                Standardized on soft-tinted + 1px border fills (<code class="font-mono text-[11px]">bg-*/10 border-*/20</code>) for data rows and metadata tags. Solid fills reserved exclusively for numeric notification counters.
+              </p>
+              <div class="pt-1">
+                <Button variant="ghost" size="xs" @click="router.push('/design-system')" class="text-warning hover:text-warning gap-1 px-0">
+                  <span>Test in Workbench</span>
+                  <ArrowUpRight class="size-3" />
+                </Button>
+              </div>
+            </div>
+
+            <!-- 4. Component Workbench & Counterpart Mirror -->
+            <div class="p-4 rounded-xl border border-border bg-background space-y-2">
+              <div class="flex items-center gap-2">
+                <div class="size-7 rounded-lg bg-success/10 text-success flex items-center justify-center shrink-0">
+                  <Sliders class="size-3.5" />
+                </div>
+                <div class="text-xs font-bold text-foreground">Dual-Theme Counterpart Mirror</div>
+              </div>
+              <p class="text-xs text-muted-foreground leading-relaxed">
+                Interactive Prop Workbench across 7 component primitives (Button, Badge, Input/Select, Card, Table, Tabs, Sonner) with live simultaneous Light vs Dark sandbox inspection.
+              </p>
+              <div class="pt-1">
+                <Button variant="ghost" size="xs" @click="router.push('/design-system')" class="text-success hover:text-success gap-1 px-0">
+                  <span>Launch Workbench</span>
+                  <ArrowUpRight class="size-3" />
+                </Button>
+              </div>
+            </div>
+
+            <!-- 5. Typography Ceiling & Tabular Numerals -->
+            <div class="p-4 rounded-xl border border-border bg-background space-y-2">
+              <div class="flex items-center gap-2">
+                <div class="size-7 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                  <Type class="size-3.5" />
+                </div>
+                <div class="text-xs font-bold text-foreground">Typography Ceiling (<code class="font-mono text-[11px]">font-bold</code>)</div>
+              </div>
+              <p class="text-xs text-muted-foreground leading-relaxed">
+                Inter Variable font scale capped strictly at <span class="font-mono text-foreground font-semibold">700 (font-bold)</span>. All currency amounts, percentages, and timestamps require <code class="font-mono text-[11px]">font-mono tabular-nums</code>.
+              </p>
+              <div class="pt-1">
+                <Button variant="ghost" size="xs" @click="activeSection = 'typography'" class="text-primary hover:text-primary gap-1 px-0">
+                  <span>View Type Hierarchy</span>
+                  <ArrowUpRight class="size-3" />
+                </Button>
+              </div>
+            </div>
+
+            <!-- 6. Zero Token Audit Gate -->
+            <div class="p-4 rounded-xl border border-border bg-background space-y-2">
+              <div class="flex items-center gap-2">
+                <div class="size-7 rounded-lg bg-info/10 text-info flex items-center justify-center shrink-0">
+                  <Code2 class="size-3.5" />
+                </div>
+                <div class="text-xs font-bold text-foreground">Zero Token Violations Gate</div>
+              </div>
+              <p class="text-xs text-muted-foreground leading-relaxed">
+                Continuous compliance script <code class="font-mono text-[11px]">scripts/audit-tokens.cjs</code> scanning all 357 UI components. Zero raw palette grays, hardcoded hex values, or raw status colors allowed.
+              </p>
+              <div class="pt-1">
+                <Button variant="ghost" size="xs" @click="activeSection = 'prompt'" class="text-info hover:text-info gap-1 px-0">
+                  <span>View System Prompt</span>
+                  <ArrowUpRight class="size-3" />
+                </Button>
+              </div>
+            </div>
+          </div>
+        </Card>
       </section>
 
       <!-- =====================================================================

@@ -1,5 +1,8 @@
 # RakanSales CRM — Project Handover & Context Directory
 
+> [!IMPORTANT]
+> **Superseded as Living Context:** This document is kept as an early historical handover snapshot. For the current single-read project map, module registry, cross-page wiring, and recent task history, use [.context/PROJECT_MAP.md](../.context/PROJECT_MAP.md) and [.context/TASK_LOG.md](../.context/TASK_LOG.md). For current theming and design rules, use [DESIGN.md](../DESIGN.md) and [AGENTS.md](../AGENTS.md).
+
 This document serves as a comprehensive handover and context reference for developers and agentic coding assistants (such as Antigravity) working on the **RakanSales CRM** workspace. It outlines the core vision of the project, details the tech stack, outlines the visual design system, summarizes the history of implemented features, and provides guidelines for running, developing, and extending this codebase.
 
 ---

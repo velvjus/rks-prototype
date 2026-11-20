@@ -54,6 +54,11 @@ const router = createRouter({
       meta: { fullWidth: true }
     },
     {
+      path: '/campaigns',
+      name: 'campaigns',
+      component: () => import('../views/CampaignsView.vue')
+    },
+    {
       path: '/settings',
       name: 'settings',
       component: () => import('../views/SettingsView.vue'),

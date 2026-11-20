@@ -47,7 +47,9 @@ const BATCHES = {
       'src/components/omnichannel/FiltersModal.vue',
       'src/views/CompaniesView.vue',
       'src/views/CalendarView.vue',
-      'src/views/EventsView.vue'
+      'src/views/EventsView.vue',
+      'src/views/CampaignsView.vue',
+      'src/data/campaignsData.ts'
     ]
   },
   4: {

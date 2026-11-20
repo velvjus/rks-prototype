@@ -36,6 +36,22 @@
 
     <!-- Right Cluster -->
     <div class="flex items-center gap-2 justify-end min-w-[202px]">
+      <!-- Interactive Guided Tour Trigger (beside Help button) -->
+      <button
+        type="button"
+        @click="handleStartDashboardTour"
+        class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold transition-all outline-none focus-visible:ring-2 focus-visible:ring-rail-muted-foreground cursor-pointer border"
+        :class="ui.isDashboardTourOpen
+          ? 'bg-primary text-primary-foreground border-primary shadow-sm'
+          : 'bg-rail-active/80 text-rail-foreground border-rail-border hover:bg-rail-active hover:border-primary/50'"
+        :title="ui.isDashboardTourOpen ? 'Exit interactive dashboard tour' : 'Start interactive dashboard walkthrough'"
+        aria-label="Interactive dashboard tour"
+        :aria-pressed="ui.isDashboardTourOpen"
+      >
+        <Play class="w-3 h-3 shrink-0 fill-current" :class="ui.isDashboardTourOpen ? 'text-primary-foreground' : 'text-primary'" />
+        <span class="hidden sm:inline tracking-tight">Tour</span>
+      </button>
+
       <!-- Circle Help Utility (Question Mark Icon) -->
       <DropdownMenu v-model:open="isHelpDropdownOpen">
         <DropdownMenuTrigger as-child>
@@ -227,7 +243,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import {
   Menu,
   Search,
@@ -241,6 +257,7 @@ import {
   Sparkles,
   Sun,
   Moon,
+  Play,
 } from 'lucide-vue-next';
 import { useTheme } from '@/composables/useTheme';
 import { useUIStore } from '@/stores/ui';
@@ -265,6 +282,7 @@ import { toast } from 'vue-sonner';
 const theme = useTheme();
 const ui = useUIStore();
 const route = useRoute();
+const router = useRouter();
 const searchInput = ref<HTMLInputElement | null>(null);
 const isMac = typeof window !== 'undefined' && window.navigator.platform.toUpperCase().indexOf('MAC') >= 0;
 
@@ -510,11 +528,25 @@ function openWikiFromModal() {
   });
 }
 
+async function handleStartDashboardTour() {
+  isHelpDropdownOpen.value = false;
+  if (ui.isDashboardTourOpen) {
+    ui.closeDashboardTour();
+    return;
+  }
+  if (route.path !== '/dashboard') {
+    await router.push('/dashboard');
+  }
+  ui.startDashboardTour();
+}
+
 function handlePageTour() {
   isHelpDropdownOpen.value = false;
-  toast.success('Page Tour', {
-    description: `Replaying interactive onboarding tour for "${pageContext.value.name}".`,
-  });
+  if (route.path === '/dashboard') {
+    ui.startDashboardTour();
+    return;
+  }
+  handleStartDashboardTour();
 }
 
 function handleAskAI() {

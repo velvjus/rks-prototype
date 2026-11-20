@@ -5,6 +5,7 @@ export const useUIStore = defineStore('ui', () => {
   const isSidebarCollapsed = ref(false);
   const activeParentItem = ref('Dashboard');
   const isSecondaryPanelOpen = ref(false);
+  const isDashboardTourOpen = ref(false);
 
   function toggleSidebar() {
     isSidebarCollapsed.value = !isSidebarCollapsed.value;
@@ -23,12 +24,28 @@ export const useUIStore = defineStore('ui', () => {
     isSecondaryPanelOpen.value = false;
   }
 
+  function startDashboardTour() {
+    isDashboardTourOpen.value = true;
+  }
+
+  function closeDashboardTour() {
+    isDashboardTourOpen.value = false;
+  }
+
+  function toggleDashboardTour() {
+    isDashboardTourOpen.value = !isDashboardTourOpen.value;
+  }
+
   return {
     isSidebarCollapsed,
     activeParentItem,
     isSecondaryPanelOpen,
+    isDashboardTourOpen,
     toggleSidebar,
     setActiveParent,
     closeSecondaryPanel,
+    startDashboardTour,
+    closeDashboardTour,
+    toggleDashboardTour,
   };
 });

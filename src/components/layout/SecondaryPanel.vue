@@ -202,21 +202,24 @@ const menuConfigs: Record<string, MenuConfig> = {
   'Campaigns': {
     groups: {
       'Overview': {
-        items: [{ label: 'All Campaigns', icon: Megaphone }],
+        items: [{ label: 'All Campaigns', icon: Megaphone, route: '/campaigns' }],
       },
       'Create': {
-        items: [{ label: 'Create Campaign', icon: Plus }],
+        items: [
+          { label: 'New WhatsApp Campaign', icon: Plus, route: '/campaigns?create=whatsapp' },
+          { label: 'New Email Campaign', icon: Plus, route: '/campaigns?create=email' },
+        ],
       },
       'Messaging': {
         items: [
           { label: 'Live Chat', icon: MessageSquare },
-          { label: 'WhatsApp', icon: MessageSquare },
+          { label: 'WhatsApp', icon: MessageSquare, route: '/campaigns?channel=whatsapp' },
           { label: 'SMS', icon: MessageSquare },
         ],
       },
       'Email': {
         items: [
-          { label: 'Email Campaigns', icon: Mail },
+          { label: 'Email Campaigns', icon: Mail, route: '/campaigns?channel=email' },
           { label: 'Email Templates', icon: FileText },
           { label: 'Email Providers', icon: Globe },
         ],
@@ -344,6 +347,8 @@ function handleItemClick(item: MenuItem) {
   if (item.route) {
     if (item.route.startsWith('/partner')) {
       ui.setActiveParent('Partners', false);
+    } else if (item.route.startsWith('/campaigns')) {
+      ui.setActiveParent('Campaigns', false);
     } else {
       ui.setActiveParent(item.label, false);
     }

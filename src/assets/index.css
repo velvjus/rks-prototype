@@ -98,6 +98,13 @@
     --accent-pink: oklch(0.656 0.241 354.308);
     --accent-indigo: oklch(0.585 0.233 277.117);
 
+    /* Interactive Guided Tour Tokens (Light Mode: Black Callout Card) */
+    --tour-scrim: oklch(0.14 0.032 264.7 / 0.38);
+    --tour-callout: oklch(0.145 0.015 264.7);
+    --tour-callout-foreground: oklch(0.985 0 0);
+    --tour-callout-muted: oklch(0.76 0.012 264.7);
+    --tour-callout-border: oklch(0.28 0.015 264.7);
+
     /* RKS Custom Brand Tokens */
     --rks-green: #23B750;
     --rks-green-dark: #1a943e;
@@ -220,6 +227,13 @@
     --accent-pink: oklch(0.718 0.202 349.761);
     --accent-indigo: oklch(0.673 0.182 276.935);
 
+    /* Interactive Guided Tour Tokens (Dark Mode: White Callout Card) */
+    --tour-scrim: oklch(0.06 0.008 285.8 / 0.54);
+    --tour-callout: oklch(0.985 0 0);
+    --tour-callout-foreground: oklch(0.145 0.015 264.7);
+    --tour-callout-muted: oklch(0.42 0.018 264.7);
+    --tour-callout-border: oklch(0.88 0.01 255.5);
+
     /* Toggleable Shadow System (Dark Mode) - diffused glow with lower opacity */
     --rks-shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.2);
     --rks-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
@@ -335,6 +349,11 @@
   --color-accent-orange: var(--accent-orange);
   --color-accent-pink: var(--accent-pink);
   --color-accent-indigo: var(--accent-indigo);
+  --color-tour-scrim: var(--tour-scrim);
+  --color-tour-callout: var(--tour-callout);
+  --color-tour-callout-foreground: var(--tour-callout-foreground);
+  --color-tour-callout-muted: var(--tour-callout-muted);
+  --color-tour-callout-border: var(--tour-callout-border);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);

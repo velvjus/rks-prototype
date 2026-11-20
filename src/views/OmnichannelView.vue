@@ -1062,6 +1062,14 @@ interface TimelineNode {
   status?: 'sending' | 'sent' | 'delivered' | 'failed' | 'expired'
   audioUrl?: string
   audioDuration?: string
+  audioLanguage?: string
+  transcriptText?: string
+  translatedText?: string
+  isTranscribing?: boolean
+  isTranscribed?: boolean
+  isTranslating?: boolean
+  isTranslated?: boolean
+  isPlayingAudio?: boolean
   crmMatchState?: 'unknown' | 'potential' | 'match-found' | 'matches-found' | 'new-channel'
   noteAuthor?: string
   noteAuthorAvatar?: string
@@ -1069,6 +1077,73 @@ interface TimelineNode {
   logClass?: string
   metaLabel?: string
   quote?: QuotedMessage
+}
+
+// Voice note playback, transcription, and translation handlers
+const toggleAudioPlayback = (msg: TimelineNode) => {
+  msg.isPlayingAudio = !msg.isPlayingAudio
+  if (msg.isPlayingAudio) {
+    addToast('Playing Malay voice note...', 'info', 2000)
+    setTimeout(() => {
+      msg.isPlayingAudio = false
+    }, 4000)
+  }
+}
+
+const handleTranscribeVoiceNote = (msg: TimelineNode) => {
+  if (msg.isTranscribed || msg.isTranscribing) return
+  msg.isTranscribing = true
+  setTimeout(() => {
+    msg.isTranscribing = false
+    msg.isTranscribed = true
+    if (!msg.transcriptText) {
+      msg.transcriptText = 'Helo Olivia, kami berminat dengan pakej Enterprise RakanSales untuk 25 ejen jualan kami. Boleh kongsikan sebut harga rasmi dan tarikh demo minggu ini?'
+    }
+    addToast('Voice note transcribed (Bahasa Melayu)', 'success')
+  }, 320)
+}
+
+const handleTranslateVoiceNote = (msg: TimelineNode) => {
+  if (msg.isTranslated || msg.isTranslating) return
+  msg.isTranslating = true
+  setTimeout(() => {
+    msg.isTranslating = false
+    msg.isTranslated = true
+    if (!msg.translatedText) {
+      msg.translatedText = 'Hello Olivia, we are interested in the RakanSales Enterprise package for our 25 sales agents. Could you share an official quotation and a demo slot this week?'
+    }
+    addToast('Transcript translated to English', 'success')
+  }, 280)
+}
+
+const simulateIncomingMalayVoiceNote = () => {
+  const id = selectedConversationId.value
+  const sender = activeConversation.value?.sender || 'Mei Ting'
+  if (!chatMessages.value[id]) {
+    chatMessages.value[id] = []
+  }
+  const newAudioNode: TimelineNode = {
+    id: `vn-malay-${Date.now()}`,
+    sender,
+    isSelf: false,
+    text: '',
+    time: 'Just now',
+    type: 'audio',
+    audioDuration: '00:11',
+    audioLanguage: 'Bahasa Melayu',
+    transcriptText: 'Selamat pagi! Kami sudah semak cadangan integrasi WhatsApp CRM tadi. Boleh kita jadualkan panggilan ringkas petang ini untuk sahkan pakej langganan?',
+    translatedText: 'Good morning! We have reviewed the WhatsApp CRM integration proposal earlier. Can we schedule a quick call this afternoon to confirm the subscription package?',
+    isTranscribed: false,
+    isTranslated: false
+  }
+  chatMessages.value[id].push(newAudioNode)
+  const conv = conversationsList.value.find(c => c.id === id)
+  if (conv) {
+    conv.message = '🎤 Voice message (0:11)'
+    conv.time = 'Just now'
+  }
+  addToast(`New Malay voice note received from ${sender}`, 'info')
+  scrollToBottom()
 }
 
 // Set up rich historical chat transcripts mapped by conversation ID
@@ -1123,6 +1198,20 @@ const chatMessages = ref<Record<string, TimelineNode[]>>({
       time: '02:19 PM',
       type: 'message',
       metaLabel: 'AI Response'
+    },
+    {
+      id: 'm1_audio_bm',
+      sender: 'Mei Ting',
+      isSelf: false,
+      text: '',
+      time: '02:21 PM',
+      type: 'audio',
+      audioDuration: '00:12',
+      audioLanguage: 'Bahasa Melayu',
+      transcriptText: 'Helo Olivia, kami berminat dengan pakej Enterprise RakanSales untuk 25 ejen jualan kami. Boleh kongsikan sebut harga rasmi dan tarikh demo minggu ini?',
+      translatedText: 'Hello Olivia, we are interested in the RakanSales Enterprise package for our 25 sales agents. Could you share an official quotation and a demo slot this week?',
+      isTranscribed: false,
+      isTranslated: false
     }
   ],
   'conv-2': [
@@ -1157,7 +1246,12 @@ const chatMessages = ref<Record<string, TimelineNode[]>>({
       text: '',
       time: '11:40 AM',
       type: 'audio',
-      audioDuration: '00:08'
+      audioDuration: '00:08',
+      audioLanguage: 'Bahasa Melayu',
+      transcriptText: 'Helo RakanSales, kami sedang mencari sistem CRM yang boleh gabungkan semua mesej WhatsApp dan e-mel pasukan jualan kami di kilang KK Steel. Boleh kongsi harga pakej?',
+      translatedText: 'Hello RakanSales, we are looking for a CRM system that can unify all WhatsApp messages and emails for our sales team at KK Steel factory. Could you share the package pricing?',
+      isTranscribed: false,
+      isTranslated: false
     },
     {
       id: 'm3_2',
@@ -2738,6 +2832,20 @@ nextTick(() => {
         </div>
         
         <div class="flex gap-2 items-center flex-nowrap">
+          <!-- Simulate Incoming Malay Voice Note Button (For Demo/Filming) -->
+          <button
+            @click="simulateIncomingMalayVoiceNote"
+            class="inline-flex items-center justify-center gap-1.5 px-3 h-8.5 rounded-lg border border-border bg-card hover:bg-muted/60 text-foreground text-xs font-semibold shadow-2xs cursor-pointer active:scale-95 transition-all outline-none select-none shrink-0"
+            title="Simulate an incoming Bahasa Melayu voice note"
+          >
+            <svg class="w-3.5 h-3.5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+              <line x1="12" x2="12" y1="19" y2="22"/>
+            </svg>
+            <span class="hidden sm:inline">Incoming Voice Note (BM)</span>
+          </button>
+
           <!-- Primary Resolve / Reopen Action Button -->
           <button
             v-if="activeConversation.section !== 'Resolved' && activeConversation.lifecycleState !== 'closed' && activeConversation.lifecycleState !== 'archived'"
@@ -3090,40 +3198,146 @@ nextTick(() => {
               </div>
             </div>
 
-            <!-- 6. Playable Audio wave bubble player -->
-            <div v-else-if="msg.type === 'audio'" class="flex flex-col gap-1 w-full max-w-[70%] self-start items-start select-none animate-in fade-in duration-200">
+            <!-- 6. Playable Audio wave bubble player with Transcription & Translation -->
+            <div v-else-if="msg.type === 'audio'" class="flex flex-col gap-1.5 w-full max-w-[75%] self-start items-start select-none animate-in fade-in duration-200">
               <div class="flex items-center gap-1.5 px-1 select-none text-[10px] text-muted-foreground font-bold">
                 <span class="font-bold text-muted-foreground">{{ msg.sender }}</span>
+                <span>•</span>
                 <span>{{ msg.time }}</span>
+                <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-tag-6 text-tag-6-foreground text-[9px] font-extrabold uppercase tracking-wider">
+                  Voice Note ({{ msg.audioLanguage || 'Bahasa Melayu' }})
+                </span>
               </div>
-              <div class="flex items-center gap-3.5 p-3 rounded-2xl bg-card border border-border shadow-sm w-64 h-13.5">
-                <!-- Audio play toggle button -->
-                <button @click="addToast('Playing voice message playback...', 'info')" class="w-8 h-8 rounded-full bg-[var(--tag-6-foreground)] hover:bg-[var(--tag-6-foreground)] flex items-center justify-center text-primary-foreground transition-all hover:scale-105 active:scale-95 cursor-pointer shrink-0">
-                  <svg class="w-4 h-4 fill-current ml-0.5" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                </button>
-                <div class="flex-1 flex flex-col gap-1">
-                  <!-- Audio waveform lines -->
-                  <div class="flex items-end gap-[2px] h-5 mb-0.5">
-                    <span class="w-[3px] bg-[var(--tag-6-foreground)] rounded-full" style="height: 12px"></span>
-                    <span class="w-[3px] bg-[var(--tag-6-foreground)] rounded-full" style="height: 18px"></span>
-                    <span class="w-[3px] bg-muted rounded-full" style="height: 6px"></span>
-                    <span class="w-[3px] bg-[var(--tag-6-foreground)] rounded-full" style="height: 14px"></span>
-                    <span class="w-[3px] bg-[var(--tag-6-foreground)] rounded-full" style="height: 20px"></span>
-                    <span class="w-[3px] bg-muted rounded-full" style="height: 10px"></span>
-                    <span class="w-[3px] bg-muted rounded-full" style="height: 16px"></span>
-                    <span class="w-[3px] bg-[var(--tag-6-foreground)] rounded-full" style="height: 8px"></span>
-                    <span class="w-[3px] bg-[var(--tag-6-foreground)] rounded-full" style="height: 15px"></span>
-                    <span class="w-[3px] bg-muted rounded-full" style="height: 12px"></span>
-                    <span class="w-[3px] bg-muted rounded-full" style="height: 4px"></span>
-                    <span class="w-[3px] bg-[var(--tag-6-foreground)] rounded-full" style="height: 18px"></span>
-                    <span class="w-[3px] bg-[var(--tag-6-foreground)] rounded-full" style="height: 12px"></span>
-                    <span class="w-[3px] bg-muted rounded-full" style="height: 8px"></span>
-                    <span class="w-[3px] bg-muted rounded-full" style="height: 14px"></span>
-                    <span class="w-[3px] bg-[var(--tag-6-foreground)] rounded-full" style="height: 6px"></span>
+
+              <!-- Voice Note Player Card + Transcript & Translation Container -->
+              <div class="flex flex-col rounded-2xl bg-card border border-border shadow-sm overflow-hidden w-full max-w-md transition-all duration-200">
+                <!-- Player Row -->
+                <div class="flex items-center gap-3.5 p-3.5">
+                  <!-- Audio play/pause toggle button -->
+                  <button
+                    @click="toggleAudioPlayback(msg)"
+                    class="w-9 h-9 rounded-full bg-primary hover:bg-primary/90 flex items-center justify-center text-primary-foreground transition-all hover:scale-105 active:scale-95 cursor-pointer shrink-0 shadow-2xs"
+                    :title="msg.isPlayingAudio ? 'Pause voice note' : 'Play voice note'"
+                  >
+                    <svg v-if="!msg.isPlayingAudio" class="w-4 h-4 fill-current ml-0.5" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    <svg v-else class="w-4 h-4 fill-current" viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+                  </button>
+
+                  <div class="flex-1 flex flex-col gap-1.5 min-w-0">
+                    <!-- Audio waveform lines -->
+                    <div class="flex items-end gap-[3px] h-5">
+                      <span class="w-[3px] rounded-full transition-all duration-300" :class="msg.isPlayingAudio ? 'bg-primary animate-pulse' : 'bg-primary'" style="height: 12px"></span>
+                      <span class="w-[3px] rounded-full transition-all duration-300" :class="msg.isPlayingAudio ? 'bg-primary animate-pulse' : 'bg-primary'" style="height: 18px"></span>
+                      <span class="w-[3px] rounded-full transition-all duration-300" :class="msg.isPlayingAudio ? 'bg-primary/80' : 'bg-muted-foreground/30'" style="height: 7px"></span>
+                      <span class="w-[3px] rounded-full transition-all duration-300" :class="msg.isPlayingAudio ? 'bg-primary animate-pulse' : 'bg-primary'" style="height: 15px"></span>
+                      <span class="w-[3px] rounded-full transition-all duration-300" :class="msg.isPlayingAudio ? 'bg-primary animate-pulse' : 'bg-primary'" style="height: 20px"></span>
+                      <span class="w-[3px] rounded-full transition-all duration-300" :class="msg.isPlayingAudio ? 'bg-primary/80' : 'bg-muted-foreground/30'" style="height: 10px"></span>
+                      <span class="w-[3px] rounded-full transition-all duration-300" :class="msg.isPlayingAudio ? 'bg-primary/80' : 'bg-muted-foreground/30'" style="height: 16px"></span>
+                      <span class="w-[3px] rounded-full transition-all duration-300" :class="msg.isPlayingAudio ? 'bg-primary animate-pulse' : 'bg-primary'" style="height: 9px"></span>
+                      <span class="w-[3px] rounded-full transition-all duration-300" :class="msg.isPlayingAudio ? 'bg-primary animate-pulse' : 'bg-primary'" style="height: 16px"></span>
+                      <span class="w-[3px] rounded-full transition-all duration-300" :class="msg.isPlayingAudio ? 'bg-primary/70' : 'bg-muted-foreground/30'" style="height: 12px"></span>
+                      <span class="w-[3px] rounded-full transition-all duration-300" :class="msg.isPlayingAudio ? 'bg-primary/70' : 'bg-muted-foreground/30'" style="height: 6px"></span>
+                      <span class="w-[3px] rounded-full transition-all duration-300" :class="msg.isPlayingAudio ? 'bg-primary animate-pulse' : 'bg-primary'" style="height: 18px"></span>
+                      <span class="w-[3px] rounded-full transition-all duration-300" :class="msg.isPlayingAudio ? 'bg-primary animate-pulse' : 'bg-primary'" style="height: 13px"></span>
+                      <span class="w-[3px] rounded-full transition-all duration-300" :class="msg.isPlayingAudio ? 'bg-primary/70' : 'bg-muted-foreground/30'" style="height: 8px"></span>
+                      <span class="w-[3px] rounded-full transition-all duration-300" :class="msg.isPlayingAudio ? 'bg-primary/70' : 'bg-muted-foreground/30'" style="height: 14px"></span>
+                      <span class="w-[3px] rounded-full transition-all duration-300" :class="msg.isPlayingAudio ? 'bg-primary' : 'bg-primary'" style="height: 8px"></span>
+                      <span class="w-[3px] rounded-full transition-all duration-300" :class="msg.isPlayingAudio ? 'bg-primary/70' : 'bg-muted-foreground/30'" style="height: 15px"></span>
+                      <span class="w-[3px] rounded-full transition-all duration-300" :class="msg.isPlayingAudio ? 'bg-primary/70' : 'bg-muted-foreground/30'" style="height: 10px"></span>
+                    </div>
+                    <div class="flex items-center justify-between text-[10px] text-muted-foreground font-bold leading-none">
+                      <span>{{ msg.isPlayingAudio ? 'Playing...' : (msg.audioDuration || '00:12') }}</span>
+                      <span>{{ msg.time }}</span>
+                    </div>
                   </div>
-                  <div class="flex items-center justify-between text-[9px] text-muted-foreground font-extrabold leading-none">
-                    <span>{{ msg.audioDuration || '00:00' }}</span>
-                    <span>11:40 AM</span>
+
+                  <!-- Transcribe Action Button -->
+                  <button
+                    v-if="!msg.isTranscribed"
+                    @click="handleTranscribeVoiceNote(msg)"
+                    :disabled="msg.isTranscribing"
+                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border border-primary/30 bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground transition-all cursor-pointer shrink-0 active:scale-95"
+                  >
+                    <svg v-if="msg.isTranscribing" class="w-3.5 h-3.5 animate-spin" viewBox="0 0 24 24" fill="none">
+                      <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" class="opacity-25"/>
+                      <path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" class="opacity-75"/>
+                    </svg>
+                    <svg v-else class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M9.813 15.904L9 21l-.813-5.096L3.096 15 8.187 14.187 9 9l.813 5.187L14.904 15z"/>
+                      <path d="M18 3v4M20 5h-4"/>
+                    </svg>
+                    <span>{{ msg.isTranscribing ? 'Transcribing...' : 'Transcribe' }}</span>
+                  </button>
+                  <span
+                    v-else
+                    class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-success/10 text-success border border-success/20 text-[10px] font-bold shrink-0"
+                  >
+                    <svg class="w-3 h-3 stroke-current stroke-[2.5]" fill="none" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span>Transcribed</span>
+                  </span>
+                </div>
+
+                <!-- Bahasa Melayu Transcript Section (Revealed after clicking Transcribe) -->
+                <div
+                  v-if="msg.isTranscribed"
+                  class="border-t border-border bg-muted/30 px-3.5 py-3 flex flex-col gap-2.5 select-text animate-in fade-in slide-in-from-top-1 duration-200"
+                >
+                  <div class="flex items-center justify-between gap-2">
+                    <div class="flex items-center gap-1.5">
+                      <span class="inline-flex items-center px-2 py-0.5 rounded-md bg-tag-3 text-tag-3-foreground text-[10px] font-extrabold uppercase tracking-wider">
+                        Transcript • Bahasa Melayu
+                      </span>
+                    </div>
+
+                    <!-- Translate Action Button -->
+                    <button
+                      v-if="!msg.isTranslated"
+                      @click="handleTranslateVoiceNote(msg)"
+                      :disabled="msg.isTranslating"
+                      class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold border border-info/30 bg-info/10 text-info hover:bg-info hover:text-info-foreground transition-all cursor-pointer active:scale-95 select-none"
+                    >
+                      <svg v-if="msg.isTranslating" class="w-3 h-3 animate-spin" viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" class="opacity-25"/>
+                        <path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" class="opacity-75"/>
+                      </svg>
+                      <svg v-else class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m5 8 6 6"/>
+                        <path d="m4 14 6-6 2-3"/>
+                        <path d="M2 5h12"/>
+                        <path d="M7 2h1"/>
+                        <path d="m22 22-5-10-5 10"/>
+                        <path d="M14 18h6"/>
+                      </svg>
+                      <span>{{ msg.isTranslating ? 'Translating...' : 'Translate' }}</span>
+                    </button>
+                    <span
+                      v-else
+                      class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-info/10 text-info text-[10px] font-bold select-none"
+                    >
+                      <svg class="w-3 h-3 stroke-current stroke-[2.5]" fill="none" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                      <span>Translated to EN</span>
+                    </span>
+                  </div>
+
+                  <!-- Original Malay Transcript Text -->
+                  <p class="text-xs text-foreground leading-relaxed font-medium">
+                    "{{ msg.transcriptText || 'Helo Olivia, kami berminat dengan pakej Enterprise RakanSales untuk 25 ejen jualan kami. Boleh kongsikan sebut harga rasmi dan tarikh demo minggu ini?' }}"
+                  </p>
+
+                  <!-- English Translation Section (Revealed below Bahasa Melayu text after clicking Translate) -->
+                  <div
+                    v-if="msg.isTranslated"
+                    class="mt-0.5 pt-2.5 border-t border-border/80 bg-card/80 rounded-xl p-3 border flex flex-col gap-1.5 animate-in fade-in slide-in-from-top-1 duration-200"
+                  >
+                    <div class="flex items-center justify-between">
+                      <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-info/10 text-info text-[10px] font-extrabold uppercase tracking-wider">
+                        English Translation
+                      </span>
+                      <span class="text-[10px] text-muted-foreground font-semibold">BM → EN</span>
+                    </div>
+                    <p class="text-xs text-foreground leading-relaxed font-semibold">
+                      "{{ msg.translatedText || 'Hello Olivia, we are interested in the RakanSales Enterprise package for our 25 sales agents. Could you share an official quotation and a demo slot this week?' }}"
+                    </p>
                   </div>
                 </div>
               </div>
