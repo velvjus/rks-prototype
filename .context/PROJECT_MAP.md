@@ -6,11 +6,11 @@
 
 ## 1. Recent Activity (Last 5 Tasks)
 
+- **2026-11-27** — Redesigned Onboarding v2 Step 5 (`StepPaymentMethod.vue`, `OnboardingView.vue`) and `html/onboarding-wizard.html`: unified 7-day free trial flow (`TRIAL_DAYS = 7`) with **Add card now** (default) vs **Add card later**, single dark-header Plan Summary card, 3-section embedded card/billing/MyInvois form (Malaysia/+60 default, inline blur & submit validation), and single always-enabled **Start free trial** footer CTA.
 - **2026-11-21** — Updated Onboarding v2 Step 1 (`StepCompanyNameType.vue`, `OnboardingView.vue`, `OnboardingTopStepper.vue`) and `html/onboarding-wizard.html`: replaced Company Type with "How will your company use RakanSales?" (Sales & Lead Management / Customer & Service Support), added optional Referral Code field, and standardized step CTA buttons to `"Next"`.
 - **2026-11-21** — Built Storylane/Supademo-style interactive dashboard walkthrough (`DashboardInteractiveTour.vue`), added on-demand `Tour` button beside Help in `TopNav.vue`, and added `--tour-scrim` / `--tour-callout*` tokens (`index.css`).
 - **2026-11-21** — Set up `.context/` project map & task logging system (`PROJECT_MAP.md`, `TASK_LOG.md`, `scripts/check-map.cjs`, `AGENTS.md` continuity rules).
 - **2026-11-02** (`e166597`) — Updated CSS semantic tokens (`src/assets/index.css`), `colorTokensData.ts`, and `GuidelinesView.vue`.
-- **2026-11-02** (`f6b65dc`) — Implemented full system Light/Dark mode across all pages, components, and charts (`useTheme.ts`, `useChartTheme.ts`).
 
 ---
 
@@ -57,7 +57,7 @@
 | Module | Status | Route(s) | View & Key Components | Store / Data | Spec / Notes |
 |---|---|---|---|---|---|
 | **Auth Portal** | Live | `/auth` (`fullWidth`) | `src/views/AuthView.vue` | Local state | Switcher for Sign Up, OTP Verification, Login → links to `/onboarding` |
-| **Onboarding v2** | Live | `/onboarding`, `/onboarding-v2` (`fullWidth`) | `src/views/OnboardingView.vue`, `src/components/onboarding/v2/*` | Local state | Multi-step company, currency, team/industry, plan selection + confetti |
+| **Onboarding v2** | Live | `/onboarding`, `/onboarding-v2` (`fullWidth`) | `src/views/OnboardingView.vue`, `src/components/onboarding/v2/*` | Local state | 5-step company/use case, currency, team/industry, plan, optional payment method + confetti |
 | **Onboarding v1** | Legacy | `/onboarding-v1` (`fullWidth`) | `src/views/OnboardingV1View.vue`, `src/components/onboarding/Step*.vue` | Local state | Earlier onboarding iteration kept for reference |
 | **Setup Wizard** | Live | `/setup-wizard` (`fullWidth`) | `src/views/SetupWizardView.vue`, `src/components/onboarding/v2/StepWizard*.vue` | `localStorage` | Post-signup checklist: Sales Team, WhatsApp Channel, Website LiveChat |
 

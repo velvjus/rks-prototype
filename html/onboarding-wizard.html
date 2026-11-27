@@ -63,13 +63,13 @@
 </head>
 <body class="h-full bg-[#f9fafb] text-slate-800 font-sans flex flex-col overflow-hidden selection:bg-[#23B750]/20 selection:text-emerald-900">
 
-  <!-- TOP STEPPER (Steps 1–4) -->
+  <!-- TOP STEPPER (Steps 1–5) -->
   <nav id="top-stepper" aria-label="Onboarding Progress" class="w-full bg-transparent pt-6 sm:pt-8 pb-3 px-6 shrink-0">
     <div class="max-w-xl mx-auto space-y-2">
       <!-- Top Text Row -->
       <div class="flex items-center justify-between text-xs">
         <span id="step-counter" class="font-bold text-[#23B750] tracking-wider uppercase text-[11px]">
-          Step 1 of 4
+          Step 1 of 5
         </span>
         <div class="flex items-center gap-2.5">
           <span id="step-subtitle" class="text-gray-400 font-medium text-xs">
@@ -82,12 +82,13 @@
         </div>
       </div>
 
-      <!-- Segmented 4-Bar Progress Indicator -->
-      <div class="grid grid-cols-4 gap-2.5" role="progressbar">
+      <!-- Segmented 5-Bar Progress Indicator -->
+      <div class="grid grid-cols-5 gap-2.5" role="progressbar">
         <button type="button" onclick="goToStep(1)" id="bar-1" class="h-1.5 rounded-full transition-all duration-300 bg-[#23B750] cursor-pointer" title="Go to step 1"></button>
         <button type="button" onclick="goToStep(2)" id="bar-2" class="h-1.5 rounded-full transition-all duration-300 bg-gray-200/80 cursor-default" title="Go to step 2"></button>
         <button type="button" onclick="goToStep(3)" id="bar-3" class="h-1.5 rounded-full transition-all duration-300 bg-gray-200/80 cursor-default" title="Go to step 3"></button>
         <button type="button" onclick="goToStep(4)" id="bar-4" class="h-1.5 rounded-full transition-all duration-300 bg-gray-200/80 cursor-default" title="Go to step 4"></button>
+        <button type="button" onclick="goToStep(5)" id="bar-5" class="h-1.5 rounded-full transition-all duration-300 bg-gray-200/80 cursor-default" title="Go to step 5"></button>
       </div>
     </div>
   </nav>
@@ -597,6 +598,307 @@
     </div>
 
     <!-- ══════════════════════════════════════════
+         STEP 5: START 7-DAY FREE TRIAL / PAYMENT METHOD
+         ══════════════════════════════════════════ -->
+    <div id="stage-step-5" class="w-full max-w-xl mx-auto px-6 py-4 sm:py-6 mb-auto flex flex-col hidden">
+      <div class="w-full flex flex-col gap-6">
+        <div class="space-y-5">
+          <!-- 2. Heading & Subtitle (No "Optional" pill) -->
+          <div class="shrink-0">
+            <h2 id="step5-heading" class="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
+              Start your 7-day free trial
+            </h2>
+            <p class="text-xs sm:text-sm text-gray-500 mt-1 leading-relaxed">
+              You won't be charged today. Choose how you'd like to pay when your trial ends.
+            </p>
+          </div>
+
+          <!-- 3. Option Selector (Two equal cards side by side, stacked on mobile) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" role="radiogroup" aria-label="Choose when to add a payment method">
+            <!-- Left Card: Add card now (default) -->
+            <button
+              type="button"
+              role="radio"
+              id="pay-mode-now"
+              onclick="setPaymentMode('now')"
+              aria-checked="true"
+              class="pay-mode-card p-4 rounded-2xl border border-[#23B750] bg-emerald-50/50 ring-2 ring-[#23B750]/15 shadow-xs transition-all duration-150 cursor-pointer flex items-start gap-3 text-left"
+            >
+              <div class="mode-icon w-9 h-9 rounded-xl bg-[#23B750] text-white flex items-center justify-center shrink-0 shadow-2xs">
+                <i data-lucide="credit-card" class="w-4.5 h-4.5"></i>
+              </div>
+              <div class="min-w-0 flex-1">
+                <div class="text-xs font-semibold text-gray-900 leading-snug">Add card now</div>
+                <p class="text-[11px] text-gray-500 mt-0.5 leading-relaxed">Renews automatically when your trial ends</p>
+              </div>
+              <span class="mode-check w-4.5 h-4.5 rounded-full bg-[#23B750] text-white flex items-center justify-center shrink-0 mt-0.5">
+                <i data-lucide="check" class="w-3 h-3 stroke-[3]"></i>
+              </span>
+            </button>
+
+            <!-- Right Card: Add card later -->
+            <button
+              type="button"
+              role="radio"
+              id="pay-mode-later"
+              onclick="setPaymentMode('later')"
+              aria-checked="false"
+              class="pay-mode-card p-4 rounded-2xl border border-gray-200 bg-white hover:bg-gray-50/60 transition-all duration-150 cursor-pointer flex items-start gap-3 text-left"
+            >
+              <div class="mode-icon w-9 h-9 rounded-xl bg-gray-100 text-gray-500 flex items-center justify-center shrink-0">
+                <i data-lucide="clock" class="w-4.5 h-4.5"></i>
+              </div>
+              <div class="min-w-0 flex-1">
+                <div class="text-xs font-semibold text-gray-900 leading-snug">Add card later</div>
+                <p class="text-[11px] text-gray-500 mt-0.5 leading-relaxed">We'll remind you before your trial ends</p>
+              </div>
+              <span class="mode-check w-4.5 h-4.5 rounded-full border border-gray-300 bg-white flex items-center justify-center shrink-0 mt-0.5">
+                <i data-lucide="check" class="w-3 h-3 stroke-[3] hidden"></i>
+              </span>
+            </button>
+          </div>
+
+          <!-- 4. Plan Summary Card (Single unified design for both states) -->
+          <div class="rounded-2xl border border-gray-200 bg-white overflow-hidden shadow-xs">
+            <!-- Dark Header Band -->
+            <div class="bg-gray-950 text-white px-4 py-3.5 flex items-center justify-between gap-3 border-b border-gray-800">
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="w-9 h-9 rounded-xl bg-[#23B750] text-white flex items-center justify-center shrink-0 shadow-xs">
+                  <i data-lucide="sparkles" class="w-5 h-5 stroke-[2.25]"></i>
+                </div>
+                <div class="min-w-0">
+                  <div id="payment-plan-title" class="text-xs font-semibold text-white truncate">
+                    Growth Plan · 7-day free trial
+                  </div>
+                  <p id="payment-plan-price" class="text-[11px] text-gray-300 truncate mt-0.5">
+                    Then RM 350/mo (billed annually) · Cancel anytime
+                  </p>
+                </div>
+              </div>
+              <div class="text-right shrink-0">
+                <div class="text-base font-bold text-[#23B750] tabular-nums leading-none">RM 0.00</div>
+                <div class="text-[10px] font-medium text-gray-300 mt-1">Due today</div>
+              </div>
+            </div>
+
+            <!-- Summary Rows & Single Status Line -->
+            <div class="p-4 sm:p-5 space-y-3">
+              <div class="space-y-2 text-xs">
+                <div class="flex items-center justify-between text-gray-500">
+                  <span id="summary-plan-cycle">Growth plan (Yearly)</span>
+                  <span id="summary-subtotal" class="tabular-nums font-medium text-gray-900">RM 4,200.00</span>
+                </div>
+                <div id="summary-tax-row" class="flex items-center justify-between text-gray-500">
+                  <span>Estimated taxes (8% SST)</span>
+                  <span id="summary-tax" class="tabular-nums font-medium text-gray-900">RM 336.00</span>
+                </div>
+                <div class="flex items-center justify-between pt-2.5 border-t border-gray-100">
+                  <span id="summary-total-label" class="font-semibold text-gray-900">Total after 7-day trial</span>
+                  <span id="summary-total" class="font-bold text-gray-900 tabular-nums">RM 4,536.00</span>
+                </div>
+              </div>
+
+              <!-- Single Status Line (Only text that changes between states) -->
+              <p id="summary-status-line" class="pt-3 border-t border-gray-100 text-xs text-gray-500 leading-relaxed"></p>
+            </div>
+          </div>
+
+          <!-- 5. Payment & Billing Form (Shown ONLY when "Add card now" is selected) -->
+          <div id="payment-form-card" class="rounded-2xl border border-gray-200 bg-white p-4 sm:p-5 shadow-2xs divide-y divide-gray-100">
+            <!-- Section 1: Card Details -->
+            <section class="pb-5 space-y-4">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <h3 class="text-sm font-bold text-gray-900">Card details</h3>
+                  <p class="text-[11px] text-gray-500 mt-0.5 flex items-center gap-1">
+                    <i data-lucide="lock" class="w-3 h-3 shrink-0 text-[#23B750]"></i>
+                    <span>Secured by encrypted payment fields</span>
+                  </p>
+                </div>
+
+                <!-- Accepted Card Logos -->
+                <div class="flex items-center gap-1.5" aria-label="Accepted cards: Visa, Mastercard, American Express">
+                  <span id="logo-visa" class="h-6 px-2 rounded-md border border-gray-200 bg-white text-gray-800 inline-flex items-center justify-center transition-all" title="Visa">
+                    <svg class="h-2.5 w-auto" viewBox="0 0 48 16" fill="currentColor" aria-hidden="true">
+                      <path d="M18.4 1.3L14.2 14.7h-3.4L8.2 4.3c-.1-.5-.3-.8-.8-1C6.5 2.8 5 2.3 3.7 2l.1-.7h5.7c.8 0 1.4.5 1.6 1.4l1.4 7.5 3.5-8.9h2.4zm13.4 9c0-3.5-4.9-3.7-4.8-5.3 0-.5.5-1 1.5-1.1.5-.1 1.9-.1 3.5.6l.6-2.9C31.7 1.3 30.5 1 29.1 1c-3.2 0-5.4 1.7-5.5 4.1 0 1.8 1.6 2.8 2.8 3.4 1.2.6 1.7 1 1.7 1.5 0 .8-1 1.2-1.9 1.2-1.6 0-2.5-.4-3.3-.8l-.6 3c.8.3 2.2.6 3.6.6 3.4 0 5.9-1.6 5.9-3.7zm8.6 4.4h3L40.8 1.3h-2.7c-.6 0-1.2.4-1.4.9l-4.9 12.5h3.4l.7-1.9h4.1l.4 1.9zm-3.6-4.5l1.7-4.7 1 4.7h-2.7zM22.7 1.3l-2.7 13.4h-3.2l2.7-13.4h3.2z" />
+                    </svg>
+                  </span>
+                  <span id="logo-mc" class="h-6 px-2 rounded-md border border-gray-200 bg-white inline-flex items-center justify-center transition-all" title="Mastercard">
+                    <svg class="h-3.5 w-auto" viewBox="0 0 28 18" aria-hidden="true">
+                      <circle cx="10.5" cy="9" r="7" fill="#EB001B" />
+                      <circle cx="17.5" cy="9" r="7" fill="#F79E1B" fill-opacity="0.85" />
+                    </svg>
+                  </span>
+                  <span id="logo-amex" class="h-6 px-1.5 rounded-md border border-gray-200 bg-white text-blue-600 inline-flex items-center justify-center text-[9px] font-bold tracking-tight transition-all" title="American Express">
+                    AMEX
+                  </span>
+                </div>
+              </div>
+
+              <div class="space-y-3.5">
+                <div class="space-y-1.5">
+                  <label for="cardNumber" class="block text-xs font-semibold text-gray-700">Card number</label>
+                  <div class="relative" data-provider-field="card-number">
+                    <input id="cardNumber" type="text" inputmode="numeric" autocomplete="cc-number" maxlength="19" placeholder="1234 5678 9012 3456" oninput="onCardNumberInput(this)" onblur="touchPaymentField('cardNumber')" class="w-full h-10 pl-3 pr-10 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-900 tabular-nums placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#23B750]/20 focus:border-[#23B750]" />
+                    <i data-lucide="lock" class="w-3.5 h-3.5 text-gray-400 pointer-events-none absolute right-3 top-1/2 -translate-y-1/2"></i>
+                  </div>
+                  <p id="err-cardNumber" class="hidden text-[11px] font-medium text-red-600"></p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                  <div class="space-y-1.5" data-provider-field="card-expiry">
+                    <label for="cardExpiry" class="block text-xs font-semibold text-gray-700">Expiry</label>
+                    <input id="cardExpiry" type="text" inputmode="numeric" autocomplete="cc-exp" maxlength="7" placeholder="MM / YY" oninput="onExpiryInput(this)" onblur="touchPaymentField('cardExpiry')" class="w-full h-10 px-3 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-900 tabular-nums placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#23B750]/20 focus:border-[#23B750]" />
+                    <p id="err-cardExpiry" class="hidden text-[11px] font-medium text-red-600"></p>
+                  </div>
+
+                  <div class="space-y-1.5" data-provider-field="card-cvc">
+                    <label for="cardCvc" class="block text-xs font-semibold text-gray-700">CVC</label>
+                    <input id="cardCvc" type="password" inputmode="numeric" autocomplete="cc-csc" maxlength="4" placeholder="123" oninput="onCvcInput(this)" onblur="touchPaymentField('cardCvc')" class="w-full h-10 px-3 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-900 tabular-nums placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#23B750]/20 focus:border-[#23B750]" />
+                    <p id="err-cardCvc" class="hidden text-[11px] font-medium text-red-600"></p>
+                  </div>
+                </div>
+
+                <div class="space-y-1.5">
+                  <label for="cardName" class="block text-xs font-semibold text-gray-700">Name on card</label>
+                  <input id="cardName" type="text" autocomplete="cc-name" placeholder="e.g. Ahmad Razak" oninput="onPaymentFieldInput('cardName', this.value)" onblur="touchPaymentField('cardName')" class="w-full h-10 px-3 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#23B750]/20 focus:border-[#23B750]" />
+                  <p id="err-cardName" class="hidden text-[11px] font-medium text-red-600"></p>
+                </div>
+              </div>
+            </section>
+
+            <!-- Section 2: Billing Details -->
+            <section class="py-5 space-y-3.5">
+              <h3 class="text-sm font-bold text-gray-900">Billing details</h3>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                <div class="space-y-1.5">
+                  <label for="billingName" class="block text-xs font-semibold text-gray-700">Billing name</label>
+                  <input id="billingName" type="text" autocomplete="organization" placeholder="e.g. Acme Corporation Sdn Bhd" oninput="onPaymentFieldInput('billingName', this.value)" onblur="touchPaymentField('billingName')" class="w-full h-10 px-3 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#23B750]/20 focus:border-[#23B750]" />
+                  <p id="err-billingName" class="hidden text-[11px] font-medium text-red-600"></p>
+                </div>
+                <div class="space-y-1.5">
+                  <label for="billingEmail" class="block text-xs font-semibold text-gray-700">Billing email</label>
+                  <input id="billingEmail" type="email" autocomplete="email" placeholder="billing@company.com" oninput="onPaymentFieldInput('billingEmail', this.value)" onblur="touchPaymentField('billingEmail')" class="w-full h-10 px-3 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#23B750]/20 focus:border-[#23B750]" />
+                  <p id="err-billingEmail" class="hidden text-[11px] font-medium text-red-600"></p>
+                </div>
+              </div>
+
+              <div class="space-y-1.5">
+                <label for="addressLine1" class="block text-xs font-semibold text-gray-700">Address line 1</label>
+                <input id="addressLine1" type="text" autocomplete="address-line1" placeholder="Street address, building, unit" oninput="onPaymentFieldInput('addressLine1', this.value)" onblur="touchPaymentField('addressLine1')" class="w-full h-10 px-3 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#23B750]/20 focus:border-[#23B750]" />
+                <p id="err-addressLine1" class="hidden text-[11px] font-medium text-red-600"></p>
+              </div>
+
+              <div class="space-y-1.5">
+                <label for="addressLine2" class="block text-xs font-semibold text-gray-700">Address line 2 <span class="text-gray-400 font-normal">(optional)</span></label>
+                <input id="addressLine2" type="text" autocomplete="address-line2" placeholder="Suite, floor, industrial park" oninput="onPaymentFieldInput('addressLine2', this.value)" class="w-full h-10 px-3 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#23B750]/20 focus:border-[#23B750]" />
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                <div class="space-y-1.5">
+                  <label for="billingCity" class="block text-xs font-semibold text-gray-700">City</label>
+                  <input id="billingCity" type="text" autocomplete="address-level2" placeholder="e.g. Kuala Lumpur" oninput="onPaymentFieldInput('city', this.value)" onblur="touchPaymentField('city')" class="w-full h-10 px-3 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#23B750]/20 focus:border-[#23B750]" />
+                  <p id="err-city" class="hidden text-[11px] font-medium text-red-600"></p>
+                </div>
+                <div class="space-y-1.5">
+                  <label for="billingState" class="block text-xs font-semibold text-gray-700">State</label>
+                  <input id="billingState" type="text" autocomplete="address-level1" placeholder="e.g. Selangor" oninput="onPaymentFieldInput('state', this.value)" onblur="touchPaymentField('state')" class="w-full h-10 px-3 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#23B750]/20 focus:border-[#23B750]" />
+                  <p id="err-state" class="hidden text-[11px] font-medium text-red-600"></p>
+                </div>
+                <div class="space-y-1.5">
+                  <label for="billingPostcode" class="block text-xs font-semibold text-gray-700">Postcode</label>
+                  <input id="billingPostcode" type="text" autocomplete="postal-code" placeholder="e.g. 50450" oninput="onPaymentFieldInput('postcode', this.value)" onblur="touchPaymentField('postcode')" class="w-full h-10 px-3 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#23B750]/20 focus:border-[#23B750]" />
+                  <p id="err-postcode" class="hidden text-[11px] font-medium text-red-600"></p>
+                </div>
+                <div class="space-y-1.5">
+                  <label for="billingCountry" class="block text-xs font-semibold text-gray-700">Country</label>
+                  <input id="billingCountry" type="text" autocomplete="country-name" value="Malaysia" placeholder="Malaysia" oninput="onPaymentFieldInput('country', this.value)" onblur="touchPaymentField('country')" class="w-full h-10 px-3 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#23B750]/20 focus:border-[#23B750]" />
+                  <p id="err-country" class="hidden text-[11px] font-medium text-red-600"></p>
+                </div>
+              </div>
+            </section>
+
+            <!-- Section 3: E-invoice (MyInvois) Details -->
+            <section class="pt-5 space-y-3.5">
+              <div>
+                <h3 class="text-sm font-bold text-gray-900">E-invoice (MyInvois) details</h3>
+                <p class="text-[11px] text-gray-500 mt-0.5">Required by LHDN before invoices can be filed on your behalf.</p>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                <div class="space-y-1.5">
+                  <label for="tinTaxId" class="block text-xs font-semibold text-gray-700">TIN / Tax ID <span class="text-gray-400 font-normal">(optional)</span></label>
+                  <input id="tinTaxId" type="text" placeholder="e.g. C2584563200" oninput="onPaymentFieldInput('tinTaxId', this.value)" class="w-full h-10 px-3 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#23B750]/20 focus:border-[#23B750]" />
+                </div>
+                <div class="space-y-1.5">
+                  <label for="regNumber" class="block text-xs font-semibold text-gray-700 truncate">Business registration / ID number</label>
+                  <input id="regNumber" type="text" placeholder="e.g. 202001012345" oninput="onPaymentFieldInput('registrationNumber', this.value)" onblur="touchPaymentField('registrationNumber')" class="w-full h-10 px-3 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#23B750]/20 focus:border-[#23B750]" />
+                  <p id="err-registrationNumber" class="hidden text-[11px] font-medium text-red-600"></p>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                <div class="space-y-1.5">
+                  <label for="regType" class="block text-xs font-semibold text-gray-700">Registration type</label>
+                  <select id="regType" onchange="onPaymentFieldInput('registrationType', this.value); touchPaymentField('registrationType');" onblur="touchPaymentField('registrationType')" class="w-full h-10 px-3 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#23B750]/20 focus:border-[#23B750] cursor-pointer">
+                    <option value="" disabled selected>Select a registration type</option>
+                    <option value="BRN">BRN — Business Registration</option>
+                    <option value="NRIC">NRIC — Malaysian IC</option>
+                    <option value="PASSPORT">Passport</option>
+                    <option value="ARMY">Army / Police ID</option>
+                  </select>
+                  <p id="err-registrationType" class="hidden text-[11px] font-medium text-red-600"></p>
+                </div>
+                <div class="space-y-1.5">
+                  <label for="contactNumber" class="block text-xs font-semibold text-gray-700">Contact number</label>
+                  <div id="contact-input-wrap" class="flex items-center h-10 bg-white border border-gray-200 rounded-xl focus-within:ring-2 focus-within:ring-[#23B750]/20 focus-within:border-[#23B750] overflow-hidden">
+                    <select id="contactDialCode" onchange="onPaymentFieldInput('contactDialCode', this.value)" class="h-full px-2.5 bg-gray-50 border-r border-gray-200 text-xs font-semibold text-gray-700 focus:outline-none cursor-pointer">
+                      <option value="+60" selected>MY +60</option>
+                      <option value="+65">SG +65</option>
+                      <option value="+62">ID +62</option>
+                      <option value="+66">TH +66</option>
+                      <option value="+63">PH +63</option>
+                      <option value="+84">VN +84</option>
+                      <option value="+1">US +1</option>
+                      <option value="+44">GB +44</option>
+                      <option value="+61">AU +61</option>
+                    </select>
+                    <input id="contactNumber" type="tel" autocomplete="tel-national" placeholder="12 345 6789" oninput="onPaymentFieldInput('contactNumber', this.value)" onblur="touchPaymentField('contactNumber')" class="flex-1 min-w-0 h-full px-2.5 bg-transparent text-sm font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none" />
+                  </div>
+                  <p id="err-contactNumber" class="hidden text-[11px] font-medium text-red-600"></p>
+                  <p id="hint-contactNumber" class="text-[10px] text-gray-400 leading-snug">Pick the country code, then enter the number. Required for e-invoice filing.</p>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+
+        <!-- 6. FOOTER NAVIGATION (Pixel-identical in both states, always enabled) -->
+        <footer class="pt-5 border-t border-gray-200/70 flex items-center justify-between gap-3 shrink-0">
+          <button
+            type="button"
+            onclick="prevStep()"
+            class="text-xs font-semibold text-gray-500 hover:text-gray-900 transition-colors flex items-center gap-1 cursor-pointer"
+          >
+            <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+            <span>Back</span>
+          </button>
+
+          <button
+            type="button"
+            id="continue-btn-5"
+            onclick="nextStep()"
+            class="h-11 px-6 text-white text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 shadow-xs cursor-pointer bg-[#23B750] hover:bg-[#1a943e] active:scale-[0.99]"
+          >
+            <span>Start free trial</span>
+            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          </button>
+        </footer>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
          PROVISIONING LOADER (2 Seconds Transition)
          ══════════════════════════════════════════ -->
     <div id="stage-provisioning" class="w-full max-w-xl mx-auto px-6 py-16 my-auto flex flex-col items-center justify-center text-center hidden">
@@ -623,7 +925,7 @@
     </div>
 
     <!-- ══════════════════════════════════════════
-         STEP 5: SUCCESS CELEBRATION
+         STEP 6: SUCCESS CELEBRATION
          ══════════════════════════════════════════ -->
     <div id="stage-success" class="w-full max-w-md mx-auto px-6 py-16 my-auto flex flex-col justify-center text-center hidden">
       <div class="space-y-6">
@@ -636,11 +938,12 @@
             You're all set!
           </h2>
           <p class="text-xs sm:text-sm text-gray-500 max-w-sm mx-auto leading-relaxed">
-            Your RakanSales workspace has been created for
+            Your <span id="success-trial-days">7</span>-day free trial workspace has been created for
             <strong id="success-company-name" class="text-gray-900 font-semibold">your company</strong>
             on the
             <strong id="success-plan-name" class="text-[#23B750] font-semibold">Pro</strong> plan.
           </p>
+          <p id="success-payment-note" class="text-xs text-gray-400 max-w-sm mx-auto pt-1 hidden"></p>
         </div>
 
         <!-- Action Buttons -->
@@ -670,6 +973,15 @@
 
   <!-- JAVASCRIPT STATE ENGINE -->
   <script>
+    // Single source of truth for trial length
+    const TRIAL_DAYS = 7;
+
+    function getTrialEndDateLabel() {
+      const endDate = new Date();
+      endDate.setDate(endDate.getDate() + TRIAL_DAYS);
+      return new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }).format(endDate);
+    }
+
     // State Model
     const state = {
       currentStep: 1,
@@ -687,6 +999,27 @@
       plan: {
         selectedPlan: '',
         billingCycle: 'yearly' // 'monthly' | 'yearly'
+      },
+      payment: {
+        mode: 'now',
+        cardNumber: '',
+        cardExpiry: '',
+        cardCvc: '',
+        cardName: '',
+        billingName: '',
+        billingEmail: '',
+        addressLine1: '',
+        addressLine2: '',
+        city: '',
+        state: '',
+        postcode: '',
+        country: 'Malaysia',
+        tinTaxId: '',
+        registrationNumber: '',
+        registrationType: '',
+        contactDialCode: '+60',
+        contactNumber: '',
+        skipped: false
       }
     };
 
@@ -739,7 +1072,8 @@
       1: 'Company details & primary use case',
       2: 'Country & operating currency',
       3: 'Team size & primary industry',
-      4: 'Select subscription plan'
+      4: 'Select subscription plan',
+      5: 'Payment method (optional)'
     };
 
     // Initialize Industry Pills
@@ -785,10 +1119,10 @@
       // Update Stepper text & bars
       const counterEl = document.getElementById('step-counter');
       const subtitleEl = document.getElementById('step-subtitle');
-      if (counterEl) counterEl.textContent = `Step ${state.currentStep} of 4`;
+      if (counterEl) counterEl.textContent = `Step ${state.currentStep} of 5`;
       if (subtitleEl) subtitleEl.textContent = subtitles[state.currentStep] || 'Workspace setup';
 
-      for (let s = 1; s <= 4; s++) {
+      for (let s = 1; s <= 5; s++) {
         const bar = document.getElementById(`bar-${s}`);
         if (!bar) continue;
         const isClickable = state.completedSteps.includes(s) || s <= state.currentStep;
@@ -829,6 +1163,13 @@
           continueBtn4.disabled = true;
           continueBtn4.className = 'h-11 px-6 text-white text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 shadow-xs bg-gray-200 text-gray-400 cursor-not-allowed';
         }
+      }
+
+      // Step 5 Start free trial button (always enabled)
+      const continueBtn5 = document.getElementById('continue-btn-5');
+      if (continueBtn5) {
+        continueBtn5.disabled = false;
+        continueBtn5.className = 'h-11 px-6 text-white text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 shadow-xs cursor-pointer bg-[#23B750] hover:bg-[#1a943e] active:scale-[0.99]';
       }
     }
 
@@ -978,6 +1319,275 @@
       updateNavUI();
     }
 
+    // Step 5 payment & validation engine
+    const paymentFieldMeta = [
+      { key: 'cardNumber', id: 'cardNumber' },
+      { key: 'cardExpiry', id: 'cardExpiry' },
+      { key: 'cardCvc', id: 'cardCvc' },
+      { key: 'cardName', id: 'cardName' },
+      { key: 'billingName', id: 'billingName' },
+      { key: 'billingEmail', id: 'billingEmail' },
+      { key: 'addressLine1', id: 'addressLine1' },
+      { key: 'city', id: 'billingCity' },
+      { key: 'state', id: 'billingState' },
+      { key: 'postcode', id: 'billingPostcode' },
+      { key: 'country', id: 'billingCountry' },
+      { key: 'registrationNumber', id: 'regNumber' },
+      { key: 'registrationType', id: 'regType' },
+      { key: 'contactNumber', id: 'contactNumber' }
+    ];
+    const paymentTouched = {};
+
+    function validatePaymentField(key) {
+      const p = state.payment;
+      switch (key) {
+        case 'cardNumber': {
+          const d = p.cardNumber.replace(/\D/g, '');
+          if (!d) return 'Enter your card number.';
+          if (d.length < 15) return 'Enter a valid 15 or 16-digit card number.';
+          return '';
+        }
+        case 'cardExpiry': {
+          const d = p.cardExpiry.replace(/\D/g, '');
+          if (!d) return 'Enter the expiry date.';
+          if (d.length !== 4) return 'Use MM / YY format.';
+          const mm = parseInt(d.slice(0, 2), 10);
+          const yy = 2000 + parseInt(d.slice(2, 4), 10);
+          if (mm < 1 || mm > 12) return 'Enter a valid month (01–12).';
+          const now = new Date();
+          if (yy < now.getFullYear() || (yy === now.getFullYear() && mm < now.getMonth() + 1)) return 'This card has expired.';
+          return '';
+        }
+        case 'cardCvc': {
+          const d = p.cardCvc.replace(/\D/g, '');
+          if (!d) return 'Enter the CVC.';
+          if (d.length < 3) return 'Enter 3 or 4 digits.';
+          return '';
+        }
+        case 'cardName': return p.cardName.trim() ? '' : 'Enter the name on your card.';
+        case 'billingName': return p.billingName.trim() ? '' : 'Enter a billing name.';
+        case 'billingEmail': {
+          const v = p.billingEmail.trim();
+          if (!v) return 'Enter a billing email.';
+          if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return 'Enter a valid email address.';
+          return '';
+        }
+        case 'addressLine1': return p.addressLine1.trim() ? '' : 'Enter your street address.';
+        case 'city': return p.city.trim() ? '' : 'Enter a city.';
+        case 'state': return p.state.trim() ? '' : 'Enter a state.';
+        case 'postcode': return p.postcode.trim() ? '' : 'Enter a postcode.';
+        case 'country': return p.country.trim() ? '' : 'Enter a country.';
+        case 'registrationNumber': return p.registrationNumber.trim() ? '' : 'Enter your business registration or ID number.';
+        case 'registrationType': return p.registrationType.trim() ? '' : 'Select a registration type.';
+        case 'contactNumber': {
+          const d = p.contactNumber.replace(/\D/g, '');
+          if (!d) return 'Enter a contact number.';
+          if (d.length < 7) return 'Enter a valid contact number.';
+          return '';
+        }
+        default: return '';
+      }
+    }
+
+    function renderPaymentFieldError(key) {
+      const meta = paymentFieldMeta.find(f => f.key === key);
+      if (!meta) return;
+      const err = paymentTouched[key] ? validatePaymentField(key) : '';
+      const errEl = document.getElementById(`err-${key}`);
+      const inputEl = document.getElementById(key === 'contactNumber' ? 'contact-input-wrap' : meta.id);
+
+      if (errEl) {
+        errEl.textContent = err;
+        errEl.classList.toggle('hidden', !err);
+      }
+      if (key === 'contactNumber') {
+        document.getElementById('hint-contactNumber')?.classList.toggle('hidden', !!err);
+      }
+      if (inputEl) {
+        inputEl.classList.toggle('border-red-500', !!err);
+        inputEl.classList.toggle('border-gray-200', !err);
+      }
+    }
+
+    function touchPaymentField(key) {
+      paymentTouched[key] = true;
+      renderPaymentFieldError(key);
+    }
+
+    function onPaymentFieldInput(key, val) {
+      state.payment[key] = val;
+      if (paymentTouched[key]) renderPaymentFieldError(key);
+    }
+
+    function updateCardBrandLogos(digits) {
+      let brand = '';
+      if (digits.startsWith('4')) brand = 'VISA';
+      else if (/^(5[1-5]|2[2-7])/.test(digits)) brand = 'MC';
+      else if (/^3[47]/.test(digits)) brand = 'AMEX';
+
+      [
+        { id: 'logo-visa', code: 'VISA' },
+        { id: 'logo-mc', code: 'MC' },
+        { id: 'logo-amex', code: 'AMEX' }
+      ].forEach(({ id, code }) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.classList.toggle('border-[#23B750]', brand === code);
+        el.classList.toggle('bg-emerald-50', brand === code);
+        el.classList.toggle('opacity-45', !!brand && brand !== code);
+      });
+    }
+
+    function onCardNumberInput(el) {
+      const digits = el.value.replace(/\D/g, '').slice(0, 16);
+      const formatted = digits.replace(/(\d{4})(?=\d)/g, '$1 ');
+      el.value = formatted;
+      state.payment.cardNumber = formatted;
+      updateCardBrandLogos(digits);
+      if (paymentTouched.cardNumber) renderPaymentFieldError('cardNumber');
+    }
+
+    function onExpiryInput(el) {
+      const digits = el.value.replace(/\D/g, '').slice(0, 4);
+      const formatted = digits.length >= 3 ? `${digits.slice(0, 2)} / ${digits.slice(2)}` : digits;
+      el.value = formatted;
+      state.payment.cardExpiry = formatted;
+      if (paymentTouched.cardExpiry) renderPaymentFieldError('cardExpiry');
+    }
+
+    function onCvcInput(el) {
+      const digits = el.value.replace(/\D/g, '').slice(0, 4);
+      el.value = digits;
+      state.payment.cardCvc = digits;
+      if (paymentTouched.cardCvc) renderPaymentFieldError('cardCvc');
+    }
+
+    function validateAllPaymentFields() {
+      let firstInvalidId = null;
+      paymentFieldMeta.forEach(({ key, id }) => {
+        paymentTouched[key] = true;
+        renderPaymentFieldError(key);
+        if (validatePaymentField(key) && !firstInvalidId) {
+          firstInvalidId = id;
+        }
+      });
+      if (firstInvalidId) {
+        const target = document.getElementById(firstInvalidId);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          target.focus({ preventScroll: true });
+        }
+        return false;
+      }
+      return true;
+    }
+
+    function setPaymentMode(mode) {
+      state.payment.mode = mode;
+      state.payment.skipped = mode === 'later';
+
+      const nowCard = document.getElementById('pay-mode-now');
+      const laterCard = document.getElementById('pay-mode-later');
+      const formCard = document.getElementById('payment-form-card');
+
+      const activeCardClass = 'pay-mode-card p-4 rounded-2xl border border-[#23B750] bg-emerald-50/50 ring-2 ring-[#23B750]/15 shadow-xs transition-all duration-150 cursor-pointer flex items-start gap-3 text-left';
+      const inactiveCardClass = 'pay-mode-card p-4 rounded-2xl border border-gray-200 bg-white hover:bg-gray-50/60 transition-all duration-150 cursor-pointer flex items-start gap-3 text-left';
+
+      [
+        { el: nowCard, active: mode === 'now' },
+        { el: laterCard, active: mode === 'later' }
+      ].forEach(({ el, active }) => {
+        if (!el) return;
+        el.setAttribute('aria-checked', String(active));
+        el.className = active ? activeCardClass : inactiveCardClass;
+        const iconBox = el.querySelector('.mode-icon');
+        if (iconBox) {
+          iconBox.className = active
+            ? 'mode-icon w-9 h-9 rounded-xl bg-[#23B750] text-white flex items-center justify-center shrink-0 shadow-2xs'
+            : 'mode-icon w-9 h-9 rounded-xl bg-gray-100 text-gray-500 flex items-center justify-center shrink-0';
+        }
+        const checkBox = el.querySelector('.mode-check');
+        if (checkBox) {
+          checkBox.className = active
+            ? 'mode-check w-4.5 h-4.5 rounded-full bg-[#23B750] text-white flex items-center justify-center shrink-0 mt-0.5'
+            : 'mode-check w-4.5 h-4.5 rounded-full border border-gray-300 bg-white flex items-center justify-center shrink-0 mt-0.5';
+          const svg = checkBox.querySelector('svg, i');
+          if (svg) svg.classList.toggle('hidden', !active);
+        }
+      });
+
+      if (formCard) formCard.classList.toggle('hidden', mode !== 'now');
+
+      updatePaymentSummary();
+      updateNavUI();
+      lucide.createIcons();
+    }
+
+    function formatRM(n) {
+      return 'RM ' + n.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function updatePaymentSummary() {
+      const yearly = state.plan.billingCycle === 'yearly';
+      const cycleLabel = yearly ? 'Yearly' : 'Monthly';
+      const endDateLabel = getTrialEndDateLabel();
+      const summaryMap = {
+        basic: { name: 'Basic', price: yearly ? 'RM 150/mo (billed annually)' : 'RM 200/mo', subtotal: yearly ? 1800 : 200 },
+        growth: { name: 'Growth', price: yearly ? 'RM 350/mo (billed annually)' : 'RM 450/mo', subtotal: yearly ? 4200 : 450 },
+        pro: { name: 'Pro', price: yearly ? 'RM 750/mo (billed annually)' : 'RM 950/mo', subtotal: yearly ? 9000 : 950 },
+        enterprise: { name: 'Enterprise', price: 'Custom pricing', subtotal: 0 }
+      };
+      const info = summaryMap[state.plan.selectedPlan] || summaryMap.growth;
+      const isEnt = state.plan.selectedPlan === 'enterprise';
+      const subText = isEnt ? 'Custom pricing' : formatRM(info.subtotal);
+      const taxText = isEnt ? '—' : formatRM(info.subtotal * 0.08);
+      const totText = isEnt ? 'Upon Request' : formatRM(info.subtotal * 1.08);
+
+      const setTxt = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+      setTxt('step5-heading', `Start your ${TRIAL_DAYS}-day free trial`);
+      setTxt('payment-plan-title', `${info.name} Plan · ${TRIAL_DAYS}-day free trial`);
+      setTxt('payment-plan-price', `Then ${info.price} · Cancel anytime`);
+      setTxt('summary-plan-cycle', `${info.name} plan (${cycleLabel})`);
+      setTxt('summary-subtotal', subText);
+      setTxt('summary-tax', taxText);
+      setTxt('summary-total-label', `Total after ${TRIAL_DAYS}-day trial`);
+      setTxt('summary-total', totText);
+
+      document.getElementById('summary-tax-row')?.classList.toggle('hidden', isEnt);
+
+      const statusEl = document.getElementById('summary-status-line');
+      if (statusEl) {
+        if (state.payment.mode === 'now') {
+          statusEl.innerHTML = isEnt
+            ? `Custom billing terms begin on <strong class="font-semibold text-gray-900">${endDateLabel}</strong>. Cancel anytime before then.`
+            : `Your card will be charged <strong class="font-semibold text-gray-900 tabular-nums">${totText}</strong> on <strong class="font-semibold text-gray-900">${endDateLabel}</strong>. Cancel anytime before then.`;
+        } else {
+          statusEl.innerHTML = `No card needed today. Add one in <strong class="font-semibold text-gray-900">Settings → Billing</strong> before <strong class="font-semibold text-gray-900">${endDateLabel}</strong> to keep your plan.`;
+        }
+      }
+
+      const nameEl = document.getElementById('billingName');
+      if (nameEl && !nameEl.value && state.business.businessName) {
+        nameEl.value = state.business.businessName;
+        state.payment.billingName = state.business.businessName;
+      }
+    }
+
+    function startProvisioning() {
+      document.getElementById('top-stepper').classList.add('hidden');
+      document.getElementById('stage-step-4').classList.add('hidden');
+      document.getElementById('stage-step-5').classList.add('hidden');
+
+      const provStage = document.getElementById('stage-provisioning');
+      document.getElementById('provisioning-company-name').textContent = state.business.businessName || 'your team';
+      provStage.classList.remove('hidden');
+
+      setTimeout(() => {
+        provStage.classList.add('hidden');
+        showSuccessScreen();
+      }, 2000);
+    }
+
     // Navigation Step Transition
     function goToStep(stepNum) {
       if (stepNum > state.currentStep && !state.completedSteps.includes(stepNum)) return;
@@ -991,26 +1601,25 @@
     }
 
     function nextStep() {
+      if (state.currentStep === 5) {
+        if (state.payment.mode === 'now') {
+          if (!validateAllPaymentFields()) return;
+          state.payment.skipped = false;
+        } else {
+          state.payment.skipped = true;
+        }
+        if (!state.completedSteps.includes(5)) state.completedSteps.push(5);
+        startProvisioning();
+        return;
+      }
+
       if (!isStepValid()) return;
       if (!state.completedSteps.includes(state.currentStep)) {
         state.completedSteps.push(state.currentStep);
       }
 
-      if (state.currentStep < 4) {
+      if (state.currentStep < 5) {
         renderStep(state.currentStep + 1);
-      } else if (state.currentStep === 4) {
-        // Run 2-Second Provisioning Screen
-        document.getElementById('top-stepper').classList.add('hidden');
-        document.getElementById('stage-step-4').classList.add('hidden');
-        
-        const provStage = document.getElementById('stage-provisioning');
-        document.getElementById('provisioning-company-name').textContent = state.business.businessName || 'your team';
-        provStage.classList.remove('hidden');
-
-        setTimeout(() => {
-          provStage.classList.add('hidden');
-          showSuccessScreen();
-        }, 2000);
       }
     }
 
@@ -1019,6 +1628,7 @@
 
       const stage13 = document.getElementById('stage-steps-1-3');
       const stage4 = document.getElementById('stage-step-4');
+      const stage5 = document.getElementById('stage-step-5');
       const step1 = document.getElementById('step-1');
       const step2 = document.getElementById('step-2');
       const step3 = document.getElementById('step-3');
@@ -1026,6 +1636,7 @@
       if (step <= 3) {
         stage13.classList.remove('hidden');
         stage4.classList.add('hidden');
+        stage5.classList.add('hidden');
 
         step1.classList.toggle('hidden', step !== 1);
         step2.classList.toggle('hidden', step !== 2);
@@ -1033,6 +1644,12 @@
       } else if (step === 4) {
         stage13.classList.add('hidden');
         stage4.classList.remove('hidden');
+        stage5.classList.add('hidden');
+      } else if (step === 5) {
+        stage13.classList.add('hidden');
+        stage4.classList.add('hidden');
+        stage5.classList.remove('hidden');
+        updatePaymentSummary();
       }
 
       updateNavUI();
@@ -1040,9 +1657,10 @@
     }
 
     function showSuccessScreen() {
-      state.currentStep = 5;
+      state.currentStep = 6;
       document.getElementById('top-stepper').classList.add('hidden');
       document.getElementById('stage-step-4').classList.add('hidden');
+      document.getElementById('stage-step-5').classList.add('hidden');
       document.getElementById('stage-provisioning').classList.add('hidden');
 
       const successStage = document.getElementById('stage-success');
@@ -1050,6 +1668,14 @@
       
       const planNames = { basic: 'Basic', growth: 'Growth', pro: 'Pro', enterprise: 'Enterprise' };
       document.getElementById('success-plan-name').textContent = planNames[state.plan.selectedPlan] || 'Pro';
+      const trialDaysEl = document.getElementById('success-trial-days');
+      if (trialDaysEl) trialDaysEl.textContent = String(TRIAL_DAYS);
+
+      const noteEl = document.getElementById('success-payment-note');
+      if (noteEl) {
+        noteEl.textContent = `No card added yet — add one in Settings → Billing before ${getTrialEndDateLabel()} to keep your plan.`;
+        noteEl.classList.toggle('hidden', !state.payment.skipped);
+      }
 
       successStage.classList.remove('hidden');
       lucide.createIcons();

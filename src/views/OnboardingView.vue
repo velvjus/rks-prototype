@@ -2,7 +2,7 @@
   <div class="h-full w-full bg-background flex flex-col font-sans selection:bg-primary/20 selection:text-primary text-foreground overflow-hidden relative">
     <!-- Top Step Progress Bar (Clean Floating Stepper, No Headerbar) -->
     <OnboardingTopStepper
-      v-if="currentStep <= 4 && !isProvisioning"
+      v-if="currentStep <= 5 && !isProvisioning"
       :current-step="currentStep"
       :completed-steps="completedSteps"
       @change-step="goToStep"
@@ -122,6 +122,48 @@
           </div>
         </div>
 
+        <!-- Step 5: Start 7-Day Free Trial / Payment Method -->
+        <div
+          v-else-if="currentStep === 5 && !isProvisioning"
+          key="payment-stage"
+          class="w-full max-w-xl mx-auto px-6 py-4 sm:py-6 flex flex-col"
+        >
+          <div class="w-full flex flex-col gap-6">
+            <StepPaymentMethod
+              ref="paymentStepRef"
+              v-model="formData.payment"
+              :plan-id="formData.plan.selectedPlan"
+              :plan-name="selectedPlanSummary.name"
+              :plan-price-label="selectedPlanSummary.price"
+              :billing-cycle="formData.plan.billingCycle"
+              :trial-days="TRIAL_DAYS"
+              :trial-end-date-label="trialEndDateLabel"
+              :default-company-name="formData.business.businessName"
+            />
+
+            <!-- Footer Navigation for Step 5 (Pixel-identical in both states) -->
+            <footer class="pt-5 border-t border-border flex items-center justify-between gap-3 shrink-0">
+              <button
+                type="button"
+                @click="prevAction"
+                class="text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1 cursor-pointer"
+              >
+                <ArrowLeft class="w-3.5 h-3.5" />
+                <span>Back</span>
+              </button>
+
+              <button
+                type="button"
+                @click="nextAction"
+                class="h-11 px-6 text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 cursor-pointer shadow-xs focus-visible:ring-2 focus-visible:ring-ring bg-primary hover:bg-primary/90 active:scale-[0.99] text-primary-foreground"
+              >
+                <span>Start free trial</span>
+                <ArrowRight class="w-3.5 h-3.5" />
+              </button>
+            </footer>
+          </div>
+        </div>
+
         <!-- 2-Second Workspace Provisioning Loading Stage -->
         <div
           v-else-if="isProvisioning"
@@ -151,9 +193,9 @@
           </div>
         </div>
 
-        <!-- Step 5: Final Success Screen (Simple Clean, Vertically Centered) -->
+        <!-- Step 6: Final Success Screen (Simple Clean, Vertically Centered) -->
         <div
-          v-else-if="currentStep === 5"
+          v-else-if="currentStep === 6"
           key="success-stage"
           class="w-full max-w-md mx-auto px-6 py-16 my-auto flex flex-col justify-center text-center animate-in fade-in-50 duration-300"
         >
@@ -167,10 +209,16 @@
                 You're all set!
               </h2>
               <p class="text-xs sm:text-sm text-muted-foreground max-w-sm mx-auto leading-relaxed">
-                Your RakanSales workspace has been created for
+                Your {{ TRIAL_DAYS }}-day free trial workspace has been created for
                 <strong class="text-foreground font-semibold">{{ formData.business.businessName || 'your company' }}</strong>
                 on the
                 <strong class="text-primary font-semibold">{{ selectedPlanName }}</strong> plan.
+              </p>
+              <p
+                v-if="formData.payment.skipped"
+                class="text-xs text-muted-foreground max-w-sm mx-auto pt-1"
+              >
+                No card added yet — add one in Settings → Billing before {{ trialEndDateLabel }} to keep your plan.
               </p>
             </div>
 
@@ -212,15 +260,31 @@ import StepCompanyNameType from '@/components/onboarding/v2/StepCompanyNameType.
 import StepCountryCurrency from '@/components/onboarding/v2/StepCountryCurrency.vue';
 import StepTeamIndustry from '@/components/onboarding/v2/StepTeamIndustry.vue';
 import StepPlanSelection from '@/components/onboarding/v2/StepPlanSelection.vue';
+import StepPaymentMethod from '@/components/onboarding/v2/StepPaymentMethod.vue';
 
 const router = useRouter();
+const paymentStepRef = ref<InstanceType<typeof StepPaymentMethod> | null>(null);
+
+// Single source of truth for trial length across Step 5 & Step 6
+const TRIAL_DAYS = 7;
+
+const trialEndDateLabel = computed(() => {
+  const endDate = new Date();
+  endDate.setDate(endDate.getDate() + TRIAL_DAYS);
+  return new Intl.DateTimeFormat('en-GB', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  }).format(endDate);
+});
 
 // Continuous single flow steps:
 // 1 = Company (Name, Primary Use Case & Referral Code)
 // 2 = Location (Country & Currency)
 // 3 = Team (Size & Industry)
 // 4 = Plan (Choose Plan)
-// 5 = Success Screen
+// 5 = Payment Method (Add card now / Add card later)
+// 6 = Success Screen
 const currentStep = ref(1);
 const completedSteps = ref<number[]>([]);
 const isProvisioning = ref(false);
@@ -240,6 +304,27 @@ const formData = reactive({
     selectedPlan: '',
     billingCycle: 'yearly' as 'monthly' | 'yearly',
     prepopulateDemoData: false,
+  },
+  payment: {
+    mode: 'now' as 'now' | 'later',
+    cardNumber: '',
+    cardExpiry: '',
+    cardCvc: '',
+    cardName: '',
+    billingName: '',
+    billingEmail: '',
+    addressLine1: '',
+    addressLine2: '',
+    city: '',
+    state: '',
+    postcode: '',
+    country: 'Malaysia',
+    tinTaxId: '',
+    registrationNumber: '',
+    registrationType: '',
+    contactDialCode: '+60',
+    contactNumber: '',
+    skipped: false,
   },
 });
 
@@ -265,15 +350,18 @@ const isValid = computed(() => {
   return true;
 });
 
-const selectedPlanName = computed(() => {
-  const map: Record<string, string> = {
-    basic: 'Basic',
-    growth: 'Growth',
-    pro: 'Pro',
-    enterprise: 'Enterprise',
+const selectedPlanSummary = computed(() => {
+  const yearly = formData.plan.billingCycle === 'yearly';
+  const map: Record<string, { name: string; price: string }> = {
+    basic: { name: 'Basic', price: yearly ? 'RM 150/mo (billed annually)' : 'RM 200/mo' },
+    growth: { name: 'Growth', price: yearly ? 'RM 350/mo (billed annually)' : 'RM 450/mo' },
+    pro: { name: 'Pro', price: yearly ? 'RM 750/mo (billed annually)' : 'RM 950/mo' },
+    enterprise: { name: 'Enterprise', price: 'Custom pricing' },
   };
-  return map[formData.plan.selectedPlan] || formData.plan.selectedPlan || 'Pro';
+  return map[formData.plan.selectedPlan] || { name: 'Pro', price: yearly ? 'RM 750/mo (billed annually)' : 'RM 950/mo' };
 });
+
+const selectedPlanName = computed(() => selectedPlanSummary.value.name);
 
 function markStepComplete(stepNum: number) {
   if (!completedSteps.value.includes(stepNum)) {
@@ -281,19 +369,34 @@ function markStepComplete(stepNum: number) {
   }
 }
 
+function startProvisioning() {
+  // 2-second workspace provisioning loading before entering success screen
+  isProvisioning.value = true;
+  setTimeout(() => {
+    isProvisioning.value = false;
+    currentStep.value = 6;
+    fireConfetti();
+  }, 2000);
+}
+
 function nextAction() {
+  if (currentStep.value === 5) {
+    if (formData.payment.mode === 'now') {
+      const ok = paymentStepRef.value?.validateAndFocusFirstError() ?? false;
+      if (!ok) return;
+      formData.payment.skipped = false;
+    } else {
+      formData.payment.skipped = true;
+    }
+    markStepComplete(5);
+    startProvisioning();
+    return;
+  }
+
   if (!isValid.value) return;
   markStepComplete(currentStep.value);
-  if (currentStep.value < 4) {
+  if (currentStep.value < 5) {
     currentStep.value++;
-  } else {
-    // 2-second workspace provisioning loading before entering success screen
-    isProvisioning.value = true;
-    setTimeout(() => {
-      isProvisioning.value = false;
-      currentStep.value = 5;
-      fireConfetti();
-    }, 2000);
   }
 }
 
@@ -362,7 +465,7 @@ function prevAction() {
 
 function goToStep(stepNum: number) {
   currentStep.value = stepNum;
-  if (stepNum === 5) {
+  if (stepNum === 6) {
     fireConfetti();
   }
 }

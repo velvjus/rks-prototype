@@ -15,6 +15,21 @@
 
 ---
 
+## [2026-11-27] Onboarding v2 Step 5 Redesign: Unified 7-Day Free Trial & Payment Flow
+- **Scope:** Onboarding v2 Step 5 (`StepPaymentMethod.vue`, `OnboardingView.vue`) & Standalone HTML Mirror (`html/onboarding-wizard.html`)
+- **Summary:**
+  - Unified Step 5 so both **"Add card now"** (default) and **"Add card later"** render the exact same page structure (top stepper, `"Start your 7-day free trial"` heading without `"Optional"` pill, two equal option cards, single dark-header Plan Summary card, and single-CTA footer `"Start free trial"` always enabled), differing only in the summary status line and whether the payment/billing form expands between the summary and footer.
+  - Stored trial length in a single `TRIAL_DAYS = 7` constant powering every trial mention and computed `{trial end date}` (eliminating all `"14"` references).
+  - Built one continuous 3-section card form (shown only under **"Add card now"**): **Card details** (encrypted provider-field slots for card number, expiry, CVC, name on card + Visa/Mastercard/Amex logos), **Billing details** (defaulting Country to `Malaysia`), and **E-invoice (MyInvois) details** (defaulting phone code to `MY +60` with LHDN helper text). Removed inner `Save details`/`Cancel` buttons, `Incomplete` badge, required counter, red asterisks (marking only optional fields with `(optional)`), and the single-option Card radio row.
+  - Added inline per-field validation on blur and on submit (scrolling to and focusing the first invalid field when submitting **"Add card now"**), while preserving typed values across mode switches and stacking option cards & all form fields single-column on mobile.
+  - Mirrored all Step 5 & Step 6 updates in `html/onboarding-wizard.html`.
+- **Files:** `src/components/onboarding/v2/StepPaymentMethod.vue`, `src/views/OnboardingView.vue`, `html/onboarding-wizard.html`
+- **Connections Updated:** `html/onboarding-wizard.html` ↔ `src/views/OnboardingView.vue`
+- **Decisions & Gotchas:** Step 5 stage is top-aligned (no `my-auto` vertical re-centering) so toggling between **"Add card now"** and **"Add card later"** keeps Items 1–4 pixel-locked with zero vertical jump. `country` (`'Malaysia'`) and `contactDialCode` (`'+60'`) default to Malaysia regardless of Step 2 selection. All Vue styling uses semantic tokens only (0 violations).
+- **Open Follow-ups:** None
+
+---
+
 ## [2026-11-21] Onboarding v2 Step 1: Primary Use Case & Referral Code
 - **Scope:** Onboarding v2 (`OnboardingView.vue`, `StepCompanyNameType.vue`, `OnboardingTopStepper.vue`) & Standalone HTML Mirror (`html/onboarding-wizard.html`)
 - **Summary:**

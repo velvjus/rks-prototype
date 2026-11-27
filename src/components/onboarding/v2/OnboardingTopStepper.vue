@@ -4,7 +4,7 @@
       <!-- Top Text Row: Step Counter, Subtitle & Discreet Exit -->
       <div class="flex items-center justify-between text-xs">
         <span class="font-bold text-primary tracking-wider uppercase text-[11px]">
-          Step {{ currentStep }} of 4
+          Step {{ currentStep }} of 5
         </span>
         <div class="flex items-center gap-2.5">
           <span class="text-muted-foreground font-medium text-xs">
@@ -22,14 +22,14 @@
 
       <!-- Segmented Progress Bar -->
       <div
-        class="grid grid-cols-4 gap-2.5"
+        class="grid grid-cols-5 gap-2.5"
         role="progressbar"
         :aria-valuenow="currentStep"
         aria-valuemin="1"
-        aria-valuemax="4"
+        aria-valuemax="5"
       >
         <button
-          v-for="s in 4"
+          v-for="s in 5"
           :key="s"
           type="button"
           @click="onStepClick(s)"
@@ -65,6 +65,7 @@ const subtitles: Record<number, string> = {
   2: 'Country & operating currency',
   3: 'Team size & primary industry',
   4: 'Select subscription plan',
+  5: 'Payment method (optional)',
 };
 
 const currentStepSubtitle = computed(() => {
